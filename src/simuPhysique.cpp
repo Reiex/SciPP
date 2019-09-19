@@ -24,7 +24,7 @@ long double phiInit(long double x)
 
 void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_simu)
 {
-	long double dx(long double(1) / Nx), dt(t_simu / Nt);
+	long double dx((long double)(1) / Nx), dt(t_simu / Nt);
 
 	Matrice<long double> M(Nx, Nx), N(Nx, Nx), Phi(Nx, 1), Phi0(Nx, 1);
 	
@@ -62,7 +62,7 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 		plot(x, y);
 	}
 
-	show(int(long double(1)/dt), true);
+	show(int((long double)(1)/dt), true);
 }
 
 // 2 Dimensions

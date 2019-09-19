@@ -86,7 +86,7 @@ template<typename T> Liste<T>& Liste<T>::operator=(Liste<T> const& l)
 	m_queue = nullptr;
 
 	if (m_taille == 0)
-		return;
+		return *this;
 
 	m_tete = new Cellule;
 	m_tete->x = l.m_tete->x;
