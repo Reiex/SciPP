@@ -1,6 +1,53 @@
 #include "simuPhysique.h"
 
 
+// Générale
+
+Force::Force()
+{
+	m_func = nullptr;
+}
+
+Vecteur<double> Force::operator()(Point p)
+{
+	return (*m_func)(p);
+}
+
+
+Point::Point(double x, double y, double m)
+{
+	m_x = x;
+	m_y = y;
+	m_m = m;
+	m_dx = 0;
+	m_dy = 0;
+}
+
+void Point::setVitesse(double vx, double vy)
+{
+	m_dx = vx * m_dt;
+	m_dy = vy * m_dt;
+}
+
+void Point::setDt(double dt)
+{
+	m_dt = dt;
+}
+
+Vecteur<double> Point::getEtat() const
+{
+	Vecteur<double> etat(6);
+	etat[0] = m_x;
+	etat[1] = m_y;
+	etat[2] = m_m;
+	etat[3] = m_dx/m_dt;
+	etat[4] = m_dy/m_dt;
+	etat[5] = m_dm/m_dt;
+
+	return etat;
+}
+
+
 // Simulations de fluides
 
 // 1 Dimension

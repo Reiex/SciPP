@@ -9,11 +9,12 @@ class Force
 {
 	public:
 
-		Vecteur<double> operator()(Point p, double t, double dt);
+		Force();
+		Vecteur<double> operator()(Point p);
 
 	private:
 
-		Vecteur<double> (*m_func)(Point, double, double);
+		Vecteur<double> (*m_func)(Point);
 };
 
 class Point
@@ -21,6 +22,9 @@ class Point
 	public:
 
 		Point(double x, double y, double m);
+		void setVitesse(double vx, double vy);
+		void setDt(double dt);
+		Vecteur<double> getEtat() const;
 
 	private:
 
@@ -29,6 +33,8 @@ class Point
 		double m_m;
 		double m_dx;
 		double m_dy;
+		double m_dm;
+		double m_dt;
 		std::vector<Force> m_forces;
 };
 
