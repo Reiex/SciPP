@@ -21,6 +21,8 @@ Point::Point(double x, double y, double m)
 	m_m = m;
 	m_dx = 0;
 	m_dy = 0;
+	m_dm = 0;
+	m_dt = 1;
 }
 
 void Point::setVitesse(double vx, double vy)
@@ -36,15 +38,32 @@ void Point::setDt(double dt)
 
 Vecteur<double> Point::getEtat() const
 {
-	Vecteur<double> etat(6);
+	Vecteur<double> etat(7);
 	etat[0] = m_x;
 	etat[1] = m_y;
 	etat[2] = m_m;
 	etat[3] = m_dx/m_dt;
 	etat[4] = m_dy/m_dt;
 	etat[5] = m_dm/m_dt;
+	etat[6] = m_dt;
 
 	return etat;
+}
+
+void Point::update()
+{
+	double aX(0), aY(0);
+	for (int i(0); i < m_forces.size(); i++)
+	{
+		Vecteur<double> a(m_forces[i](*this));
+		aX += a[0];
+		aY += a[1];
+	}
+
+	m_dx += aX * m_dt;
+	m_dy += aY * m_dt;
+	m_x += m_dx * m_dt;
+	m_y += m_dy * m_dt;
 }
 
 

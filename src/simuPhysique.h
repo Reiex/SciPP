@@ -22,9 +22,12 @@ class Point
 	public:
 
 		Point(double x, double y, double m);
+
 		void setVitesse(double vx, double vy);
 		void setDt(double dt);
 		Vecteur<double> getEtat() const;
+
+		void update();
 
 	private:
 
