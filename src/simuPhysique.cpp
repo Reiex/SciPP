@@ -1,7 +1,7 @@
 #include "simuPhysique.h"
 
 
-// Générale
+// Gï¿½nï¿½rale
 
 Force::Force()
 {
@@ -73,12 +73,12 @@ void Point::update()
 	aX /= m_m;
 	aY /= m_m;
 
-	m_dx += aX * m_dt;
-	m_dy += aY * m_dt;
-	m_x += m_dx * m_dt;
-	m_y += m_dy * m_dt;
+	m_dx += aX * m_dt * m_dt;
+	m_dy += aY * m_dt * m_dt;
+	m_x += m_dx;
+	m_y += m_dy;
 
-	std::cout << aX << ", " << aY << ", " << m_dx/m_dt << ", " << m_dy/m_dt << std::endl;
+	std::cout << m_x << ", " << m_y << std::endl;
 }
 
 
@@ -314,7 +314,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	}
 	iterations++;
 
-	std::cout << std::endl << "## Simulation terminée, mise en place de l'affichage..." << std::endl;
+	std::cout << std::endl << "## Simulation terminï¿½e, mise en place de l'affichage..." << std::endl;
 
 	long double Wmin(premiere->matrice[0][0]), Wmax(Wmin);
 	MatriceChainee* courante(premiere);
@@ -353,7 +353,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 }
 
 
-// Simulations mécaniques
+// Simulations mï¿½caniques
 
 Vecteur<double> gravite(Point p)
 {
@@ -363,17 +363,41 @@ Vecteur<double> gravite(Point p)
 	return force;
 }
 
+
+Vecteur<double> kawabanaKomo(Point p)
+{
+	double k(1000), gamma(0.005);
+
+	Vecteur<double> force(2), etat(p.getEtat());
+	double yp(etat[1]), ypp(etat[1]-etat[4]*etat[6]);
+
+	yp = yp > 0 ? 0: yp;
+	ypp = ypp > 0 ? 0: ypp;
+
+	yp *= -1;
+	ypp *= -1;
+
+	yp *= sqrt(yp);
+	ypp *= sqrt(ypp);
+
+	force[1] = k*(yp + gamma*(yp - ypp)/etat[6]);
+
+	return force;
+}
+
 void simuBalle(long double t, long double x, long double y, long double vx, long double vy)
 {
-	int n(1000);
+	int n(10000);
 
 	long double dt(t/n);
 
 	Point p(x, y, 0.1);
-	Force g;
+	Force g, elastique;
 
 	g.setFunc(gravite);
+	elastique.setFunc(kawabanaKomo);
 	p.ajouterForce(g);
+	p.ajouterForce(elastique);
 	p.setVitesse(vx, vy);
 	p.setDt(dt);
 
@@ -384,5 +408,5 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 		p.update();
 	}
 
-	show(n/t, true);
+	show(double(n)/t, true);
 }
