@@ -33,6 +33,40 @@ void libererMatrices()
 
 // Variables et fonctions externes
 
+void plot(long double x, long double y)
+{
+	Courbe* courbe(new Courbe);
+	sf::VertexArray* figure(new sf::VertexArray(sf::LinesStrip, 1));
+
+	courbe->min_x = x;
+	courbe->max_x = x;
+	courbe->min_y = y;
+	courbe->max_y = y;
+
+	(*figure)[0].position.x = x;
+	(*figure)[0].position.y = y;
+	(*figure)[0].color = sf::Color(0, 0, 0);
+
+	courbe->figure = figure;
+	courbe->suivante = nullptr;
+
+	if (COURBES == nullptr)
+	{
+		COURBES = courbe;
+	}
+	else
+	{
+		Courbe* courrante(COURBES);
+
+		while (courrante->suivante != nullptr)
+		{
+			courrante = courrante->suivante;
+		}
+
+		courrante->suivante = courbe;
+	}
+}
+
 void plot(Vecteur<long double> x, Vecteur<long double> y)
 {
 	if (x.taille() != y.taille() || x.taille() < 1)
@@ -195,14 +229,32 @@ void show(int framerate, bool animationCourbe)
 					else
 						courbeAffichee = courbeAffichee->suivante;
 
-					window.draw(*courbeAffichee->figure);
+					if (courbeAffichee->figure->getVertexCount() == 1)
+					{
+						sf::CircleShape cercle;
+						cercle.setRadius(3);
+						cercle.setFillColor(sf::Color(0, 0, 0));
+						cercle.setPosition((*courbeAffichee->figure)[0].position.x, (*courbeAffichee->figure)[0].position.y);
+						window.draw(cercle);
+					}
+					else
+						window.draw(*courbeAffichee->figure);
 				}
 				else
 				{
 					Courbe* courrante(COURBES);
 					while (courrante != nullptr)
 					{
-						window.draw(*courrante->figure);
+						if (courrante->figure->getVertexCount() == 1)
+						{
+							sf::CircleShape cercle;
+							cercle.setRadius(3);
+							cercle.setFillColor(sf::Color(0, 0, 0));
+							cercle.setPosition((*courrante->figure)[0].position.x, (*courrante->figure)[0].position.y);
+							window.draw(cercle);
+						}
+						else
+							window.draw(*courrante->figure);
 						courrante = courrante->suivante;
 					}
 				}

@@ -8,6 +8,11 @@ Force::Force()
 	m_func = nullptr;
 }
 
+void Force::setFunc(Vecteur<double>(*func)(Point))
+{
+	m_func = func;
+}
+
 Vecteur<double> Force::operator()(Point p)
 {
 	return (*m_func)(p);
@@ -23,6 +28,11 @@ Point::Point(double x, double y, double m)
 	m_dy = 0;
 	m_dm = 0;
 	m_dt = 1;
+}
+
+void Point::ajouterForce(Force f)
+{
+	m_forces.push_back(f);
 }
 
 void Point::setVitesse(double vx, double vy)
@@ -59,6 +69,9 @@ void Point::update()
 		aX += a[0];
 		aY += a[1];
 	}
+
+	aX /= m_m;
+	aY /= m_m;
 
 	m_dx += aX * m_dt;
 	m_dy += aY * m_dt;
@@ -337,3 +350,35 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	show(int((iterations + 1) / (t_simu * 2)));
 }
 
+
+// Simulations mécaniques
+
+Vecteur<double> gravite(Point p)
+{
+	Vecteur<double> force(2);
+	force[1] = -9.81;
+
+	return force;
+}
+
+void simuBalle(long double t, long double x, long double y, long double vx, long double vy)
+{
+	long double dt = t / 1000;
+
+	Point p(x, y, 0.1);
+	Force g;
+
+	g.setFunc(gravite);
+	p.ajouterForce(g);
+	p.setVitesse(vx, vy);
+	p.setDt(dt);
+
+	for (int i(0); i < 1000; i++)
+	{
+		Vecteur<double> etat(p.getEtat());
+		plot(etat[0], etat[1]);
+		p.update();
+	}
+
+	show();
+}

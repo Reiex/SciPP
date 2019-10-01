@@ -11,6 +11,7 @@ int main()
 	// simuDispersionVorticite();
 	// simuFluide2D();
 	// lancerInterpreteur();
+	simuBalle();
 
 	return 0;
 }

@@ -14,6 +14,9 @@ struct Courbe
 	Courbe* suivante;
 };
 
+
+void plot(long double x, long double y);
+
 void plot(Vecteur<long double> x, Vecteur<long double> y);
 
 void plot(Matrice<long double> M, long double min_z, long double max_z);
