@@ -77,6 +77,8 @@ void Point::update()
 	m_dy += aY * m_dt;
 	m_x += m_dx * m_dt;
 	m_y += m_dy * m_dt;
+
+	std::cout << aX << ", " << aY << ", " << m_dx/m_dt << ", " << m_dy/m_dt << std::endl;
 }
 
 
@@ -356,14 +358,16 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 Vecteur<double> gravite(Point p)
 {
 	Vecteur<double> force(2);
-	force[1] = -9.81;
+	force[1] = -9.81*p.getEtat()[2];
 
 	return force;
 }
 
 void simuBalle(long double t, long double x, long double y, long double vx, long double vy)
 {
-	long double dt = t / 1000;
+	int n(1000);
+
+	long double dt(t/n);
 
 	Point p(x, y, 0.1);
 	Force g;
@@ -373,12 +377,12 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 	p.setVitesse(vx, vy);
 	p.setDt(dt);
 
-	for (int i(0); i < 1000; i++)
+	for (int i(0); i < n; i++)
 	{
 		Vecteur<double> etat(p.getEtat());
 		plot(etat[0], etat[1]);
 		p.update();
 	}
 
-	show();
+	show(n/t, true);
 }

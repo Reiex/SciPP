@@ -179,6 +179,17 @@ void show(int framerate, bool animationCourbe)
 		min_y -= 0.05*(max_y - min_y);
 		max_y += 0.05*(max_y - min_y);
 
+		if (max_x == min_x)
+		{
+			min_x -= 0.5;
+			max_x += 0.5;
+		}
+		if (max_y == min_y)
+		{
+			min_y -= 0.5;
+			max_y += 0.5;
+		}
+
 		courrante = COURBES;
 
 		while (courrante != nullptr)
