@@ -1,7 +1,7 @@
 #include "simuPhysique.h"
 
 
-// G�n�rale
+// Générale
 
 Force::Force()
 {
@@ -77,8 +77,6 @@ void Point::update()
 	m_dy += aY * m_dt * m_dt;
 	m_x += m_dx;
 	m_y += m_dy;
-
-	std::cout << m_x << ", " << m_y << std::endl;
 }
 
 
@@ -353,7 +351,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 }
 
 
-// Simulations m�caniques
+// Simulations mécaniques
 
 Vecteur<double> gravite(Point p)
 {
@@ -363,8 +361,7 @@ Vecteur<double> gravite(Point p)
 	return force;
 }
 
-
-Vecteur<double> kawabanaKomo(Point p)
+Vecteur<double> chocElastique(Point p)
 {
 	double k(1000), gamma(0.005);
 
@@ -395,7 +392,7 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 	Force g, elastique;
 
 	g.setFunc(gravite);
-	elastique.setFunc(kawabanaKomo);
+	elastique.setFunc(chocElastique);
 	p.ajouterForce(g);
 	p.ajouterForce(elastique);
 	p.setVitesse(vx, vy);
@@ -408,5 +405,5 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 		p.update();
 	}
 
-	show(double(n)/t, true);
+	show(1.0/dt, true);
 }
