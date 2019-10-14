@@ -9,11 +9,11 @@ Polynome<long double> bernstein(int n, int i)
     long double coeff(binom(n, i));
 
 	if (n == 0)
-		return Polynome<long double>(coeff);
+		return coeff;
 	if (i == 0)
-		return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
+		return coeff * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
 	if (i == n)
-		return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(tab, 2), i);
+		return coeff * expoRapide(Polynome<long double>(tab, 2), i);
 
     return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(tab, 2), i) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
 }

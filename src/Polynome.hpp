@@ -113,7 +113,7 @@ template<typename T> int Polynome<T>::degre() const
 }
 
 
-// Op�rations
+// Opérations
 
 template<typename T> Polynome<T>& Polynome<T>::operator+=(Polynome<T> const& P)
 {
@@ -227,6 +227,16 @@ template<typename T> Polynome<T> operator*(Polynome<T> const& P, Polynome<T> con
 	R *= Q;
 
 	return R;
+}
+
+template<typename T> Polynome<T> operator*(Polynome<T> const& P, T const& x)
+{
+	return P * Polynome<T>(x);
+}
+
+template<typename T> Polynome<T> operator*(T const& x, Polynome<T> const& P)
+{
+	return Polynome<T>(x) * P;
 }
 
 template<typename T> Polynome<T>& Polynome<T>::operator/=(Polynome<T> const& P)
