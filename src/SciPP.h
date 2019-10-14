@@ -5,7 +5,7 @@
 #include <complex>
 
 
-// Templates spécifiques
+// Templates spï¿½cifiques
 
 /*
 	T::T(T const&)
@@ -83,7 +83,9 @@ long double const PI = 3.141592653589793;
 long double const E = 2.7182818284590452;
 
 
-// Fonctions spécifiques
+// Fonctions spÃ©cifiques
+
+long long int binom(int n, int p);
 
 std::string decimales(Fraction<Entier> const& x, int n);
 std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x);

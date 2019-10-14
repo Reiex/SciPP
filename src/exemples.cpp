@@ -2,6 +2,7 @@
 #include <iostream>
 #include "SciPP.h"
 #include "simuPhysique.h"
+#include "geom.h"
 #include "jeuxArithmetiques.h"
 
 

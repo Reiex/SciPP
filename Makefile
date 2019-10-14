@@ -1,7 +1,7 @@
 # Règles générales
 
-SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o
-	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
+SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/geom.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o
+	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/geom.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
 	rm -r obj
@@ -24,6 +24,9 @@ obj/simuPhysique.o: src/simuPhysique.cpp obj/
 	
 obj/jeuxArithmetiques.o: src/jeuxArithmetiques.cpp obj/
 	g++ -c src/jeuxArithmetiques.cpp -o obj/jeuxArithmetiques.o
+
+obj/geom.o: src/geom.cpp obj/
+	g++ -c src/geom.cpp -o obj/geom.o
 
 
 # Bibliothèque

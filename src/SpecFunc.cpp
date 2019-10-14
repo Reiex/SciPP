@@ -1,7 +1,20 @@
 #include "SciPP.h"
 
 
-// Fonctions spécifiques
+// Fonctions spÃ©cifiques
+
+long long int binom(int n, int p)
+{
+	Entier num(1), denom(1);
+
+	for (int i(0); i < p; i++)
+	{
+		num *= n-i;
+		denom *= p-i;
+	}
+
+	return (num/denom).toInt();
+}
 
 std::string decimales(Fraction<Entier> const& x, int n)
 {
@@ -127,7 +140,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 		for (int j(0); j < Nx; j++)
 			fHat[i][j] = f[i][j];
 
-	// Calcul de la transformée de Fourier
+	// Calcul de la transformï¿½e de Fourier
 
 	fHat = DFT2D(fHat);
 
@@ -146,7 +159,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 		else
 			ky[i] = std::complex<long double>(0, 2*PI*(Ny - i)/Ly);
 
-	// Calcul de la transformée de fourier du résultat
+	// Calcul de la transformï¿½e de fourier du rï¿½sultat
 
 	for (int i(0); i < Ny; i++)
 		for (int j(0); j < Nx; j++)
@@ -155,11 +168,11 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 			else
 				fHat[i][j] /= (kx[j] * kx[j] + ky[i] * ky[i]);
 
-	// Calcul de la matrice complexe du résultat par transformée inverse
+	// Calcul de la matrice complexe du rï¿½sultat par transformï¿½e inverse
 
 	Matrice<std::complex<long double>> psiBar(IDFT2D(fHat));
 
-	// Calcul du résultat
+	// Calcul du rï¿½sultat
 
 	Matrice<long double> psi(Ny, Nx);
 	for (int i(0); i < Ny; i++)
@@ -199,3 +212,5 @@ Matrice<long double> cholesky(Matrice<long double> const& A)
 
 	return B;
 }
+
+
