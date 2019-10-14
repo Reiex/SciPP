@@ -129,6 +129,7 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 		x[i] = i;
 	}
 
+	Timeline timeline;
 	Matrice<long double> B(N.inv());
 	for (int i(0); i < Nt; i++)
 	{
@@ -138,10 +139,11 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 		{
 			y[j] = Phi[j][0];
 		}
-		plot(x, y);
+		timeline.plot(x, y);
 	}
 
-	show(int((long double)(1)/dt), true);
+	timeline.setFramerate(24);
+	Timeline::show();
 }
 
 // 2 Dimensions
@@ -328,12 +330,13 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		courante = courante->suivante;
 	}
 
+	Timeline timeline;
 	courante = premiere;
 	int i(1);
 	while (courante != nullptr)
 	{
 		std::cout << "> Calcul image " << i << "/" << iterations << std::endl;
-		plot(courante->matrice, Wmin, Wmax);
+		timeline.plot(courante->matrice, Wmin, Wmax);
 		courante = courante->suivante;
 		i++;
 	}
@@ -347,7 +350,8 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		courante = tmp;
 	}
 
-	show(int((iterations + 1) / (t_simu * 2)));
+	timeline.setFramerate(iterations/(t_simu*2));
+	Timeline::show();
 }
 
 
@@ -398,12 +402,14 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 	p.setVitesse(vx, vy);
 	p.setDt(dt);
 
+	Timeline timeline;
 	for (int i(0); i < n; i++)
 	{
 		Vecteur<double> etat(p.getEtat());
-		plot(etat[0], etat[1]);
+		timeline.plot(etat[0], etat[1]);
 		p.update();
 	}
-
-	show(1.0/dt, true);
+	
+	timeline.setFramerate(1.0/dt);
+	Timeline::show();
 }

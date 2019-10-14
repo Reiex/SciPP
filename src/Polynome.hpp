@@ -4,7 +4,7 @@
 #include "SciPP.h"
 
 /*
-	Les fonctions nécessaires de Vecteur.
+	Les fonctions nÃ©cessaires de Vecteur.
 
 	T::T()
 	T::T(int)
@@ -113,7 +113,7 @@ template<typename T> int Polynome<T>::degre() const
 }
 
 
-// Opérations
+// Opï¿½rations
 
 template<typename T> Polynome<T>& Polynome<T>::operator+=(Polynome<T> const& P)
 {
@@ -338,7 +338,7 @@ template<typename T> bool operator!=(Polynome<T> const& P, Polynome<T> const& Q)
 }
 
 
-// Fonctions spécifiques
+// Fonctions spï¿½cifiques
 
 template<typename T> T Polynome<T>::operator()(T const& x) const
 {

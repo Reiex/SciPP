@@ -1,81 +1,56 @@
 #include "Plot.h"
 
-// Variables et fonctions internes
-
 static const int TAILLE_PLOT[] = { 600, 600 };
-static Courbe* COURBES(nullptr);
-static Vecteur<sf::Image*> MATRICES;
+std::vector<Timeline*> Timeline::timelineList;
 
-void libererCourbes()
+Timeline::Timeline()
 {
-	Courbe* courrante(COURBES);
-	Courbe* suivante(nullptr);
-
-	while (courrante != nullptr)
-	{
-		suivante = courrante->suivante;
-		delete courrante->figure;
-		delete courrante;
-		courrante = suivante;
-	}
-
-	COURBES = nullptr;
+	timelineList.push_back(this);
+	m_delay = 1.0/24.0;
+	m_border = Vecteur<long double>(4);
+	m_borderSet = false;
 }
 
-void libererMatrices()
+void Timeline::setFramerate(int framerate)
 {
-	for (int i(0); i < MATRICES.taille(); i++)
-		delete MATRICES[i];
-
-	MATRICES.changerTaille(0);
+	m_delay = 1.0/framerate;
 }
 
-
-// Variables et fonctions externes
-
-void plot(long double x, long double y)
+void Timeline::plot(long double x, long double y)
 {
-	Courbe* courbe(new Courbe);
-	sf::VertexArray* figure(new sf::VertexArray(sf::LinesStrip, 1));
+	sf::VertexArray figure(sf::LinesStrip, 1);
 
-	courbe->min_x = x;
-	courbe->max_x = x;
-	courbe->min_y = y;
-	courbe->max_y = y;
-
-	(*figure)[0].position.x = x;
-	(*figure)[0].position.y = y;
-	(*figure)[0].color = sf::Color(0, 0, 0);
-
-	courbe->figure = figure;
-	courbe->suivante = nullptr;
-
-	if (COURBES == nullptr)
+	if (!m_borderSet)
 	{
-		COURBES = courbe;
+		m_borderSet = true;
+		m_border[0] = x;
+		m_border[1] = x;
+		m_border[2] = y;
+		m_border[3] = y;
 	}
 	else
 	{
-		Courbe* courrante(COURBES);
-
-		while (courrante->suivante != nullptr)
-		{
-			courrante = courrante->suivante;
-		}
-
-		courrante->suivante = courbe;
+		m_border[0] = x < m_border[0] ? x: m_border[0];
+		m_border[1] = x > m_border[1] ? x: m_border[1];
+		m_border[2] = y < m_border[2] ? y: m_border[2];
+		m_border[3] = y > m_border[3] ? y: m_border[3];
 	}
+
+	figure[0].position.x = x;
+	figure[0].position.y = y;
+	figure[0].color = sf::Color(0, 0, 0);
+
+	m_courbes.push_back(figure);
 }
 
-void plot(Vecteur<long double> x, Vecteur<long double> y)
+void Timeline::plot(Vecteur<long double> x, Vecteur<long double> y)
 {
 	if (x.taille() != y.taille() || x.taille() < 1)
 		throw "La taille des vecteurs est invalide.";
 
 	int n(x.taille());
 
-	Courbe* courbe(new Courbe);
-	sf::VertexArray* figure(new sf::VertexArray(sf::LinesStrip, n));
+	sf::VertexArray figure(sf::LinesStrip, n);
 	long double min_x(x[0]), max_x(x[0]), min_y(y[0]), max_y(y[0]);
 
 	for (int i(0); i < n; i++)
@@ -90,44 +65,38 @@ void plot(Vecteur<long double> x, Vecteur<long double> y)
 			max_y = y[i];
 	}
 
-	courbe->min_x = min_x;
-	courbe->max_x = max_x;
-	courbe->min_y = min_y;
-	courbe->max_y = max_y;
-
-	for (int i(0); i < n; i++)
+	if (!m_borderSet)
 	{
-		(*figure)[i].position.x = x[i];
-		(*figure)[i].position.y = y[i];
-		(*figure)[i].color = sf::Color(0, 0, 0);
-	}
-
-	courbe->figure = figure;
-	courbe->suivante = nullptr;
-
-	if (COURBES == nullptr)
-	{
-		COURBES = courbe;
+		m_borderSet = true;
+		m_border[0] = min_x;
+		m_border[1] = max_x;
+		m_border[2] = min_y;
+		m_border[3] = max_y;
 	}
 	else
 	{
-		Courbe* courrante(COURBES);
-
-		while (courrante->suivante != nullptr)
-		{
-			courrante = courrante->suivante;
-		}
-
-		courrante->suivante = courbe;
+		m_border[0] = min_x < m_border[0] ? min_x: m_border[0];
+		m_border[1] = max_x > m_border[1] ? max_x: m_border[1];
+		m_border[2] = min_y < m_border[2] ? min_y: m_border[2];
+		m_border[3] = max_y > m_border[3] ? max_y: m_border[3];
 	}
+
+	for (int i(0); i < n; i++)
+	{
+		figure[i].position.x = x[i];
+		figure[i].position.y = y[i];
+		figure[i].color = sf::Color(0, 0, 0);
+	}
+
+	m_courbes.push_back(figure);
 }
 
-void plot(Matrice<long double> M, long double min_z, long double max_z)
+void Timeline::plot(Matrice<long double> M, long double min_z, long double max_z)
 {
 	int w(TAILLE_PLOT[0]), h(TAILLE_PLOT[1]);
 
-	sf::Image* image(new sf::Image);
-	image->create(w, h);
+	sf::Image image;
+	image.create(w, h);
 
 	float facteurX(float(M.taille()[0]) / w), facteurY(float(M.taille()[1]) / h);
 	for (int x(0); x < w; x++)
@@ -137,82 +106,104 @@ void plot(Matrice<long double> M, long double min_z, long double max_z)
 			int i(facteurX * x), j(facteurY * y);
 
 			if (M[i][j] < min_z)
-				image->setPixel(x, y, sf::Color(0, 0, 0));
+				image.setPixel(x, y, sf::Color(0, 0, 0));
 			else if (M[i][j] > max_z)
-				image->setPixel(x, y, sf::Color(255, 255, 255));
+				image.setPixel(x, y, sf::Color(255, 255, 255));
 			else
 			{
 				int color(255 * (M[i][j] - min_z) / (max_z - min_z));
-				image->setPixel(x, y, sf::Color(color, color, color));
+				image.setPixel(x, y, sf::Color(color, color, color));
 			}
 		}
 	}
 
-	MATRICES.changerTaille(MATRICES.taille() + 1);
-	MATRICES[MATRICES.taille() - 1] = image;
-
-	libererCourbes();
+	m_matrices.push_back(image);
+	m_courbes.clear();
 }
 
-void show(int framerate, bool animationCourbe)
+void Timeline::show()
 {
 	int w(TAILLE_PLOT[0]), h(TAILLE_PLOT[1]);
 
-	// Calcule des coordonn�es des points des courbes
-
-	if (COURBES != nullptr)
+	if (timelineList.size() == 0)
 	{
-		Courbe* courrante(COURBES);
-		long double min_x(courrante->min_x), max_x(courrante->max_x), min_y(courrante->min_y), max_y(courrante->max_y);
-		while (courrante->suivante != nullptr)
+		return;
+	}
+
+	// Calcule des coordonnées des points des courbes
+
+	Vecteur<long double> border(timelineList[0]->m_border);
+	for (int i(1); i < timelineList.size(); i++)
+	{
+		if (timelineList[i]->m_courbes.size() != 0)
 		{
-			courrante = courrante->suivante;
-
-			min_x = courrante->min_x < min_x ? courrante->min_x : min_x;
-			max_x = courrante->max_x > max_x ? courrante->max_x : max_x;
-			min_y = courrante->min_y < min_y ? courrante->min_y : min_y;
-			max_y = courrante->max_y > max_y ? courrante->max_y : max_y;
-		}
-
-		min_x -= 0.05*(max_x - min_x);
-		max_x += 0.05*(max_x - min_x);
-		min_y -= 0.05*(max_y - min_y);
-		max_y += 0.05*(max_y - min_y);
-
-		if (max_x == min_x)
-		{
-			min_x -= 0.5;
-			max_x += 0.5;
-		}
-		if (max_y == min_y)
-		{
-			min_y -= 0.5;
-			max_y += 0.5;
-		}
-
-		courrante = COURBES;
-
-		while (courrante != nullptr)
-		{
-			for (int i(0); i < courrante->figure->getVertexCount(); i++)
-			{
-				(*courrante->figure)[i].position.x = w * ((*courrante->figure)[i].position.x - min_x) / (max_x - min_x);
-				(*courrante->figure)[i].position.y = h * (1 - ((*courrante->figure)[i].position.y - min_y) / (max_y - min_y));
-			}
-
-			courrante = courrante->suivante;
+			Vecteur<long double>& other(timelineList[i]->m_border);
+			border[0] = other[0] < border[0] ? other[0] : border[0];
+			border[1] = other[1] > border[1] ? other[1] : border[1];
+			border[2] = other[2] < border[2] ? other[2] : border[2];
+			border[3] = other[3] > border[3] ? other[3] : border[3];
 		}
 	}
 
+	border[0] -= 0.05*(border[1] - border[0]);
+	border[1] += 0.05*(border[1] - border[0]);
+	border[2] -= 0.05*(border[3] - border[2]);
+	border[3] += 0.05*(border[3] - border[2]);
 
-	// Ouverture de la fen�tre
+	if (border[0] == border[1])
+	{
+		border[0] -= 0.5;
+		border[1] += 0.5;
+	}
+	if (border[2] == border[3])
+	{
+		border[2] -= 0.5;
+		border[3] += 0.5;
+	}
+
+	for (int i(0); i < timelineList.size(); i++)
+	{
+		for (int j(0); j < timelineList[i]->m_courbes.size(); j++)
+		{
+			sf::VertexArray& courbe(timelineList[i]->m_courbes[j]);
+			
+			for (int k(0); k < courbe.getVertexCount(); k++)
+			{
+				courbe[k].position.x = w*(courbe[k].position.x - border[0]) / (border[1] - border[0]);
+				courbe[k].position.y = h*(1 - (courbe[k].position.y - border[2]) / (border[3] - border[2]));
+			}
+		}
+	}
+
+	// Initialisation des courbes/matrices affichées
+
+	std::vector<int> affichees;
+	std::vector<sf::Clock> clocks;
+	bool matriceTrouvee(false);
+	for (int i(0); i < timelineList.size(); i++)
+	{
+		affichees.push_back(0);
+		clocks.push_back(sf::Clock());
+
+		if (timelineList[i]->m_matrices.size() != 0)
+		{
+			if (matriceTrouvee)
+				throw "On ne peut pas dessiner plus d'une matrice à la fois.";
+
+			Timeline* t(timelineList[0]);
+
+			timelineList[0] = timelineList[i];
+			timelineList[i] = t;
+
+			matriceTrouvee = true;
+		}
+	}
+
+	// Ouverture de la fenêtre
 
 	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
-	window.setFramerateLimit(framerate);
 
 	sf::Event event;
-	int t(0);
-	Courbe* courbeAffichee(COURBES);
 	while (window.isOpen())
 	{
 		window.display();
@@ -222,57 +213,56 @@ void show(int framerate, bool animationCourbe)
 			if (event.type == sf::Event::Closed)
 				window.close();
 
-		if (MATRICES.taille() != 0)
+		for (int i(0); i < timelineList.size(); i++)
 		{
-			sf::Texture texture;
-			texture.loadFromImage(*MATRICES[t]);
-			window.draw(sf::Sprite(texture));
-			t = (t + 1) % MATRICES.taille();
-		}
-		else
-		{
-			if (COURBES != nullptr)
-			{
-				if (animationCourbe)
-				{
-					if (courbeAffichee->suivante == nullptr)
-						courbeAffichee = COURBES;
-					else
-						courbeAffichee = courbeAffichee->suivante;
+			Timeline& timeline(*timelineList[i]);
 
-					if (courbeAffichee->figure->getVertexCount() == 1)
-					{
-						sf::CircleShape cercle;
-						cercle.setRadius(3);
-						cercle.setFillColor(sf::Color(0, 0, 0));
-						cercle.setPosition((*courbeAffichee->figure)[0].position.x, (*courbeAffichee->figure)[0].position.y);
-						window.draw(cercle);
-					}
-					else
-						window.draw(*courbeAffichee->figure);
+			if (timeline.m_matrices.size() != 0)
+			{
+				sf::Texture texture;
+				texture.loadFromImage(timeline.m_matrices[affichees[i]]);
+				window.draw(sf::Sprite(texture));
+
+				if (clocks[i].getElapsedTime().asSeconds() > timeline.m_delay)
+				{
+					affichees[i] = (affichees[i] + 1) % timeline.m_matrices.size();
+					clocks[i].restart();
+				}
+			}
+			else
+			{
+				sf::VertexArray& courbe(timeline.m_courbes[affichees[i]]);
+				if (courbe.getVertexCount() == 1)
+				{
+					sf::CircleShape cercle;
+					cercle.setRadius(3);
+					cercle.setFillColor(sf::Color(0, 0, 0));
+					cercle.setPosition(courbe[0].position.x, courbe[0].position.y);
+					window.draw(cercle);
 				}
 				else
 				{
-					Courbe* courrante(COURBES);
-					while (courrante != nullptr)
-					{
-						if (courrante->figure->getVertexCount() == 1)
-						{
-							sf::CircleShape cercle;
-							cercle.setRadius(3);
-							cercle.setFillColor(sf::Color(0, 0, 0));
-							cercle.setPosition((*courrante->figure)[0].position.x, (*courrante->figure)[0].position.y);
-							window.draw(cercle);
-						}
-						else
-							window.draw(*courrante->figure);
-						courrante = courrante->suivante;
-					}
+					window.draw(courbe);
+				}
+				
+				if (clocks[i].getElapsedTime().asSeconds() > timeline.m_delay)
+				{
+					affichees[i] = (affichees[i] + 1) % timeline.m_courbes.size();
+					clocks[i].restart();
 				}
 			}
 		}
 	}
+}
 
-	libererCourbes();
-	libererMatrices();
+Timeline::~Timeline()
+{
+	for (int i(0); i < timelineList.size(); i++)
+	{
+		if (timelineList[i] == this)
+		{
+			timelineList.erase(timelineList.begin() + i);
+			i--;
+		}
+	}
 }
