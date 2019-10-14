@@ -314,7 +314,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	}
 	iterations++;
 
-	std::cout << std::endl << "## Simulation termin�e, mise en place de l'affichage..." << std::endl;
+	std::cout << std::endl << "## Simulation terminée, mise en place de l'affichage..." << std::endl;
 
 	long double Wmin(premiere->matrice[0][0]), Wmax(Wmin);
 	MatriceChainee* courante(premiere);
