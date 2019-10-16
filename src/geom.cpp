@@ -40,17 +40,12 @@ void bezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool c
 		yCourbe[i] = By(double(i) / nbPoints);
 	}
 
-	Timeline timelineA;
+	Timeline timelineA, timelineB;
 	timelineA.plot(xCourbe, yCourbe);
 	if (contour)
 	{
-		Timeline timelineB;
 		timelineB.plot(x, y);
-		Timeline::show();
 	}
-	else
-	{
-		Timeline::show();
-	}
+	Timeline::show();
 	
 }

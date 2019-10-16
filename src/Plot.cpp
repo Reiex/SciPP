@@ -143,6 +143,11 @@ void Timeline::show()
 			border[2] = other[2] < border[2] ? other[2] : border[2];
 			border[3] = other[3] > border[3] ? other[3] : border[3];
 		}
+		else if (timelineList[i]->m_matrices.size() == 0)
+		{
+			timelineList.erase(timelineList.begin() + i);
+			i--;
+		}
 	}
 
 	border[0] -= 0.05*(border[1] - border[0]);
