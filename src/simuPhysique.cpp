@@ -413,3 +413,31 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 	timeline.setFramerate(1.0/dt);
 	Timeline::show();
 }
+
+
+// Autres simulations
+
+
+Vecteur<double> fSystemeD(Vecteur<double> x)
+{
+	double omega = 1;
+	double mu = 2;
+	double a = -0.1;
+
+	Vecteur<double> xp(2);
+	xp[0] = -omega*x[1] + mu*x[0] + a*x[0]*(x[0]*x[0] + x[1]*x[1]);
+	xp[1] = omega*x[0] + mu*x[1] + a*x[1]*(x[0]*x[0] + x[1]*x[1]);
+
+	return xp;
+}
+
+void systemeD()
+{
+	Vecteur<double> coord(4);
+	coord[0] = -10;
+	coord[1] = 10;
+	coord[2] = -10;
+	coord[3] = 10;
+
+	plotSolve2D(fSystemeD, coord);
+}

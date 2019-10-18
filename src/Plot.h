@@ -30,3 +30,5 @@ class Timeline
 		Vecteur<long double> m_border;
 		bool m_borderSet;
 };
+
+void plotSolve2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord);

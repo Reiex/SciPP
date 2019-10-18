@@ -271,3 +271,72 @@ Timeline::~Timeline()
 		}
 	}
 }
+
+
+void plotSolve2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
+{
+	int nbCases(40);
+
+	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
+	Matrice<Vecteur<double>> M(nbCases, nbCases);
+
+	for (int i(0); i < nbCases; i++)
+	{
+		for (int j(0); j < nbCases; j++)
+		{
+			Vecteur<double> v(2);
+			v[0] = coord[0] + i * pasX;
+			v[1] = coord[3] - j * pasY;
+
+			M[i][j] = f(v);
+		}
+	}
+
+	for (int i(0); i < nbCases; i++)
+	{
+		for (int j(0); j < nbCases; j++)
+		{
+			Vecteur<double> v(4);
+			v[0] = i * 15 + 8;
+			v[1] = j * 15 + 8;
+
+			M[i][j] /= sqrt(M[i][j] * M[i][j]);
+			v[2] = v[0] + M[i][j][0]*7;
+			v[3] = v[1] - M[i][j][1]*7;
+
+			M[i][j] = v;
+		}
+	}
+
+	// Ouverture de la fenêtre
+
+	sf::RenderWindow window(sf::VideoMode(600, 600), "Plot SciPP");
+
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		while (window.pollEvent(event))
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+		for (int i(0); i < nbCases; i++)
+		{
+			for (int j(0); j < nbCases; j++)
+			{
+				sf::VertexArray ligne(sf::LineStrip, 2);
+
+				ligne[0].position.x = M[i][j][0];
+				ligne[0].position.y = M[i][j][1];
+				ligne[0].color = sf::Color(0, 0, 0);
+				ligne[1].position.x = M[i][j][2];
+				ligne[1].position.y = M[i][j][3];
+				ligne[1].color = sf::Color(255, 0, 0);
+
+				window.draw(ligne);
+			}
+		}
+	}
+}
