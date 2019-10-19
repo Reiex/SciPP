@@ -31,4 +31,6 @@ class Timeline
 		bool m_borderSet;
 };
 
-void plotSolve2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord);
+void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord);
+
+void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision = 10000, double distCourbe = 100);

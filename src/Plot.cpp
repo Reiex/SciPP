@@ -273,7 +273,7 @@ Timeline::~Timeline()
 }
 
 
-void plotSolve2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
+void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
 {
 	int nbCases(40);
 
@@ -337,6 +337,120 @@ void plotSolve2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
 
 				window.draw(ligne);
 			}
+		}
+	}
+}
+
+void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision, double distCourbe)
+{
+	// Calculer le champ vectoriel a afficher
+
+	int nbCases(40);
+
+	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
+	Matrice<Vecteur<double>> M(nbCases, nbCases);
+
+	for (int i(0); i < nbCases; i++)
+	{
+		for (int j(0); j < nbCases; j++)
+		{
+			Vecteur<double> v(2);
+			v[0] = coord[0] + i * pasX;
+			v[1] = coord[3] - j * pasY;
+
+			M[i][j] = f(v);
+		}
+	}
+
+	for (int i(0); i < nbCases; i++)
+	{
+		for (int j(0); j < nbCases; j++)
+		{
+			Vecteur<double> v(4);
+			v[0] = i * 15 + 8;
+			v[1] = j * 15 + 8;
+
+			M[i][j] /= sqrt(M[i][j] * M[i][j]);
+			v[2] = v[0] + M[i][j][0] * 7;
+			v[3] = v[1] - M[i][j][1] * 7;
+
+			M[i][j] = v;
+		}
+	}
+
+	// Ouverture de la fenêtre
+
+	sf::RenderWindow window(sf::VideoMode(600, 600), "Plot SciPP");
+	std::vector<sf::VertexArray> orbites;
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				Vecteur<double> pos(2);
+				pos[0] = coord[0] + (coord[1] - coord[0])*(double(event.mouseButton.x)/window.getSize().x);
+				pos[1] = coord[2] + (coord[3] - coord[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
+
+				std::cout << pos << std::endl;
+
+				std::vector<Vecteur<double>> courbe;
+				courbe.push_back(pos);
+				double h((coord[1] - coord[0]) / precision), k((coord[3] - coord[2]) / precision), d(0);
+				while (d < distCourbe)
+				{
+					int n(courbe.size());
+					Vecteur<double> xp(f(courbe[n - 1])), x(2);
+					x[0] = courbe[n - 1][0] + h * xp[0];
+					x[1] = courbe[n - 1][1] + k * xp[1];
+					courbe.push_back(x);
+
+					double dD(sqrt((courbe[n - 1] - x) * (courbe[n - 1] - x)));
+					d += dD;
+
+					if (dD == 0)
+						break;
+				}
+
+				orbites.push_back(sf::VertexArray(sf::LineStrip, courbe.size()));
+				for (int i(0); i < courbe.size(); i++)
+				{
+					orbites[orbites.size() - 1][i].position.x = 600*(courbe[i][0] - coord[0])/(coord[1] - coord[0]);
+					orbites[orbites.size() - 1][i].position.y = 600*(1 - (courbe[i][1] - coord[2])/(coord[3] - coord[2]));
+					orbites[orbites.size() - 1][i].color = sf::Color(0, 0, 255);
+				}
+			}
+		}
+
+		for (int i(0); i < nbCases; i++)
+		{
+			for (int j(0); j < nbCases; j++)
+			{
+				sf::VertexArray ligne(sf::LineStrip, 2);
+
+				ligne[0].position.x = M[i][j][0];
+				ligne[0].position.y = M[i][j][1];
+				ligne[0].color = sf::Color(0, 0, 0);
+				ligne[1].position.x = M[i][j][2];
+				ligne[1].position.y = M[i][j][3];
+				ligne[1].color = sf::Color(255, 0, 0);
+
+				window.draw(ligne);
+			}
+		}
+
+		for (int i(0); i < orbites.size(); i++)
+		{
+			window.draw(orbites[i]);
 		}
 	}
 }

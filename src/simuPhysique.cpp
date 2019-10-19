@@ -420,7 +420,7 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 
 Vecteur<double> fSystemeD(Vecteur<double> x)
 {
-	double omega = 1;
+	double omega = 2;
 	double mu = 2;
 	double a = -0.1;
 
@@ -439,5 +439,5 @@ void systemeD()
 	coord[2] = -10;
 	coord[3] = 10;
 
-	plotSolve2D(fSystemeD, coord);
+	plotFlot2D(fSystemeD, coord, 100000, 100);
 }
