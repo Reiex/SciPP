@@ -5,3 +5,5 @@
 #include "SciPP.h"
 
 std::string neper(int n);
+
+void fonctionLogistique();

@@ -447,8 +447,6 @@ void systemeD()
 {
 	Vecteur<double> coord(4);
 
-	/*
-
 	// Equilibre rotation
 
 	coord[0] = -10;
@@ -458,7 +456,8 @@ void systemeD()
 
 	plotFlot2D(fEquilibreRotation, coord, 100000, 100);
 
-	*/
+
+	/*
 
 	// Proies prédateurs
 
@@ -468,4 +467,6 @@ void systemeD()
 	coord[3] = 3;
 
 	plotFlot2D(fProiesPredateurs, coord, 10000, 10);
+
+	*/
 }

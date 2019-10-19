@@ -14,7 +14,8 @@ int main()
 	// lancerInterpreteur();
 	// simuBalle();
 	// long double x[4] = { 0, -1, 0.5, 1 }, y[4] = { 0, 1, 0.75, 0.5 }; bezier(Vecteur<long double>(x, 4), Vecteur<long double>(y, 4), true);
-	systemeD();
+	// systemeD();
+	// fonctionLogistique();
 
 	return 0;
 }

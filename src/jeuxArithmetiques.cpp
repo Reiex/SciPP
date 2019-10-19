@@ -29,3 +29,45 @@ std::string neper(int n)
 
 	return decimales(s, n);
 }
+
+void fonctionLogistique()
+{
+	int w(1920), h(1017);
+
+	Timeline::TAILLE_PLOT[0] = w;
+	Timeline::TAILLE_PLOT[1] = h;
+
+	int n(100000);
+	Matrice<long double> f(w, h);
+	Vecteur<double> bornes(2);
+	bornes[0] = 2.8;
+	bornes[1] = 4;
+
+	for (int i(0); i < w; i++)
+	{
+		double x(0.5);
+		double r(bornes[0] + (bornes[1] - bornes[0]) * i / w);
+		for (int j(0); j < n; j++)
+		{
+			x = r * x * (1 - x);
+			f[i][h - 1 - int(x * h)] += 1.0 / n;
+		}
+
+		double max(0);
+		for (int j(0); j < h; j++)
+		{
+			max = f[i][j] > max ? f[i][j] : max;
+		}
+		for (int j(0); j < h; j++)
+		{
+			f[i][j] /= max;
+		}
+	}
+
+	Timeline timeline;
+	timeline.plot(f, 0, 1);
+	Timeline::show();
+
+	Timeline::TAILLE_PLOT[0] = 600;
+	Timeline::TAILLE_PLOT[1] = 600;
+}

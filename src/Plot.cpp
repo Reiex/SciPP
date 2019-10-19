@@ -1,6 +1,6 @@
 #include "Plot.h"
 
-static const int TAILLE_PLOT[] = { 600, 600 };
+int Timeline::TAILLE_PLOT[] = { 600, 600 };
 std::vector<Timeline*> Timeline::timelineList;
 
 Timeline::Timeline()

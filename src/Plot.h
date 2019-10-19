@@ -8,6 +8,8 @@ class Timeline
 {
 	public:
 
+		static int TAILLE_PLOT[];
+
 		Timeline();
 
 		void setFramerate(int framerate);
