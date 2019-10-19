@@ -71,3 +71,44 @@ void fonctionLogistique()
 	Timeline::TAILLE_PLOT[0] = 600;
 	Timeline::TAILLE_PLOT[1] = 600;
 }
+
+void mandelbrot()
+{
+	int w(1920), h(1080);
+
+	Timeline::TAILLE_PLOT[0] = w;
+	Timeline::TAILLE_PLOT[1] = h;
+
+	int n(100);
+	Matrice<long double> f(w, h);
+	Vecteur<double> bornes(4);
+	bornes[0] = -0.77;
+	bornes[1] = -0.768;
+	bornes[2] = 0.116;
+	bornes[3] = 0.117;
+
+	for (int i(0); i < w; i++)
+	{
+		for (int j(0); j < h; j++)
+		{
+			std::complex<double> c(bornes[0] + (bornes[1] - bornes[0]) * i / w, bornes[2] + (bornes[3] - bornes[2]) * j / h), z(0, 0);
+			for (int k(0); k < n; k++)
+			{
+				z = z * z + c;
+				if (std::abs(z) > 2)
+				{
+					z = 2;
+					break;
+				}
+			}
+			f[i][h - 1 - j] = std::abs(z) >= 2 ? 2: 0;
+		}
+	}
+
+	Timeline timeline;
+	timeline.plot(f, 0, 2);
+	Timeline::show();
+
+	Timeline::TAILLE_PLOT[0] = 600;
+	Timeline::TAILLE_PLOT[1] = 600;
+}

@@ -7,3 +7,5 @@
 std::string neper(int n);
 
 void fonctionLogistique();
+
+void mandelbrot();
