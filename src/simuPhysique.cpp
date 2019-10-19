@@ -418,7 +418,7 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 // Autres simulations
 
 
-Vecteur<double> fSystemeD(Vecteur<double> x)
+Vecteur<double> fEquilibreRotation(Vecteur<double> x)
 {
 	double omega = 2;
 	double mu = 2;
@@ -431,13 +431,41 @@ Vecteur<double> fSystemeD(Vecteur<double> x)
 	return xp;
 }
 
+Vecteur<double> fProiesPredateurs(Vecteur<double> x)
+{
+	double alpha = 0.5;
+	double lambda = 0.5;
+
+	Vecteur<double> xp(2);
+	xp[0] = x[0]*(1-x[1]-lambda*x[0]);
+	xp[1] = alpha*x[1]*(x[0]-1);
+
+	return xp;
+}
+
 void systemeD()
 {
 	Vecteur<double> coord(4);
+
+	/*
+
+	// Equilibre rotation
+
 	coord[0] = -10;
 	coord[1] = 10;
 	coord[2] = -10;
 	coord[3] = 10;
 
-	plotFlot2D(fSystemeD, coord, 100000, 100);
+	plotFlot2D(fEquilibreRotation, coord, 100000, 100);
+
+	*/
+
+	// Proies prédateurs
+
+	coord[0] = 0;
+	coord[1] = 3;
+	coord[2] = 0;
+	coord[3] = 3;
+
+	plotFlot2D(fProiesPredateurs, coord, 10000, 10);
 }
