@@ -8,4 +8,4 @@ std::string neper(int n);
 
 void fonctionLogistique();
 
-void mandelbrot();
+void mandelbrot(double xCentre, double yCentre, double zoom);

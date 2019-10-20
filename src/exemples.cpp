@@ -16,7 +16,7 @@ int main()
 	// long double x[4] = { 0, -1, 0.5, 1 }, y[4] = { 0, 1, 0.75, 0.5 }; bezier(Vecteur<long double>(x, 4), Vecteur<long double>(y, 4), true);
 	// systemeD();
 	// fonctionLogistique();
-	// mandelbrot();
+	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
 
 	return 0;
 }
