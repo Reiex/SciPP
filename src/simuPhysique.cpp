@@ -456,7 +456,6 @@ void systemeD()
 
 	plotFlot2D(fEquilibreRotation, coord, 100000, 100);
 
-
 	/*
 
 	// Proies prédateurs

@@ -9,11 +9,19 @@ Timeline::Timeline()
 	m_delay = 1.0/24.0;
 	m_border = Vecteur<long double>(4);
 	m_borderSet = false;
+	m_color = Vecteur<int>(3);
 }
 
 void Timeline::setFramerate(int framerate)
 {
 	m_delay = 1.0/framerate;
+}
+
+void Timeline::setColor(int r, int g, int b)
+{
+	m_color[0] = r;
+	m_color[1] = g;
+	m_color[2] = b;
 }
 
 void Timeline::plot(long double x, long double y)
@@ -171,11 +179,13 @@ void Timeline::show()
 		for (int j(0); j < timelineList[i]->m_courbes.size(); j++)
 		{
 			sf::VertexArray& courbe(timelineList[i]->m_courbes[j]);
+			Vecteur<int>& color(timelineList[i]->m_color);
 			
 			for (int k(0); k < courbe.getVertexCount(); k++)
 			{
 				courbe[k].position.x = w*(courbe[k].position.x - border[0]) / (border[1] - border[0]);
 				courbe[k].position.y = h*(1 - (courbe[k].position.y - border[2]) / (border[3] - border[2]));
+				courbe[k].color = sf::Color(color[0], color[1], color[2]);
 			}
 		}
 	}
@@ -272,6 +282,7 @@ Timeline::~Timeline()
 	}
 }
 
+// Graphes 2D
 
 void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
 {
@@ -454,3 +465,130 @@ void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int
 		}
 	}
 }
+
+// Bezier
+
+Polynome<long double> bernstein(int n, int i)
+{
+    long double tab[2] = {0, 1};
+    long double coeff(binom(n, i));
+
+	if (n == 0)
+		return coeff;
+	if (i == 0)
+		return coeff * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
+	if (i == n)
+		return coeff * expoRapide(Polynome<long double>(tab, 2), i);
+
+    return coeff * expoRapide(Polynome<long double>(tab, 2), i) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
+}
+
+Vecteur<long double> getBorder(Vecteur<long double> x, Vecteur<long double> y)
+{
+	int nbPoints(x.taille());
+	Vecteur<long double> border(4);
+
+	if (nbPoints != 0)
+	{
+		border[0] = x[0];
+		border[1] = x[0];
+		border[2] = y[0];
+		border[3] = y[0];
+
+		for (int i(0); i < nbPoints; i++)
+		{
+			border[0] = x[i] < border[0] ? x[i] : border[0];
+			border[1] = x[i] > border[1] ? x[i] : border[1];
+			border[2] = y[i] < border[2] ? y[i] : border[2];
+			border[3] = y[i] > border[3] ? y[i] : border[3];
+		}
+		
+		border[0] -= 0.05*(border[1] - border[0]);
+		border[1] += 0.05*(border[1] - border[0]);
+		border[2] -= 0.05*(border[3] - border[2]);
+		border[3] += 0.05*(border[3] - border[2]);
+	}
+
+	if (border[0] == border[1])
+	{
+		border[0] -= 0.5;
+		border[1] += 0.5;
+	}
+	if (border[2] == border[3])
+	{
+		border[2] -= 0.5;
+		border[3] += 0.5;
+	}
+
+	return border;
+}
+
+void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour, bool dynamique)
+{
+    if (x.taille() != y.taille())
+        throw "Les vecteurs x et y doivent être de même taille !";
+
+    int n(x.taille());
+    Polynome<long double> Bx, By;
+
+    for (int i(0); i < n; i++)
+    {
+		Bx += Polynome<long double>(x[i]) * bernstein(n-1, i);
+		By += Polynome<long double>(y[i]) * bernstein(n-1, i);
+    }
+
+	int nbPoints(1000);
+	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
+	for (int i(0); i < nbPoints; i++)
+	{
+		xCourbe[i] = Bx(double(i) / nbPoints);
+		yCourbe[i] = By(double(i) / nbPoints);
+	}
+	
+	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
+
+	// Calcule des coordonnées des points des courbes
+
+	Vecteur<long double> border(getBorder(x, y));
+	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
+
+	for (int i(0); i < n; i++)
+	{
+		polygoneVertex[i].position.x = w*(x[i] - border[0]) / (border[1] - border[0]);
+		polygoneVertex[i].position.y = h*(1 - (y[i] - border[2]) / (border[3] - border[2]));
+		polygoneVertex[i].color = sf::Color(255, 0, 0);
+	}
+	for (int i(0); i < nbPoints; i++)
+	{
+		courbeVertex[i].position.x = w*(xCourbe[i] - border[0]) / (border[1] - border[0]);
+		courbeVertex[i].position.y = h*(1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+		courbeVertex[i].color = sf::Color(0, 0, 0);
+	}
+
+	// Ouverture de la fenêtre
+
+	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
+
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		while (window.pollEvent(event))
+			if (event.type == sf::Event::Closed)
+				window.close();
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				Vecteur<double> pos(2);
+				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseButton.x)/window.getSize().x);
+				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
+
+				std::cout << pos << std::endl;
+			}
+
+		window.draw(polygoneVertex);
+		window.draw(courbeVertex);
+	}
+}
+

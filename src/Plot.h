@@ -13,6 +13,7 @@ class Timeline
 		Timeline();
 
 		void setFramerate(int framerate);
+		void setColor(int r, int g, int b);
 
 		void plot(long double x, long double y);
 		void plot(Vecteur<long double> x, Vecteur<long double> y);
@@ -31,8 +32,11 @@ class Timeline
 		std::vector<sf::Image> m_matrices;
 		Vecteur<long double> m_border;
 		bool m_borderSet;
+		Vecteur<int> m_color;
 };
 
 void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord);
 
 void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision = 10000, double distCourbe = 100);
+
+void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour=false, bool dynamique=false);
