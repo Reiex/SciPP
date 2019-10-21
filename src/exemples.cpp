@@ -12,7 +12,7 @@ int main()
 	// simuFluide2D();
 	// lancerInterpreteur();
 	// simuBalle();
-	long double x[4] = { 0, -1, 0.5, 1 }, y[4] = { 0, 1, 0.75, 0.5 }; plotBezier(Vecteur<long double>(x, 4), Vecteur<long double>(y, 4));
+	plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
 	// systemeD();
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);

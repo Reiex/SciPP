@@ -529,12 +529,13 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
         throw "Les vecteurs x et y doivent être de même taille !";
 
     int n(x.taille());
+	Vecteur<long double> xPolygone(x), yPolygone(y);
     Polynome<long double> Bx, By;
 
     for (int i(0); i < n; i++)
     {
-		Bx += Polynome<long double>(x[i]) * bernstein(n-1, i);
-		By += Polynome<long double>(y[i]) * bernstein(n-1, i);
+		Bx += Polynome<long double>(xPolygone[i]) * bernstein(n-1, i);
+		By += Polynome<long double>(yPolygone[i]) * bernstein(n-1, i);
     }
 
 	int nbPoints(1000);
@@ -549,13 +550,13 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 
 	// Calcule des coordonnées des points des courbes
 
-	Vecteur<long double> border(getBorder(x, y));
+	Vecteur<long double> border(getBorder(xPolygone, yPolygone));
 	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
 
 	for (int i(0); i < n; i++)
 	{
-		polygoneVertex[i].position.x = w*(x[i] - border[0]) / (border[1] - border[0]);
-		polygoneVertex[i].position.y = h*(1 - (y[i] - border[2]) / (border[3] - border[2]));
+		polygoneVertex[i].position.x = w*(xPolygone[i] - border[0]) / (border[1] - border[0]);
+		polygoneVertex[i].position.y = h*(1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
 		polygoneVertex[i].color = sf::Color(255, 0, 0);
 	}
 	for (int i(0); i < nbPoints; i++)
@@ -577,7 +578,9 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 
 		while (window.pollEvent(event))
 			if (event.type == sf::Event::Closed)
+			{
 				window.close();
+			}
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
 				Vecteur<double> pos(2);
@@ -585,10 +588,69 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
 
 				std::cout << pos << std::endl;
+
+				n++;
+
+				xPolygone.changerTaille(xPolygone.taille() + 1);
+				xPolygone[xPolygone.taille() - 1] = pos[0];
+				yPolygone.changerTaille(yPolygone.taille() + 1);
+				yPolygone[yPolygone.taille() - 1] = pos[1];
+			
+				Bx = 0;
+				By = 0;
+
+				for (int i(0); i < n; i++)
+				{
+					Bx += Polynome<long double>(xPolygone[i]) * bernstein(n - 1, i);
+					By += Polynome<long double>(yPolygone[i]) * bernstein(n - 1, i);
+				}
+
+				for (int i(0); i < nbPoints; i++)
+				{
+					xCourbe[i] = Bx(double(i) / nbPoints);
+					yCourbe[i] = By(double(i) / nbPoints);
+				}
+
+				polygoneVertex.resize(n);
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (xCourbe[i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
+			}
+			else if (event.type == sf::Event::MouseWheelScrolled)
+			{
+				float zoom(exp(-0.1*event.mouseWheelScroll.delta));
+				double centreX(border[0] + (border[1] - border[0]) / 2), centreY(border[2] + (border[3] - border[2]) / 2);
+
+				border[1] = centreX + (centreX - border[0]) * zoom;
+				border[0] = centreX - (centreX - border[0]) * zoom;
+				border[3] = centreY + (centreY - border[2]) * zoom;
+				border[2] = centreY - (centreY - border[2]) * zoom;
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (xCourbe[i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
 			}
 
 		window.draw(polygoneVertex);
 		window.draw(courbeVertex);
 	}
 }
-

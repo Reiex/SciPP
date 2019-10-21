@@ -212,5 +212,3 @@ Matrice<long double> cholesky(Matrice<long double> const& A)
 
 	return B;
 }
-
-
