@@ -36,8 +36,8 @@ void bezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool c
 	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
 	for (int i(0); i < nbPoints; i++)
 	{
-		xCourbe[i] = Bx(long double(i) / nbPoints);
-		yCourbe[i] = By(long double(i) / nbPoints);
+		xCourbe[i] = Bx(double(i) / nbPoints);
+		yCourbe[i] = By(double(i) / nbPoints);
 	}
 
 	Timeline timelineA, timelineB;

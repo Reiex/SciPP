@@ -2,7 +2,7 @@
 
 std::string neper(int n)
 {
-	// Calcul du nombre d'itérations nécessaires
+	// Calcul du nombre d'itï¿½rations nï¿½cessaires
 
 	int k(0);
 	Fraction<Entier> fact(2);
