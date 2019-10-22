@@ -443,9 +443,20 @@ Vecteur<double> fProiesPredateurs(Vecteur<double> x)
 	return xp;
 }
 
+Vecteur<double> fPendule(Vecteur<double> x)
+{
+	Vecteur<double> xp(2);
+	xp[0] = x[1];
+	xp[1] = -sin(x[0]);
+
+	return xp;
+}
+
 void systemeD()
 {
 	Vecteur<double> coord(4);
+
+	/*
 
 	// Equilibre rotation
 
@@ -455,6 +466,8 @@ void systemeD()
 	coord[3] = 10;
 
 	plotFlot2D(fEquilibreRotation, coord, 100000, 100);
+
+	*/
 
 	/*
 
@@ -468,4 +481,14 @@ void systemeD()
 	plotFlot2D(fProiesPredateurs, coord, 10000, 10);
 
 	*/
+
+	// Pendule
+
+	coord[0] = -10;
+	coord[1] = 10;
+	coord[2] = -2;
+	coord[3] = 2;
+
+	plotFlot2D(fPendule, coord, 10000, 50);
+
 }
