@@ -355,7 +355,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 }
 
 
-// Simulations mécaniques
+// Simulations mecaniques
 
 Vecteur<double> gravite(Point p)
 {
@@ -415,7 +415,7 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 }
 
 
-// Autres simulations
+// Simulations de systemes dynamiques
 
 
 Vecteur<double> fEquilibreRotation(Vecteur<double> x)
