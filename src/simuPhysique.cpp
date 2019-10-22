@@ -492,5 +492,4 @@ void systemeD()
 	coord[3] = 2;
 
 	plotFlot2D(fPendule, coord, 100, 50);
-
 }
