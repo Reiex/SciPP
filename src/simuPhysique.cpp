@@ -445,9 +445,11 @@ Vecteur<double> fProiesPredateurs(Vecteur<double> x)
 
 Vecteur<double> fPendule(Vecteur<double> x)
 {
+	double nu(1);
+
 	Vecteur<double> xp(2);
 	xp[0] = x[1];
-	xp[1] = -sin(x[0]);
+	xp[1] = -sin(x[0]) - nu*x[1];
 
 	return xp;
 }
@@ -478,7 +480,7 @@ void systemeD()
 	coord[2] = 0;
 	coord[3] = 3;
 
-	plotFlot2D(fProiesPredateurs, coord, 10000, 10);
+	plotFlot2D(fProiesPredateurs, coord, 500, 10);
 
 	*/
 
@@ -489,6 +491,6 @@ void systemeD()
 	coord[2] = -2;
 	coord[3] = 2;
 
-	plotFlot2D(fPendule, coord, 10000, 50);
+	plotFlot2D(fPendule, coord, 100, 50);
 
 }
