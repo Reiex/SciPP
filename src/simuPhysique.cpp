@@ -474,48 +474,66 @@ void systemeD()
 	// plotFlot2D(fPendule, coord, 100, 50);
 }
 
-double uInit(double x)
+double uInit(double x, double y)
 {
-	return 1 - (x - 1)*x + sin(2*3.1415926*x);
+	double pi(3.1415926);
+	double r(0), d((x - 0.5)*(x - 0.5) + (y - 0.5)*(y-0.5));
+
+	r += exp(-50*d);
+
+	return r;
 }
 
-void equationChaleur(int Nx, double t_simu)
+void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 {
-	double dx(1.0/Nx);
+	double dx(1.0/Nx), dy(1.0/Ny), Umin(uInit(0, 0)), Umax(uInit(0, 0));
 
-	Vecteur<long double> x(Nx), axe(Nx);
+	Matrice<long double> U(Nx, Ny);
 
 	for (int i(0); i < Nx; i++)
 	{
-		x[i] = uInit(double(i)/(Nx - 1));
-		axe[i] = double(i)/(Nx - 1);
+		for (int j(0); j < Ny; j++)
+		{
+			U[i][j] = uInit(double(i)/(Nx - 1), double(j)/(Ny - 1));
+			Umin = U[i][j] < Umin ? U[i][j]: Umin;
+			Umax = U[i][j] > Umax ? U[i][j]: Umax;
+		}
 	}
 
 	Timeline timeline;
-	timeline.plot(axe, x);
+	timeline.plot(U, Umin, Umax);
 	long double t(0);
-	int nbIterations(0);
+	int nbIterations(0), nbImages(0);
 	while (t < t_simu)
 	{
-		Vecteur<long double> xp(Nx);
+		Matrice<long double> Up(Nx, Ny);
 		double max(0);
 		for (int i(0); i < Nx; i++)
 		{
-			xp[i] = (x[i > 0 ? i-1 : Nx - 1] - 2*x[i] + x[i < Nx - 1 ? i+1: 0])/(dx*dx);
-			if (xp[i] > max || xp[i] < -max)
+			for (int j(0); j < Ny; j++)
 			{
-				max = xp[i] > 0 ? xp[i]: -xp[i];
+				Up[i][j] = (U[i > 0 ? i-1 : Nx - 1][j] - 2*U[i][j] + U[i < Nx - 1 ? i+1: 0][j])/(dx*dx) + (U[i][j > 0 ? j-1 : Ny - 1] - 2*U[i][j] + U[i][j < Ny - 1 ? j+1: 0])/(dy*dy);
+				if (Up[i][j] > max || Up[i][j] < -max)
+				{
+					max = Up[i][j] > 0 ? Up[i][j]: -Up[i][j];
+				}
 			}
 		}
 
-		long double dt(0.001*dx/max);
-
-		x += xp*dt;
-		timeline.plot(axe, x);
+		long double dt(5*dx*dy/max);
+		U += Up*dt;
 		t += dt;
+		if (t > double(nbImages + 1)/2400)
+		{
+			nbImages += 1;
+			timeline.plot(U, Umin, Umax);
+			std::cout << max << ", " << t << ", " << dt << std::endl;
+		}
 		nbIterations++;
 	}
 
-	timeline.setFramerate(nbIterations/t_simu);
+	std::cout << nbImages << std::endl;
+
+	timeline.setFramerate(24);
 	Timeline::show();
 }

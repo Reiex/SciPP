@@ -52,4 +52,4 @@ void simuBalle(long double t = 10, long double x = 0, long double y = 10, long d
 
 void systemeD();
 
-void equationChaleur(int Nx, double t_simu);
+void dispertionChaleur2D(int Nx, int Ny, double t_simu);
