@@ -479,7 +479,7 @@ double uInit(double x, double y)
 	double pi(3.1415926);
 	double r(0), d((x - 0.5)*(x - 0.5) + (y - 0.5)*(y-0.5));
 
-	r += exp(-50*d);
+	r += 5*exp(-50*std::abs(0.2 - d));
 
 	return r;
 }
@@ -504,9 +504,9 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 	timeline.plot(U, Umin, Umax);
 	long double t(0);
 	int nbIterations(0), nbImages(0);
+	Matrice<long double> Up(Nx, Ny);
 	while (t < t_simu)
 	{
-		Matrice<long double> Up(Nx, Ny);
 		double max(0);
 		for (int i(0); i < Nx; i++)
 		{
