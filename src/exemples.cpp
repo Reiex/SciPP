@@ -13,9 +13,10 @@ int main()
 	// lancerInterpreteur();
 	// simuBalle();
 	// plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
-	systemeD();
+	// systemeD();
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
+	equationChaleur(100, 1);
 
 	return 0;
 }

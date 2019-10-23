@@ -458,38 +458,64 @@ void systemeD()
 {
 	Vecteur<double> coord(4);
 
-	/*
-
 	// Equilibre rotation
 
-	coord[0] = -10;
-	coord[1] = 10;
-	coord[2] = -10;
-	coord[3] = 10;
-
-	plotFlot2D(fEquilibreRotation, coord, 100000, 100);
-
-	*/
-
-	/*
+	// coord[0] = -10; coord[1] = 10; coord[2] = -10; coord[3] = 10;
+	// plotFlot2D(fEquilibreRotation, coord, 100000, 100);
 
 	// Proies prédateurs
 
-	coord[0] = 0;
-	coord[1] = 3;
-	coord[2] = 0;
-	coord[3] = 3;
-
-	plotFlot2D(fProiesPredateurs, coord, 500, 10);
-
-	*/
+	// coord[0] = 0; coord[1] = 3; coord[2] = 0; coord[3] = 3;
+	// plotFlot2D(fProiesPredateurs, coord, 500, 10);
 
 	// Pendule
 
-	coord[0] = -10;
-	coord[1] = 10;
-	coord[2] = -2;
-	coord[3] = 2;
+	// coord[0] = -10; coord[1] = 10; coord[2] = -2; coord[3] = 2;
+	// plotFlot2D(fPendule, coord, 100, 50);
+}
 
-	plotFlot2D(fPendule, coord, 100, 50);
+double uInit(double x)
+{
+	return 1 - (x - 1)*x + sin(2*3.1415926*x);
+}
+
+void equationChaleur(int Nx, double t_simu)
+{
+	double dx(1.0/Nx);
+
+	Vecteur<long double> x(Nx), axe(Nx);
+
+	for (int i(0); i < Nx; i++)
+	{
+		x[i] = uInit(double(i)/(Nx - 1));
+		axe[i] = double(i)/(Nx - 1);
+	}
+
+	Timeline timeline;
+	timeline.plot(axe, x);
+	long double t(0);
+	int nbIterations(0);
+	while (t < t_simu)
+	{
+		Vecteur<long double> xp(Nx);
+		double max(0);
+		for (int i(0); i < Nx; i++)
+		{
+			xp[i] = (x[i > 0 ? i-1 : Nx - 1] - 2*x[i] + x[i < Nx - 1 ? i+1: 0])/(dx*dx);
+			if (xp[i] > max || xp[i] < -max)
+			{
+				max = xp[i] > 0 ? xp[i]: -xp[i];
+			}
+		}
+
+		long double dt(0.001*dx/max);
+
+		x += xp*dt;
+		timeline.plot(axe, x);
+		t += dt;
+		nbIterations++;
+	}
+
+	timeline.setFramerate(nbIterations/t_simu);
+	Timeline::show();
 }
