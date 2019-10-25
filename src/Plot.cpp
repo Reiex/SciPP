@@ -652,3 +652,40 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 		window.draw(courbeVertex);
 	}
 }
+
+Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my, int nbPoints)
+{
+    if (x.taille() != y.taille() || mx.taille() != my.taille() || x.taille() != mx.taille())
+        throw "Les tailles des vecteurs ne se correspondent pas !";
+	
+	int n(x.taille()), j(0);
+	long double tabH0[] = {1, 0, -3, 2}, tabH1[] = {0, 0, 3, -2}, tabH2[] = {0, 1, -2, 1}, tabH3[] = {0, 0, -1, 1};
+	Polynome<long double> H0(tabH0, 4), H1(tabH1, 4), H2(tabH2, 4), H3(tabH3, 4);
+	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
+	for (int i(0); i < n - 1; i++)
+	{
+		Polynome<long double> Px, Py;
+		Px += Polynome<long double>(x[i])*H0;
+		Px += Polynome<long double>(x[i+1])*H1;
+		Px += Polynome<long double>(mx[i])*H2;
+		Px += Polynome<long double>(mx[i+1])*H3;
+
+		Py += Polynome<long double>(y[i])*H0;
+		Py += Polynome<long double>(y[i+1])*H1;
+		Py += Polynome<long double>(my[i])*H2;
+		Py += Polynome<long double>(my[i+1])*H3;
+		int l((i+1)*nbPoints/(n-1));
+		for (int k(0); j + k < l ;k++)
+		{
+			xCourbe[j + k] = Px(double (k)/(l - j));
+			yCourbe[j + k] = Py(double (k)/(l - j));
+		}
+		j = l;
+	}
+
+	Vecteur<Vecteur<long double>> courbeHermite(2);
+	courbeHermite[0] = xCourbe;
+	courbeHermite[1] = yCourbe;
+
+	return courbeHermite;
+}
