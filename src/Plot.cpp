@@ -659,26 +659,21 @@ Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<
         throw "Les tailles des vecteurs ne se correspondent pas !";
 	
 	int n(x.taille()), j(0);
-	long double tabH0[] = {1, 0, -3, 2}, tabH1[] = {0, 0, 3, -2}, tabH2[] = {0, 1, -2, 1}, tabH3[] = {0, 0, -1, 1};
-	Polynome<long double> H0(tabH0, 4), H1(tabH1, 4), H2(tabH2, 4), H3(tabH3, 4);
 	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
-	for (int i(0); i < n - 1; i++)
+	for (int k(0); k < n - 1; k++)
 	{
-		Polynome<long double> Px, Py;
-		Px += Polynome<long double>(x[i])*H0;
-		Px += Polynome<long double>(x[i+1])*H1;
-		Px += Polynome<long double>(mx[i])*H2;
-		Px += Polynome<long double>(mx[i+1])*H3;
+		Vecteur<long double> xBezier(4), yBezier(4);
+		xBezier[0] = x[k]; yBezier[0] = y[k];
+		xBezier[1] = x[k] + mx[k]/3; yBezier[1] = y[k] + my[k]/3;
+		xBezier[2] = x[k+1] - mx[k+1]/3; yBezier[2] = y[k+1] - my[k+1]/3;
+		xBezier[3] = x[k+1]; yBezier[3] = y[k+1];
+		int l((k+1)*nbPoints/(n-1));
+		Vecteur<Vecteur<long double>> courbeBezier(getBezier(xBezier, yBezier, l - j));
 
-		Py += Polynome<long double>(y[i])*H0;
-		Py += Polynome<long double>(y[i+1])*H1;
-		Py += Polynome<long double>(my[i])*H2;
-		Py += Polynome<long double>(my[i+1])*H3;
-		int l((i+1)*nbPoints/(n-1));
-		for (int k(0); j + k < l ;k++)
+		for (int i(0); j + i < l; i++)
 		{
-			xCourbe[j + k] = Px(double (k)/(l - j));
-			yCourbe[j + k] = Py(double (k)/(l - j));
+			xCourbe[j+i] = courbeBezier[0][i];
+			yCourbe[j+i] = courbeBezier[1][i];
 		}
 		j = l;
 	}

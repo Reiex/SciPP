@@ -513,6 +513,7 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 			for (int j(0); j < Ny; j++)
 			{
 				Up[i][j] = (U[i > 0 ? i-1 : Nx - 1][j] - 2*U[i][j] + U[i < Nx - 1 ? i+1: 0][j])/(dx*dx) + (U[i][j > 0 ? j-1 : Ny - 1] - 2*U[i][j] + U[i][j < Ny - 1 ? j+1: 0])/(dy*dy);
+				Up[i][j] *= 0.1;
 				if (Up[i][j] > max || Up[i][j] < -max)
 				{
 					max = Up[i][j] > 0 ? Up[i][j]: -Up[i][j];
