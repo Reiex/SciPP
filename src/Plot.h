@@ -39,4 +39,6 @@ void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord
 
 void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision = 10000, double distCourbe = 100);
 
+Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, int nbPoints);
+
 void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour=false, bool dynamique=false);
