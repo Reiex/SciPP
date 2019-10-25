@@ -523,28 +523,39 @@ Vecteur<long double> getBorder(Vecteur<long double> x, Vecteur<long double> y)
 	return border;
 }
 
-void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour, bool dynamique)
+Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, int nbPoints)
 {
     if (x.taille() != y.taille())
         throw "Les vecteurs x et y doivent être de même taille !";
-
-    int n(x.taille());
-	Vecteur<long double> xPolygone(x), yPolygone(y);
+	
+	int n(x.taille());
     Polynome<long double> Bx, By;
 
     for (int i(0); i < n; i++)
     {
-		Bx += Polynome<long double>(xPolygone[i]) * bernstein(n-1, i);
-		By += Polynome<long double>(yPolygone[i]) * bernstein(n-1, i);
+		Bx += Polynome<long double>(x[i]) * bernstein(n-1, i);
+		By += Polynome<long double>(y[i]) * bernstein(n-1, i);
     }
 
-	int nbPoints(1000);
 	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
 	for (int i(0); i < nbPoints; i++)
 	{
 		xCourbe[i] = Bx(double(i) / nbPoints);
 		yCourbe[i] = By(double(i) / nbPoints);
 	}
+
+	Vecteur<Vecteur<long double>> courbeBezier(2);
+	courbeBezier[0] = xCourbe;
+	courbeBezier[1] = yCourbe;
+
+	return courbeBezier;
+}
+
+void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour, bool dynamique)
+{
+	int n(x.taille()), nbPoints(1000);
+	Vecteur<long double> xPolygone(x), yPolygone(y);
+	Vecteur<Vecteur<long double>> courbeBezier(getBezier(xPolygone, yPolygone, nbPoints));
 	
 	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
@@ -561,8 +572,8 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 	}
 	for (int i(0); i < nbPoints; i++)
 	{
-		courbeVertex[i].position.x = w*(xCourbe[i] - border[0]) / (border[1] - border[0]);
-		courbeVertex[i].position.y = h*(1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+		courbeVertex[i].position.x = w*(courbeBezier[0][i] - border[0]) / (border[1] - border[0]);
+		courbeVertex[i].position.y = h*(1 - (courbeBezier[1][i] - border[2]) / (border[3] - border[2]));
 		courbeVertex[i].color = sf::Color(0, 0, 0);
 	}
 
@@ -596,20 +607,7 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 				yPolygone.changerTaille(yPolygone.taille() + 1);
 				yPolygone[yPolygone.taille() - 1] = pos[1];
 			
-				Bx = 0;
-				By = 0;
-
-				for (int i(0); i < n; i++)
-				{
-					Bx += Polynome<long double>(xPolygone[i]) * bernstein(n - 1, i);
-					By += Polynome<long double>(yPolygone[i]) * bernstein(n - 1, i);
-				}
-
-				for (int i(0); i < nbPoints; i++)
-				{
-					xCourbe[i] = Bx(double(i) / nbPoints);
-					yCourbe[i] = By(double(i) / nbPoints);
-				}
+				courbeBezier = getBezier(xPolygone, yPolygone, nbPoints);
 
 				polygoneVertex.resize(n);
 
@@ -621,8 +619,8 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 				}
 				for (int i(0); i < nbPoints; i++)
 				{
-					courbeVertex[i].position.x = w * (xCourbe[i] - border[0]) / (border[1] - border[0]);
-					courbeVertex[i].position.y = h * (1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].position.x = w * (courbeBezier[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeBezier[1][i] - border[2]) / (border[3] - border[2]));
 					courbeVertex[i].color = sf::Color(0, 0, 0);
 				}
 			}
@@ -644,8 +642,8 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bo
 				}
 				for (int i(0); i < nbPoints; i++)
 				{
-					courbeVertex[i].position.x = w * (xCourbe[i] - border[0]) / (border[1] - border[0]);
-					courbeVertex[i].position.y = h * (1 - (yCourbe[i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].position.x = w * (courbeBezier[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeBezier[1][i] - border[2]) / (border[3] - border[2]));
 					courbeVertex[i].color = sf::Color(0, 0, 0);
 				}
 			}

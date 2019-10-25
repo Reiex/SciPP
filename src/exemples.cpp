@@ -12,11 +12,11 @@ int main()
 	// simuFluide2D();
 	// lancerInterpreteur();
 	// simuBalle();
-	// plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
+	plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
 	// systemeD();
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
-	dispertionChaleur2D(200, 200, 0.1);
+	// dispertionChaleur2D(200, 200, 0.1);
 
 	return 0;
 }
