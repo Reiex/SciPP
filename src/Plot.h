@@ -41,6 +41,8 @@ void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int
 
 Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, int nbPoints = 1000);
 
-void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour=false, bool dynamique=false);
+void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y);
 
 Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my, int nbPoints = 1000);
+
+void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my);

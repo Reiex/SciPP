@@ -551,7 +551,7 @@ Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<l
 	return courbeBezier;
 }
 
-void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, bool contour, bool dynamique)
+void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y)
 {
 	int n(x.taille()), nbPoints(1000);
 	Vecteur<long double> xPolygone(x), yPolygone(y);
@@ -683,4 +683,119 @@ Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<
 	courbeHermite[1] = yCourbe;
 
 	return courbeHermite;
+}
+
+void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my)
+{
+	
+	int n(x.taille()), nbPoints(1000);
+	Vecteur<long double> xPolygone(x), yPolygone(y), mxPolygone(mx), myPolygone(my);
+	Vecteur<Vecteur<long double>> courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
+	
+	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
+
+	// Calcule des coordonnées des points des courbes
+
+	Vecteur<long double> border(getBorder(xPolygone, yPolygone));
+	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
+
+	for (int i(0); i < n; i++)
+	{
+		polygoneVertex[i].position.x = w*(xPolygone[i] - border[0]) / (border[1] - border[0]);
+		polygoneVertex[i].position.y = h*(1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+		polygoneVertex[i].color = sf::Color(255, 0, 0);
+	}
+	for (int i(0); i < nbPoints; i++)
+	{
+		courbeVertex[i].position.x = w*(courbeHermite[0][i] - border[0]) / (border[1] - border[0]);
+		courbeVertex[i].position.y = h*(1 - (courbeHermite[1][i] - border[2]) / (border[3] - border[2]));
+		courbeVertex[i].color = sf::Color(0, 0, 0);
+	}
+
+	// Ouverture de la fenêtre
+
+	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
+
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		while (window.pollEvent(event))
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				Vecteur<double> pos(2);
+				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseButton.x)/window.getSize().x);
+				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
+
+				std::cout << pos << std::endl;
+
+				n++;
+
+				xPolygone.changerTaille(n);
+				yPolygone.changerTaille(n);
+				mxPolygone.changerTaille(n);
+				myPolygone.changerTaille(n);
+				xPolygone[n - 1] = pos[0];
+				yPolygone[n - 1] = pos[1];
+				if (n > 1)
+				{
+					mxPolygone[n - 1] = pos[0] - xPolygone[n - 2];
+					myPolygone[n - 1] = pos[1] - yPolygone[n - 2];
+				}
+				else
+				{
+					mxPolygone[n - 1] = 0;
+					myPolygone[n - 1] = 0;
+				}
+			
+				courbeHermite = getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints);
+
+				polygoneVertex.resize(n);
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (courbeHermite[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeHermite[1][i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
+			}
+			else if (event.type == sf::Event::MouseWheelScrolled)
+			{
+				float zoom(exp(-0.1*event.mouseWheelScroll.delta));
+				double centreX(border[0] + (border[1] - border[0]) / 2), centreY(border[2] + (border[3] - border[2]) / 2);
+
+				border[1] = centreX + (centreX - border[0]) * zoom;
+				border[0] = centreX - (centreX - border[0]) * zoom;
+				border[3] = centreY + (centreY - border[2]) * zoom;
+				border[2] = centreY - (centreY - border[2]) * zoom;
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (courbeHermite[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeHermite[1][i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
+			}
+
+		window.draw(polygoneVertex);
+		window.draw(courbeVertex);
+	}
 }
