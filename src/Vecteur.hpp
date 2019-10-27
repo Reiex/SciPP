@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "Fraction.hpp"
 
 /*
 	T::T()
@@ -196,7 +197,7 @@ template<typename T> void Vecteur<T>::changerTaille(int taille)
 }
 
 
-// Opérations
+// Opï¿½rations
 
 template<typename T> Vecteur<T>& Vecteur<T>::operator+=(Vecteur<T> const& v)
 {

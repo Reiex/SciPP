@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "Entier.h"
+#include <string>
+#include <sstream>
+#include "Entier.hpp"
 
 /*
 	Les fonctions necessaires de Vecteur.
@@ -243,3 +245,11 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Fraction<T> 
 	stream << "(" << a.numerateur() << "/" << a.denominateur() << ")";
 	return stream;
 }
+
+// Autres
+
+long double const PI = 3.141592653589793;
+long double const E = 2.7182818284590452;
+
+std::string decimales(Fraction<Entier> const& x, int n);
+std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x);

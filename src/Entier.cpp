@@ -1,4 +1,4 @@
-#include "Entier.h"
+#include "Entier.hpp"
 
 
 // Constructeurs

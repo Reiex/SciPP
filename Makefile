@@ -1,7 +1,7 @@
 # Règles générales
 
-SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o
-	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Interpreteur.o obj/Plot.o obj/SpecFunc.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
+SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Fraction.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o
+	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Fraction.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
 	rm obj/*
@@ -24,12 +24,15 @@ obj/jeuxArithmetiques.o: src/jeuxArithmetiques.cpp
 
 obj/Entier.o: src/Entier.cpp
 	g++ -c src/Entier.cpp -o obj/Entier.o
-	
+
+obj/Fraction.o: src/Fraction.cpp
+	g++ -c src/Fraction.cpp -o obj/Fraction.o
+
+obj/Matrice.o: src/Matrice.cpp
+	g++ -c src/Matrice.cpp -o obj/Matrice.o
+
 obj/Interpreteur.o: src/Interpreteur.cpp
 	g++ -c src/Interpreteur.cpp -o obj/Interpreteur.o
 	
 obj/Plot.o: src/Plot.cpp
 	g++ -c src/Plot.cpp -o obj/Plot.o
-	
-obj/SpecFunc.o: src/SpecFunc.cpp
-	g++ -c src/SpecFunc.cpp -o obj/SpecFunc.o

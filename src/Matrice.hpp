@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <complex>
 #include "Vecteur.hpp"
 
 /*
@@ -523,3 +524,13 @@ template<typename T> Matrice<T>::~Matrice()
 	if (m_actif)
 		liberer();
 }
+
+
+// Autres
+
+Vecteur<std::complex<long double>> DFT(Vecteur<std::complex<long double>> const& v);
+Vecteur<std::complex<long double>> IDFT(Vecteur<std::complex<long double>> const& v);
+Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M);
+Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M);
+Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly);
+Matrice<long double> cholesky(Matrice<long double> const& A);
