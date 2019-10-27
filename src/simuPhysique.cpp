@@ -470,8 +470,8 @@ void systemeD()
 
 	// Pendule
 
-	// coord[0] = -10; coord[1] = 10; coord[2] = -2; coord[3] = 2;
-	// plotFlot2D(fPendule, coord, 100, 50);
+	coord[0] = -10; coord[1] = 10; coord[2] = -2; coord[3] = 2;
+	plotFlot2D(fPendule, coord, 100, 50);
 }
 
 double uInit(double x, double y)
