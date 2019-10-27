@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "SciPP.h"
+#include "Entier.h"
 
 /*
-	Les fonctions nécessaires de Vecteur.
+	Les fonctions necessaires de Vecteur.
 
 	T::T(int)
 	T::operator=(T const&)
@@ -97,7 +97,7 @@ template<typename T> T Fraction<T>::denominateur() const
 }
 
 
-// Opérations
+// Operations
 
 template<typename T> Fraction<T>& Fraction<T>::operator+=(Fraction<T> const& a)
 {
@@ -215,7 +215,7 @@ template<typename T> bool operator<=(Fraction<T> const& a, Fraction<T> const& b)
 }
 
 
-// Fonctions spécifiques
+// Fonctions specifiques
 
 template<typename T> void Fraction<T>::simplifier()
 {

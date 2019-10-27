@@ -471,7 +471,7 @@ void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int
 Polynome<long double> bernstein(int n, int i)
 {
     long double tab[2] = {0, 1};
-    long double coeff(binom(n, i));
+    long double coeff(binom(n, i).toInt());
 
 	if (n == 0)
 		return coeff;

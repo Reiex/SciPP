@@ -3,19 +3,6 @@
 
 // Fonctions spécifiques
 
-long long int binom(int n, int p)
-{
-	Entier num(1), denom(1);
-
-	for (int i(0); i < p; i++)
-	{
-		num *= n-i;
-		denom *= p-i;
-	}
-
-	return (num/denom).toInt();
-}
-
 std::string decimales(Fraction<Entier> const& x, int n)
 {
 	std::string chaine("");

@@ -12,7 +12,7 @@ int main()
 	// simuFluide2D();
 	// lancerInterpreteur();
 	// simuBalle();
-	// plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
+	plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
 	// plotHermite(Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0));
 	// systemeD();
 	// fonctionLogistique();

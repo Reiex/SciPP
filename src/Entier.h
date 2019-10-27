@@ -4,6 +4,57 @@
 #include <cstdint>
 
 
+// Templates necessaires
+
+template<typename T> T expoRapide(T const& x, int n)
+{
+	if (n < 1)
+		throw "n doit etre superieur a 1.";
+
+	if (n == 1)
+		return x;
+
+	int k(n - 1);
+	T r(x), p(x);
+
+	while (k != 0)
+	{
+		if (k % 2 == 0)
+		{
+			p *= p;
+			k /= 2;
+		}
+		else
+		{
+			r *= p;
+			k -= 1;
+		}
+	}
+
+	return r;
+}
+
+template<typename T> T pgcd(T const& a, T const& b)
+{
+	T zero(0);
+	if (a == zero || b == zero)
+		return T(1);
+
+	T u(a), v(b), r(u % v);
+
+	while (r != zero)
+	{
+		u = v;
+		v = r;
+		r = u % v;
+	}
+
+	return v;
+}
+
+
+// Classe Entier
+
 class Entier
 {
 	public:
@@ -46,7 +97,7 @@ class Entier
 };
 
 
-// Opérations
+// Operations
 
 Entier operator+(Entier const& x, Entier const& y);
 Entier&& operator+(Entier&& x, Entier const& y);
@@ -85,3 +136,7 @@ bool operator<=(Entier const& x, Entier const& y);
 // Affichage
 
 std::ostream& operator<<(std::ostream& stream, Entier const& x);
+
+// Autres
+
+Entier binom(int n, int p);

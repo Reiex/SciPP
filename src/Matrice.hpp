@@ -4,7 +4,7 @@
 #include "Vecteur.hpp"
 
 /*
-	Les fonctions nécessaires de Vecteur.
+	Les fonctions necessaires de Vecteur.
 
 	T::T()
 	T::T(int)
@@ -228,7 +228,7 @@ template<typename T> void Matrice<T>::changerTaille(int m, int n)
 }
 
 
-// Opérations
+// Opï¿½rations
 
 template<typename T> Matrice<T>& Matrice<T>::operator+=(Matrice<T> const& M)
 {
@@ -380,7 +380,7 @@ template<typename T> bool operator!=(Matrice<T> const& M, Matrice<T> const& N)
 }
 
 
-// Fonctions spécifiques
+// Fonctions spï¿½cifiques
 
 template<typename T> T Matrice<T>::det() const
 {

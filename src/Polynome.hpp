@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "SciPP.h"
+#include "Vecteur.hpp"
 
 /*
-	Les fonctions nécessaires de Vecteur.
+	Les fonctions necessaires de Vecteur.
 
 	T::T()
 	T::T(int)

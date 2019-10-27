@@ -94,7 +94,7 @@ Entier& Entier::operator=(Entier&& x)
 }
 
 
-// Opérations
+// Operations
 
 Entier& Entier::operator+=(Entier const& x)
 {
@@ -104,7 +104,7 @@ Entier& Entier::operator+=(Entier const& x)
 		int taille;
 		uint8_t* oldX(m_x);
 
-		// Déterminer la taille de l'entier
+		// Determiner la taille de l'entier
 
 		if (m_taille > x.m_taille)
 		{
@@ -179,12 +179,12 @@ Entier& Entier::operator+=(Entier const& x)
 			}
 		}
 
-		// Allouer un nouvel espace mémoire si nécessaire
+		// Allouer un nouvel espace memoire si necessaire
 
 		if (taille != m_taille)
 			m_x = new uint8_t[taille];
 
-		// Faire la somme elle-même
+		// Faire la somme elle-meme
 
 		buffer = 0;
 		for (int i(0); i < taille; i++)
@@ -197,7 +197,7 @@ Entier& Entier::operator+=(Entier const& x)
 			buffer >>= 8;
 		}
 
-		// Supprimer les espaces mémoires inutilement alloués s'il y en a
+		// Supprimer les espaces memoires inutilement alloues s'il y en a
 
 		if (taille != m_taille)
 		{
@@ -470,7 +470,7 @@ Entier Entier::operator+() const
 }
 
 
-// Fonctions spécifiques
+// Fonctions specifiques
 
 long long int Entier::toInt() const
 {
@@ -505,7 +505,7 @@ Entier::~Entier()
 */
 
 
-// Opérations
+// Operations
 
 Entier operator+(Entier const& x, Entier const& y)
 {
@@ -736,4 +736,20 @@ std::ostream& operator<<(std::ostream& stream, Entier const& x)
 	}
 
 	return stream;
+}
+
+
+// Autres
+
+Entier binom(int n, int p)
+{
+	Entier num(1), denom(1);
+
+	for (int i(0); i < p; i++)
+	{
+		num *= n-i;
+		denom *= p-i;
+	}
+
+	return num/denom;
 }
