@@ -698,12 +698,21 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 
 	Vecteur<long double> border(getBorder(xPolygone, yPolygone));
 	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
+	std::vector<sf::CircleShape> derivees;
 
 	for (int i(0); i < n; i++)
 	{
 		polygoneVertex[i].position.x = w*(xPolygone[i] - border[0]) / (border[1] - border[0]);
 		polygoneVertex[i].position.y = h*(1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
 		polygoneVertex[i].color = sf::Color(255, 0, 0);
+
+		sf::CircleShape point(3);
+		int x, y;
+		x = polygoneVertex[i].position.x - 3 + mxPolygone[i]*w/(border[1] - border[0])/10;
+		y = polygoneVertex[i].position.y - 3 - myPolygone[i]*h/(border[3] - border[2])/10;
+		point.setPosition(x, y);
+		point.setFillColor(sf::Color(255, 0, 0));
+		derivees.push_back(point);
 	}
 	for (int i(0); i < nbPoints; i++)
 	{
@@ -757,12 +766,21 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 				courbeHermite = getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints);
 
 				polygoneVertex.resize(n);
+				derivees.clear();
 
 				for (int i(0); i < n; i++)
 				{
 					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
 					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
 					polygoneVertex[i].color = sf::Color(255, 0, 0);
+
+					sf::CircleShape point(3);
+					int x, y;
+					x = polygoneVertex[i].position.x - 3 + mxPolygone[i]*w/(border[1] - border[0])/10;
+					y = polygoneVertex[i].position.y - 3 - myPolygone[i]*h/(border[3] - border[2])/10;
+					point.setPosition(x, y);
+					point.setFillColor(sf::Color(255, 0, 0));
+					derivees.push_back(point);
 				}
 				for (int i(0); i < nbPoints; i++)
 				{
@@ -781,11 +799,18 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 				border[3] = centreY + (centreY - border[2]) * zoom;
 				border[2] = centreY - (centreY - border[2]) * zoom;
 
+				
 				for (int i(0); i < n; i++)
 				{
 					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
 					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
 					polygoneVertex[i].color = sf::Color(255, 0, 0);
+
+					sf::CircleShape point(3);
+					int x, y;
+					x = polygoneVertex[i].position.x - 3 + mxPolygone[i]*w/(border[1] - border[0])/10;
+					y = polygoneVertex[i].position.y - 3 - myPolygone[i]*h/(border[3] - border[2])/10;
+					derivees[i].setPosition(x, y);
 				}
 				for (int i(0); i < nbPoints; i++)
 				{
@@ -797,5 +822,7 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 
 		window.draw(polygoneVertex);
 		window.draw(courbeVertex);
+		for (int i(0); i < n; i++)
+			window.draw(derivees[i]);
 	}
 }

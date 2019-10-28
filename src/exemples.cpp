@@ -13,7 +13,7 @@ int main()
 	// lancerInterpreteur();
 	// simuBalle();
 	// plotBezier(Vecteur<long double>(0), Vecteur<long double>(0));
-	// plotHermite(Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0));
+	plotHermite(Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0), Vecteur<long double>(0));
 	// systemeD();
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
