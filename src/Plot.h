@@ -2,7 +2,8 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
-#include "SciPP.h"
+#include "Matrice.hpp"
+#include "Polynome.hpp"
 
 class Timeline
 {

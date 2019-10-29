@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <string>
-#include "SciPP.h"
+#include "Plot.h"
 
 /*
 	input l0?l! -> instr l0?l1! ENDL input l1?l!
