@@ -699,8 +699,8 @@ void calculRendu(sf::VertexArray& polygoneVertex, sf::VertexArray& courbeVertex,
 		polygoneVertex[i].color = sf::Color(255, 0, 0);
 
 		sf::CircleShape point(3);
-		x = polygoneVertex[i].position.x - 3 + mxPolygone[i]*w/(border[1] - border[0])/10;
-		y = polygoneVertex[i].position.y - 3 - myPolygone[i]*h/(border[3] - border[2])/10;
+		x = polygoneVertex[i].position.x - 3 + mxPolygone[i]*w/(border[1] - border[0])/3;
+		y = polygoneVertex[i].position.y - 3 - myPolygone[i]*h/(border[3] - border[2])/3;
 		point.setPosition(x, y);
 		point.setFillColor(sf::Color(255, 0, 0));
 		derivees[i] = point;
@@ -811,8 +811,8 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseMove.x)/window.getSize().x);
 				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseMove.y)/window.getSize().y);
 
-				mxPolygone[selection] = (pos[0] - xPolygone[selection])*10;
-				myPolygone[selection] = (pos[1] - yPolygone[selection])*10;
+				mxPolygone[selection] = (pos[0] - xPolygone[selection])*3;
+				myPolygone[selection] = (pos[1] - yPolygone[selection])*3;
 
 				courbeHermite = getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints);
 				calculRendu(polygoneVertex, courbeVertex, derivees, xPolygone, yPolygone, mxPolygone, myPolygone, courbeHermite, border);
