@@ -113,3 +113,90 @@ void mandelbrot(double xCentre, double yCentre, double zoom)
 	Timeline::TAILLE_PLOT[0] = 600;
 	Timeline::TAILLE_PLOT[1] = 600;
 }
+
+Vecteur<Vecteur<int>> voisins(int x, int y, int w, int h)
+{
+	Vecteur<Vecteur<int>> voisinsPossibles(8);
+	for (int i(0); i < 8; i++)
+		voisinsPossibles[i] = Vecteur<int>(2);
+
+	voisinsPossibles[0][0] = x + 1; voisinsPossibles[0][1] = y + 1;
+	voisinsPossibles[1][0] = x + 1; voisinsPossibles[1][1] = y;
+	voisinsPossibles[2][0] = x + 1; voisinsPossibles[2][1] = y - 1;
+	voisinsPossibles[3][0] = x; voisinsPossibles[3][1] = y + 1;
+	voisinsPossibles[4][0] = x; voisinsPossibles[4][1] = y - 1;
+	voisinsPossibles[5][0] = x - 1; voisinsPossibles[5][1] = y + 1;
+	voisinsPossibles[6][0] = x - 1; voisinsPossibles[6][1] = y;
+	voisinsPossibles[7][0] = x - 1; voisinsPossibles[7][1] = y - 1;
+
+	int nbVoisins(8);
+	for (int i(0); i < 8; i++)
+		if (voisinsPossibles[i][0] < 0 || voisinsPossibles[i][0] >= w || voisinsPossibles[i][1] < 0 || voisinsPossibles[i][1] >= h)
+			nbVoisins--;
+
+	Vecteur<Vecteur<int>> voisinsDefinitifs(nbVoisins);
+	int j(0);
+	for (int i(0); i < 8; i++)
+		if (voisinsPossibles[i][0] >= 0 && voisinsPossibles[i][0] < w && voisinsPossibles[i][1] >= 0 && voisinsPossibles[i][1] < h)
+		{
+			voisinsDefinitifs[j] = voisinsPossibles[i];
+			j++;
+		}
+	
+	return voisinsDefinitifs;
+}
+
+void conway()
+{
+	int w(50), h(50), t(300), tR(10);
+	Matrice<long double> M(w, h), N(w, h);
+
+	// Initialisation
+
+	int const wInit(40), hInit(10);
+	long double tab[hInit][wInit] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+							         {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+	
+	for (int i(0); i < wInit; i++)
+		for (int j(0); j < hInit; j++)
+			M[i][j] = tab[j][i];
+
+	// Jeu de la vie lui même
+
+	Timeline timeline;
+	timeline.plot(M, 0, 1);
+	for (int dt(0); dt < t; dt++)
+	{
+		std::cout << "Iteration: " << dt << std::endl;
+		for (int i(0); i < w; i++)
+		{
+			for (int j(0); j < h; j++)
+			{
+				Vecteur<Vecteur<int>> voisinage(voisins(i, j, w, h));
+				int s(0);
+				for (int k(0); k < voisinage.taille(); k++)
+					s += M[voisinage[k][0]][voisinage[k][1]];
+				if (M[i][j] == 0 && s == 3)
+					N[i][j] = 1;
+				else if (M[i][j] == 1 && (s < 2 || s > 3))
+					N[i][j] = 0;
+				else
+					N[i][j] = M[i][j];
+			}
+		}
+
+		M = N;
+		timeline.plot(M, 0, 1);
+	}
+
+	timeline.setFramerate(double(t)/tR + 1);
+	Timeline::show();
+}
