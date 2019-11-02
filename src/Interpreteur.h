@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Plot.h"
+#include "Liste.hpp"
 
 /*
 	input l0?l! -> instr l0?l1! ENDL input l1?l!
