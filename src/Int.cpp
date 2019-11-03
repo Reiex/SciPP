@@ -1,9 +1,9 @@
-#include "Entier.hpp"
+#include "Int.hpp"
 
 
 // Constructeurs
 
-Entier::Entier()
+Int::Int()
 {
 	m_taille = 1;
 	m_x = new uint8_t[m_taille];
@@ -12,7 +12,7 @@ Entier::Entier()
 	m_actif = true;
 }
 
-Entier::Entier(long long int x)
+Int::Int(long long int x)
 {
 	m_positif = (x >= 0);
 
@@ -37,7 +37,7 @@ Entier::Entier(long long int x)
 	m_actif = true;
 }
 
-Entier::Entier(Entier const& x)
+Int::Int(Int const& x)
 {
 	m_positif = x.m_positif;
 	m_taille = x.m_taille;
@@ -49,7 +49,7 @@ Entier::Entier(Entier const& x)
 	m_actif = x.m_actif;
 }
 
-Entier::Entier(Entier&& x)
+Int::Int(Int&& x)
 {
 	m_positif = x.m_positif;
 	m_taille = x.m_taille;
@@ -62,7 +62,7 @@ Entier::Entier(Entier&& x)
 
 // Copie et mouvement
 
-Entier& Entier::operator=(Entier const& x)
+Int& Int::operator=(Int const& x)
 {
 	delete[] m_x;
 
@@ -78,7 +78,7 @@ Entier& Entier::operator=(Entier const& x)
 	return *this;
 }
 
-Entier& Entier::operator=(Entier&& x)
+Int& Int::operator=(Int&& x)
 {
 	if (m_actif)
 		delete[] m_x;
@@ -96,7 +96,7 @@ Entier& Entier::operator=(Entier&& x)
 
 // Operations
 
-Entier& Entier::operator+=(Entier const& x)
+Int& Int::operator+=(Int const& x)
 {
 	if (m_positif == x.m_positif)
 	{
@@ -104,7 +104,7 @@ Entier& Entier::operator+=(Entier const& x)
 		int taille;
 		uint8_t* oldX(m_x);
 
-		// Determiner la taille de l'entier
+		// Determiner la taille de l'Int
 
 		if (m_taille > x.m_taille)
 		{
@@ -215,7 +215,7 @@ Entier& Entier::operator+=(Entier const& x)
 	return *this;
 }
 
-Entier& Entier::operator-=(Entier const& x)
+Int& Int::operator-=(Int const& x)
 {
 	if (m_positif == x.m_positif)
 	{
@@ -305,7 +305,7 @@ Entier& Entier::operator-=(Entier const& x)
 	return *this;
 }
 
-Entier& Entier::operator*=(Entier const& x)
+Int& Int::operator*=(Int const& x)
 {
 	if (*this == 0 || x == 0)
 	{
@@ -362,7 +362,7 @@ int getNbBits(uint8_t x)
 	return i;
 }
 
-Entier& Entier::operator/=(Entier const& x)
+Int& Int::operator/=(Int const& x)
 {
 	if (x == 0)
 		throw "Division par 0";
@@ -451,28 +451,28 @@ Entier& Entier::operator/=(Entier const& x)
 	return *this;
 }
 
-Entier& Entier::operator%=(Entier const& x)
+Int& Int::operator%=(Int const& x)
 {
 	*this -= (*this / x) * x;
 	return *this;
 }
 
-Entier Entier::operator-() const
+Int Int::operator-() const
 {
-	Entier x(*this);
+	Int x(*this);
 	x.m_positif = !m_positif;
 	return x;
 }
 
-Entier Entier::operator+() const
+Int Int::operator+() const
 {
-	return Entier(*this);
+	return Int(*this);
 }
 
 
 // Fonctions specifiques
 
-long long int Entier::toInt() const
+long long int Int::toInt() const
 {
 	int t(sizeof(long long int));
 	long long int x(0);
@@ -489,7 +489,7 @@ long long int Entier::toInt() const
 
 // Destructeur
 
-Entier::~Entier()
+Int::~Int()
 {
 	if (m_actif)
 	{
@@ -507,118 +507,118 @@ Entier::~Entier()
 
 // Operations
 
-Entier operator+(Entier const& x, Entier const& y)
+Int operator+(Int const& x, Int const& y)
 {
-	Entier z(x);
+	Int z(x);
 	z += y;
 	return z;
 }
 
-Entier&& operator+(Entier&& x, Entier const& y)
+Int&& operator+(Int&& x, Int const& y)
 {
 	x += y;
 	return std::move(x);
 }
 
-Entier&& operator+(Entier const& x, Entier&& y)
+Int&& operator+(Int const& x, Int&& y)
 {
 	y += x;
 	return std::move(y);
 }
 
-Entier&& operator+(Entier&& x, Entier&& y)
+Int&& operator+(Int&& x, Int&& y)
 {
 	x += y;
 	return std::move(x);
 }
 
 
-Entier operator-(Entier const& x, Entier const& y)
+Int operator-(Int const& x, Int const& y)
 {
-	Entier z(x);
+	Int z(x);
 	z -= y;
 	return z;
 }
 
-Entier&& operator-(Entier&& x, Entier const& y)
+Int&& operator-(Int&& x, Int const& y)
 {
 	x -= y;
 	return std::move(x);
 }
 
-Entier&& operator-(Entier const& x, Entier&& y)
+Int&& operator-(Int const& x, Int&& y)
 {
 	y -= x;
 	return std::move(-y);
 }
 
-Entier&& operator-(Entier&& x, Entier&& y)
+Int&& operator-(Int&& x, Int&& y)
 {
 	x -= y;
 	return std::move(x);
 }
 
 
-Entier operator*(Entier const& x, Entier const& y)
+Int operator*(Int const& x, Int const& y)
 {
-	Entier z(x);
+	Int z(x);
 	z *= y;
 	return z;
 }
 
-Entier&& operator*(Entier&& x, Entier const& y)
+Int&& operator*(Int&& x, Int const& y)
 {
 	x *= y;
 	return std::move(x);
 }
 
-Entier&& operator*(Entier const& x, Entier&& y)
+Int&& operator*(Int const& x, Int&& y)
 {
 	y *= x;
 	return std::move(y);
 }
 
-Entier&& operator*(Entier&& x, Entier&& y)
+Int&& operator*(Int&& x, Int&& y)
 {
 	x *= y;
 	return std::move(x);
 }
 
 
-Entier operator/(Entier const& x, Entier const& y)
+Int operator/(Int const& x, Int const& y)
 {
-	Entier z(x);
+	Int z(x);
 	z /= y;
 	return z;
 }
 
-Entier&& operator/(Entier&& x, Entier const& y)
+Int&& operator/(Int&& x, Int const& y)
 {
 	x /= y;
 	return std::move(x);
 }
 
-Entier&& operator/(Entier&& x, Entier&& y)
+Int&& operator/(Int&& x, Int&& y)
 {
 	x /= y;
 	return std::move(x);
 }
 
 
-Entier operator%(Entier const& x, Entier const& y)
+Int operator%(Int const& x, Int const& y)
 {
-	Entier z(x);
+	Int z(x);
 	z %= y;
 	return z;
 }
 
-Entier&& operator%(Entier&& x, Entier const& y)
+Int&& operator%(Int&& x, Int const& y)
 {
 	x %= y;
 	return std::move(x);
 }
 
-Entier&& operator%(Entier&& x, Entier&& y)
+Int&& operator%(Int&& x, Int&& y)
 {
 	x %= y;
 	return std::move(x);
@@ -627,7 +627,7 @@ Entier&& operator%(Entier&& x, Entier&& y)
 
 // Comparaisons
 
-bool operator==(Entier const& x, Entier const& y)
+bool operator==(Int const& x, Int const& y)
 {
 	if (x.m_taille != y.m_taille)
 		return false;
@@ -642,12 +642,12 @@ bool operator==(Entier const& x, Entier const& y)
 	return true;
 }
 
-bool operator!=(Entier const& x, Entier const& y)
+bool operator!=(Int const& x, Int const& y)
 {
 	return !(x == y);
 }
 
-bool operator>(Entier const& x, Entier const& y)
+bool operator>(Int const& x, Int const& y)
 {
 	if (x.m_positif != y.m_positif)
 		return x.m_positif;
@@ -662,7 +662,7 @@ bool operator>(Entier const& x, Entier const& y)
 	return false;
 }
 
-bool operator<(Entier const& x, Entier const& y)
+bool operator<(Int const& x, Int const& y)
 {
 	if (x.m_positif != y.m_positif)
 		return !x.m_positif;
@@ -677,7 +677,7 @@ bool operator<(Entier const& x, Entier const& y)
 	return false;
 }
 
-bool operator>=(Entier const& x, Entier const& y)
+bool operator>=(Int const& x, Int const& y)
 {
 	if (x.m_positif != y.m_positif)
 		return x.m_positif;
@@ -692,7 +692,7 @@ bool operator>=(Entier const& x, Entier const& y)
 	return true;
 }
 
-bool operator<=(Entier const& x, Entier const& y)
+bool operator<=(Int const& x, Int const& y)
 {
 	if (x.m_positif != y.m_positif)
 		return !x.m_positif;
@@ -710,7 +710,7 @@ bool operator<=(Entier const& x, Entier const& y)
 
 // Affichage
 
-std::ostream& operator<<(std::ostream& stream, Entier const& x)
+std::ostream& operator<<(std::ostream& stream, Int const& x)
 {
 	if (x == 0)
 	{
@@ -718,7 +718,7 @@ std::ostream& operator<<(std::ostream& stream, Entier const& x)
 		return stream;
 	}
 
-	Entier p(1), y(x);
+	Int p(1), y(x);
 	if (x < 0)
 	{
 		stream << "-";
@@ -741,9 +741,9 @@ std::ostream& operator<<(std::ostream& stream, Entier const& x)
 
 // Autres
 
-Entier binom(int n, int p)
+Int binom(int n, int p)
 {
-	Entier num(1), denom(1);
+	Int num(1), denom(1);
 
 	for (int i(0); i < p; i++)
 	{

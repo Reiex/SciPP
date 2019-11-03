@@ -8,12 +8,12 @@ Force::Force()
 	m_func = nullptr;
 }
 
-void Force::setFunc(Vecteur<double>(*func)(Point))
+void Force::setFunc(Vect<double>(*func)(Point))
 {
 	m_func = func;
 }
 
-Vecteur<double> Force::operator()(Point p)
+Vect<double> Force::operator()(Point p)
 {
 	return (*m_func)(p);
 }
@@ -46,9 +46,9 @@ void Point::setDt(double dt)
 	m_dt = dt;
 }
 
-Vecteur<double> Point::getEtat() const
+Vect<double> Point::getEtat() const
 {
-	Vecteur<double> etat(7);
+	Vect<double> etat(7);
 	etat[0] = m_x;
 	etat[1] = m_y;
 	etat[2] = m_m;
@@ -65,7 +65,7 @@ void Point::update()
 	double aX(0), aY(0);
 	for (int i(0); i < m_forces.size(); i++)
 	{
-		Vecteur<double> a(m_forces[i](*this));
+		Vect<double> a(m_forces[i](*this));
 		aX += a[0];
 		aY += a[1];
 	}
@@ -123,7 +123,7 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 		Phi0[k][0] = phiInit((k - 1)*dx);
 	}
 
-	Vecteur<long double> x(Nx), y(Nx);
+	Vect<long double> x(Nx), y(Nx);
 	for (int i(0); i < Nx; i++)
 	{
 		x[i] = i;
@@ -154,7 +154,7 @@ struct MatriceChainee
 	MatriceChainee* suivante;
 };
 
-void solveur1D(Vecteur<long double>& W, Vecteur<long double> const& U, long double kappa, long double dl, long double dt)
+void solveur1D(Vect<long double>& W, Vect<long double> const& U, long double kappa, long double dl, long double dt)
 {
 	int Nl(U.taille());
 	Matrice<long double> M(Nl, Nl), N(Nl, Nl);
@@ -184,7 +184,7 @@ void solveur2D(Matrice<long double>& W, Matrice<long double> const& Ux, Matrice<
 
 	for (int j(0); j < Nx; j++)
 	{
-		Vecteur<long double> Wy(Ny), Vy(Ny);
+		Vect<long double> Wy(Ny), Vy(Ny);
 		for (int i(0); i < Ny; i++)
 		{
 			Wy[i] = W[i][j];
@@ -219,7 +219,7 @@ void poissonCurlSolveur(Matrice<long double> const& W, Matrice<long double>& Ux,
 
 	WHat = DFT2D(WHat);
 
-	Vecteur<std::complex<long double>> kx(Nx), ky(Ny);
+	Vect<std::complex<long double>> kx(Nx), ky(Ny);
 	for (int i(0); i < Nx; i++)
 		if (i < (Nx + 1) / 2)
 			kx[i] = std::complex<long double>(0, 2 * PI*i / Lx);
@@ -357,19 +357,19 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 
 // Simulations mecaniques
 
-Vecteur<double> gravite(Point p)
+Vect<double> gravite(Point p)
 {
-	Vecteur<double> force(2);
+	Vect<double> force(2);
 	force[1] = -9.81*p.getEtat()[2];
 
 	return force;
 }
 
-Vecteur<double> chocElastique(Point p)
+Vect<double> chocElastique(Point p)
 {
 	double k(1000), gamma(0.005);
 
-	Vecteur<double> force(2), etat(p.getEtat());
+	Vect<double> force(2), etat(p.getEtat());
 	double yp(etat[1]), ypp(etat[1]-etat[4]*etat[6]);
 
 	yp = yp > 0 ? 0: yp;
@@ -405,7 +405,7 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 	Timeline timeline;
 	for (int i(0); i < n; i++)
 	{
-		Vecteur<double> etat(p.getEtat());
+		Vect<double> etat(p.getEtat());
 		timeline.plot(etat[0], etat[1]);
 		p.update();
 	}
@@ -418,36 +418,36 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 // Simulations de systemes dynamiques
 
 
-Vecteur<double> fEquilibreRotation(Vecteur<double> x)
+Vect<double> fEquilibreRotation(Vect<double> x)
 {
 	double omega = 2;
 	double mu = 2;
 	double a = -0.1;
 
-	Vecteur<double> xp(2);
+	Vect<double> xp(2);
 	xp[0] = -omega*x[1] + mu*x[0] + a*x[0]*(x[0]*x[0] + x[1]*x[1]);
 	xp[1] = omega*x[0] + mu*x[1] + a*x[1]*(x[0]*x[0] + x[1]*x[1]);
 
 	return xp;
 }
 
-Vecteur<double> fProiesPredateurs(Vecteur<double> x)
+Vect<double> fProiesPredateurs(Vect<double> x)
 {
 	double alpha = 0.5;
 	double lambda = 0.5;
 
-	Vecteur<double> xp(2);
+	Vect<double> xp(2);
 	xp[0] = x[0]*(1-x[1]-lambda*x[0]);
 	xp[1] = alpha*x[1]*(x[0]-1);
 
 	return xp;
 }
 
-Vecteur<double> fPendule(Vecteur<double> x)
+Vect<double> fPendule(Vect<double> x)
 {
 	double nu(1);
 
-	Vecteur<double> xp(2);
+	Vect<double> xp(2);
 	xp[0] = x[1];
 	xp[1] = -sin(x[0]) - nu*x[1];
 
@@ -456,7 +456,7 @@ Vecteur<double> fPendule(Vecteur<double> x)
 
 void systemeD()
 {
-	Vecteur<double> coord(4);
+	Vect<double> coord(4);
 
 	// Equilibre rotation
 

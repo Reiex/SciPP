@@ -1,9 +1,9 @@
 #include "Matrice.hpp"
 
-Vecteur<std::complex<long double>> DFT(Vecteur<std::complex<long double>> const& v)
+Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 {
 	int n(v.taille());
-	Vecteur<std::complex<long double>> u(n);
+	Vect<std::complex<long double>> u(n);
 
 	for (int k(0); k < n; k++)
 		for (int i(0); i < n; i++)
@@ -12,10 +12,10 @@ Vecteur<std::complex<long double>> DFT(Vecteur<std::complex<long double>> const&
 	return u;
 }
 
-Vecteur<std::complex<long double>> IDFT(Vecteur<std::complex<long double>> const& v)
+Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
 {
 	int n(v.taille());
-	Vecteur<std::complex<long double>> u(n);
+	Vect<std::complex<long double>> u(n);
 
 	for (int k(0); k < n; k++)
 		for (int i(0); i < n; i++)
@@ -73,7 +73,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 
 	// Calcul des nombres d'ondes
 
-	Vecteur<std::complex<long double>> kx(Nx), ky(Ny);
+	Vect<std::complex<long double>> kx(Nx), ky(Ny);
 	for (int i(0); i < Nx; i++)
 		if (i < (Nx + 1) / 2)
 			kx[i] = std::complex<long double>(0, 2*PI*i/Lx);

@@ -17,7 +17,7 @@ class Timeline
 		void setColor(int r, int g, int b);
 
 		void plot(long double x, long double y);
-		void plot(Vecteur<long double> x, Vecteur<long double> y);
+		void plot(Vect<long double> x, Vect<long double> y);
 		void plot(Matrice<long double> M, long double min_z, long double max_z);
 
 		static void show();
@@ -31,19 +31,19 @@ class Timeline
 		long double m_delay;
 		std::vector<sf::VertexArray> m_courbes;
 		std::vector<sf::Image> m_matrices;
-		Vecteur<long double> m_border;
+		Vect<long double> m_border;
 		bool m_borderSet;
-		Vecteur<int> m_color;
+		Vect<int> m_color;
 };
 
-void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord);
+void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord);
 
-void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision = 10000, double distCourbe = 100);
+void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precision = 10000, double distCourbe = 100);
 
-Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, int nbPoints = 1000);
+Vect<Vect<long double>> getBezier(Vect<long double> const& x, Vect<long double> const& y, int nbPoints = 1000);
 
-void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y);
+void plotBezier(Vect<long double> const& x, Vect<long double> const& y);
 
-Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my, int nbPoints = 1000);
+Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my, int nbPoints = 1000);
 
-void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my);
+void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my);

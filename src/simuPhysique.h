@@ -10,12 +10,12 @@ class Force
 	public:
 
 		Force();
-		void setFunc(Vecteur<double>(*func)(Point));
-		Vecteur<double> operator()(Point p);
+		void setFunc(Vect<double>(*func)(Point));
+		Vect<double> operator()(Point p);
 
 	private:
 
-		Vecteur<double> (*m_func)(Point);
+		Vect<double> (*m_func)(Point);
 };
 
 class Point
@@ -27,7 +27,7 @@ class Point
 		void ajouterForce(Force f);
 		void setVitesse(double vx, double vy);
 		void setDt(double dt);
-		Vecteur<double> getEtat() const;
+		Vect<double> getEtat() const;
 
 		void update();
 

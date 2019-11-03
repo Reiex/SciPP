@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "Vecteur.hpp"
+#include "Vect.hpp"
 
 /*
-	Les fonctions necessaires de Vecteur.
+	Les fonctions necessaires de Vect.
 
 	T::T()
 	T::T(int)
@@ -48,7 +48,7 @@ template<typename T> class Polynome
 
 	private:
 
-		Vecteur<T> m_coeffs;
+		Vect<T> m_coeffs;
 		int m_deg;
 };
 
@@ -57,20 +57,20 @@ template<typename T> class Polynome
 
 template<typename T> Polynome<T>::Polynome()
 {
-	m_coeffs = Vecteur<T>(1);
+	m_coeffs = Vect<T>(1);
 	m_deg = 0;
 }
 
 template<typename T> Polynome<T>::Polynome(int x)
 {
-	m_coeffs = Vecteur<T>(1);
+	m_coeffs = Vect<T>(1);
 	m_coeffs[0] = T(x);
 	m_deg = 0;
 }
 
 template<typename T> Polynome<T>::Polynome(T const& x)
 {
-	m_coeffs = Vecteur<T>(1);
+	m_coeffs = Vect<T>(1);
 	m_coeffs[0] = x;
 	m_deg = 0;
 }
@@ -83,7 +83,7 @@ template<typename T> Polynome<T>::Polynome(T const* tab, int taille)
 		if (tab[i] != zero)
 			m_deg = i;
 
-	m_coeffs = Vecteur<T>(m_deg + 1);
+	m_coeffs = Vect<T>(m_deg + 1);
 	for (int i(0); i < m_deg + 1; i++)
 		m_coeffs[i] = tab[i];
 }
@@ -200,12 +200,12 @@ template<typename T> Polynome<T>& Polynome<T>::operator*=(Polynome<T> const& P)
 	T zero(0);
 	if (P.m_deg == 0 && P[0] == zero || m_deg == 0 && m_coeffs[0] == zero)
 	{
-		m_coeffs = Vecteur<T>(1);
+		m_coeffs = Vect<T>(1);
 		m_deg = 0;
 	}
 	else
 	{
-		Vecteur<T> prod(m_deg + P.m_deg + 1);
+		Vect<T> prod(m_deg + P.m_deg + 1);
 		m_coeffs.changerTaille(m_deg + P.m_deg + 1);
 
 		for (int k(0); k < m_deg + P.m_deg + 1; k++)
@@ -243,12 +243,12 @@ template<typename T> Polynome<T>& Polynome<T>::operator/=(Polynome<T> const& P)
 {
 	if (P.m_deg > m_deg)
 	{
-		m_coeffs = Vecteur<T>(1);
+		m_coeffs = Vect<T>(1);
 		m_deg = 0;
 	}
 	else
 	{
-		Vecteur<T> coeffs(m_deg - P.m_deg + 1);
+		Vect<T> coeffs(m_deg - P.m_deg + 1);
 		m_deg -= P.m_deg;
 		int k(P.m_deg);
 		T a(P[P.m_deg]);
@@ -314,7 +314,7 @@ template<typename T> Polynome<T> Polynome<T>::operator-()
 {
 	Polynome<T> P;
 	P.m_deg = m_deg;
-	P.m_coeffs = Vecteur<T>(m_deg + 1);
+	P.m_coeffs = Vect<T>(m_deg + 1);
 
 	for (int i(0); i < m_deg + 1; i++)
 		P.m_coeffs[i] = -m_coeffs[i];

@@ -1,11 +1,11 @@
-#include "Fraction.hpp"
+#include "Frac.hpp"
 
 
-std::string decimales(Fraction<Entier> const& x, int n)
+std::string decimales(Frac<Int> const& x, int n)
 {
 	std::string chaine("");
 	std::stringstream s;
-	Fraction<Entier> y(x);
+	Frac<Int> y(x);
 
 	s << (y.numerateur() / y.denominateur());
 
@@ -15,14 +15,14 @@ std::string decimales(Fraction<Entier> const& x, int n)
 		return s.str();
 	
 	y -= (y.numerateur() / y.denominateur());
-	y *= expoRapide(Fraction<Entier>(10, 1), n);
+	y *= expoRapide(Frac<Int>(10, 1), n);
 
 	s << (y.numerateur() / y.denominateur());
 
 	return s.str();
 }
 
-std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x)
+std::ostream& operator<<(std::ostream& stream, Frac<Int> const& x)
 {
 	if (x.denominateur() == 1)
 	{
@@ -30,7 +30,7 @@ std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x)
 		return stream;
 	}
 	
-	Entier d(x.denominateur());
+	Int d(x.denominateur());
 	while (d % 2 == 0)
 		d /= 2;
 	while (d % 5 == 0)
@@ -38,7 +38,7 @@ std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x)
 
 	if (d == 1)
 	{
-		Entier r(x.numerateur());
+		Int r(x.numerateur());
 
 		stream << r / x.denominateur() << ".";
 		r %= x.denominateur();

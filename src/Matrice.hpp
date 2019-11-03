@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <complex>
-#include "Vecteur.hpp"
+#include "Vect.hpp"
 
 /*
-	Les fonctions necessaires de Vecteur.
+	Les fonctions necessaires de Vect.
 
 	T::T()
 	T::T(int)
@@ -35,9 +35,9 @@ template<typename T> class Matrice
 		Matrice<T>& operator=(Matrice<T> const& M);
 		Matrice<T>& operator=(Matrice<T>&& M);
 
-		Vecteur<T>& operator[](int i);
-		Vecteur<T> const& operator[](int i) const;
-		Vecteur<int> const& taille() const;
+		Vect<T>& operator[](int i);
+		Vect<T> const& operator[](int i) const;
+		Vect<int> const& taille() const;
 		void changerTaille(int m, int n);
 
 		Matrice<T>& operator+=(Matrice<T> const& M);
@@ -57,8 +57,8 @@ template<typename T> class Matrice
 		void liberer();
 		void copier(Matrice<T> const& M);
 
-		Vecteur<T>* m_lignes;
-		Vecteur<int> m_taille;
+		Vect<T>* m_lignes;
+		Vect<int> m_taille;
 
 		bool m_actif;
 };
@@ -69,7 +69,7 @@ template<typename T> class Matrice
 template<typename T> Matrice<T>::Matrice()
 {
 	m_lignes = nullptr;
-	m_taille = Vecteur<int>(2);
+	m_taille = Vect<int>(2);
 	m_taille[0] = 0;
 	m_taille[1] = 0;
 
@@ -80,20 +80,20 @@ template<typename T> Matrice<T>::Matrice(int m, int n)
 {
 	if (m > 0 && n > 0)
 	{
-		m_taille = Vecteur<int>(2);
+		m_taille = Vect<int>(2);
 		m_taille[0] = m;
 		m_taille[1] = n;
 
-		m_lignes = new Vecteur<T>[m];
+		m_lignes = new Vect<T>[m];
 		for (int i(0); i < m; i++)
-			m_lignes[i] = Vecteur<T>(n);
+			m_lignes[i] = Vect<T>(n);
 
 		m_actif = true;
 	}
 	else
 	{
 		m_lignes = nullptr;
-		m_taille = Vecteur<int>(2);
+		m_taille = Vect<int>(2);
 		m_taille[0] = 0;
 		m_taille[1] = 0;
 
@@ -121,14 +121,14 @@ template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n)
 {
 	if (m > 0 && n > 0)
 	{
-		m_taille = Vecteur<int>(2);
+		m_taille = Vect<int>(2);
 		m_taille[0] = m;
 		m_taille[1] = n;
 
-		m_lignes = new Vecteur<T>[m];
+		m_lignes = new Vect<T>[m];
 		for (int i(0); i < m; i++)
 		{
-			m_lignes[i] = Vecteur<T>(n);
+			m_lignes[i] = Vect<T>(n);
 			for (int j(0); j < n; j++)
 				m_lignes[i][j] = tab[i*n + j];
 		}
@@ -138,7 +138,7 @@ template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n)
 	else
 	{
 		m_lignes = nullptr;
-		m_taille = Vecteur<int>(2);
+		m_taille = Vect<int>(2);
 		m_taille[0] = 0;
 		m_taille[1] = 0;
 
@@ -152,7 +152,7 @@ template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n)
 template<typename T> void Matrice<T>::copier(Matrice<T> const& M)
 {
 	m_taille = M.m_taille;
-	m_lignes = new Vecteur<T>[m_taille[0]];
+	m_lignes = new Vect<T>[m_taille[0]];
 	for (int i(0); i < m_taille[0]; i++)
 		m_lignes[i] = M.m_lignes[i];
 }
@@ -183,7 +183,7 @@ template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T>&& M)
 
 // Acces et modification de la structure
 
-template<typename T> Vecteur<T>& Matrice<T>::operator[](int i)
+template<typename T> Vect<T>& Matrice<T>::operator[](int i)
 {
 	if (i < 0 || i >= m_taille[0])
 		throw "L'indice est en dehors des limites.";
@@ -191,7 +191,7 @@ template<typename T> Vecteur<T>& Matrice<T>::operator[](int i)
 	return m_lignes[i];
 }
 
-template<typename T> Vecteur<T> const& Matrice<T>::operator[](int i) const
+template<typename T> Vect<T> const& Matrice<T>::operator[](int i) const
 {
 	if (i < 0 || i >= m_taille[0])
 		throw "L'indice est en dehors des limites.";
@@ -199,16 +199,16 @@ template<typename T> Vecteur<T> const& Matrice<T>::operator[](int i) const
 	return m_lignes[i];
 }
 
-template<typename T> Vecteur<int> const& Matrice<T>::taille() const
+template<typename T> Vect<int> const& Matrice<T>::taille() const
 {
 	return m_taille;
 }
 
 template<typename T> void Matrice<T>::changerTaille(int m, int n)
 {
-	Vecteur<T>* lignesTmp = m_lignes;
+	Vect<T>* lignesTmp = m_lignes;
 
-	m_lignes = new Vecteur<T>[m];
+	m_lignes = new Vect<T>[m];
 	for (int i(0); i < m; i++)
 	{
 		if (i < m_taille[0])
@@ -218,7 +218,7 @@ template<typename T> void Matrice<T>::changerTaille(int m, int n)
 		}
 		else
 		{
-			m_lignes[i] = Vecteur<T>(n);
+			m_lignes[i] = Vect<T>(n);
 		}
 	}
 
@@ -276,15 +276,15 @@ template<typename T> Matrice<T>& Matrice<T>::operator*=(Matrice<T> const& M)
 	if (m_taille[1] != M.m_taille[0])
 		throw "Les tailles des matrices doivent se correspondre.";
 
-	Vecteur<T>* lignes(m_lignes);
+	Vect<T>* lignes(m_lignes);
 
 	int m(m_taille[0]), n(m_taille[1]), p(M.m_taille[1]);
 
 	m_taille[1] = p;
-	m_lignes = new Vecteur<T>[m];
+	m_lignes = new Vect<T>[m];
 	for (int i(0); i < m; i++)
 	{
-		m_lignes[i] = Vecteur<T>(p);
+		m_lignes[i] = Vect<T>(p);
 		for (int j(0); j < p; j++)
 		{
 			T x(0);
@@ -307,12 +307,12 @@ template<typename T> Matrice<T> operator*(Matrice<T> const& M, Matrice<T> const&
 	return R;
 }
 
-template<typename T> Vecteur<T> operator*(Matrice<T> const& M, Vecteur<T> const& v)
+template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 {
 	if (M.taille()[1] != v.taille())
 		throw "Les tailles sont incompatibles";
 
-	Vecteur<T> u(M.taille()[0]);
+	Vect<T> u(M.taille()[0]);
 	for (int i(0); i < M.taille()[0]; i++)
 		for (int k(0); k < M.taille()[1]; k++)
 			u[i] += M[i][k] * v[k];
@@ -528,8 +528,8 @@ template<typename T> Matrice<T>::~Matrice()
 
 // Autres
 
-Vecteur<std::complex<long double>> DFT(Vecteur<std::complex<long double>> const& v);
-Vecteur<std::complex<long double>> IDFT(Vecteur<std::complex<long double>> const& v);
+Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v);
+Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v);
 Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M);
 Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M);
 Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly);

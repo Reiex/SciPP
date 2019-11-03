@@ -5,8 +5,8 @@ std::string neper(int n)
 	// Calcul du nombre d'it�rations n�cessaires
 
 	int k(0);
-	Fraction<Entier> fact(2);
-	Fraction<Entier> puiss(1, 10);
+	Frac<Int> fact(2);
+	Frac<Int> puiss(1, 10);
 	puiss = expoRapide(puiss, n + 1);
 	while (fact >= puiss)
 	{
@@ -16,8 +16,8 @@ std::string neper(int n)
 
 	// Calcul de la constante de neper
 
-	fact = Fraction<Entier>(1);
-	Fraction<Entier> s(1);
+	fact = Frac<Int>(1);
+	Frac<Int> s(1);
 	for (int i(1); i < k; i++)
 	{
 		std::cout << "> Iteration " << i + 1 << "/" << k << std::endl;
@@ -39,7 +39,7 @@ void fonctionLogistique()
 
 	int n(100000);
 	Matrice<long double> f(w, h);
-	Vecteur<double> bornes(2);
+	Vect<double> bornes(2);
 	bornes[0] = 2.8;
 	bornes[1] = 4;
 
@@ -81,7 +81,7 @@ void mandelbrot(double xCentre, double yCentre, double zoom)
 
 	int n(200);
 	Matrice<long double> f(w, h);
-	Vecteur<double> bornes(4);
+	Vect<double> bornes(4);
 	bornes[0] = xCentre - 2.0/zoom;
 	bornes[1] = xCentre + 2.0/zoom;
 	bornes[2] = yCentre - 1.0/zoom;
@@ -114,11 +114,11 @@ void mandelbrot(double xCentre, double yCentre, double zoom)
 	Timeline::TAILLE_PLOT[1] = 600;
 }
 
-Vecteur<Vecteur<int>> voisins(int x, int y, int w, int h)
+Vect<Vect<int>> voisins(int x, int y, int w, int h)
 {
-	Vecteur<Vecteur<int>> voisinsPossibles(8);
+	Vect<Vect<int>> voisinsPossibles(8);
 	for (int i(0); i < 8; i++)
-		voisinsPossibles[i] = Vecteur<int>(2);
+		voisinsPossibles[i] = Vect<int>(2);
 
 	voisinsPossibles[0][0] = x + 1; voisinsPossibles[0][1] = y + 1;
 	voisinsPossibles[1][0] = x + 1; voisinsPossibles[1][1] = y;
@@ -134,7 +134,7 @@ Vecteur<Vecteur<int>> voisins(int x, int y, int w, int h)
 		if (voisinsPossibles[i][0] < 0 || voisinsPossibles[i][0] >= w || voisinsPossibles[i][1] < 0 || voisinsPossibles[i][1] >= h)
 			nbVoisins--;
 
-	Vecteur<Vecteur<int>> voisinsDefinitifs(nbVoisins);
+	Vect<Vect<int>> voisinsDefinitifs(nbVoisins);
 	int j(0);
 	for (int i(0); i < 8; i++)
 		if (voisinsPossibles[i][0] >= 0 && voisinsPossibles[i][0] < w && voisinsPossibles[i][1] >= 0 && voisinsPossibles[i][1] < h)
@@ -180,7 +180,7 @@ void conway()
 		{
 			for (int j(0); j < h; j++)
 			{
-				Vecteur<Vecteur<int>> voisinage(voisins(i, j, w, h));
+				Vect<Vect<int>> voisinage(voisins(i, j, w, h));
 				int s(0);
 				for (int k(0); k < voisinage.taille(); k++)
 					s += M[voisinage[k][0]][voisinage[k][1]];

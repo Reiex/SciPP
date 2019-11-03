@@ -3,10 +3,10 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "Entier.hpp"
+#include "Int.hpp"
 
 /*
-	Les fonctions necessaires de Vecteur.
+	Les fonctions necessaires de Vect.
 
 	T::T(int)
 	T::operator=(T const&)
@@ -28,24 +28,24 @@
 	bool operator>=(T const&, T const&)
 	bool operator<=(T const&, T const&)
 */
-template<typename T> class Fraction
+template<typename T> class Frac
 {
 	public:
 
-		Fraction();
-		Fraction(int x);
-		Fraction(T const& x);
-		Fraction(T const& p, T const& q);
+		Frac();
+		Frac(int x);
+		Frac(T const& x);
+		Frac(T const& p, T const& q);
 
 		T numerateur() const;
 		T denominateur() const;
 
-		Fraction<T>& operator+=(Fraction<T> const& a);
-		Fraction<T>& operator-=(Fraction<T> const& a);
-		Fraction<T>& operator*=(Fraction<T> const& a);
-		Fraction<T>& operator/=(Fraction<T> const& a);
-		Fraction<T> operator-();
-		Fraction<T> operator+();
+		Frac<T>& operator+=(Frac<T> const& a);
+		Frac<T>& operator-=(Frac<T> const& a);
+		Frac<T>& operator*=(Frac<T> const& a);
+		Frac<T>& operator/=(Frac<T> const& a);
+		Frac<T> operator-();
+		Frac<T> operator+();
 
 	private:
 
@@ -58,25 +58,25 @@ template<typename T> class Fraction
 
 // Constructeurs
 
-template<typename T> Fraction<T>::Fraction()
+template<typename T> Frac<T>::Frac()
 {
 	m_p = T(0);
 	m_q = T(1);
 }
 
-template<typename T> Fraction<T>::Fraction(int x)
+template<typename T> Frac<T>::Frac(int x)
 {
 	m_p = T(x);
 	m_q = T(1);
 }
 
-template<typename T> Fraction<T>::Fraction(T const& x)
+template<typename T> Frac<T>::Frac(T const& x)
 {
 	m_p = x;
 	m_q = T(1);
 }
 
-template<typename T> Fraction<T>::Fraction(T const& p, T const& q)
+template<typename T> Frac<T>::Frac(T const& p, T const& q)
 {
 	if (q == T(0))
 		throw "Division par zero.";
@@ -88,12 +88,12 @@ template<typename T> Fraction<T>::Fraction(T const& p, T const& q)
 
 // Acces et modification de la structure
 
-template<typename T> T Fraction<T>::numerateur() const
+template<typename T> T Frac<T>::numerateur() const
 {
 	return m_p;
 }
 
-template<typename T> T Fraction<T>::denominateur() const
+template<typename T> T Frac<T>::denominateur() const
 {
 	return m_q;
 }
@@ -101,7 +101,7 @@ template<typename T> T Fraction<T>::denominateur() const
 
 // Operations
 
-template<typename T> Fraction<T>& Fraction<T>::operator+=(Fraction<T> const& a)
+template<typename T> Frac<T>& Frac<T>::operator+=(Frac<T> const& a)
 {
 	m_p = m_p * a.m_q + a.m_p*m_q;
 	m_q *= a.m_q;
@@ -111,15 +111,15 @@ template<typename T> Fraction<T>& Fraction<T>::operator+=(Fraction<T> const& a)
 	return *this;
 }
 
-template<typename T> Fraction<T> operator+(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> Frac<T> operator+(Frac<T> const& a, Frac<T> const& b)
 {
-	Fraction<T> c(a);
+	Frac<T> c(a);
 	c += b;
 
 	return c;
 }
 
-template<typename T> Fraction<T>& Fraction<T>::operator-=(Fraction<T> const& a)
+template<typename T> Frac<T>& Frac<T>::operator-=(Frac<T> const& a)
 {
 	m_p = m_p * a.m_q - a.m_p*m_q;
 	m_q *= a.m_q;
@@ -129,15 +129,15 @@ template<typename T> Fraction<T>& Fraction<T>::operator-=(Fraction<T> const& a)
 	return *this;
 }
 
-template<typename T> Fraction<T> operator-(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> Frac<T> operator-(Frac<T> const& a, Frac<T> const& b)
 {
-	Fraction<T> c(a);
+	Frac<T> c(a);
 	c -= b;
 
 	return c;
 }
 
-template<typename T> Fraction<T>& Fraction<T>::operator*=(Fraction<T> const& a)
+template<typename T> Frac<T>& Frac<T>::operator*=(Frac<T> const& a)
 {
 	m_p *= a.m_p;
 	m_q *= a.m_q;
@@ -147,15 +147,15 @@ template<typename T> Fraction<T>& Fraction<T>::operator*=(Fraction<T> const& a)
 	return *this;
 }
 
-template<typename T> Fraction<T> operator*(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> Frac<T> operator*(Frac<T> const& a, Frac<T> const& b)
 {
-	Fraction<T> c(a);
+	Frac<T> c(a);
 	c *= b;
 
 	return c;
 }
 
-template<typename T> Fraction<T>& Fraction<T>::operator/=(Fraction<T> const& a)
+template<typename T> Frac<T>& Frac<T>::operator/=(Frac<T> const& a)
 {
 	m_p *= a.m_q;
 	m_q *= a.m_p;
@@ -165,53 +165,53 @@ template<typename T> Fraction<T>& Fraction<T>::operator/=(Fraction<T> const& a)
 	return *this;
 }
 
-template<typename T> Fraction<T> operator/(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> Frac<T> operator/(Frac<T> const& a, Frac<T> const& b)
 {
-	Fraction<T> c(a);
+	Frac<T> c(a);
 	c /= b;
 
 	return c;
 }
 
-template<typename T> Fraction<T> Fraction<T>::operator-()
+template<typename T> Frac<T> Frac<T>::operator-()
 {
-	return Fraction<T>(-m_p, m_q);
+	return Frac<T>(-m_p, m_q);
 }
 
-template<typename T> Fraction<T> Fraction<T>::operator+()
+template<typename T> Frac<T> Frac<T>::operator+()
 {
-	return Fraction<T>(m_p, m_q);
+	return Frac<T>(m_p, m_q);
 }
 
 
 // Comparaisons
 
-template<typename T> bool operator==(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator==(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() == b.numerateur()*a.denominateur();
 }
 
-template<typename T> bool operator!=(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator!=(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() != b.numerateur()*a.denominateur();
 }
 
-template<typename T> bool operator>(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator>(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() > b.numerateur()*a.denominateur();
 }
 
-template<typename T> bool operator<(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator<(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() < b.numerateur()*a.denominateur();
 }
 
-template<typename T> bool operator>=(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator>=(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() >= b.numerateur()*a.denominateur();
 }
 
-template<typename T> bool operator<=(Fraction<T> const& a, Fraction<T> const& b)
+template<typename T> bool operator<=(Frac<T> const& a, Frac<T> const& b)
 {
 	return a.numerateur()*b.denominateur() <= b.numerateur()*a.denominateur();
 }
@@ -219,7 +219,7 @@ template<typename T> bool operator<=(Fraction<T> const& a, Fraction<T> const& b)
 
 // Fonctions specifiques
 
-template<typename T> void Fraction<T>::simplifier()
+template<typename T> void Frac<T>::simplifier()
 {
 	if (m_q < 0)
 	{
@@ -240,7 +240,7 @@ template<typename T> void Fraction<T>::simplifier()
 
 // Affichage
 
-template<typename T> std::ostream& operator<<(std::ostream& stream, Fraction<T> const& a)
+template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> const& a)
 {
 	stream << "(" << a.numerateur() << "/" << a.denominateur() << ")";
 	return stream;
@@ -251,5 +251,5 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Fraction<T> 
 long double const PI = 3.141592653589793;
 long double const E = 2.7182818284590452;
 
-std::string decimales(Fraction<Entier> const& x, int n);
-std::ostream& operator<<(std::ostream& stream, Fraction<Entier> const& x);
+std::string decimales(Frac<Int> const& x, int n);
+std::ostream& operator<<(std::ostream& stream, Frac<Int> const& x);

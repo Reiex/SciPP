@@ -7,9 +7,9 @@ Timeline::Timeline()
 {
 	timelineList.push_back(this);
 	m_delay = 1.0/24.0;
-	m_border = Vecteur<long double>(4);
+	m_border = Vect<long double>(4);
 	m_borderSet = false;
-	m_color = Vecteur<int>(3);
+	m_color = Vect<int>(3);
 }
 
 void Timeline::setFramerate(int framerate)
@@ -51,10 +51,10 @@ void Timeline::plot(long double x, long double y)
 	m_courbes.push_back(figure);
 }
 
-void Timeline::plot(Vecteur<long double> x, Vecteur<long double> y)
+void Timeline::plot(Vect<long double> x, Vect<long double> y)
 {
 	if (x.taille() != y.taille() || x.taille() < 1)
-		throw "La taille des vecteurs est invalide.";
+		throw "La taille des Vects est invalide.";
 
 	int n(x.taille());
 
@@ -140,12 +140,12 @@ void Timeline::show()
 
 	// Calcule des coordonnées des points des courbes
 
-	Vecteur<long double> border(timelineList[0]->m_border);
+	Vect<long double> border(timelineList[0]->m_border);
 	for (int i(1); i < timelineList.size(); i++)
 	{
 		if (timelineList[i]->m_courbes.size() != 0)
 		{
-			Vecteur<long double>& other(timelineList[i]->m_border);
+			Vect<long double>& other(timelineList[i]->m_border);
 			border[0] = other[0] < border[0] ? other[0] : border[0];
 			border[1] = other[1] > border[1] ? other[1] : border[1];
 			border[2] = other[2] < border[2] ? other[2] : border[2];
@@ -179,7 +179,7 @@ void Timeline::show()
 		for (int j(0); j < timelineList[i]->m_courbes.size(); j++)
 		{
 			sf::VertexArray& courbe(timelineList[i]->m_courbes[j]);
-			Vecteur<int>& color(timelineList[i]->m_color);
+			Vect<int>& color(timelineList[i]->m_color);
 			
 			for (int k(0); k < courbe.getVertexCount(); k++)
 			{
@@ -284,18 +284,18 @@ Timeline::~Timeline()
 
 // Graphes 2D
 
-void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord)
+void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord)
 {
 	int nbCases(40);
 
 	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
-	Matrice<Vecteur<double>> M(nbCases, nbCases);
+	Matrice<Vect<double>> M(nbCases, nbCases);
 
 	for (int i(0); i < nbCases; i++)
 	{
 		for (int j(0); j < nbCases; j++)
 		{
-			Vecteur<double> v(2);
+			Vect<double> v(2);
 			v[0] = coord[0] + i * pasX;
 			v[1] = coord[3] - j * pasY;
 
@@ -307,7 +307,7 @@ void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord
 	{
 		for (int j(0); j < nbCases; j++)
 		{
-			Vecteur<double> v(4);
+			Vect<double> v(4);
 			v[0] = i * 15 + 8;
 			v[1] = j * 15 + 8;
 
@@ -352,20 +352,20 @@ void plotChampVect2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord
 	}
 }
 
-void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int precision, double distCourbe)
+void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precision, double distCourbe)
 {
 	// Calculer le champ vectoriel a afficher
 
 	int nbCases(40);
 
 	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
-	Matrice<Vecteur<double>> M(nbCases, nbCases);
+	Matrice<Vect<double>> M(nbCases, nbCases);
 
 	for (int i(0); i < nbCases; i++)
 	{
 		for (int j(0); j < nbCases; j++)
 		{
-			Vecteur<double> v(2);
+			Vect<double> v(2);
 			v[0] = coord[0] + i * pasX;
 			v[1] = coord[3] - j * pasY;
 
@@ -377,7 +377,7 @@ void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int
 	{
 		for (int j(0); j < nbCases; j++)
 		{
-			Vecteur<double> v(4);
+			Vect<double> v(4);
 			v[0] = i * 15 + 8;
 			v[1] = j * 15 + 8;
 
@@ -408,19 +408,19 @@ void plotFlot2D(Vecteur<double>(*f)(Vecteur<double>), Vecteur<double> coord, int
 
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
-				Vecteur<double> pos(2);
+				Vect<double> pos(2);
 				pos[0] = coord[0] + (coord[1] - coord[0])*(double(event.mouseButton.x)/window.getSize().x);
 				pos[1] = coord[2] + (coord[3] - coord[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
 
 				std::cout << pos << std::endl;
 
-				std::vector<Vecteur<double>> courbe;
+				std::vector<Vect<double>> courbe;
 				courbe.push_back(pos);
 				double h((coord[1] - coord[0]) / precision), k((coord[3] - coord[2]) / precision), d(0);
 				while (d < distCourbe)
 				{
 					int n(courbe.size());
-					Vecteur<double> xp(f(courbe[n - 1])), x(2);
+					Vect<double> xp(f(courbe[n - 1])), x(2);
 					x[0] = courbe[n - 1][0] + h * xp[0];
 					x[1] = courbe[n - 1][1] + k * xp[1];
 					courbe.push_back(x);
@@ -483,10 +483,10 @@ Polynome<long double> bernstein(int n, int i)
     return coeff * expoRapide(Polynome<long double>(tab, 2), i) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
 }
 
-Vecteur<long double> getBorder(Vecteur<long double> x, Vecteur<long double> y)
+Vect<long double> getBorder(Vect<long double> x, Vect<long double> y)
 {
 	int nbPoints(x.taille());
-	Vecteur<long double> border(4);
+	Vect<long double> border(4);
 
 	if (nbPoints != 0)
 	{
@@ -523,10 +523,10 @@ Vecteur<long double> getBorder(Vecteur<long double> x, Vecteur<long double> y)
 	return border;
 }
 
-Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<long double> const& y, int nbPoints)
+Vect<Vect<long double>> getBezier(Vect<long double> const& x, Vect<long double> const& y, int nbPoints)
 {
     if (x.taille() != y.taille())
-        throw "Les vecteurs x et y doivent être de même taille !";
+        throw "Les Vects x et y doivent être de même taille !";
 	
 	int n(x.taille());
     Polynome<long double> Bx, By;
@@ -537,31 +537,31 @@ Vecteur<Vecteur<long double>> getBezier(Vecteur<long double> const& x, Vecteur<l
 		By += Polynome<long double>(y[i]) * bernstein(n-1, i);
     }
 
-	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
+	Vect<long double> xCourbe(nbPoints), yCourbe(nbPoints);
 	for (int i(0); i < nbPoints; i++)
 	{
 		xCourbe[i] = Bx(double(i) / nbPoints);
 		yCourbe[i] = By(double(i) / nbPoints);
 	}
 
-	Vecteur<Vecteur<long double>> courbeBezier(2);
+	Vect<Vect<long double>> courbeBezier(2);
 	courbeBezier[0] = xCourbe;
 	courbeBezier[1] = yCourbe;
 
 	return courbeBezier;
 }
 
-void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y)
+void plotBezier(Vect<long double> const& x, Vect<long double> const& y)
 {
 	int n(x.taille()), nbPoints(1000);
-	Vecteur<long double> xPolygone(x), yPolygone(y);
-	Vecteur<Vecteur<long double>> courbeBezier(getBezier(xPolygone, yPolygone, nbPoints));
+	Vect<long double> xPolygone(x), yPolygone(y);
+	Vect<Vect<long double>> courbeBezier(getBezier(xPolygone, yPolygone, nbPoints));
 	
 	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
 	// Calcule des coordonnées des points des courbes
 
-	Vecteur<long double> border(getBorder(xPolygone, yPolygone));
+	Vect<long double> border(getBorder(xPolygone, yPolygone));
 	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
 
 	for (int i(0); i < n; i++)
@@ -594,7 +594,7 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y)
 			}
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
-				Vecteur<double> pos(2);
+				Vect<double> pos(2);
 				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseButton.x)/window.getSize().x);
 				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
 
@@ -653,22 +653,22 @@ void plotBezier(Vecteur<long double> const& x, Vecteur<long double> const& y)
 	}
 }
 
-Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my, int nbPoints)
+Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my, int nbPoints)
 {
     if (x.taille() != y.taille() || mx.taille() != my.taille() || x.taille() != mx.taille())
-        throw "Les tailles des vecteurs ne se correspondent pas !";
+        throw "Les tailles des Vects ne se correspondent pas !";
 	
 	int n(x.taille()), j(0);
-	Vecteur<long double> xCourbe(nbPoints), yCourbe(nbPoints);
+	Vect<long double> xCourbe(nbPoints), yCourbe(nbPoints);
 	for (int k(0); k < n - 1; k++)
 	{
-		Vecteur<long double> xBezier(4), yBezier(4);
+		Vect<long double> xBezier(4), yBezier(4);
 		xBezier[0] = x[k]; yBezier[0] = y[k];
 		xBezier[1] = x[k] + mx[k]/3; yBezier[1] = y[k] + my[k]/3;
 		xBezier[2] = x[k+1] - mx[k+1]/3; yBezier[2] = y[k+1] - my[k+1]/3;
 		xBezier[3] = x[k+1]; yBezier[3] = y[k+1];
 		int l((k+1)*nbPoints/(n-1));
-		Vecteur<Vecteur<long double>> courbeBezier(getBezier(xBezier, yBezier, l - j));
+		Vect<Vect<long double>> courbeBezier(getBezier(xBezier, yBezier, l - j));
 
 		for (int i(0); j + i < l; i++)
 		{
@@ -678,14 +678,14 @@ Vecteur<Vecteur<long double>> getHermite(Vecteur<long double> const& x, Vecteur<
 		j = l;
 	}
 
-	Vecteur<Vecteur<long double>> courbeHermite(2);
+	Vect<Vect<long double>> courbeHermite(2);
 	courbeHermite[0] = xCourbe;
 	courbeHermite[1] = yCourbe;
 
 	return courbeHermite;
 }
 
-void calculRendu(sf::VertexArray& polygoneVertex, sf::VertexArray& courbeVertex, std::vector<sf::CircleShape>& derivees, Vecteur<long double> const& xPolygone, Vecteur<long double> const& yPolygone, Vecteur<long double> const& mxPolygone, Vecteur<long double> const& myPolygone, Vecteur<Vecteur<long double>> const& courbeHermite, Vecteur<long double> const& border)
+void calculRendu(sf::VertexArray& polygoneVertex, sf::VertexArray& courbeVertex, std::vector<sf::CircleShape>& derivees, Vect<long double> const& xPolygone, Vect<long double> const& yPolygone, Vect<long double> const& mxPolygone, Vect<long double> const& myPolygone, Vect<Vect<long double>> const& courbeHermite, Vect<long double> const& border)
 {
 	int n(polygoneVertex.getVertexCount());
 	int nbPoints(courbeVertex.getVertexCount());
@@ -722,18 +722,18 @@ int deriveeSelectionnee(std::vector<sf::CircleShape> const& derivees, int xSouri
 	return -1;
 }
 
-void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, Vecteur<long double> const& mx, Vecteur<long double> const& my)
+void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my)
 {
 	
 	int n(x.taille()), nbPoints(1000);
-	Vecteur<long double> xPolygone(x), yPolygone(y), mxPolygone(mx), myPolygone(my);
-	Vecteur<Vecteur<long double>> courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
+	Vect<long double> xPolygone(x), yPolygone(y), mxPolygone(mx), myPolygone(my);
+	Vect<Vect<long double>> courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
 	
 	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
 	// Calcule des coordonnées des points des courbes
 
-	Vecteur<long double> border(getBorder(xPolygone, yPolygone));
+	Vect<long double> border(getBorder(xPolygone, yPolygone));
 	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
 	std::vector<sf::CircleShape> derivees;
 	for (int i(0); i < n; i++)
@@ -763,7 +763,7 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 				if (selection != -1)
 					continue; 
 
-				Vecteur<double> pos(2);
+				Vect<double> pos(2);
 				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseButton.x)/window.getSize().x);
 				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
 
@@ -807,7 +807,7 @@ void plotHermite(Vecteur<long double> const& x, Vecteur<long double> const& y, V
 			}
 			else if (event.type == sf::Event::MouseMoved && selection != -1)
 			{
-				Vecteur<double> pos(2);
+				Vect<double> pos(2);
 				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseMove.x)/window.getSize().x);
 				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseMove.y)/window.getSize().y);
 

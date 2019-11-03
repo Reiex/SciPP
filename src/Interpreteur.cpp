@@ -33,7 +33,7 @@ struct Token
 	};
 
 	Type type;
-	Fraction<Entier> value;
+	Frac<Int> value;
 	int virgule;
 };
 
@@ -75,7 +75,7 @@ void parseNum()
 	}
 	else if (currentLexeme >= 48 && currentLexeme <= 57 && current.virgule)
 	{
-		current.value += Fraction<Entier>(int(currentLexeme - 48), expoRapide(Entier(10), current.virgule));
+		current.value += Frac<Int>(int(currentLexeme - 48), expoRapide(Int(10), current.virgule));
 		current.virgule++;
 		parseLexeme();
 		parseNum();
@@ -176,15 +176,15 @@ void parseToken(Token::Type expected)
 // Gestion des expressions
 
 
-void parseInput(Liste<Fraction<Entier>>& l);
-void parseInstr(Liste<Fraction<Entier>>& l);
-Fraction<Entier> parseExp0(Liste<Fraction<Entier>>& l);
-Fraction<Entier> parseExp1(Liste<Fraction<Entier>>& l);
-Fraction<Entier> parseExp1p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& y);
-Fraction<Entier> parseExp2(Liste<Fraction<Entier>>& l);
-Fraction<Entier> parseExp2p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& y);
+void parseInput(Liste<Frac<Int>>& l);
+void parseInstr(Liste<Frac<Int>>& l);
+Frac<Int> parseExp0(Liste<Frac<Int>>& l);
+Frac<Int> parseExp1(Liste<Frac<Int>>& l);
+Frac<Int> parseExp1p(Liste<Frac<Int>>& l, Frac<Int> const& y);
+Frac<Int> parseExp2(Liste<Frac<Int>>& l);
+Frac<Int> parseExp2p(Liste<Frac<Int>>& l, Frac<Int> const& y);
 
-void parseInput(Liste<Fraction<Entier>>& l)
+void parseInput(Liste<Frac<Int>>& l)
 {
 	switch (current.type)
 	{
@@ -202,9 +202,9 @@ void parseInput(Liste<Fraction<Entier>>& l)
 	}
 }
 
-void parseInstr(Liste<Fraction<Entier>>& l)
+void parseInstr(Liste<Frac<Int>>& l)
 {
-	Fraction<Entier> x;
+	Frac<Int> x;
 	int i;
 	
 	switch (current.type)
@@ -232,9 +232,9 @@ void parseInstr(Liste<Fraction<Entier>>& l)
 	}
 }
 
-Fraction<Entier> parseExp0(Liste<Fraction<Entier>>& l)
+Frac<Int> parseExp0(Liste<Frac<Int>>& l)
 {
-	Fraction<Entier> x, x0;
+	Frac<Int> x, x0;
 	int i;
 	switch (current.type)
 	{
@@ -268,16 +268,16 @@ Fraction<Entier> parseExp0(Liste<Fraction<Entier>>& l)
 	}
 }
 
-Fraction<Entier> parseExp1(Liste<Fraction<Entier>>& l)
+Frac<Int> parseExp1(Liste<Frac<Int>>& l)
 {
-	Fraction<Entier> x0;
+	Frac<Int> x0;
 	x0 = parseExp0(l);
 	return parseExp1p(l, x0);
 }
 
-Fraction<Entier> parseExp1p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& y)
+Frac<Int> parseExp1p(Liste<Frac<Int>>& l, Frac<Int> const& y)
 {
-	Fraction<Entier> x0, x;
+	Frac<Int> x0, x;
 	switch (current.type)
 	{
 		case Token::TIMES:
@@ -297,16 +297,16 @@ Fraction<Entier> parseExp1p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& 
 	}
 }
 
-Fraction<Entier> parseExp2(Liste<Fraction<Entier>>& l)
+Frac<Int> parseExp2(Liste<Frac<Int>>& l)
 {
-	Fraction<Entier> x0;
+	Frac<Int> x0;
 	x0 = parseExp1(l);
 	return parseExp2p(l, x0);
 }
 
-Fraction<Entier> parseExp2p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& y)
+Frac<Int> parseExp2p(Liste<Frac<Int>>& l, Frac<Int> const& y)
 {
-	Fraction<Entier> x0, x;
+	Frac<Int> x0, x;
 	switch (current.type)
 	{
 		case Token::PLUS:
@@ -331,7 +331,7 @@ Fraction<Entier> parseExp2p(Liste<Fraction<Entier>>& l, Fraction<Entier> const& 
 
 void lancerInterpreteur()
 {
-	Liste<Fraction<Entier>> l;
+	Liste<Frac<Int>> l;
 
 	std::cout << ">>> ";
 	parseLexeme();

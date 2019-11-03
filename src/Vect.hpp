@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "Fraction.hpp"
+#include "Frac.hpp"
 
 /*
 	T::T()
@@ -19,35 +19,35 @@
 	bool operator==(T const&, T const&)
 	bool operator!=(T const&, T const&)
 */
-template<typename T> class Vecteur
+template<typename T> class Vect
 {
 	public:
 
-		Vecteur();
-		Vecteur(Vecteur<T> const& v);
-		Vecteur(Vecteur<T>&& v);
-		Vecteur(int n);
-		Vecteur(T const* tab, int taille);
+		Vect();
+		Vect(Vect<T> const& v);
+		Vect(Vect<T>&& v);
+		Vect(int n);
+		Vect(T const* tab, int taille);
 
-		Vecteur<T>& operator=(Vecteur<T> const& v);
-		Vecteur<T>& operator=(Vecteur<T>&& v);
+		Vect<T>& operator=(Vect<T> const& v);
+		Vect<T>& operator=(Vect<T>&& v);
 
 		T& operator[](int i);
 		T const& operator[](int i) const;
 		int taille() const;
 		void changerTaille(int taille);
 
-		Vecteur<T>& operator+=(Vecteur<T> const& v);
-		Vecteur<T>& operator-=(Vecteur<T> const& v);
-		Vecteur<T>& operator*=(T x);
-		Vecteur<T>& operator/=(T x);
+		Vect<T>& operator+=(Vect<T> const& v);
+		Vect<T>& operator-=(Vect<T> const& v);
+		Vect<T>& operator*=(T x);
+		Vect<T>& operator/=(T x);
 
-		~Vecteur();
+		~Vect();
 
 	private:
 
 		void liberer();
-		void copier(Vecteur<T> const& v);
+		void copier(Vect<T> const& v);
 
 		T* m_x;
 		int m_n;
@@ -58,7 +58,7 @@ template<typename T> class Vecteur
 
 // Constructeurs
 
-template<typename T> Vecteur<T>::Vecteur()
+template<typename T> Vect<T>::Vect()
 {
 	m_n = 0;
 	m_x = nullptr;
@@ -66,14 +66,14 @@ template<typename T> Vecteur<T>::Vecteur()
 	m_actif = false;
 }
 
-template<typename T> Vecteur<T>::Vecteur(Vecteur<T> const& v)
+template<typename T> Vect<T>::Vect(Vect<T> const& v)
 {
 	copier(v);
 
 	m_actif = v.m_actif;
 }
 
-template<typename T> Vecteur<T>::Vecteur(Vecteur<T>&& v)
+template<typename T> Vect<T>::Vect(Vect<T>&& v)
 {
 	m_x = v.m_x;
 	m_n = v.m_n;
@@ -82,7 +82,7 @@ template<typename T> Vecteur<T>::Vecteur(Vecteur<T>&& v)
 	v.m_actif = false;
 }
 
-template<typename T> Vecteur<T>::Vecteur(int n)
+template<typename T> Vect<T>::Vect(int n)
 {
 	if (n > 0)
 	{
@@ -103,7 +103,7 @@ template<typename T> Vecteur<T>::Vecteur(int n)
 	}
 }
 
-template<typename T> Vecteur<T>::Vecteur(T const* tab, int taille)
+template<typename T> Vect<T>::Vect(T const* tab, int taille)
 {
 	if (taille > 0)
 	{
@@ -127,7 +127,7 @@ template<typename T> Vecteur<T>::Vecteur(T const* tab, int taille)
 
 // Copie et mouvement
 
-template<typename T> void Vecteur<T>::copier(Vecteur<T> const& v)
+template<typename T> void Vect<T>::copier(Vect<T> const& v)
 {
 	m_n = v.m_n;
 	m_x = new T[m_n];
@@ -135,7 +135,7 @@ template<typename T> void Vecteur<T>::copier(Vecteur<T> const& v)
 		m_x[i] = v[i];
 }
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator=(Vecteur<T> const& v)
+template<typename T> Vect<T>& Vect<T>::operator=(Vect<T> const& v)
 {
 	liberer();
 	copier(v);
@@ -145,7 +145,7 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator=(Vecteur<T> const& v)
 	return *this;
 }
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator=(Vecteur<T>&& v)
+template<typename T> Vect<T>& Vect<T>::operator=(Vect<T>&& v)
 {
 	liberer();
 
@@ -161,7 +161,7 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator=(Vecteur<T>&& v)
 
 // Acces et modification de la structure
 
-template<typename T> T& Vecteur<T>::operator[](int i)
+template<typename T> T& Vect<T>::operator[](int i)
 {
 
 	if (i < 0 || i >= m_n)
@@ -170,7 +170,7 @@ template<typename T> T& Vecteur<T>::operator[](int i)
 	return m_x[i];
 }
 
-template<typename T> T const& Vecteur<T>::operator[](int i) const
+template<typename T> T const& Vect<T>::operator[](int i) const
 {
 	if (i < 0 || i >= m_n)
 		throw "L'indice est en dehors des limites.";
@@ -178,12 +178,12 @@ template<typename T> T const& Vecteur<T>::operator[](int i) const
 	return m_x[i];
 }
 
-template<typename T> int Vecteur<T>::taille() const
+template<typename T> int Vect<T>::taille() const
 {
 	return m_n;
 }
 
-template<typename T> void Vecteur<T>::changerTaille(int taille)
+template<typename T> void Vect<T>::changerTaille(int taille)
 {
 	T* xTmp = m_x;
 
@@ -199,10 +199,10 @@ template<typename T> void Vecteur<T>::changerTaille(int taille)
 
 // Op�rations
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator+=(Vecteur<T> const& v)
+template<typename T> Vect<T>& Vect<T>::operator+=(Vect<T> const& v)
 {
 	if (m_n != v.m_n)
-		throw "Les deux vecteurs doivent avoir la meme taille.";
+		throw "Les deux Vects doivent avoir la meme taille.";
 
 	for (int i(0); i < m_n; i++)
 		m_x[i] += v[i];
@@ -210,18 +210,18 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator+=(Vecteur<T> const& v)
 	return *this;
 }
 
-template<typename T> Vecteur<T> operator+(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> Vect<T> operator+(Vect<T> const& u, Vect<T> const& v)
 {
-	Vecteur<T> w(u);
+	Vect<T> w(u);
 	w += v;
 
 	return w;
 }
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator-=(Vecteur<T> const& v)
+template<typename T> Vect<T>& Vect<T>::operator-=(Vect<T> const& v)
 {
 	if (m_n != v.m_n)
-		throw "Les deux vecteurs doivent avoir la meme taille.";
+		throw "Les deux Vects doivent avoir la meme taille.";
 
 	for (int i(0); i < m_n; i++)
 		m_x[i] -= v[i];
@@ -229,15 +229,15 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator-=(Vecteur<T> const& v)
 	return *this;
 }
 
-template<typename T> Vecteur<T> operator-(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> Vect<T> operator-(Vect<T> const& u, Vect<T> const& v)
 {
-	Vecteur<T> w(u);
+	Vect<T> w(u);
 	w -= v;
 
 	return w;
 }
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator*=(T x)
+template<typename T> Vect<T>& Vect<T>::operator*=(T x)
 {
 	for (int i(0); i < m_n; i++)
 		m_x[i] *= x;
@@ -245,20 +245,20 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator*=(T x)
 	return *this;
 }
 
-template<typename T> Vecteur<T> operator*(Vecteur<T> const& v, T x)
+template<typename T> Vect<T> operator*(Vect<T> const& v, T x)
 {
-	Vecteur<T> w(v);
+	Vect<T> w(v);
 	w *= x;
 
 	return w;
 }
 
-template<typename T> Vecteur<T> operator*(T x, Vecteur<T> const& v)
+template<typename T> Vect<T> operator*(T x, Vect<T> const& v)
 {
 	return v*x;
 }
 
-template<typename T> Vecteur<T>& Vecteur<T>::operator/=(T x)
+template<typename T> Vect<T>& Vect<T>::operator/=(T x)
 {
 	for (int i(0); i < m_n; i++)
 		m_x[i] /= x;
@@ -266,18 +266,18 @@ template<typename T> Vecteur<T>& Vecteur<T>::operator/=(T x)
 	return *this;
 }
 
-template<typename T> Vecteur<T> operator/(Vecteur<T> const& v, T x)
+template<typename T> Vect<T> operator/(Vect<T> const& v, T x)
 {
-	Vecteur<T> w(v);
+	Vect<T> w(v);
 	w /= x;
 
 	return w;
 }
 
-template<typename T> T operator*(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 {
 	if (u.taille() != v.taille())
-		throw "Les deux vecteurs doivent avoir la meme taille.";
+		throw "Les deux Vects doivent avoir la meme taille.";
 
 	T x(0);
 	for (int i(0); i < u.taille(); i++)
@@ -286,12 +286,12 @@ template<typename T> T operator*(Vecteur<T> const& u, Vecteur<T> const& v)
 	return x;
 }
 
-template<typename T> Vecteur<T> operator^(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> Vect<T> operator^(Vect<T> const& u, Vect<T> const& v)
 {
 	if (u.taille != 3 || v.taille != 3)
-		throw "Les vecteurs doivent etre en dimension 3.";
+		throw "Les Vects doivent etre en dimension 3.";
 
-	Vecteur<T> w(3);
+	Vect<T> w(3);
 
 	w[0] = u[1]*v[2] - u[2]*v[1];
 	w[1] = u[2]*v[0] - u[0]*v[2];
@@ -303,7 +303,7 @@ template<typename T> Vecteur<T> operator^(Vecteur<T> const& u, Vecteur<T> const&
 
 // Comparaisons
 
-template<typename T> bool operator==(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> bool operator==(Vect<T> const& u, Vect<T> const& v)
 {
 	if (u.taille() != v.taille())
 		return false;
@@ -315,7 +315,7 @@ template<typename T> bool operator==(Vecteur<T> const& u, Vecteur<T> const& v)
 	return true;
 }
 
-template<typename T> bool operator!=(Vecteur<T> const& u, Vecteur<T> const& v)
+template<typename T> bool operator!=(Vect<T> const& u, Vect<T> const& v)
 {
 	return !(u == v);
 }
@@ -323,7 +323,7 @@ template<typename T> bool operator!=(Vecteur<T> const& u, Vecteur<T> const& v)
 
 // Affichage
 
-template<typename T> std::ostream& operator<<(std::ostream& stream, Vecteur<T> const& v)
+template<typename T> std::ostream& operator<<(std::ostream& stream, Vect<T> const& v)
 {
 	stream << "(";
 	for (int i(0); i < v.taille(); i++)
@@ -339,12 +339,12 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Vecteur<T> c
 
 // Destructeur
 
-template<typename T> void Vecteur<T>::liberer()
+template<typename T> void Vect<T>::liberer()
 {
 	delete[] m_x;
 }
 
-template<typename T> Vecteur<T>::~Vecteur()
+template<typename T> Vect<T>::~Vect()
 {
 	if (m_actif)
 		liberer();

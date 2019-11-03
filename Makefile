@@ -1,7 +1,7 @@
 # Règles générales
 
-SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Fraction.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o
-	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Entier.o obj/Fraction.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
+SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Int.o obj/Frac.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o
+	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Int.o obj/Frac.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
 	rm obj/*
@@ -22,11 +22,11 @@ obj/jeuxArithmetiques.o: src/jeuxArithmetiques.cpp
 
 # Bibliothèque
 
-obj/Entier.o: src/Entier.cpp
-	g++ -c src/Entier.cpp -o obj/Entier.o
+obj/Int.o: src/Int.cpp
+	g++ -c src/Int.cpp -o obj/Int.o
 
-obj/Fraction.o: src/Fraction.cpp
-	g++ -c src/Fraction.cpp -o obj/Fraction.o
+obj/Frac.o: src/Frac.cpp
+	g++ -c src/Frac.cpp -o obj/Frac.o
 
 obj/Matrice.o: src/Matrice.cpp
 	g++ -c src/Matrice.cpp -o obj/Matrice.o
