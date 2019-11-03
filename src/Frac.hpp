@@ -246,10 +246,12 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 	return stream;
 }
 
-// Autres
+// Rationnels
+
+typedef Frac<Int> Rationnel;
 
 long double const PI = 3.141592653589793;
 long double const E = 2.7182818284590452;
 
-std::string decimales(Frac<Int> const& x, int n);
-std::ostream& operator<<(std::ostream& stream, Frac<Int> const& x);
+std::string decimales(Rationnel const& x, int n);
+std::ostream& operator<<(std::ostream& stream, Rationnel const& x);

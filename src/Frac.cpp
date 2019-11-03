@@ -1,7 +1,7 @@
 #include "Frac.hpp"
 
 
-std::string decimales(Frac<Int> const& x, int n)
+std::string decimales(Rationnel const& x, int n)
 {
 	std::string chaine("");
 	std::stringstream s;
@@ -22,7 +22,7 @@ std::string decimales(Frac<Int> const& x, int n)
 	return s.str();
 }
 
-std::ostream& operator<<(std::ostream& stream, Frac<Int> const& x)
+std::ostream& operator<<(std::ostream& stream, Rationnel const& x)
 {
 	if (x.denominateur() == 1)
 	{
