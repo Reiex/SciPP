@@ -474,6 +474,10 @@ void systemeD()
 	plotFlot2D(fPendule, coord, 100, 50);
 }
 
+
+// Equation de la chaleur
+
+
 double uInit(double x, double y)
 {
 	double pi(3.1415926);
@@ -487,6 +491,7 @@ double uInit(double x, double y)
 void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 {
 	double dx(1.0/Nx), dy(1.0/Ny), Umin(uInit(0, 0)), Umax(uInit(0, 0));
+	double nu(0.1);
 
 	Matrice<long double> U(Nx, Ny);
 
@@ -513,7 +518,7 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 			for (int j(0); j < Ny; j++)
 			{
 				Up[i][j] = (U[i > 0 ? i-1 : Nx - 1][j] - 2*U[i][j] + U[i < Nx - 1 ? i+1: 0][j])/(dx*dx) + (U[i][j > 0 ? j-1 : Ny - 1] - 2*U[i][j] + U[i][j < Ny - 1 ? j+1: 0])/(dy*dy);
-				Up[i][j] *= 0.1;
+				Up[i][j] *= nu;
 				if (Up[i][j] > max || Up[i][j] < -max)
 				{
 					max = Up[i][j] > 0 ? Up[i][j]: -Up[i][j];
@@ -521,7 +526,7 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 			}
 		}
 
-		long double dt(5*dx*dy/max);
+		long double dt(5*(dx*dx + dy*dy)/(max*nu));
 		U += Up*dt;
 		t += dt;
 		if (t > double(nbImages + 1)/2400)
