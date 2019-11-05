@@ -678,6 +678,12 @@ Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double>
 		j = l;
 	}
 
+	if (n > 1 && nbPoints != 0)
+	{
+		xCourbe[nbPoints - 1] = x[n - 1];
+		yCourbe[nbPoints - 1] = y[n - 1];
+	}
+
 	Vect<Vect<long double>> courbeHermite(2);
 	courbeHermite[0] = xCourbe;
 	courbeHermite[1] = yCourbe;
@@ -827,4 +833,37 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 		for (int i(0); i < n; i++)
 			window.draw(derivees[i]);
 	}
+}
+
+Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y)
+{
+	if (x.taille() != y.taille())
+		throw "Les tailles ne se correspondent pas !";
+
+	int n(x.taille());
+	long double c(0.5);
+	Vect<Vect<long double>> m(2);
+	m[0] = Vect<long double>(n);
+	m[1] = Vect<long double>(n);
+
+	if (n < 2)
+		return m;
+
+	// Courbe tangeante aux bords du polygone de contrôle
+
+	m[0][0] = (1-c)*(x[1] - x[0]);
+	m[1][0] = (1-c)*(y[1] - y[0]);
+
+	m[0][n-1] = (1-c)*(x[n-1] - x[n-2]);
+	m[1][n-1] = (1-c)*(y[n-2] - y[n-2]);
+
+	// Calcul des dérivées au milieu de la courbe
+
+	for (int i(1); i < n-1; i++)
+	{
+		m[0][i] = (1-c)*(x[i+1] - x[i-1])/2;
+		m[0][i] = (1-c)*(y[i+1] - y[i-1])/2;
+	}
+
+	return m;
 }

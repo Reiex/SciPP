@@ -5,8 +5,8 @@ std::string neper(int n)
 	// Calcul du nombre d'it�rations n�cessaires
 
 	int k(0);
-	Frac<Int> fact(2);
-	Frac<Int> puiss(1, 10);
+	Rationnel fact(2);
+	Rationnel puiss(1, 10);
 	puiss = expoRapide(puiss, n + 1);
 	while (fact >= puiss)
 	{
@@ -16,8 +16,8 @@ std::string neper(int n)
 
 	// Calcul de la constante de neper
 
-	fact = Frac<Int>(1);
-	Frac<Int> s(1);
+	fact = Rationnel(1);
+	Rationnel s(1);
 	for (int i(1); i < k; i++)
 	{
 		std::cout << "> Iteration " << i + 1 << "/" << k << std::endl;
