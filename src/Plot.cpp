@@ -733,7 +733,7 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 	
 	int n(x.taille()), nbPoints(1000);
 	Vect<long double> xPolygone(x), yPolygone(y), mxPolygone(mx), myPolygone(my);
-	Vect<Vect<long double>> courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
+	Vect<Vect<long double>> controle, courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
 	
 	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
@@ -749,8 +749,10 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 	// Ouverture de la fenêtre
 
 	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
+	window.setKeyRepeatEnabled(true);
 
 	int selection(-1);
+	long double c(0);
 	sf::Event event;
 	while (window.isOpen())
 	{
@@ -761,6 +763,30 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
+			}
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::Up)
+					c += 0.1;
+				else if (event.key.code == sf::Keyboard::Down)
+					c -= 0.1;
+				else if (event.key.code == sf::Keyboard::Space)
+					c = 0;
+
+				switch (event.key.code)
+				{
+					case sf::Keyboard::Up:
+					case sf::Keyboard::Down:
+					case sf::Keyboard::Space:
+						controle = getSmoothCurve(xPolygone, yPolygone, c);
+						mxPolygone = controle[0];
+						myPolygone = controle[1];
+						courbeHermite = getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints);
+						calculRendu(polygoneVertex, courbeVertex, derivees, xPolygone, yPolygone, mxPolygone, myPolygone, courbeHermite, border);
+						break;
+					default:
+						break;
+				}
 			}
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
@@ -835,13 +861,12 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 	}
 }
 
-Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y)
+Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y, long double c)
 {
 	if (x.taille() != y.taille())
 		throw "Les tailles ne se correspondent pas !";
 
 	int n(x.taille());
-	long double c(0.5);
 	Vect<Vect<long double>> m(2);
 	m[0] = Vect<long double>(n);
 	m[1] = Vect<long double>(n);
@@ -855,14 +880,14 @@ Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long dou
 	m[1][0] = (1-c)*(y[1] - y[0]);
 
 	m[0][n-1] = (1-c)*(x[n-1] - x[n-2]);
-	m[1][n-1] = (1-c)*(y[n-2] - y[n-2]);
+	m[1][n-1] = (1-c)*(y[n-1] - y[n-2]);
 
 	// Calcul des dérivées au milieu de la courbe
 
 	for (int i(1); i < n-1; i++)
 	{
 		m[0][i] = (1-c)*(x[i+1] - x[i-1])/2;
-		m[0][i] = (1-c)*(y[i+1] - y[i-1])/2;
+		m[1][i] = (1-c)*(y[i+1] - y[i-1])/2;
 	}
 
 	return m;

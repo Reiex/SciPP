@@ -47,3 +47,5 @@ void plotBezier(Vect<long double> const& x, Vect<long double> const& y);
 Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my, int nbPoints = 1000);
 
 void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my);
+
+Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y, long double c);
