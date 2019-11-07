@@ -7,6 +7,9 @@ clean:
 	rm obj/*
 	rm SciPP
 
+lineCount:
+	git ls-files | xargs wc -l
+
 
 # Exemples
 
