@@ -767,9 +767,9 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 			else if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Up)
-					c += 0.1;
-				else if (event.key.code == sf::Keyboard::Down)
 					c -= 0.1;
+				else if (event.key.code == sf::Keyboard::Down)
+					c += 0.1;
 				else if (event.key.code == sf::Keyboard::Space)
 					c = 0;
 

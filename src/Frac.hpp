@@ -248,6 +248,9 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 
 // Rationnels
 
+long double const PI(3.14159265359);
+long double const E(2.71828182846);
+
 class Rationnel: public Frac<Int>
 {
 	public:
