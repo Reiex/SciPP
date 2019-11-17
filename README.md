@@ -8,7 +8,9 @@ Elle implémente entre autres un module de gestion d'entiers (big int), de gesti
 ## Compilation et execution d'un projet
 
 SciPP est dépendant de la SFML, il faut donc l'installer au préalable.
-``` sudo apt-get install libsfml-dev ```
+
+`sudo apt-get install libsfml-dev`
+
 Vous pouvez également regarder directement sur le site de la SFML: [https://www.sfml-dev.org](https://www.sfml-dev.org)
 
 ---
