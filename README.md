@@ -22,6 +22,13 @@ Les règles de compilation principales sont:
 - `SciPP`: permet de compiler le projet
 - `clean`: permet de supprimer les fichiers `.o` créés à la compilation
 
+Pour executer le fichier exemple la suite d'instructions est donc (si vous avez installé la SFML):
+
+```
+	make SciPP
+	./SciPP
+```
+
 ## Documentation du projet
 
 A venir...
