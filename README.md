@@ -5,7 +5,7 @@
 SciPP est une petite bibliothèque scientifique développée en C++ avec la SFML.
 Elle implémente entre autres un module de gestion d'entiers (big int), de gestion de matrices et de dessin scientifique.
 
-## Compilation et execution d'un projet
+## Compilation et execution du projet
 
 SciPP est dépendant de la SFML, il faut donc l'installer au préalable.
 

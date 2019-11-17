@@ -1,41 +1,24 @@
+# Variables
+
+CC = g++
+OBJ_DIR = obj
+LIBRARY_OBJS = $(OBJ_DIR)/Int.o $(OBJ_DIR)/Frac.o $(OBJ_DIR)/Matrice.o $(OBJ_DIR)/Interpreteur.o $(OBJ_DIR)/Plot.o
+PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxArithmetiques.o
+
 # Règles générales
 
-SciPP: obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Int.o obj/Frac.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o
-	g++ obj/exemples.o obj/simuPhysique.o obj/jeuxArithmetiques.o obj/Int.o obj/Frac.o obj/Matrice.o obj/Interpreteur.o obj/Plot.o -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
+SciPP: $(EXAMPLE_OBJS) $(PROJECT_OBJS)
+	$(CC) $(EXAMPLE_OBJS) $(PROJECT_OBJS) -o SciPP -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
-	rm obj/*
-	rm SciPP
+	rm -rf *.o
+	rm -rf +SciPP
 
 lineCount:
 	git ls-files | xargs wc -l
 
 
-# Exemples
+# Règles spécifiques
 
-obj/exemples.o: src/exemples.cpp
-	g++ -c src/exemples.cpp -o obj/exemples.o
-
-obj/simuPhysique.o: src/simuPhysique.cpp
-	g++ -c src/simuPhysique.cpp -o obj/simuPhysique.o
-	
-obj/jeuxArithmetiques.o: src/jeuxArithmetiques.cpp
-	g++ -c src/jeuxArithmetiques.cpp -o obj/jeuxArithmetiques.o
-
-
-# Bibliothèque
-
-obj/Int.o: src/Int.cpp
-	g++ -c src/Int.cpp -o obj/Int.o
-
-obj/Frac.o: src/Frac.cpp
-	g++ -c src/Frac.cpp -o obj/Frac.o
-
-obj/Matrice.o: src/Matrice.cpp
-	g++ -c src/Matrice.cpp -o obj/Matrice.o
-
-obj/Interpreteur.o: src/Interpreteur.cpp
-	g++ -c src/Interpreteur.cpp -o obj/Interpreteur.o
-	
-obj/Plot.o: src/Plot.cpp
-	g++ -c src/Plot.cpp -o obj/Plot.o
+%.o: %.cpp
+	$(CC) -o $@ -c $<
