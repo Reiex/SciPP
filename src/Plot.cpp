@@ -551,7 +551,7 @@ Vect<Vect<long double>> getBezier(Vect<long double> const& x, Vect<long double> 
 	return courbeBezier;
 }
 
-void plotBezier(Vect<long double> const& x, Vect<long double> const& y)
+Vect<Vect<long double>> plotBezier(Vect<long double> const& x, Vect<long double> const& y)
 {
 	int n(x.taille()), nbPoints(1000);
 	Vect<long double> xPolygone(x), yPolygone(y);
@@ -651,6 +651,14 @@ void plotBezier(Vect<long double> const& x, Vect<long double> const& y)
 		window.draw(polygoneVertex);
 		window.draw(courbeVertex);
 	}
+
+	Vect<Vect<long double>> r(4);
+	r[0] = courbeBezier[0];
+	r[1] = courbeBezier[1];
+	r[2] = xPolygone;
+	r[3] = yPolygone;
+
+	return r;
 }
 
 Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my, int nbPoints)
@@ -728,7 +736,7 @@ int deriveeSelectionnee(std::vector<sf::CircleShape> const& derivees, int xSouri
 	return -1;
 }
 
-void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my)
+Vect<Vect<long double>> plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my)
 {
 	
 	int n(x.taille()), nbPoints(1000);
@@ -859,6 +867,16 @@ void plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<lo
 		for (int i(0); i < n; i++)
 			window.draw(derivees[i]);
 	}
+
+	Vect<Vect<long double>> r(6);
+	r[0] = courbeHermite[0];
+	r[1] = courbeHermite[1];
+	r[2] = xPolygone;
+	r[3] = yPolygone;
+	r[4] = mxPolygone;
+	r[5] = myPolygone;
+
+	return r;
 }
 
 Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y, long double c)
