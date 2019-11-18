@@ -786,7 +786,7 @@ Vect<Vect<long double>> plotHermite(Vect<long double> const& x, Vect<long double
 					case sf::Keyboard::Up:
 					case sf::Keyboard::Down:
 					case sf::Keyboard::Space:
-						controle = getSmoothCurve(xPolygone, yPolygone, c);
+						controle = getSmoothDerivatives(xPolygone, yPolygone, c);
 						mxPolygone = controle[0];
 						myPolygone = controle[1];
 						courbeHermite = getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints);
@@ -879,7 +879,7 @@ Vect<Vect<long double>> plotHermite(Vect<long double> const& x, Vect<long double
 	return r;
 }
 
-Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long double> const& y, long double c)
+Vect<Vect<long double>> getSmoothDerivatives(Vect<long double> const& x, Vect<long double> const& y, long double c)
 {
 	if (x.taille() != y.taille())
 		throw "Les tailles ne se correspondent pas !";
@@ -909,4 +909,154 @@ Vect<Vect<long double>> getSmoothCurve(Vect<long double> const& x, Vect<long dou
 	m[1][n-1] = 0;
 
 	return m;
+}
+
+Polynome<long double> lagrangePolynome(int i, int n)
+{
+	long double tab[2] = {0, 1};
+	Polynome<long double> L(1), X(tab, 2);
+	for (int j(0); j < n; j++)
+		if (i != j)
+			L *= (X - Polynome<long double>(j))/Polynome<long double>(i - j);
+	
+	return L;
+}
+
+Vect<Vect<long double>> getLagrange(Vect<long double> const& x, Vect<long double> const& y, int nbPoints)
+{
+    if (x.taille() != y.taille())
+        throw "Les Vects x et y doivent être de même taille !";
+	
+	int n(x.taille());
+    Polynome<long double> Bx, By;
+
+    for (int i(0); i < n; i++)
+    {
+		Polynome<long double> L(lagrangePolynome(i, n));
+		Bx += Polynome<long double>(x[i]) * L;
+		By += Polynome<long double>(y[i]) * L;
+    }
+
+	Vect<long double> xCourbe(nbPoints), yCourbe(nbPoints);
+	for (int i(0); i < nbPoints; i++)
+	{
+		xCourbe[i] = Bx((n-1) * double(i) / (nbPoints-1));
+		yCourbe[i] = By((n-1) * double(i) / (nbPoints-1));
+	}
+
+	Vect<Vect<long double>> courbeLagrange(2);
+	courbeLagrange[0] = xCourbe;
+	courbeLagrange[1] = yCourbe;
+
+	return courbeLagrange;
+}
+
+Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long double> const& y)
+{
+	int n(x.taille()), nbPoints(1000);
+	Vect<long double> xPolygone(x), yPolygone(y);
+	Vect<Vect<long double>> courbeLagrange(getLagrange(xPolygone, yPolygone, nbPoints));
+	
+	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
+
+	// Calcule des coordonnées des points des courbes
+
+	Vect<long double> border(getBorder(xPolygone, yPolygone));
+	sf::VertexArray polygoneVertex(sf::LineStrip, n), courbeVertex(sf::LineStrip, nbPoints);
+
+	for (int i(0); i < n; i++)
+	{
+		polygoneVertex[i].position.x = w*(xPolygone[i] - border[0]) / (border[1] - border[0]);
+		polygoneVertex[i].position.y = h*(1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+		polygoneVertex[i].color = sf::Color(255, 0, 0);
+	}
+	for (int i(0); i < nbPoints; i++)
+	{
+		courbeVertex[i].position.x = w*(courbeLagrange[0][i] - border[0]) / (border[1] - border[0]);
+		courbeVertex[i].position.y = h*(1 - (courbeLagrange[1][i] - border[2]) / (border[3] - border[2]));
+		courbeVertex[i].color = sf::Color(0, 0, 0);
+	}
+
+	// Ouverture de la fenêtre
+
+	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
+
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		while (window.pollEvent(event))
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				Vect<double> pos(2);
+				pos[0] = border[0] + (border[1] - border[0])*(double(event.mouseButton.x)/window.getSize().x);
+				pos[1] = border[2] + (border[3] - border[2])*(1 - double(event.mouseButton.y)/window.getSize().y);
+
+				std::cout << pos << std::endl;
+
+				n++;
+
+				xPolygone.changerTaille(xPolygone.taille() + 1);
+				xPolygone[xPolygone.taille() - 1] = pos[0];
+				yPolygone.changerTaille(yPolygone.taille() + 1);
+				yPolygone[yPolygone.taille() - 1] = pos[1];
+			
+				courbeLagrange = getLagrange(xPolygone, yPolygone, nbPoints);
+
+				polygoneVertex.resize(n);
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (courbeLagrange[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeLagrange[1][i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
+			}
+			else if (event.type == sf::Event::MouseWheelScrolled)
+			{
+				float zoom(exp(-0.1*event.mouseWheelScroll.delta));
+				double centreX(border[0] + (border[1] - border[0]) / 2), centreY(border[2] + (border[3] - border[2]) / 2);
+
+				border[1] = centreX + (centreX - border[0]) * zoom;
+				border[0] = centreX - (centreX - border[0]) * zoom;
+				border[3] = centreY + (centreY - border[2]) * zoom;
+				border[2] = centreY - (centreY - border[2]) * zoom;
+
+				for (int i(0); i < n; i++)
+				{
+					polygoneVertex[i].position.x = w * (xPolygone[i] - border[0]) / (border[1] - border[0]);
+					polygoneVertex[i].position.y = h * (1 - (yPolygone[i] - border[2]) / (border[3] - border[2]));
+					polygoneVertex[i].color = sf::Color(255, 0, 0);
+				}
+				for (int i(0); i < nbPoints; i++)
+				{
+					courbeVertex[i].position.x = w * (courbeLagrange[0][i] - border[0]) / (border[1] - border[0]);
+					courbeVertex[i].position.y = h * (1 - (courbeLagrange[1][i] - border[2]) / (border[3] - border[2]));
+					courbeVertex[i].color = sf::Color(0, 0, 0);
+				}
+			}
+
+		window.draw(polygoneVertex);
+		window.draw(courbeVertex);
+	}
+
+	Vect<Vect<long double>> r(4);
+	r[0] = courbeLagrange[0];
+	r[1] = courbeLagrange[1];
+	r[2] = xPolygone;
+	r[3] = yPolygone;
+
+	return r;
 }
