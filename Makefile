@@ -15,6 +15,12 @@ clean:
 	rm -rf $(OBJ_DIR)/*.o
 	rm -rf SciPP
 
+doxy:
+	doxygen doc/doxygen
+
+doxyClean:
+	rm -rf doc/html doc/latex
+
 lineCount:
 	git ls-files | xargs wc -l
 
