@@ -45,6 +45,7 @@ template<typename T> class Polynome
 		Polynome<T> operator+();
 
 		T operator()(T const& x) const;
+		Polynome<T> derivee() const;
 
 	private:
 
@@ -348,7 +349,7 @@ template<typename T> bool operator!=(Polynome<T> const& P, Polynome<T> const& Q)
 }
 
 
-// Fonctions sp�cifiques
+// Fonctions spécifiques
 
 template<typename T> T Polynome<T>::operator()(T const& x) const
 {
@@ -358,6 +359,25 @@ template<typename T> T Polynome<T>::operator()(T const& x) const
 		y = x * y + m_coeffs[i];
 
 	return y;
+}
+
+template<typename T> Polynome<T> Polynome<T>::derivee() const
+{
+	Polynome<T> P(*this);
+
+	if (P.m_deg == 0)
+	{
+		P[0] = 0;
+	}
+	else
+	{
+		for (int i(0); i < P.m_coeffs.taille() - 1; i++)
+			P[i] = P[i+1];
+		P.m_coeffs.changerTaille(P.m_coeffs.taille() - 1);
+		P.m_deg--;
+	}
+
+	return P;
 }
 
 
