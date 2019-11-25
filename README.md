@@ -34,8 +34,8 @@ Cette bibliothèque possède deux documentations. La première, générée avec 
 
 La documentation Doxygen doit être générée par l'utilisateur, pour cela rien de plus simple, il suffit d'installer puis de lancer Doxygen:
 ```shell
-	sudo apt-get install doxygen graphviz
-	make doxy
+sudo apt-get install doxygen graphviz
+make doxy
 ```
 
 **Avancement:**
