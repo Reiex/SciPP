@@ -3,6 +3,7 @@
 #include "SciPP.h"
 #include "simuPhysique.h"
 #include "jeuxArithmetiques.h"
+#include "projetGeom.hpp"
 
 
 int main()
@@ -12,14 +13,12 @@ int main()
 	// simuFluide2D();
 	// lancerInterpreteur();
 	// simuBalle();
-	// plotBezier();
-	// plotHermite();
-	// plotLagrange();
 	// systemeD();
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
 	// dispertionChaleur2D(100, 100, 0.1);
 	// conway();
+	mainProjetGeom();
 
 	return 0;
 }

@@ -1,6 +1,5 @@
 #include "Int.hpp"
 
-
 // Constructeurs
 
 Int::Int()

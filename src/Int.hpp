@@ -1,11 +1,27 @@
 #pragma once
 
+/**
+ * \file Int.hpp
+ * \author Reiex
+ * \brief Ensemble des fonctions et classes permettant la manipulations d'entiers de taille variable.
+ * 
+ * Pour une description plus détaillée, voir la description de la classe Int.
+ * 
+*/
+
 #include <iostream>
 #include <cstdint>
 
-
-// Templates necessaires
-
+/**
+ * \brief Calcule x puissance n pour n supérieur ou égale à 1.
+ * 
+ * Cette fonction étant template, on souhaite qu'elle utilise un minimum de contraintes sur sa classe
+ * template T. Ajouter le cas n nul imposerait l'existence d'un constructeur T(1) et le cas n negatif
+ * l'existence d'une opération de division (en plus de T(1)).
+ * 
+ * Ici, les seuls contraintes pour T sont d'avoir une multiplication et une addition internes.
+ * 
+*/
 template<typename T> T expoRapide(T const& x, int n)
 {
 	if (n < 1)
@@ -34,6 +50,13 @@ template<typename T> T expoRapide(T const& x, int n)
 	return r;
 }
 
+/**
+ * \brief Calcule le PGCD (Plus Grand Commun Diviseur) de a et b.
+ * 
+ * Les contraintes sur T sont d'avoir un constructeur T(0), une comparaison interne et un modulo 
+ * interne.
+ * 
+*/
 template<typename T> T pgcd(T const& a, T const& b)
 {
 	T zero(0);
@@ -55,11 +78,23 @@ template<typename T> T pgcd(T const& a, T const& b)
 
 // Classe Int
 
+/**
+ * \class Int
+ * \brief Classe permettant de manipuler des Entiers de taille variable.
+ * 
+ * SciPP intègre une gestion d'entiers "big int" c'est à dire des entiers de taille variable. Cette
+ * taille peut être aussi grande que l'on veut puisque la seule limitation est la mémoire RAM de la
+ * machine.
+ * Ainsi pour un entier utilisant 1Ko de RAM l'entier peut déjà atteindre \f$ 256^{1000} \simeq 10^{2408} \f$
+ * 
+*/
 class Int
 {
 	public:
 
+		/** \brief Constructeur par défaut, initialise l'entier à 0. */
 		Int();
+		/** \brief Initialise l'entier à x. */
 		Int(long long int x);
 		Int(Int const& x);
 		Int(Int&& x);
@@ -75,6 +110,14 @@ class Int
 		Int operator-() const;
 		Int operator+() const;
 
+		/** 
+		 * \brief Retourne, si c'est possible, l'entier sous forme de long long int.
+		 * 
+		 * Si l'entier est trop grand (ou trop petit) pour être converti en long long int, la 
+		 * fonction retournera un entier d'apparence aléatoire, il appartient au programmeur de
+		 * vérifier si l'on peut convertir l'entier.
+		 * 
+		*/
 		long long int toInt() const;
 
 		~Int();
@@ -139,4 +182,11 @@ std::ostream& operator<<(std::ostream& stream, Int const& x);
 
 // Autres
 
+/**
+ * \brief Calcule le coefficient binomial de deux entiers et le renvoie sous forme d'Int.
+ * 
+ * La conversion en Int ne se fait que sur la valeur de retour (et non pas en entrée) pour des
+ * raisons pratiques. Cela peut être amené à changer, notemment avec une surcharge de cette
+ * fonction.
+*/
 Int binom(int n, int p);

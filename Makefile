@@ -4,7 +4,7 @@ CC = g++
 OBJ_DIR = obj
 SRC_DIR = src
 LIBRARY_OBJS = $(OBJ_DIR)/Int.o $(OBJ_DIR)/Frac.o $(OBJ_DIR)/Matrice.o $(OBJ_DIR)/Interpreteur.o $(OBJ_DIR)/Plot.o
-PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxArithmetiques.o
+PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxArithmetiques.o $(OBJ_DIR)/projetGeom.o
 
 # Règles générales
 
