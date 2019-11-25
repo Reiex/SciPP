@@ -21,6 +21,7 @@ Les règles de compilation principales sont:
 - `SciPP`: permet de compiler le projet
 - `clean`: permet de supprimer les fichiers `.o` créés à la compilation
 
+
 ---
 
 Il suffit ensuite d'executer le fichier généré:
@@ -29,4 +30,14 @@ Il suffit ensuite d'executer le fichier généré:
 
 ## Documentation du projet
 
-A venir...
+Cette bibliothèque possède deux documentations. La première, générée avec Doxygen, se base sur des commentaires du code. La seconde est celle que vous lisez actuellement, composée de README au format markdown.
+
+La documentation Doxygen doit être générée par l'utilisateur, pour cela rien de plus simple, il suffit d'installer puis de lancer Doxygen:
+```shell
+	sudo apt-get install doxygen graphviz
+	make doxy
+```
+
+**Avancement:**
+- La documentation doxygen est en cours d'écriture
+- La documentation README viendra ensuite
