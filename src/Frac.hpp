@@ -301,6 +301,12 @@ class Rationnel: public Frac<Int>
 		Rationnel(Frac<Int> const& x);
 };
 
+/**
+ * \brief Renvoie une chaine de caractères avec les n premières décimales de x.
+ * 
+ * Attention, la chaine de caractère n'est pas de taille n, parce qu'elle contient également
+ * une virgule et la partie entière de x.
+*/
 std::string decimales(Rationnel const& x, int n);
 std::ostream& operator<<(std::ostream& stream, Rationnel const& x);
 
