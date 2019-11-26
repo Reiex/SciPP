@@ -1,43 +1,69 @@
 #pragma once
 
+/**
+ * \file Frac.hpp
+ * \author Reiex
+ * \brief Ensemble des fonctions et classes permettant la manipulation de fractions (pas forcément entre deux entiers).
+ * 
+ * Pour une description plus détaillée, voir la description de la classe Frac.
+ * 
+*/
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include "Int.hpp"
 
-/*
-	Les fonctions necessaires de Vect.
-
-	T::T(int)
-	T::operator=(T const&)
-	ostream& operator<<(ostream&, T const&)
-	T& T::operator+=(T const&)
-	T operator+(T const&, T const&)
-	T& T::operator-=(T const&)
-	T operator-(T const&, T const&)
-	T& T::operator*=(T const&)
-	T operator*(T const&, T const&)
-	T& T::operator/=(T const&)
-	T operator/(T const&, T const&)
-	T T::operator-()
-	T T::operator+()
-	bool operator==(T const&, T const&)
-	bool operator!=(T const&, T const&)
-	bool operator>(T const&, T const&)
-	bool operator<(T const&, T const&)
-	bool operator>=(T const&, T const&)
-	bool operator<=(T const&, T const&)
+/**
+ * \class Frac
+ * \brief Classe permettant de manipuler des fractions (pas forcéments entre deux entiers).
+ * 
+ * La classe Frac est template et prend en argument template une classe T.
+ * La fraction sera entre deux objets de cette classe T qui peut représenter une multitude d'objets
+ * mathématiques différents. Les exemples les plus communs sont pour T de prendre des Int (on obtient
+ * alors des nombres rationnels) ou de prendre des Polynome (on obtient alors des fractions rationnels).
+ * 
+ * La classe Frac implémente les opérations de bases communes à tout type de fraction, des classes
+ * plus spécifiées héritent ensuite de cette classe pour ajouter des fonctionnalités plus spécifiques,
+ * comme la conversion en long double pour les rationnels.
+ * Ces classes filles sont:
+ * - Rationnel
+ * 
+ * Voici les fonctions qui doivent être définies par la classe T:
+ * - Constructeurs
+ * 		- T(int)
+ * 		- T(T const&)
+ * - Comparaisons
+ * 		- (bool)T==T
+ * 		- (bool)T!=T
+ * 		- (bool)T<T
+ * 		- (bool)T>T
+ * 		- (bool)T<=T
+ * 		- (bool)T>=T
+ * - Opérations
+ * 		- (T)T*T
+ * 		- (T)T/T
+ * 		- (T)T+T
+ * 		- (T)T-T
+ * 		- (T)T%T
+ * 
 */
 template<typename T> class Frac
 {
 	public:
 
+		/** \brief Constructeur par défaut, initialise la fraction à T(0)/T(1) */
 		Frac();
+		/** \brief Initialise la fraction à T(x)/T(1) */
 		Frac(int x);
+		/** \brief Initialise la fraction à T(x)/T(1) */
 		Frac(T const& x);
+		/** \brief Initialise la fraction à T(p)/T(q) */
 		Frac(T const& p, T const& q);
 
+		/** \brief Retour le numérateur de la fraction */
 		T numerateur() const;
+		/** \brief Retour le dénominateur de la fraction */
 		T denominateur() const;
 
 		Frac<T>& operator+=(Frac<T> const& a);
@@ -246,19 +272,31 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 	return stream;
 }
 
+
 // Rationnels
 
-long double const PI(3.14159265359);
-long double const E(2.71828182846);
+/** \brief Approche la valeur de \f$\pi\f$ */
+long double const PI = 3.141592653589793238;
+/** \brief Approche la valeur de \f$e\f$ */
+long double const E = 2.718281828459045235;
 
+/**
+ * \class Rationnel
+ * \brief Classe permettant de manipuler des nombres rationnels.
+*/
 class Rationnel: public Frac<Int>
 {
 	public:
 
+		/** \brief Constructeur par défaut, initialise le nombre rationnel à 0 */
 		Rationnel();
+		/** \brief Initialise le nombre rationnel à x */
 		Rationnel(int x);
+		/** \brief Initialise le nombre rationnel à x */
 		Rationnel(Int const& x);
+		/** \brief Initialise le nombre rationnel à p/q */
 		Rationnel(Int const& p, Int const& q);
+		/** \brief Initialise le nombre à une fraction approchée de x */
 		Rationnel(double x);
 		Rationnel(Frac<Int> const& x);
 };

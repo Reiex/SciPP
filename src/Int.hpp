@@ -76,8 +76,6 @@ template<typename T> T pgcd(T const& a, T const& b)
 }
 
 
-// Classe Int
-
 /**
  * \class Int
  * \brief Classe permettant de manipuler des Entiers de taille variable.
