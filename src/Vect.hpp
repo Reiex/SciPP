@@ -33,16 +33,18 @@
  * 		- (T)T/T
  * 		- (T)T+T
  * 		- (T)T-T
- * 
 */
 template<typename T> class Vect
 {
 	public:
 
+		/** \brief Constructeur par défaut, la taille du vecteur vaut 0. */
 		Vect();
 		Vect(Vect<T> const& v);
 		Vect(Vect<T>&& v);
+		/** \brief Initialise un vecteur avec `n` occurences de `T()` */
 		Vect(int n);
+		/** \brief Initialise un vecteur avec les éléments de `tab`. Celui-ci doit contenir `taille` valeurs. */
 		Vect(T const* tab, int taille);
 
 		Vect<T>& operator=(Vect<T> const& v);
@@ -50,7 +52,15 @@ template<typename T> class Vect
 
 		T& operator[](int i);
 		T const& operator[](int i) const;
+		/** \brief Retourne la taille du vecteur */
 		int taille() const;
+		/**
+		 * \brief Change la taille du vecteur
+		 * 
+		 * Si la nouvelle taille est supérieure à la première, les valeurs actuelles sont gardées au début du vecteur
+		 * et la fin du vecteur est remplie de `T()`
+		 * Si la nouvelle taille est inférieure à la première, les valeurs sont tronquées.
+		*/
 		void changerTaille(int taille);
 
 		Vect<T>& operator+=(Vect<T> const& v);
