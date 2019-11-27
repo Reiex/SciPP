@@ -1,35 +1,51 @@
 #pragma once
 
+/**
+ * \file Matrice.hpp
+ * \author Reiex
+ * \brief Ensemble des fonctions et classes permettant la manipulation de matrices mathématiques.
+ *
+ * Pour une description plus détaillée, voir la description de la classe Matrice.
+*/
+
 #include <iostream>
 #include <complex>
 #include "Vect.hpp"
 
-/*
-	Les fonctions necessaires de Vect.
-
-	T::T()
-	T::T(int)
-	T::operator=(T const&)
-	ostream& operator<<(ostream&, T const&)
-	T& T::operator+=(T const&)
-	T operator+(T const&, T const&)
-	T& T::operator-=(T const&)
-	T operator-(T const&, T const&)
-	T& T::operator*=(T const&)
-	T operator*(T const&, T const&)
-	T& T::operator/=(T const&)
-	T operator/(T const&, T const&)
-	bool operator==(T const&, T const&)
-	bool operator!=(T const&, T const&)
+/**
+ * \class Matrice
+ * \brief Classe permettant de manipuler des matrices mathématiques.
+ *
+ * La classe Matrice est template et prend en argument template une classe T.
+ * L'espace dans lequel se place la matrice est l'espace de cette classe T.
+ *
+ * Voici les fonctions qui doivent être définies par la classe T:
+ * - Constructeurs
+ * 		- T()
+ * 		- T(int)
+ * 		- T(T const&)
+ * - Comparaisons
+ * 		- (bool)T==T
+ * 		- (bool)T!=T
+ * - Opérations
+ * 		- (T)T*T
+ * 		- (T)T/T
+ * 		- (T)T+T
+ * 		- (T)T-T
+ * - Affichage
+ *		- (ostream)ostream<<T
 */
 template<typename T> class Matrice
 {
 	public:
 
+		/** \brief Constructeur par défaut, inotialise une matrice de taille nulle. */
 		Matrice();
+		/** \brief Initialise une matrice de m lignes et n colonnes avec `T()`. */
 		Matrice(int m, int n);
 		Matrice(Matrice<T> const& M);
 		Matrice(Matrice<T>&& M);
+		/** \brief Initialise une matrice de m lignes et n colonnes. Il faut donc que `tab` soit de taille m*n. */
 		Matrice(T const* tab, int m, int n);
 
 		Matrice<T>& operator=(Matrice<T> const& M);
@@ -37,7 +53,14 @@ template<typename T> class Matrice
 
 		Vect<T>& operator[](int i);
 		Vect<T> const& operator[](int i) const;
+		/** \brief Retourne un vecteur contenant deux éléments, le nombre de lignes et le nombre de colonnes. */
 		Vect<int> const& taille() const;
+		/**
+		 * \brief Change la taille de la matrice.
+		 * 
+		 * - Si la taille est supérieure, les "emplacements" ajoutés sont remplis avec `T()`.
+		 * - Si la taille est inférieure, la matrice est tronquée.
+		*/
 		void changerTaille(int m, int n);
 
 		Matrice<T>& operator+=(Matrice<T> const& M);
@@ -46,8 +69,11 @@ template<typename T> class Matrice
 		Matrice<T>& operator*=(T const& x);
 		Matrice<T>& operator/=(T const& x);
 
+		/** \brief Retourne le déterminant de la matrice */
 		T det() const;
+		/** \brief Retourne l'inverse de la matrice */
 		Matrice<T> inv() const;
+		/** \brief Retourne la transposée de la matrice */
 		Matrice<T> transpose() const;
 
 		~Matrice();
@@ -229,7 +255,7 @@ template<typename T> void Matrice<T>::changerTaille(int m, int n)
 }
 
 
-// Op�rations
+// Opérations
 
 template<typename T> Matrice<T>& Matrice<T>::operator+=(Matrice<T> const& M)
 {
@@ -381,7 +407,7 @@ template<typename T> bool operator!=(Matrice<T> const& M, Matrice<T> const& N)
 }
 
 
-// Fonctions sp�cifiques
+// Fonctions spécifiques
 
 template<typename T> T Matrice<T>::det() const
 {

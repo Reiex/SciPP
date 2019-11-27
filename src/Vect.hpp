@@ -6,7 +6,6 @@
  * \brief Ensemble des fonctions et classes permettant la manipulation de vecteurs mathématiques.
  * 
  * Pour une description plus détaillée, voir la description de la classe Vect.
- * 
 */
 
 #include <iostream>
@@ -33,6 +32,8 @@
  * 		- (T)T/T
  * 		- (T)T+T
  * 		- (T)T-T
+ * - Affichage
+ *		- (ostream)ostream<<T
 */
 template<typename T> class Vect
 {

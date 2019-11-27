@@ -46,6 +46,8 @@
  * 		- (T)T+T
  * 		- (T)T-T
  * 		- (T)T%T
+ * - Affichage
+ *		- (ostream)ostream<<T
  * 
 */
 template<typename T> class Frac
