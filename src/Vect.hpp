@@ -1,23 +1,39 @@
 #pragma once
 
+/**
+ * \file Vect.hpp
+ * \author Reiex
+ * \brief Ensemble des fonctions et classes permettant la manipulation de vecteurs mathématiques.
+ * 
+ * Pour une description plus détaillée, voir la description de la classe Vect.
+ * 
+*/
+
 #include <iostream>
 #include "Frac.hpp"
 
-/*
-	T::T()
-	T::T(int)
-	T::operator=(T const&)
-	ostream& operator<<(ostream&, T const&)
-	T& T::operator+=(T const&)
-	T operator+(T const&, T const&)
-	T& T::operator-=(T const&)
-	T operator-(T const&, T const&)
-	T& T::operator*=(T const&)
-	T operator*(T const&, T const&)
-	T& T::operator/=(T const&)
-	T operator/(T const&, T const&)
-	bool operator==(T const&, T const&)
-	bool operator!=(T const&, T const&)
+
+/**
+ * \class Vect
+ * \brief Classe permettant de manipuler des vecteurs mathématiques.
+ * 
+ * La classe Vect est template et prend en argument template une classe T.
+ * L'espace dans lequel se place le vecteur est l'espace de cette classe T.
+ * 
+ * Voici les fonctions qui doivent être définies par la classe T:
+ * - Constructeurs
+ * 		- T()
+ * 		- T(int)
+ * 		- T(T const&)
+ * - Comparaisons
+ * 		- (bool)T==T
+ * 		- (bool)T!=T
+ * - Opérations
+ * 		- (T)T*T
+ * 		- (T)T/T
+ * 		- (T)T+T
+ * 		- (T)T-T
+ * 
 */
 template<typename T> class Vect
 {
@@ -197,7 +213,7 @@ template<typename T> void Vect<T>::changerTaille(int taille)
 }
 
 
-// Op�rations
+// Opérations
 
 template<typename T> Vect<T>& Vect<T>::operator+=(Vect<T> const& v)
 {
