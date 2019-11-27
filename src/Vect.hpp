@@ -57,9 +57,9 @@ template<typename T> class Vect
 		/**
 		 * \brief Change la taille du vecteur
 		 * 
-		 * Si la nouvelle taille est supérieure à la première, les valeurs actuelles sont gardées au début du vecteur
+		 * - Si la nouvelle taille est supérieure à la première, les valeurs actuelles sont gardées au début du vecteur
 		 * et la fin du vecteur est remplie de `T()`
-		 * Si la nouvelle taille est inférieure à la première, les valeurs sont tronquées.
+		 * - Si la nouvelle taille est inférieure à la première, les valeurs sont tronquées.
 		*/
 		void changerTaille(int taille);
 
