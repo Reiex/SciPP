@@ -67,7 +67,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 		for (int j(0); j < Nx; j++)
 			fHat[i][j] = f[i][j];
 
-	// Calcul de la transform�e de Fourier
+	// Calcul de la transformée de Fourier
 
 	fHat = DFT2D(fHat);
 
@@ -86,7 +86,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 		else
 			ky[i] = std::complex<long double>(0, 2*PI*(Ny - i)/Ly);
 
-	// Calcul de la transform�e de fourier du r�sultat
+	// Calcul de la transformée de fourier du résultat
 
 	for (int i(0); i < Ny; i++)
 		for (int j(0); j < Nx; j++)
