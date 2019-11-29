@@ -17,6 +17,7 @@
 /**
  * \class Frac
  * \brief Classe permettant de manipuler des fractions (pas forcéments entre deux entiers).
+ * \author Reiex
  * 
  * La classe Frac est template et prend en argument template une classe T.
  * La fraction sera entre deux objets de cette classe T qui peut représenter une multitude d'objets

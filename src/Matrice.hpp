@@ -2,8 +2,8 @@
 
 /**
  * \file Matrice.hpp
- * \author Reiex
  * \brief Ensemble des fonctions et classes permettant la manipulation de matrices mathématiques.
+ * \author Reiex
  *
  * Pour une description plus détaillée, voir la description de la classe Matrice.
 */

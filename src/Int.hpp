@@ -2,8 +2,8 @@
 
 /**
  * \file Int.hpp
- * \author Reiex
  * \brief Ensemble des fonctions et classes permettant la manipulations d'entiers de taille variable.
+ * \author Reiex
  * 
  * Pour une description plus détaillée, voir la description de la classe Int.
  * 

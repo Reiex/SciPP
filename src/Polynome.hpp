@@ -1,39 +1,56 @@
 #pragma once
 
+/**
+ * \file Polynome.hpp
+ * \brief Ensemble des fonctions et classes permettant la manipulation de polynomes.
+ * \author Reiex
+ *
+ * Pour une description plus détaillée, voir la description de la classe Polynome.
+*/
+
 #include <iostream>
 #include "Vect.hpp"
 
-/*
-	Les fonctions necessaires de Vect.
-
-	T::T()
-	T::T(int)
-	T::operator=(T const&)
-	ostream& operator<<(ostream&, T const&)
-	T& T::operator+=(T const&)
-	T operator+(T const&, T const&)
-	T& T::operator-=(T const&)
-	T operator-(T const&, T const&)
-	T& T::operator*=(T const&)
-	T operator*(T const&, T const&)
-	T& T::operator/=(T const&)
-	T operator/(T const&, T const&)
-	T T::operator-()
-	T T::operator+()
-	bool operator==(T const&, T const&)
-	bool operator!=(T const&, T const&)
+/**
+ * \class Polynome
+ * \brief Classe permettant de manipuler des polynome.
+ *
+ * La classe Polynomr est template et prend en argument template une classe T.
+ * L'espace des coefficients du polynome est l'espace de cette classe T.
+ *
+ * Voici les fonctions qui doivent être définies par la classe T:
+ * - Constructeurs
+ * 		- T()
+ * 		- T(int)
+ * 		- T(T const&)
+ * - Comparaisons
+ * 		- (bool)T==T
+ * 		- (bool)T!=T
+ * - Opérations
+ * 		- (T)T*T
+ * 		- (T)T/T
+ * 		- (T)T+T
+ * 		- (T)T-T
+ * 		- (T)T%T
+ * - Affichage
+ *		- (ostream)ostream<<T
 */
 template<typename T> class Polynome
 {
 	public:
 
+		/** \brief Constructeur par défaut, initialise le polynome à 0. */
 		Polynome();
+		/** \brief Initialise le polynome à la constante T(x). */
 		Polynome(int x);
+		/** \brief Initialise le polynome à la constante x. */
 		Polynome(T const& x);
+		/** \brief Initialise le polynome à partir de `tab` avec `tab[]` le coefficient devant \f$x^i\f$. */
 		Polynome(T const* tab, int taille);
 
 		T& operator[](int i);
 		T const& operator[](int i) const;
+		/** \brief Retourne le degré du polynome, le degré vaut 0 si le polynome est nul */
 		int degre() const;
 
 		Polynome<T>& operator+=(Polynome<T> const& P);
@@ -44,7 +61,9 @@ template<typename T> class Polynome
 		Polynome<T> operator-();
 		Polynome<T> operator+();
 
+		/** \brief Calcul le polynome appliqué à la valeur x.*/
 		T operator()(T const& x) const;
+		/** \brief Retourne la dérivée du polynome. */
 		Polynome<T> derivee() const;
 
 	private:

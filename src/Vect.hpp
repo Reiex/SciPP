@@ -2,8 +2,8 @@
 
 /**
  * \file Vect.hpp
- * \author Reiex
  * \brief Ensemble des fonctions et classes permettant la manipulation de vecteurs mathématiques.
+ * \author Reiex
  * 
  * Pour une description plus détaillée, voir la description de la classe Vect.
 */
