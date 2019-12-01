@@ -16,9 +16,6 @@ examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(PROJECT_OBJS)
 	$(CC) $(PROJECT_OBJS) -o SciPP $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
 
 SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
-	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp
-	cp $(SRC_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)
-	cp $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
 
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(OBJ_LIBRARY_DIR)/*.o
@@ -42,6 +39,9 @@ lineCount:
 # Build la librairie
 
 $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a: $(LIBRARY_OBJS)
+	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp
+	cp $(SRC_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)
+	cp $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
 	ar rcs $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(LIBRARY_OBJS)
 
 # Compilations spécifiques
