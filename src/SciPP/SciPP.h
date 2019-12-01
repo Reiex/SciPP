@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * \file SciPP.h
+ * \brief Fichier d'inclusion, c'est ce fichier qui doit ête inclus pour importer la bibliothèque SciPP.
+*/
+
 #include "Int.hpp"
 #include "Frac.hpp"
 #include "Liste.hpp"

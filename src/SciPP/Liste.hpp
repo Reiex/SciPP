@@ -1,5 +1,11 @@
 #pragma once
 
+/**
+ * \file Liste.hpp
+ * \deprecated Ce fichier est voué à être totalement modifié/supprimé pour une implémentation beaucoup plus complètes de listes et tableaux.
+ * \brief Permet la manipulation de listes chainées.
+*/
+
 #include <iostream>
 
 /*
