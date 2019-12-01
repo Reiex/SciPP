@@ -2,11 +2,11 @@
 
 CC = g++
 OBJ_DIR = obj
-OBJ_LIBRARY_DIR = obj/SciPP
+OBJ_LIBRARY_DIR = $(OBJ_DIR)/SciPP
 SRC_DIR = src
-SRC_LIBRARY_DIR = src/SciPP
+SRC_LIBRARY_DIR = $(SRC_DIR)/SciPP
 INCLUDE_DIR = include
-INCLUDE_LIBRARY_DIR = include/SciPP
+INCLUDE_LIBRARY_DIR = $(INCLUDE_DIR)/SciPP
 LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o $(OBJ_LIBRARY_DIR)/Matrice.o $(OBJ_LIBRARY_DIR)/Interpreteur.o $(OBJ_LIBRARY_DIR)/Plot.o
 PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxArithmetiques.o $(OBJ_DIR)/projetGeom.o
 
