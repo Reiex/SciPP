@@ -13,8 +13,8 @@ int main()
 	// simuFluide2D();
 	// lancerInterpreteur();
 	// simuBalle();
-	// systemeD();
-	fonctionLogistique();
+	systemeD();
+	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
 	// dispertionChaleur2D(100, 100, 0.1);
 	// conway();

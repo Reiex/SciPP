@@ -7,26 +7,35 @@ Elle implémente entre autres un module de gestion d'entiers (big int), de gesti
 
 ## Compilation et execution d'un projet
 
+### Installation des dépendances
+
 SciPP est dépendant de la SFML, il faut donc l'installer au préalable.
 
 `sudo apt-get install libsfml-dev`
 
 Vous pouvez également regarder directement sur le site de la SFML: [https://www.sfml-dev.org](https://www.sfml-dev.org)
 
----
+### Compilation
 
-Pour l'instant la bibliothèque ne possède pas de version compilée exportable, il faut donc la compiler soit même pour l'utiliser.
-Il suffit pour cela de s'inspirer du Makefile présent dans le dépot qui permet de compiler le code exemple.
-Les règles de compilation principales sont:
-- `SciPP`: permet de compiler le projet
-- `clean`: permet de supprimer les fichiers `.o` créés à la compilation
+La bibliothèque possède désormais une version compilée exportable. Pour l'utiliser rien de plus simple. Il suffit d'extraire le dossier `SciPP` du dossier `include` du dépot git
+et de le placer avec vos sources.
+Ce dossier contient tout les headers de la bibliothèque ainsi qu'une version compilée dans un sous-dossier `bin`.
+Ainsi, pour utiliser la bibliothèque il suffit d'insérer au début de vos sources la ligne:
+```cpp
+#include "SciPP/SciPP.h"
+```
 
+Vous pouvez ensuite compiler vos sources et construire directement un executable. Par exemple avec g++:
+```shell
+g++ -o monProgramme.o -c monProgramme.cpp 
+g++ monProgramme.o -o MonProgramme SciPP/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+```
 
----
+### Execution
 
 Il suffit ensuite d'executer le fichier généré:
 
-`./SciPP`
+`./MonProgramme`
 
 ## Documentation du projet
 
