@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SciPP.h"
+#include "SciPP/SciPP.h"
 
 
 class Point;

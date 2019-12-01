@@ -1,3 +1,5 @@
-#include "SciPP.h"
+#pragma once
+
+#include "SciPP/SciPP.h"
 
 void mainProjetGeom();
