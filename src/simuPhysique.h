@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * \file simuPhysique.h
+ * \brief Fichier d'exemples d'applications de la bibliothèque SciPP à la simulation de phénomènes physiques
+ * 
+ * Ce fichier est à but didactique et implémente quelques fonctions utilisant la bibliothèque SciPP
+ * pour montrer son utilisation dans le cadre de la simulation de phénomènes physiques divers.
+*/
+
 #include "SciPP.h"
 
 

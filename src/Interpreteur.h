@@ -1,5 +1,14 @@
 #pragma once
 
+/**
+ * \file Interpreteur.h
+ * \brief Ensemble de fonctions permettant la manipulation d'un petit interpreteur propre à SciPP
+ * 
+ * Pour l'instant très sommaire, cet interpreteur ne permet que de faire quelques calculs basiques
+ * qu'une calculatrice de primaire peut également executer. Mais à terme le but est d'avoir un petit
+ * interpreteur de calcul formel.
+*/
+
 #include <iostream>
 #include <string>
 #include "Plot.h"
