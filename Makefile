@@ -36,7 +36,7 @@ lineCount:
 	git ls-files | xargs wc -l
 
 
-# Build la librairie
+# Compilation de la librairie
 
 $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a: $(LIBRARY_OBJS)
 	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp

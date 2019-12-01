@@ -17,7 +17,7 @@ Vous pouvez également regarder directement sur le site de la SFML: [https://www
 
 ### Compilation
 
-La bibliothèque possède désormais une version compilée exportable. Pour l'utiliser rien de plus simple. Il suffit d'extraire le dossier `SciPP` du dossier `include` du dépot git
+La bibliothèque possède désormais une version compilée exportable. Pour l'utiliser rien de plus simple: il suffit d'extraire le sous-dossier `SciPP` du dossier `include` du dépot git
 et de le placer avec vos sources.
 Ce dossier contient tout les headers de la bibliothèque ainsi qu'une version compilée dans un sous-dossier `bin`.
 Ainsi, pour utiliser la bibliothèque il suffit d'insérer au début de vos sources la ligne:
