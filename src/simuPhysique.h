@@ -1,8 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
-#include "SciPP/SciPP.h"
-=======
 /**
  * \file simuPhysique.h
  * \brief Fichier d'exemples d'applications de la bibliothèque SciPP à la simulation de phénomènes physiques
@@ -11,8 +8,7 @@
  * pour montrer son utilisation dans le cadre de la simulation de phénomènes physiques divers.
 */
 
-#include "SciPP.h"
->>>>>>> c7e95e1d0e958dda527643ddb69a82bff65140e3
+#include "SciPP/SciPP.h"
 
 
 class Point;
