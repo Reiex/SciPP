@@ -12,7 +12,7 @@ PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxAr
 
 # Règles générales
 
-examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(PROJECT_OBJS)
+all: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(PROJECT_OBJS)
 	$(CC) $(PROJECT_OBJS) -o SciPP $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
 
 SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a

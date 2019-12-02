@@ -1060,3 +1060,31 @@ Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long doubl
 
 	return r;
 }
+
+
+Vect<long double> getCourbure(Vect<long double> const& x, Vect<long double> const& y)
+{
+    if (x.taille() != y.taille())
+        throw "Les Vects x et y doivent être de même taille !";
+
+	int n(x.taille());
+	Vect<long double> c(n-2);
+
+	for (int i(1); i < n-1; i++)
+	{
+		long double dx, ddx, dy, ddy, a, b;
+
+		ddx = x[i-1] - 2*x[i] + x[i+1];
+		ddy = y[i-1] - 2*y[i] + y[i+1];
+
+		dx = x[i-1] - x[i];
+		dy = y[i-1] - y[i];
+
+		a = dx*ddy  - dy*ddx;
+		b = dx*dx + dy*dy;
+		b = b*sqrt(b);
+		c[i-1] = a/b;
+	}
+
+	return c;
+}

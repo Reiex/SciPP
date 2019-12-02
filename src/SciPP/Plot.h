@@ -184,3 +184,15 @@ Vect<Vect<long double>> getSmoothDerivatives(Vect<long double> const& x, Vect<lo
 Vect<Vect<long double>> getLagrange(Vect<long double> const& x, Vect<long double> const& y, int nbPoints = 1000);
 /** \brief Cette fonction est identique à plotBezier() mais pour une interpolation de Lagrange */
 Vect<Vect<long double>> plotLagrange(Vect<long double> const& x = Vect<long double>(0), Vect<long double> const& y = Vect<long double>(0));
+
+/**
+ * \brief Retourne une courbe approchée de la fonction de courbure de la courbe (x, y).
+ * 
+ * On suppose pour cela que le pas de temps entre deux points de la courbe passée en paramètres
+ * est constant.
+ * 
+ * De plus la courbure calculée n'est que proportionnelle à la courbure réelle.
+ * Pour obtenir la courbure réelle, il faut en effet diviser le résultat obtenu par le pas de temps
+ * mis au carré.
+*/
+Vect<long double> getCourbure(Vect<long double> const& x, Vect<long double> const& y);
