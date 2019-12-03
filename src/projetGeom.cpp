@@ -16,7 +16,7 @@ void mainProjetGeom()
 
     // Question 4
 
-	// plotHermite();
+	plotHermite();
 
     /*
         On active le lissage avec espace avec c = 0, puis on peut faire varier c avec les flèches
@@ -81,5 +81,5 @@ void mainProjetGeom()
 
     // Question 7
 
-	// plotLagrange();
+	plotLagrange();
 }

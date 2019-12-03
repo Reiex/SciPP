@@ -18,7 +18,7 @@ int main()
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
 	// dispertionChaleur2D(100, 100, 0.1);
 	// conway();
-	mainProjetGeom();
+	// mainProjetGeom();
 
 	return 0;
 }
