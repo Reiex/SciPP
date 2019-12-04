@@ -454,7 +454,27 @@ Vect<double> fPendule(Vect<double> x)
 	return xp;
 }
 
-void systemeD()
+Vect<double> fPopulationSaisonniere(Vect<double> x)
+{
+	double A(0.2);
+
+	Vect<double> xp(2);
+	xp[0] = 1;
+	xp[1] = 10*((1 + sin(2*PI*x[0]))*x[1]*(1 - x[1]) - A*(1 + 0.5*sin(2*PI*x[0])));
+
+	return xp;
+}
+
+Vect<double> fOscillateurQuadratique(Vect<double> x)
+{
+	Vect<double> xp(2);
+	xp[0] = x[1];
+	xp[1] = x[0]*(x[0]-1);
+
+	return xp;
+}
+
+void integrationFlot()
 {
 	Vect<double> coord(4);
 
@@ -470,8 +490,18 @@ void systemeD()
 
 	// Pendule
 
-	coord[0] = -10; coord[1] = 10; coord[2] = -2; coord[3] = 2;
-	plotFlot2D(fPendule, coord, 100, 50);
+	// coord[0] = -10; coord[1] = 10; coord[2] = -2; coord[3] = 2;
+	// plotFlot2D(fPendule, coord, 100, 50);
+
+	// Populations saisonières
+
+	// coord[0] = 0; coord[1] = 30; coord[2] = 0; coord[3] = 1.5;
+	// plotFlot2D(fPopulationSaisonniere, coord, 1000, 50);
+
+	// Oscillateur non-linéaire quadratique
+
+	coord[0] = -1; coord[1] = 1.5; coord[2] = -1; coord[3] = 1;
+	plotFlot2D(fOscillateurQuadratique, coord, 1000, 7.5);
 }
 
 

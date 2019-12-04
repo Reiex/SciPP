@@ -58,6 +58,6 @@ void simuFluide2D(int Nx = 60, int Ny = 60, long double t_simu = 7.5, long doubl
 
 void simuBalle(long double t = 10, long double x = 0, long double y = 10, long double vx = 0, long double vy = 0);
 
-void systemeD();
+void integrationFlot();
 
 void dispertionChaleur2D(int Nx, int Ny, double t_simu);

@@ -466,7 +466,7 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 	}
 }
 
-// Bezier & Hermite
+// Bezier, Hermite & Lagrange
 
 Polynome<long double> bernstein(int n, int i)
 {
