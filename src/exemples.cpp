@@ -3,7 +3,6 @@
 #include "SciPP/SciPP.h"
 #include "simuPhysique.h"
 #include "jeuxArithmetiques.h"
-#include "projetGeom.hpp"
 
 
 int main()
