@@ -30,7 +30,7 @@ doxy:
 	doxygen doc/doxygen
 
 doxyClean:
-	rm -rf doc/html doc/latex
+	rm -rf doc/html
 
 lineCount:
 	git ls-files | xargs wc -l
