@@ -1,0 +1,9 @@
+.vs
+SciPP.sln
+SciPP
+SciPPExamples
+Debug
+Release
+doc/latex
+doc/html
+obj
