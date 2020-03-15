@@ -1,31 +1,43 @@
 # Variables
 
 CC = g++
+
 OBJ_DIR = obj
 OBJ_LIBRARY_DIR = $(OBJ_DIR)/SciPP
+OBJ_TESTS_DIR = $(OBJ_DIR)/tests
+OBJ_EXAMPLES_DIR = $(OBJ_DIR)/examples
+
 SRC_DIR = src
 SRC_LIBRARY_DIR = $(SRC_DIR)/SciPP
+SRC_TESTS_DIR = $(SRC_DIR)/tests
+SRC_EXAMPLES_DIR = $(SRC_DIR)/examples
+
 INCLUDE_DIR = include
 INCLUDE_LIBRARY_DIR = $(INCLUDE_DIR)/SciPP
+
 LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o $(OBJ_LIBRARY_DIR)/Matrice.o $(OBJ_LIBRARY_DIR)/Interpreteur.o $(OBJ_LIBRARY_DIR)/Plot.o
-PROJECT_OBJS = $(OBJ_DIR)/exemples.o $(OBJ_DIR)/simuPhysique.o $(OBJ_DIR)/jeuxArithmetiques.o
+TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o
+EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/examples.o $(OBJ_EXAMPLES_DIR)/simuPhysique.o $(OBJ_EXAMPLES_DIR)/jeuxArithmetiques.o
 
 # Règles générales
 
-all: folders SciPP exemples
+all: folders SciPP tests examples
 
-exemples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(PROJECT_OBJS)
-	$(CC) $(PROJECT_OBJS) -o SciPPExamples $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(EXAMPLES_OBJS)
+	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+
+tests: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(TESTS_OBJS)
+	$(CC) $(TESTS_OBJS) -o SciPPTests $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
 
 SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(OBJ_LIBRARY_DIR)/*.o
-	rm -rf SciPP
+	rm -rf $(OBJ_LIBRARY_DIR)/*.o $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)/*.o
+	rm -rf SciPPExamples SciPPTests
 
 folders:
 	rm -rf $(INCLUDE_DIR) $(OBJ_DIR)
-	mkdir $(OBJ_DIR) $(OBJ_LIBRARY_DIR)
+	mkdir $(OBJ_DIR) $(OBJ_LIBRARY_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)
 	mkdir $(INCLUDE_DIR) $(INCLUDE_LIBRARY_DIR) $(INCLUDE_LIBRARY_DIR)/bin
 
 doxy:

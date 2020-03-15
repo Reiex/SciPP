@@ -8,7 +8,7 @@
  * pour montrer son utilisation dans le cadre de la simulation de phénomènes physiques divers.
 */
 
-#include "SciPP/SciPP.h"
+#include "../SciPP/SciPP.h"
 
 
 class Point;

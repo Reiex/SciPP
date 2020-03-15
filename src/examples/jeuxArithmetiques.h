@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "SciPP/SciPP.h"
+#include "../SciPP/SciPP.h"
 
 std::string neper(int n);
 
