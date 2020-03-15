@@ -32,7 +32,7 @@ tests: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(TESTS_OBJS)
 SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
 
 clean:
-	rm -rf $(OBJ_LIBRARY_DIR)/*.o $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)/*.o
+	rm -rf $(OBJ_LIBRARY_DIR)/*.o $(OBJ_TESTS_DIR)/*.o $(OBJ_EXAMPLES_DIR)/*.o
 	rm -rf SciPPExamples SciPPTests
 
 folders:
