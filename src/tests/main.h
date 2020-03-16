@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include "../SciPP/SciPP.h"
 
 void displayMainTitle(std::string const& title);
 void displaySectionTitle(std::string const& title);
