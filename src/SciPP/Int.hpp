@@ -106,7 +106,9 @@ class Int
 		Int& operator/=(Int const& x);
 		Int& operator%=(Int const& x);
 		Int operator-() const;
+		Int& operator-();
 		Int operator+() const;
+		Int& operator+();
 
 		/** 
 		 * \brief Retourne, si c'est possible, l'entier sous forme de long long int.
@@ -117,6 +119,12 @@ class Int
 		 * 
 		*/
 		long long int toInt() const;
+		/**
+		 * \brief Indique si l'entier est activé ou non.
+		 * 
+		 * Un entier est désactivé s'il a été déplacé, en utilisant std::move par exemple.
+		*/
+		bool estActif() const;
 
 		~Int();
 

@@ -463,9 +463,20 @@ Int Int::operator-() const
 	return x;
 }
 
+Int& Int::operator-()
+{
+	m_positif = !m_positif;
+	return *this;
+}
+
 Int Int::operator+() const
 {
 	return Int(*this);
+}
+
+Int& Int::operator+()
+{
+	return *this;
 }
 
 
@@ -483,6 +494,11 @@ long long int Int::toInt() const
 	}
 
 	return x;
+}
+
+bool Int::estActif() const
+{
+	return m_actif;
 }
 
 
