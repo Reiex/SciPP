@@ -459,7 +459,10 @@ Int& Int::operator%=(Int const& x)
 Int Int::operator-() const
 {
 	Int x(*this);
-	x.m_positif = !m_positif;
+
+	if (m_taille != 1 || m_x[0] != 0)
+		x.m_positif = !m_positif;
+
 	return x;
 }
 
@@ -644,7 +647,9 @@ Int&& operator%(Int&& x, Int&& y)
 
 Int&& operator-(Int&& x)
 {
-	x.m_positif = !x.m_positif;
+	if (x.m_taille != 1 || x.m_x[0] != 0)
+		x.m_positif = !x.m_positif;
+
 	return std::move(x);
 }
 

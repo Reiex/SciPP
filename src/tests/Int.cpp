@@ -594,16 +594,349 @@ void testConversionInt()
 void testEgalite()
 {
 	displaySectionTitle("Test des opérateurs == et !=");
+
+	{
+		Int x(161803398874989), y(161803398874989);
+		if (x == y)
+			pass("Comparaison entiers égaux.");
+		else
+			fail("Comparaison entiers égaux.", "Le test d'égalité ne renvoie pas le résultat attendu.");
+	}
+
+	{
+		Int x(161803398874989), y(161803398874989);
+		x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
+		y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
+		if (x == y)
+			pass("Comparaison entiers égaux après opérations.");
+		else
+			fail("Comparaison entiers égaux après opérations.", "Le test d'égalité ne renvoie pas le résultat attendu.");
+	}
+
+	{
+		Int x(161803398874989), y(-161803398874989);
+		if (x != y)
+			pass("Comparaison entiers différents.");
+		else
+			fail("Comparaison entiers différents.", "Le test d'égalité ne renvoie pas le résultat attendu.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(0), y(-x);
+		if (!hasFailed && x != y)
+		{
+			hasFailed = true;
+			fail("Comparaison autour de zero", "Le test n°1 d'égalité ne renvoie pas le résultat attendu.");
+		}
+
+		x = -161803398874989;
+		y = x - x;
+		x -= x;
+		if (!hasFailed && x != y)
+		{
+			hasFailed = true;
+			fail("Comparaison autour de zero", "Le test n°2 d'égalité ne renvoie pas le résultat attendu.");
+		}
+
+		x = -161803398874989;
+		x -= x;
+		y = 0;
+		if (!hasFailed && x != y)
+		{
+			hasFailed = true;
+			fail("Comparaison autour de zero", "Le test n°3 d'égalité ne renvoie pas le résultat attendu.");
+		}
+
+		if (!hasFailed)
+			pass("Comparaison autour de zero");
+
+	}
 }
 
 void testComparaison()
 {
 	displaySectionTitle("Test des opérateurs <= et >=");
+
+	{
+		bool hasFailed(false);
+
+		Int x(161803398874989), y(31415926536);
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Entiers différents de même signe.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && y >= x)
+		{
+			hasFailed = true;
+			fail("Entiers différents de même signe.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers différents de même signe.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(-161803398874989), y(31415926536);
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Entiers différents de signes différents.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && x >= y)
+		{
+			hasFailed = true;
+			fail("Entiers différents de signes différents.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers différents de signes différents.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(161803398874989), y(161803398874989);
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Entiers égaux positifs.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Entiers égaux positifs.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers égaux positifs.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(-161803398874989), y(-161803398874989);
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Entiers égaux négatifs.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Entiers égaux négatifs.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers égaux négatifs.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(0), y(-x);
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°2 a échoué.");
+		}
+
+		x = -161803398874989;
+		y = x - x;
+		x -= x;
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°3 a échoué.");
+		}
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°4 a échoué.");
+		}
+
+		x = -161803398874989;
+		x -= x;
+		y = 0;
+
+		if (!hasFailed && !(y >= x))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°5 a échoué.");
+		}
+
+		if (!hasFailed && !(x >= y))
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°6 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Comparaisons autout de zero.");
+	}
 }
 
 void testComparaisonStricte()
 {
 	displaySectionTitle("Test des opérateurs < et >");
+
+	{
+		bool hasFailed(false);
+
+		Int x(161803398874989), y(31415926536);
+
+		if (!hasFailed && !(x > y))
+		{
+			hasFailed = true;
+			fail("Entiers différents de même signe.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Entiers différents de même signe.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers différents de même signe.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(-161803398874989), y(31415926536);
+
+		if (!hasFailed && !(y > x))
+		{
+			hasFailed = true;
+			fail("Entiers différents de signes différents.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Entiers différents de signes différents.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers différents de signes différents.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(161803398874989), y(161803398874989);
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Entiers égaux positifs.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Entiers égaux positifs.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers égaux positifs.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(-161803398874989), y(-161803398874989);
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Entiers égaux négatifs.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Entiers égaux négatifs.", "La comparaison n°2 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Entiers égaux négatifs.");
+	}
+
+	{
+		bool hasFailed(false);
+
+		Int x(0), y(-x);
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°1 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°2 a échoué.");
+		}
+
+		x = -161803398874989;
+		y = x - x;
+		x -= x;
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°3 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°4 a échoué.");
+		}
+
+		x = -161803398874989;
+		x -= x;
+		y = 0;
+
+		if (!hasFailed && y > x)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°5 a échoué.");
+		}
+
+		if (!hasFailed && x > y)
+		{
+			hasFailed = true;
+			fail("Comparaisons autout de zero.", "La comparaison n°6 a échoué.");
+		}
+
+		if (!hasFailed)
+			pass("Comparaisons autout de zero.");
+	}
 }
 
 void testFlux()
