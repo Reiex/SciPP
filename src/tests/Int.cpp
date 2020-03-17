@@ -166,7 +166,7 @@ void testAddition()
 		stream << z;
 		if (x.estActif())
 			fail("Addition externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "15235586649")
+		else if (stream.str() == "15235586649")
 			pass("Addition externe Int&&(Int&&, Int const&).");
 		else
 			fail("Addition externe Int&&(Int&&, Int const&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -179,7 +179,7 @@ void testAddition()
 		stream << z;
 		if (y.estActif())
 			fail("Addition externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "15235586649")
+		else if (stream.str() == "15235586649")
 			pass("Addition externe Int&&(Int const&, Int&&).");
 		else
 			fail("Addition externe Int&&(Int const&, Int&&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -192,7 +192,7 @@ void testAddition()
 		stream << z;
 		if (x.estActif())
 			fail("Addition externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "15235586649")
+		else if (stream.str() == "15235586649")
 			pass("Addition externe Int&&(Int&&, Int&&).");
 		else
 			fail("Addition externe Int&&(Int&&, Int&&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -232,7 +232,7 @@ void testSoustraction()
 		stream << z;
 		if (x.estActif())
 			fail("Soustraction externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-15235586649")
+		else if (stream.str() == "-15235586649")
 			pass("Soustraction externe Int&&(Int&&, Int const&).");
 		else
 			fail("Soustraction externe Int&&(Int&&, Int const&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -245,7 +245,7 @@ void testSoustraction()
 		stream << z;
 		if (y.estActif())
 			fail("Soustraction externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-15235586649")
+		else if (stream.str() == "-15235586649")
 			pass("Soustraction externe Int&&(Int const&, Int&&).");
 		else
 			fail("Soustraction externe Int&&(Int const&, Int&&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -258,7 +258,7 @@ void testSoustraction()
 		stream << z;
 		if (x.estActif())
 			fail("Soustraction externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-15235586649")
+		else if (stream.str() == "-15235586649")
 			pass("Soustraction externe Int&&(Int&&, Int&&).");
 		else
 			fail("Soustraction externe Int&&(Int&&, Int&&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
@@ -298,7 +298,7 @@ void testMultiplication()
 		stream << z;
 		if (x.estActif())
 			fail("Multiplication externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-50831088")
+		else if (stream.str() == "-50831088")
 			pass("Multiplication externe Int&&(Int&&, Int const&).");
 		else
 			fail("Multiplication externe Int&&(Int&&, Int const&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
@@ -311,7 +311,7 @@ void testMultiplication()
 		stream << z;
 		if (y.estActif())
 			fail("Multiplication externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-50831088")
+		else if (stream.str() == "-50831088")
 			pass("Multiplication externe Int&&(Int const&, Int&&).");
 		else
 			fail("Multiplication externe Int&&(Int const&, Int&&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
@@ -324,7 +324,7 @@ void testMultiplication()
 		stream << z;
 		if (x.estActif())
 			fail("Multiplication externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-50831088")
+		else if (stream.str() == "-50831088")
 			pass("Multiplication externe Int&&(Int&&, Int&&).");
 		else
 			fail("Multiplication externe Int&&(Int&&, Int&&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
@@ -364,7 +364,7 @@ void testDivision()
 		stream << z;
 		if (x.estActif())
 			fail("Division externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-19416518")
+		else if (stream.str() == "-19416518")
 			pass("Division externe Int&&(Int&&, Int const&).");
 		else
 			fail("Division externe Int&&(Int&&, Int const&).", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
@@ -377,7 +377,7 @@ void testDivision()
 		stream << z;
 		if (x.estActif())
 			fail("Division externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "-19416518")
+		else if (stream.str() == "-19416518")
 			pass("Division externe Int&&(Int&&, Int&&).");
 		else
 			fail("Division externe Int&&(Int&&, Int&&).", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
@@ -417,7 +417,7 @@ void testModulo()
 		stream << z;
 		if (x.estActif())
 			fail("Division externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "412")
+		else if (stream.str() == "412")
 			pass("Division externe Int&&(Int&&, Int const&).");
 		else
 			fail("Division externe Int&&(Int&&, Int const&).", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
@@ -430,7 +430,7 @@ void testModulo()
 		stream << z;
 		if (x.estActif())
 			fail("Division externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
-		if (stream.str() == "412")
+		else if (stream.str() == "412")
 			pass("Division externe Int&&(Int&&, Int&&).");
 		else
 			fail("Division externe Int&&(Int&&, Int&&).", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
@@ -440,11 +440,155 @@ void testModulo()
 void testUnaires()
 {
 	displaySectionTitle("Test des plus et moins unaires");
+
+	{
+		Int x(161803398874989), y;
+		y = -x;
+		std::stringstream stream;
+		stream << y;
+		if (stream.str() == "-161803398874989")
+			pass("Moins unaire par création d'un nouvel Int.");
+		else
+			fail("Moins unaire par création d'un nouvel Int.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(161803398874989), y;
+		y = +x;
+		std::stringstream stream;
+		stream << y;
+		if (stream.str() == "161803398874989")
+			pass("Plus unaire par création d'un nouvel Int.");
+		else
+			fail("Plus unaire par création d'un nouvel Int.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(161803398874989), y;
+		y = -std::move(x);
+		std::stringstream stream;
+		stream << y;
+		if (x.estActif())
+			fail("Moins unaire par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+		else if (stream.str() == "-161803398874989")
+			pass("Moins unaire par déplacement.");
+		else
+			fail("Moins unaire par déplacement.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(161803398874989), y;
+		y = +std::move(x);
+		std::stringstream stream;
+		stream << y;
+		if (x.estActif())
+			fail("Plus unaire par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+		else if (stream.str() == "161803398874989")
+			pass("Plus unaire par déplacement.");
+		else
+			fail("Plus unaire par déplacement.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
 }
 
 void testConversionInt()
 {
 	displaySectionTitle("Test de la methode Int::toInt()");
+
+	{
+		Int x(161803398874989);
+		if (x.toInt() == 161803398874989)
+			pass("Entier positif.");
+		else
+			fail("Entier positif.", "Résultat attendu: 161803398874989. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(-161803398874989);
+		if (x.toInt() == -161803398874989)
+			pass("Entier négatif.");
+		else
+			fail("Entier négatif.", "Résultat attendu: -161803398874989. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(0);
+		if (x.toInt() == 0)
+			pass("Entier nul.");
+		else
+			fail("Entier nul.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(LLONG_MAX);
+		if (x.toInt() == LLONG_MAX)
+			pass("Entier maximal.");
+		else
+			fail("Entier maximal.", "Résultat attendu: " + std::to_string(LLONG_MAX) + ". Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(LLONG_MIN);
+		if (x.toInt() == LLONG_MIN)
+			pass("Entier minimal.");
+		else
+			fail("Entier minimal.", "Résultat attendu: " + std::to_string(LLONG_MIN) + ". Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(LLONG_MAX);
+		x += 1;
+		try
+		{
+			x.toInt();
+			fail("Entier minimal trop grand.", "L'entier minimal trop grand a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+		}
+		catch (Int::IntTooBigException & e)
+		{
+			pass("Entier minimal trop grand.");
+		}
+	}
+
+	{
+		Int x(LLONG_MIN);
+		x -= 1;
+		try
+		{
+			x.toInt();
+			fail("Entier maximal trop petit.", "L'entier maximal trop petit a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+		}
+		catch (Int::IntTooBigException & e)
+		{
+			pass("Entier maximal trop petit.");
+		}
+	}
+
+	{
+		Int x(LLONG_MAX);
+		x = (x + 2) * (x + 5) * (x + 12);
+		try
+		{
+			x.toInt();
+			fail("Entier trop grand.", "Un entier trop grand a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+		}
+		catch (Int::IntTooBigException & e)
+		{
+			pass("Entier trop grand.");
+		}
+	}
+
+	{
+		Int x(LLONG_MIN);
+		x = (x + 2) * (x + 5) * (x + 12);
+		try
+		{
+			x.toInt();
+			fail("Entier trop petit.", "Un entier trop petit a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+		}
+		catch (Int::IntTooBigException & e)
+		{
+			pass("Entier trop petit.");
+		}
+	}
 }
 
 void testEgalite()

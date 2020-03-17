@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <cstdint>
+#include <exception>
+#include <limits.h>
 
 /**
  * \brief Calcule x puissance n pour n supérieur ou égale à 1.
@@ -75,7 +77,6 @@ template<typename T> T pgcd(T const& a, T const& b)
 	return v;
 }
 
-
 /**
  * \class Int
  * \brief Classe permettant de manipuler des Entiers de taille variable.
@@ -106,9 +107,16 @@ class Int
 		Int& operator/=(Int const& x);
 		Int& operator%=(Int const& x);
 		Int operator-() const;
-		Int& operator-();
 		Int operator+() const;
-		Int& operator+();
+
+		/**
+		 * \brief Erreur renvoyée lors de la tentative de conversion d'un Int trop grand en un long long int
+		*/
+		class IntTooBigException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
 
 		/** 
 		 * \brief Retourne, si c'est possible, l'entier sous forme de long long int.
@@ -134,6 +142,8 @@ class Int
 		uint8_t* m_x;
 		bool m_positif;
 		bool m_actif;
+
+	friend Int&& operator-(Int&& x);
 
 	friend bool operator==(Int const& x, Int const& y);
 	friend bool operator!=(Int const& x, Int const& y);
@@ -170,6 +180,9 @@ Int&& operator/(Int&& x, Int&& y);
 Int operator%(Int const& x, Int const& y);
 Int&& operator%(Int&& x, Int const& y);
 Int&& operator%(Int&& x, Int&& y);
+
+Int&& operator-(Int&& x);
+Int&& operator+(Int&& x);
 
 
 // Comparaisons

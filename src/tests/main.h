@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <limits.h>
 #include "../SciPP/SciPP.h"
 
 void displayMainTitle(std::string const& title);

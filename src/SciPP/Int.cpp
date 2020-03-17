@@ -138,7 +138,7 @@ Int& Int::operator+=(Int const& x)
 			while (i >= m_taille && x.m_x[i] == 255)
 				i--;
 
-			if (i == x.m_taille - 1)
+			if (i == m_taille - 1)
 			{
 				buffer = m_x[i] + x.m_x[i];
 				while (buffer >= 255)
@@ -463,35 +463,37 @@ Int Int::operator-() const
 	return x;
 }
 
-Int& Int::operator-()
-{
-	m_positif = !m_positif;
-	return *this;
-}
-
 Int Int::operator+() const
 {
 	return Int(*this);
 }
 
-Int& Int::operator+()
-{
-	return *this;
-}
 
 
 // Fonctions specifiques
 
+const char* Int::IntTooBigException::what() const throw()
+{
+	return "Tentative de conversion d'un entier trop grand pour etre converti en long long int.";
+}
+
 long long int Int::toInt() const
 {
 	int t(sizeof(long long int));
+
+	if (*this > LLONG_MAX || *this < LLONG_MIN)
+		throw IntTooBigException();
+
 	long long int x(0);
 
-	for (int i(t < m_taille ? t - 1 : m_taille - 1); i >= 0; i--)
+	for (int i(m_taille - 1); i >= 0; i--)
 	{
 		x = x << 8;
 		x += m_x[i];
 	}
+
+	if (!m_positif)
+		x = -x;
 
 	return x;
 }
@@ -564,7 +566,7 @@ Int&& operator-(Int&& x, Int const& y)
 Int&& operator-(Int const& x, Int&& y)
 {
 	y -= x;
-	return std::move(-y);
+	return -std::move(y);
 }
 
 Int&& operator-(Int&& x, Int&& y)
@@ -636,6 +638,18 @@ Int&& operator%(Int&& x, Int const& y)
 Int&& operator%(Int&& x, Int&& y)
 {
 	x %= y;
+	return std::move(x);
+}
+
+
+Int&& operator-(Int&& x)
+{
+	x.m_positif = !x.m_positif;
+	return std::move(x);
+}
+
+Int&& operator+(Int&& x)
+{
 	return std::move(x);
 }
 
