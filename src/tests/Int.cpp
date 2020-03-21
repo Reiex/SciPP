@@ -942,11 +942,94 @@ void testComparaisonStricte()
 void testFlux()
 {
 	displaySectionTitle("Test des opérations sur les flux");
+
+	{
+		Int x(0);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "0")
+			pass("Affichage 0.");
+		else
+			fail("Affichage 0.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(0);
+		std::stringstream stream;
+		stream << -x;
+		if (stream.str() == "0")
+			pass("Affichage -0.");
+		else
+			fail("Affichage -0.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(161803398874989);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "161803398874989")
+			pass("Affichage entier positif.");
+		else
+			fail("Affichage entier positif.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
+
+	{
+		Int x(-161803398874989);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "-161803398874989")
+			pass("Affichage entier négatif.");
+		else
+			fail("Affichage entier négatif.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
+	}
 }
 
 void testDestructeur()
 {
 	displaySectionTitle("Test du destructeur");
+
+	{
+		Int *x(new Int(161803398874989));
+		delete x;
+		pass("Destruction d'un entier simple.");
+	}
+
+	{
+		Int *x(new Int(161803398874989)), *y(new Int(*x));
+		delete x;
+		pass("Destruction de l'original d'un entier créé par copie.");
+		delete y;
+		pass("Destruction d'un entier créé par copie.");
+	}
+
+	{
+		Int* x(new Int(161803398874989)), *y(new Int(std::move(*x)));
+		delete x;
+		pass("Destruction de l'original d'un entier créé par déplacement.");
+		delete y;
+		pass("Destruction d'un entier créé par déplacement.");
+	}
+}
+
+void testGeneraux()
+{
+	displaySectionTitle("Test généraux");
+
+	{
+		Int x(1);
+		for (int i(1); i < 1000; i++)
+			x *= i;
+
+		for (unsigned long long int i(999); i > 0; i--)
+			x /= i;
+
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "1")
+			pass("Test aller-retour factorielle.");
+		else
+			fail("Test aller-retour factorielle.", "La valeur obtenue n'est pas celle attendue. Valeur attendue: 1. Valeur obtenue: " + stream.str());
+	}
 }
 
 void mainInt()
@@ -972,4 +1055,6 @@ void mainInt()
 	testFlux();
 
 	testDestructeur();
+
+	testGeneraux();
 }
