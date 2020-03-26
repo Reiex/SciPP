@@ -6,6 +6,5 @@ SciPPExamples
 SciPPTests
 Debug/
 Release/
-doc/latex/
 doc/html/
 obj/
