@@ -1084,7 +1084,7 @@ void testFonctionsInt()
 		if (x == 15504)
 			pass("Test binom simple.");
 		else
-			fail("Test binom simple.", "Résultat attendu: 15504. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+			fail("Test binom simple.", "Résultat attendu: 15504. Résultat obtenu: " + x.toString() + ".");
 	}
 
 	{
@@ -1092,7 +1092,7 @@ void testFonctionsInt()
 		if (x == 0)
 			pass("Test binom p negatif.");
 		else
-			fail("Test binom p negatif.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+			fail("Test binom p negatif.", "Résultat attendu: 0. Résultat obtenu: " + x.toString() + ".");
 	}
 
 	{
@@ -1100,7 +1100,7 @@ void testFonctionsInt()
 		if (x == 0)
 			pass("Test binom p trop grand.");
 		else
-			fail("Test binom p trop grand.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+			fail("Test binom p trop grand.", "Résultat attendu: 0. Résultat obtenu: " + x.toString() + ".");
 	}
 
 	{
@@ -1108,7 +1108,7 @@ void testFonctionsInt()
 		if (x == 1)
 			pass("Test binom (0, 0).");
 		else
-			fail("Test binom (0, 0).", "Résultat attendu: 1. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+			fail("Test binom (0, 0).", "Résultat attendu: 1. Résultat obtenu: " + x.toString() + ".");
 	}
 }
 

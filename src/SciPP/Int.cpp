@@ -480,6 +480,14 @@ const char* Int::IntTooBigException::what() const throw()
 	return "Tentative de conversion d'un entier trop grand pour etre converti en long long int.";
 }
 
+std::string Int::toString() const
+{
+	std::stringstream stream;
+	stream << *this;
+
+	return stream.str();
+}
+
 long long int Int::toInt() const
 {
 	int t(sizeof(long long int));

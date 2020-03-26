@@ -109,4 +109,3 @@ std::ostream& operator<<(std::ostream& stream, Rationnel const& x)
 	stream << x.numerateur() << "/" << x.denominateur();
 	return stream;
 }
-

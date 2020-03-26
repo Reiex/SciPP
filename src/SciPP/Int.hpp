@@ -10,6 +10,8 @@
 */
 
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <cstdint>
 #include <exception>
 #include <limits.h>
@@ -121,6 +123,10 @@ class Int
 				virtual const char* what() const throw();
 		};
 
+		/**
+		 * \brief Retourne l'entier sous forme de chaine de caractères
+		*/
+		std::string toString() const;
 		/** 
 		 * \brief Retourne, si c'est possible, l'entier sous forme de long long int.
 		 * 
