@@ -6,6 +6,7 @@
 #include <limits.h>
 #include "../SciPP/SciPP.h"
 
+
 void displayMainTitle(std::string const& title);
 void displaySectionTitle(std::string const& title);
 void pass(std::string const& message);

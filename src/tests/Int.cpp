@@ -1011,16 +1011,117 @@ void testDestructeur()
 	}
 }
 
+void testFonctionsInt()
+{
+	displaySectionTitle("Test des fonctions définies en même temps que les Int");
+
+	{
+		int x(expoRapide(2, 16));
+		if (x == 65536)
+			pass("Test expoRapide simple.");
+		else
+			fail("Test expoRapide simple.", "Résultat attendu: 65536. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		int x(expoRapide(-2, 11));
+		if (x == -2048)
+			pass("Test expoRapide négatif.");
+		else
+			fail("Test expoRapide négatif.", "Résultat attendu: -2048. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		double x;
+		try
+		{
+			x = expoRapide(2.0, -10);
+			fail("Test expoRapide exposant nul.", "L'exposant nul a été accepté par la fonction expoRapide. Résultat obtenu: " + std::to_string(x));
+		}
+		catch (char const* e)
+		{
+			if (e == "Unexpected: n < 1")
+				pass("Test expoRapide exposant nul.");
+			else
+				fail("Test expoRapide exposant nul.", "L'erreur retournée n'est pas la bonne. Erreur retournée: " + std::string(e));
+		}
+	}
+
+	{
+		int x(pgcd(2755, 10353));
+		if (x == 29)
+			pass("Test PGCD simple.");
+		else
+			fail("Test PGCD simple.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		int x(pgcd(-2755, 10353));
+		if (x == 29)
+			pass("Test PGCD négatif.");
+		else
+			fail("Test PGCD négatif.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		int x(pgcd(-2755, -10353));
+		if (x == 29)
+			pass("Test PGCD double négatif.");
+		else
+			fail("Test PGCD double négatif.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		int x(pgcd(0, 10353));
+		if (x == 1)
+			pass("Test PGCD nul.");
+		else
+			fail("Test PGCD nul.", "Résultat attendu: 1. Résultat obtenu: " + std::to_string(x) + ".");
+	}
+
+	{
+		Int x(binom(20, 15));
+		if (x == 15504)
+			pass("Test binom simple.");
+		else
+			fail("Test binom simple.", "Résultat attendu: 15504. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(binom(20, -1));
+		if (x == 0)
+			pass("Test binom p negatif.");
+		else
+			fail("Test binom p negatif.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(binom(20, 21));
+		if (x == 0)
+			pass("Test binom p trop grand.");
+		else
+			fail("Test binom p trop grand.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+
+	{
+		Int x(binom(0, 0));
+		if (x == 1)
+			pass("Test binom (0, 0).");
+		else
+			fail("Test binom (0, 0).", "Résultat attendu: 1. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
+	}
+}
+
 void testGeneraux()
 {
 	displaySectionTitle("Test généraux");
 
 	{
 		Int x(1);
-		for (int i(1); i < 1000; i++)
+		for (int i(1); i < 300; i++)
 			x *= i;
 
-		for (unsigned long long int i(999); i > 0; i--)
+		for (unsigned long long int i(299); i > 0; i--)
 			x /= i;
 
 		std::stringstream stream;
@@ -1055,6 +1156,8 @@ void mainInt()
 	testFlux();
 
 	testDestructeur();
+
+	testFonctionsInt();
 
 	testGeneraux();
 }

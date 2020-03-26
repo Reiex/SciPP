@@ -57,8 +57,7 @@ lineCount:
 
 $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a: $(LIBRARY_OBJS)
 	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp
-	cp $(SRC_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)
-	cp $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
+	cp $(SRC_LIBRARY_DIR)/*.h $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
 	ar rcs $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(LIBRARY_OBJS)
 
 # Compilations spécifiques

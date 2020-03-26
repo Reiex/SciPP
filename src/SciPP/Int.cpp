@@ -775,11 +775,14 @@ std::ostream& operator<<(std::ostream& stream, Int const& x)
 
 // Autres
 
-Int binom(int n, int p)
+Int binom(long long int n, long long int p)
 {
+	if (p > n || p < 0)
+		return 0;
+
 	Int num(1), denom(1);
 
-	for (int i(0); i < p; i++)
+	for (long long int i(0); i < p; i++)
 	{
 		num *= n-i;
 		denom *= p-i;

@@ -27,7 +27,7 @@
 template<typename T> T expoRapide(T const& x, int n)
 {
 	if (n < 1)
-		throw "n doit etre superieur a 1.";
+		throw "Unexpected: n < 1";
 
 	if (n == 1)
 		return x;
@@ -55,8 +55,8 @@ template<typename T> T expoRapide(T const& x, int n)
 /**
  * \brief Calcule le PGCD (Plus Grand Commun Diviseur) de a et b.
  * 
- * Les contraintes sur T sont d'avoir un constructeur T(0), une comparaison interne et un modulo 
- * interne.
+ * Les contraintes sur T sont d'avoir un constructeur T(0), un test d'égalité interne, une comparaison
+ * interne, un moins unaire et un modulo interne.
  * 
 */
 template<typename T> T pgcd(T const& a, T const& b)
@@ -73,6 +73,9 @@ template<typename T> T pgcd(T const& a, T const& b)
 		v = r;
 		r = u % v;
 	}
+
+	if (v < zero)
+		v = -v;
 
 	return v;
 }
@@ -208,4 +211,4 @@ std::ostream& operator<<(std::ostream& stream, Int const& x);
  * raisons pratiques. Cela peut être amené à changer, notemment avec une surcharge de cette
  * fonction.
 */
-Int binom(int n, int p);
+Int binom(long long int n, long long int p);
