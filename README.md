@@ -35,18 +35,21 @@ g++ monProgramme.o -o MonProgramme SciPP/bin/SciPP.a -lsfml-graphics -lsfml-wind
 
 Il suffit ensuite d'executer le fichier généré:
 
-`./MonProgramme`
+```shell
+./MonProgramme
+```
 
 ## Documentation du projet
 
-Cette bibliothèque possède deux documentations. La première, générée avec Doxygen, se base sur des commentaires du code. La seconde est celle que vous lisez actuellement, composée de README au format markdown.
-
-La documentation Doxygen doit être générée par l'utilisateur, pour cela rien de plus simple, il suffit d'installer puis de lancer Doxygen:
+La documentation doit être générée par l'utilisateur. Pour cela rien de plus simple, il suffit d'installer puis de lancer Doxygen:
 ```shell
 sudo apt-get install doxygen graphviz
 make doxy
 ```
 
-**Avancement:**
-- La documentation doxygen est en cours d'écriture
-- La documentation README viendra ensuite
+## Tests
+
+Une banque de tests est développée pour SciPP dans le sous fichier `src/tests`. Pour lancer les tests, il suffit de lancer la commande
+```shell
+make check
+```
