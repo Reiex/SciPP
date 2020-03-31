@@ -845,7 +845,7 @@ static std::string testRationnels(Test& test)
 	return "";
 }
 
-static std::string testsFonctionsRationnels(Test& test)
+static std::string testFonctionsRationnels(Test& test)
 {
 	return "";
 }
