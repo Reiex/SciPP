@@ -472,7 +472,6 @@ Int Int::operator+() const
 }
 
 
-
 // Fonctions specifiques
 
 const char* Int::IntTooBigException::what() const throw()

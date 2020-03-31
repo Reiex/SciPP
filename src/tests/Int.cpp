@@ -1,6 +1,6 @@
 #include "main.h"
 
-std::string testInit(Test& test)
+static std::string testInit(Test& test)
 {
 	test.addSubTest("Initialisation par defaut", [](Test& test)->std::string
 	{
@@ -73,7 +73,7 @@ std::string testInit(Test& test)
 	return "";
 }
 
-std::string testAffectation(Test& test)
+static std::string testAffectation(Test& test)
 {
 	test.addSubTest("Affectation par copie", [](Test& test)->std::string
 	{
@@ -144,7 +144,7 @@ std::string testAffectation(Test& test)
 	return "";
 }
 
-std::string testAddition(Test& test)
+static std::string testAddition(Test& test)
 {
 	test.addSubTest("Addition en place", [](Test& test)->std::string
 	{
@@ -215,7 +215,7 @@ std::string testAddition(Test& test)
 	return "";
 }
 
-std::string testSoustraction(Test& test)
+static std::string testSoustraction(Test& test)
 {
 	test.addSubTest("Soustraction en place", [](Test& test)->std::string
 	{
@@ -286,7 +286,7 @@ std::string testSoustraction(Test& test)
 	return "";
 }
 
-std::string testMultiplication(Test& test)
+static std::string testMultiplication(Test& test)
 {
 	test.addSubTest("Multiplication en place", [](Test& test)->std::string
 	{
@@ -357,7 +357,7 @@ std::string testMultiplication(Test& test)
 	return "";
 }
 
-std::string testDivision(Test& test)
+static std::string testDivision(Test& test)
 {
 	test.addSubTest("Division en place", [](Test& test)->std::string
 	{
@@ -414,7 +414,7 @@ std::string testDivision(Test& test)
 	return "";
 }
 
-std::string testModulo(Test& test)
+static std::string testModulo(Test& test)
 {
 	test.addSubTest("Modulo en place", [](Test& test)->std::string
 	{
@@ -471,7 +471,7 @@ std::string testModulo(Test& test)
 	return "";
 }
 
-std::string testUnaires(Test& test)
+static std::string testUnaires(Test& test)
 {
 	test.addSubTest("Moins unaire par creation d'un nouvel Int", [](Test& test)->std::string
 	{
@@ -528,7 +528,7 @@ std::string testUnaires(Test& test)
 	return "";
 }
 
-std::string testConversionInt(Test& test)
+static std::string testConversionInt(Test& test)
 {
 	test.addSubTest("Conversion entier positif", [](Test& test)->std::string
 	{
@@ -638,7 +638,7 @@ std::string testConversionInt(Test& test)
 	return "";
 }
 
-std::string testEgalite(Test& test)
+static std::string testEgalite(Test& test)
 {
 	test.addSubTest("Comparaisons entiers egaux", [](Test& test)->std::string
 	{
@@ -706,7 +706,7 @@ std::string testEgalite(Test& test)
 	return "";
 }
 
-std::string testComparaison(Test& test)
+static std::string testComparaison(Test& test)
 {
 	test.addSubTest("Comparaisons entiers differents de meme signe", [](Test& test)->std::string
 	{
@@ -853,7 +853,7 @@ std::string testComparaison(Test& test)
 	return "";
 }
 
-std::string testComparaisonStricte(Test& test)
+static std::string testComparaisonStricte(Test& test)
 {
 	test.addSubTest("Comparaisons entiers differents de meme signe", [](Test& test)->std::string
 	{
@@ -1000,7 +1000,7 @@ std::string testComparaisonStricte(Test& test)
 	return "";
 }
 
-std::string testFlux(Test& test)
+static std::string testFlux(Test& test)
 {
 	test.addSubTest("Affichage de 0", [](Test& test)->std::string
 	{
@@ -1049,7 +1049,7 @@ std::string testFlux(Test& test)
 	return "";
 }
 
-std::string testDestructeur(Test& test)
+static std::string testDestructeur(Test& test)
 {
 	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
 	{
@@ -1077,7 +1077,7 @@ std::string testDestructeur(Test& test)
 	return "";
 }
 
-std::string testFonctionsInt(Test& test)
+static std::string testFonctionsInt(Test& test)
 {
 	test.addSubTest("Test expoRapide simple", [](Test& test)->std::string
 	{
@@ -1105,12 +1105,12 @@ std::string testFonctionsInt(Test& test)
 			x = expoRapide(2.0, -10);
 			return "L'exposant nul a ete accepte par la fonction expoRapide. Resultat obtenu: " + std::to_string(x);
 		}
-		catch (char const* e)
+		catch (std::string const& e)
 		{
 			if (e == "Unexpected: n < 1")
 				return "";
 			else
-				return "L'erreur retournee n'est pas la bonne. Erreur retournee: " + std::string(e);
+				return "L'erreur retournee n'est pas la bonne. Erreur retournee: " + e;
 		}
 	});
 
@@ -1189,7 +1189,7 @@ std::string testFonctionsInt(Test& test)
 	return "";
 }
 
-std::string testGeneraux(Test& test)
+static std::string testGeneraux(Test& test)
 {
 	test.addSubTest("Test aller-retour factorielle", [](Test& test)->std::string
 	{
