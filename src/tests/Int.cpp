@@ -144,6 +144,34 @@ static std::string testAffectation(Test& test)
 	return "";
 }
 
+static std::string testDestructeur(Test& test)
+{
+	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
+	{
+		Int* x(new Int(161803398874989));
+		delete x;
+		return "";
+	});
+
+	test.addSubTest("Destruction d'un entier cree par copie et de son original", [](Test& test)->std::string
+	{
+		Int* x(new Int(161803398874989)), * y(new Int(*x));
+		delete x;
+		delete y;
+		return "";
+	});
+
+	test.addSubTest("Destruction d'un entier cree par deplacement et de son original", [](Test& test)->std::string
+	{
+		Int* x(new Int(161803398874989)), * y(new Int(std::move(*x)));
+		delete x;
+		delete y;
+		return "";
+	});
+
+	return "";
+}
+
 static std::string testAddition(Test& test)
 {
 	test.addSubTest("Addition en place", [](Test& test)->std::string
@@ -1049,34 +1077,6 @@ static std::string testFlux(Test& test)
 	return "";
 }
 
-static std::string testDestructeur(Test& test)
-{
-	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
-	{
-		Int* x(new Int(161803398874989));
-		delete x;
-		return "";
-	});
-
-	test.addSubTest("Destruction d'un entier cree par copie et de son original", [](Test& test)->std::string
-	{
-		Int* x(new Int(161803398874989)), *y(new Int(*x));
-		delete x;
-		delete y;
-		return "";
-	});
-
-	test.addSubTest("Destruction d'un entier cree par deplacement et de son original", [](Test& test)->std::string
-	{
-		Int* x(new Int(161803398874989)), *y(new Int(std::move(*x)));
-		delete x;
-		delete y;
-		return "";
-	});
-
-	return "";
-}
-
 static std::string testFonctionsInt(Test& test)
 {
 	test.addSubTest("Test expoRapide simple", [](Test& test)->std::string
@@ -1215,6 +1215,7 @@ std::string mainInt(Test& test)
 {
 	test.addSubTest("Test des initialisations", &testInit);
 	test.addSubTest("Test des affectations", &testAffectation);
+	test.addSubTest("Test du destructeur", &testDestructeur);
 
 	test.addSubTest("Test des additions", &testAddition);
 	test.addSubTest("Test des soustractions", &testSoustraction);
@@ -1230,8 +1231,6 @@ std::string mainInt(Test& test)
 	test.addSubTest("Test des operateurs < et >", &testComparaisonStricte);
 
 	test.addSubTest("Test des operations sur les flux", &testFlux);
-
-	test.addSubTest("Test du destructeur", &testDestructeur);
 
 	test.addSubTest("Test des fonctions definies en meme temps que les Int", &testFonctionsInt);
 
