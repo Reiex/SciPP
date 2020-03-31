@@ -257,10 +257,7 @@ template<typename T> void Frac<T>::simplifier()
 	}
 
 	T x;
-	if (m_p < 0)
-		x = pgcd(-m_p, m_q);
-	else
-		x = pgcd(m_p, m_q);
+	x = pgcd(m_p, m_q);
 
 	m_p /= x;
 	m_q /= x;

@@ -11,7 +11,7 @@ int main()
 		return "";
 	});
 
-	mainTest(0, 3);
+	mainTest(0, 2);
 
 	return 0;
 }
