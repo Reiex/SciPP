@@ -845,6 +845,11 @@ static std::string testRationnels(Test& test)
 	return "";
 }
 
+static std::string testsFonctionsRationnels(Test& test)
+{
+	return "";
+}
+
 static std::string testGeneraux(Test& test)
 {
 	test.addSubTest("Test aller-retour factorielle", [](Test& test)->std::string
@@ -876,7 +881,6 @@ std::string mainFrac(Test& test)
 	test.addSubTest("Test des soustractions", &testSoustraction);
 	test.addSubTest("Test des multiplications", &testMultiplication);
 	test.addSubTest("Test des divisions", &testDivision);
-	test.addSubTest("Test des modulos", &testModulo);
 	test.addSubTest("Test des plus et moins unaires", &testUnaires);
 
 	test.addSubTest("Test des operateurs == et !=", &testEgalite);
@@ -886,6 +890,7 @@ std::string mainFrac(Test& test)
 	test.addSubTest("Test des operations sur les flux", &testFlux);
 
 	test.addSubTest("Test de la classe Rationnel", &testRationnels);
+	test.addSubTest("Test des fonctions définies en même temps que les rationnels", &testFonctionsRationnels);
 
 	test.addSubTest("Test generaux", &testGeneraux);
 
