@@ -64,10 +64,10 @@ template<typename T> class Frac
 		/** \brief Initialise la fraction à T(p)/T(q) */
 		Frac(T const& p, T const& q);
 
-		/** \brief Retour le numérateur de la fraction */
-		T numerateur() const;
-		/** \brief Retour le dénominateur de la fraction */
-		T denominateur() const;
+		/** \brief Retour une référence constante vers le numérateur de la fraction */
+		T const& numerateur() const;
+		/** \brief Retour une référence constante vers le dénominateur de la fraction */
+		T const& denominateur() const;
 
 		Frac<T>& operator+=(Frac<T> const& a);
 		Frac<T>& operator-=(Frac<T> const& a);
@@ -117,12 +117,12 @@ template<typename T> Frac<T>::Frac(T const& p, T const& q)
 
 // Acces et modification de la structure
 
-template<typename T> T Frac<T>::numerateur() const
+template<typename T> T const& Frac<T>::numerateur() const
 {
 	return m_p;
 }
 
-template<typename T> T Frac<T>::denominateur() const
+template<typename T> T const& Frac<T>::denominateur() const
 {
 	return m_q;
 }

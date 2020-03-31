@@ -1,7 +1,6 @@
 #include "main.h"
 
-void mainMatrice()
+std::string mainMatrice(Test& test)
 {
-	displayMainTitle("TEST DES MATRICES");
+	return "";
 }
-

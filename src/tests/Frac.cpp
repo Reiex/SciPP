@@ -1,6 +1,6 @@
 #include "main.h"
 
-void mainFrac()
+std::string mainFrac(Test& test)
 {
-	displayMainTitle("TEST DES FRACTIONS");
+	return "";
 }

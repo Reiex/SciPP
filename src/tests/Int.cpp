@@ -1,626 +1,675 @@
 #include "main.h"
 
-void testInit()
+std::string testInit(Test& test)
 {
-	displaySectionTitle("Test des initialisations");
-
+	test.addSubTest("Initialisation par defaut", [](Test& test)->std::string
 	{
 		Int x;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "0")
-			pass("Initialisation par défaut.");
+			return "";
 		else
-			fail("Initialisation par défaut.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Initialisation entier nul", [](Test& test)->std::string
 	{
 		Int x(0);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "0")
-			pass("Initialisation entier nul.");
+			return "";
 		else
-			fail("Initialisation nulle.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Initialisation entier positif", [](Test& test)->std::string
 	{
 		Int x(161803398874989);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "161803398874989")
-			pass("Initialisation entier positif.");
+			return "";
 		else
-			fail("Initialisation positive.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Initialisation entier negatif", [](Test& test)->std::string
 	{
 		Int x(-161803398874989);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-161803398874989")
-			pass("Initialisation entier négatif.");
+			return "";
 		else
-			fail("Initialisation négative.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Initialisation par copie", [](Test& test)->std::string
 	{
 		Int x(31415926535), y(x);
 		std::stringstream stream;
 		stream << y;
 		if (stream.str() == "31415926535")
-			pass("Initialisation par copie.");
+			return "";
 		else
-			fail("Initialisation par copie.", "Résultat attendu: 31415926535. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Initialisation par deplacement", [](Test& test)->std::string
 	{
 		Int x(31415926535), y(std::move(x));
 		std::stringstream stream;
 		stream << y;
 		if (x.estActif())
-			fail("Initialisation par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "31415926535")
-			pass("Initialisation par déplacement.");
+			return "";
 		else
-			fail("Initialisation par déplacement.", "Résultat attendu: 31415926535. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testAffectation()
+std::string testAffectation(Test& test)
 {
-	displaySectionTitle("Test des affectations");
-
+	test.addSubTest("Affectation par copie", [](Test& test)->std::string
 	{
 		Int x(-161803398874989), y;
 		y = x;
 		std::stringstream stream;
 		stream << y;
 		if (stream.str() == "-161803398874989")
-			pass("Affectation par copie.");
+			return "";
 		else
-			fail("Affectation par copie.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affectation par deplacement", [](Test& test)->std::string
 	{
 		Int x(-161803398874989), y;
 		y = std::move(x);
 		std::stringstream stream;
 		stream << y;
 		if (x.estActif())
-			fail("Affectation par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-161803398874989")
-			pass("Affectation par déplacement.");
+			return "";
 		else
-			fail("Affectation par déplacement.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affectation chainee par copie", [](Test& test)->std::string
 	{
 		Int x(-161803398874989), y, z, t;
 		t = z = y = x;
 		std::stringstream stream;
 		stream << t;
 		if (stream.str() == "-161803398874989")
-			pass("Affectation chainée par copie.");
+			return "";
 		else
-			fail("Affectation chainée par copie.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affectation chainee par deplacement et copie", [](Test& test)->std::string
 	{
 		Int x(-161803398874989), y, z, t;
 		t = std::move(z = y = x);
 		std::stringstream stream;
 		stream << t;
 		if (!x.estActif() || !y.estActif())
-			fail("Affectation chainée par déplacement et copie.", "Un déplacement inattendu a eu lieu.");
+			return "Un deplacement inattendu a eu lieu.";
 		if (z.estActif())
-			fail("Affectation chainée par déplacement et copie.", "Le déplacement n'a pas eu lieu, un entier déplacé est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, un entier deplace est toujours actif.";
 		else if (stream.str() == "-161803398874989")
-			pass("Affectation chainée par déplacement et copie.");
+			return "";
 		else
-			fail("Affectation chainée par déplacement et copie.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affectation par un entier immediat", [](Test& test)->std::string
 	{
 		Int x;
 		x = -161803398874989;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-161803398874989")
-			pass("Affectation par un entier immédiat.");
+			return "";
 		else
-			fail("Affectation par un entier immédiat.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testAddition()
+std::string testAddition(Test& test)
 {
-	displaySectionTitle("Test des additions");
-
+	test.addSubTest("Addition en place", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-16180339887);
 		x += y;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "15235586649")
-			pass("Addition en place.");
+			return "";
 		else
-			fail("Addition en place.", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Addition externe Int(Int const&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-16180339887), z;
 		z = x + y;
 		std::stringstream stream;
 		stream << z;
 		if (stream.str() == "15235586649")
-			pass("Addition externe Int(Int const&, Int const&).");
+			return "";
 		else
-			fail("Addition externe Int(Int const&, Int const&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Addition externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-16180339887), z;
 		z = std::move(x) + y;
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Addition externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "15235586649")
-			pass("Addition externe Int&&(Int&&, Int const&).");
+			return "";
 		else
-			fail("Addition externe Int&&(Int&&, Int const&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Addition externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-16180339887), z;
 		z = x + std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (y.estActif())
-			fail("Addition externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "15235586649")
-			pass("Addition externe Int&&(Int const&, Int&&).");
+			return "";
 		else
-			fail("Addition externe Int&&(Int const&, Int&&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Addition externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-16180339887), z;
 		z = std::move(x) + std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Addition externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "15235586649")
-			pass("Addition externe Int&&(Int&&, Int&&).");
+			return "";
 		else
-			fail("Addition externe Int&&(Int&&, Int&&).", "Résultat attendu: 15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testSoustraction()
+std::string testSoustraction(Test& test)
 {
-	displaySectionTitle("Test des soustractions");
-
+	test.addSubTest("Soustraction en place", [](Test& test)->std::string
 	{
 		Int x(-31415926536), y(-16180339887);
 		x -= y;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-15235586649")
-			pass("Soustraction en place.");
+			return "";
 		else
-			fail("Soustraction en place.", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Soustraction externe Int(Int const&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(-31415926536), y(-16180339887), z;
 		z = x - y;
 		std::stringstream stream;
 		stream << z;
 		if (stream.str() == "-15235586649")
-			pass("Soustraction externe Int(Int const&, Int const&).");
+			return "";
 		else
-			fail("Soustraction externe Int(Int const&, Int const&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Soustraction externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(-31415926536), y(-16180339887), z;
 		z = std::move(x) - y;
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Soustraction externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-15235586649")
-			pass("Soustraction externe Int&&(Int&&, Int const&).");
+			return "";
 		else
-			fail("Soustraction externe Int&&(Int&&, Int const&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Soustraction externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(-31415926536), y(-16180339887), z;
 		z = x - std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (y.estActif())
-			fail("Soustraction externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-15235586649")
-			pass("Soustraction externe Int&&(Int const&, Int&&).");
+			return "";
 		else
-			fail("Soustraction externe Int&&(Int const&, Int&&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
-
+			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
+	
+	test.addSubTest("Soustraction externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(-31415926536), y(-16180339887), z;
 		z = std::move(x) - std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Soustraction externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-15235586649")
-			pass("Soustraction externe Int&&(Int&&, Int&&).");
+			return "";
 		else
-			fail("Soustraction externe Int&&(Int&&, Int&&).", "Résultat attendu: -15235586649. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testMultiplication()
+std::string testMultiplication(Test& test)
 {
-	displaySectionTitle("Test des multiplications");
-
+	test.addSubTest("Multiplication en place", [](Test& test)->std::string
 	{
 		Int x(31416), y(-1618);
 		x *= y;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-50831088")
-			pass("Multiplication en place.");
+			return "";
 		else
-			fail("Multiplication en place.", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Multiplication externe Int(Int const&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31416), y(-1618), z;
 		z = x * y;
 		std::stringstream stream;
 		stream << z;
 		if (stream.str() == "-50831088")
-			pass("Multiplication externe Int(Int const&, Int const&).");
+			return "";
 		else
-			fail("Multiplication externe Int(Int const&, Int const&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Multiplication externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31416), y(-1618), z;
 		z = std::move(x) * y;
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Multiplication externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-50831088")
-			pass("Multiplication externe Int&&(Int&&, Int const&).");
+			return "";
 		else
-			fail("Multiplication externe Int&&(Int&&, Int const&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Multiplication externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31416), y(-1618), z;
 		z = x * std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (y.estActif())
-			fail("Multiplication externe Int&&(Int const&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-50831088")
-			pass("Multiplication externe Int&&(Int const&, Int&&).");
+			return "";
 		else
-			fail("Multiplication externe Int&&(Int const&, Int&&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Multiplication externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31416), y(-1618), z;
 		z = std::move(x) * std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Multiplication externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-50831088")
-			pass("Multiplication externe Int&&(Int&&, Int&&).");
+			return "";
 		else
-			fail("Multiplication externe Int&&(Int&&, Int&&).", "Résultat attendu: -50831088. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testDivision()
+std::string testDivision(Test& test)
 {
-	displaySectionTitle("Test des divisions");
-
+	test.addSubTest("Division en place", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618);
 		x /= y;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-19416518")
-			pass("Division en place.");
+			return "";
 		else
-			fail("Division en place.", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Division externe Int(Int const&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = x / y;
 		std::stringstream stream;
 		stream << z;
 		if (stream.str() == "-19416518")
-			pass("Division externe Int(Int const&, Int const&).");
+			return "";
 		else
-			fail("Division externe Int(Int const&, Int const&).", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Division externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = std::move(x) / y;
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Division externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-19416518")
-			pass("Division externe Int&&(Int&&, Int const&).");
+			return "";
 		else
-			fail("Division externe Int&&(Int&&, Int const&).", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Division externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = std::move(x) / std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Division externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-19416518")
-			pass("Division externe Int&&(Int&&, Int&&).");
+			return "";
 		else
-			fail("Division externe Int&&(Int&&, Int&&).", "Résultat attendu: -19416518. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testModulo()
+std::string testModulo(Test& test)
 {
-	displaySectionTitle("Test des modulos");
-
+	test.addSubTest("Modulo en place", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618);
 		x %= y;
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "412")
-			pass("Division en place.");
+			return "";
 		else
-			fail("Division en place.", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Modulo externe Int(Int const&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = x % y;
 		std::stringstream stream;
 		stream << z;
 		if (stream.str() == "412")
-			pass("Division externe Int(Int const&, Int const&).");
+			return "";
 		else
-			fail("Division externe Int(Int const&, Int const&).", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Modulo externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = std::move(x) % y;
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Division externe Int&&(Int&&, Int const&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "412")
-			pass("Division externe Int&&(Int&&, Int const&).");
+			return "";
 		else
-			fail("Division externe Int&&(Int&&, Int const&).", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Modulo externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618), z;
 		z = std::move(x) % std::move(y);
 		std::stringstream stream;
 		stream << z;
 		if (x.estActif())
-			fail("Division externe Int&&(Int&&, Int&&).", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "412")
-			pass("Division externe Int&&(Int&&, Int&&).");
+			return "";
 		else
-			fail("Division externe Int&&(Int&&, Int&&).", "Résultat attendu: 412. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testUnaires()
+std::string testUnaires(Test& test)
 {
-	displaySectionTitle("Test des plus et moins unaires");
-
+	test.addSubTest("Moins unaire par creation d'un nouvel Int", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y;
 		y = -x;
 		std::stringstream stream;
 		stream << y;
 		if (stream.str() == "-161803398874989")
-			pass("Moins unaire par création d'un nouvel Int.");
+			return "";
 		else
-			fail("Moins unaire par création d'un nouvel Int.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Plus unaire par creation d'un nouvel Int", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y;
 		y = +x;
 		std::stringstream stream;
 		stream << y;
 		if (stream.str() == "161803398874989")
-			pass("Plus unaire par création d'un nouvel Int.");
+			return "";
 		else
-			fail("Plus unaire par création d'un nouvel Int.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Moins unaire par deplacement", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y;
 		y = -std::move(x);
 		std::stringstream stream;
 		stream << y;
 		if (x.estActif())
-			fail("Moins unaire par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "-161803398874989")
-			pass("Moins unaire par déplacement.");
+			return "";
 		else
-			fail("Moins unaire par déplacement.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Plus unaire par deplacement", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y;
 		y = +std::move(x);
 		std::stringstream stream;
 		stream << y;
 		if (x.estActif())
-			fail("Plus unaire par déplacement.", "Le déplacement n'a pas eu lieu, l'entier de départ est toujours actif.");
+			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
 		else if (stream.str() == "161803398874989")
-			pass("Plus unaire par déplacement.");
+			return "";
 		else
-			fail("Plus unaire par déplacement.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testConversionInt()
+std::string testConversionInt(Test& test)
 {
-	displaySectionTitle("Test de la methode Int::toInt()");
-
+	test.addSubTest("Conversion entier positif", [](Test& test)->std::string
 	{
 		Int x(161803398874989);
 		if (x.toInt() == 161803398874989)
-			pass("Entier positif.");
+			return "";
 		else
-			fail("Entier positif.", "Résultat attendu: 161803398874989. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
-	}
+			return "Resultat attendu: 161803398874989. Resultat obtenu: " + std::to_string(x.toInt()) + ".";
+	});
 
+	test.addSubTest("Conversion entier negatif", [](Test& test)->std::string
 	{
 		Int x(-161803398874989);
 		if (x.toInt() == -161803398874989)
-			pass("Entier négatif.");
+			return "";
 		else
-			fail("Entier négatif.", "Résultat attendu: -161803398874989. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + std::to_string(x.toInt()) + ".";
+	});
 
+	test.addSubTest("Conversion entier nul", [](Test& test)->std::string
 	{
 		Int x(0);
 		if (x.toInt() == 0)
-			pass("Entier nul.");
+			return "";
 		else
-			fail("Entier nul.", "Résultat attendu: 0. Résultat obtenu: " + std::to_string(x.toInt()) + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + std::to_string(x.toInt()) + ".";
+	});
 
+	test.addSubTest("Conversion entier maximal", [](Test& test)->std::string
 	{
 		Int x(LLONG_MAX);
 		if (x.toInt() == LLONG_MAX)
-			pass("Entier maximal.");
+			return "";
 		else
-			fail("Entier maximal.", "Résultat attendu: " + std::to_string(LLONG_MAX) + ". Résultat obtenu: " + std::to_string(x.toInt()) + ".");
-	}
+			return "Resultat attendu: " + std::to_string(LLONG_MAX) + ". Resultat obtenu: " + std::to_string(x.toInt()) + ".";
+	});
 
+	test.addSubTest("Conversion entier minimal", [](Test& test)->std::string
 	{
 		Int x(LLONG_MIN);
 		if (x.toInt() == LLONG_MIN)
-			pass("Entier minimal.");
+			return "";
 		else
-			fail("Entier minimal.", "Résultat attendu: " + std::to_string(LLONG_MIN) + ". Résultat obtenu: " + std::to_string(x.toInt()) + ".");
-	}
+			return "Resultat attendu: " + std::to_string(LLONG_MIN) + ". Resultat obtenu: " + std::to_string(x.toInt()) + ".";
+	});
 
+	test.addSubTest("Conversion entier minimal trop grand", [](Test& test)->std::string
 	{
 		Int x(LLONG_MAX);
 		x += 1;
 		try
 		{
 			x.toInt();
-			fail("Entier minimal trop grand.", "L'entier minimal trop grand a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+			return "L'entier minimal trop grand a ete converti en un Int: " + std::to_string(x.toInt()) + ".";
 		}
-		catch (Int::IntTooBigException & e)
+		catch (Int::IntTooBigException& e)
 		{
-			pass("Entier minimal trop grand.");
+			return "";
 		}
-	}
+	});
 
+	test.addSubTest("Conversion entier maximal trop petit", [](Test& test)->std::string
 	{
 		Int x(LLONG_MIN);
 		x -= 1;
 		try
 		{
 			x.toInt();
-			fail("Entier maximal trop petit.", "L'entier maximal trop petit a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+			return "L'entier maximal trop petit a ete converti en un Int: " + std::to_string(x.toInt()) + ".";
 		}
-		catch (Int::IntTooBigException & e)
+		catch (Int::IntTooBigException& e)
 		{
-			pass("Entier maximal trop petit.");
+			return "";
 		}
-	}
+	});
 
+	test.addSubTest("Conversion entier trop grand", [](Test& test)->std::string
 	{
 		Int x(LLONG_MAX);
 		x = (x + 2) * (x + 5) * (x + 12);
 		try
 		{
 			x.toInt();
-			fail("Entier trop grand.", "Un entier trop grand a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+			return "Un entier trop grand a ete converti en un Int: " + std::to_string(x.toInt()) + ".";
 		}
-		catch (Int::IntTooBigException & e)
+		catch (Int::IntTooBigException& e)
 		{
-			pass("Entier trop grand.");
+			return "";
 		}
-	}
+	});
 
+	test.addSubTest("Conversion entier trop petit", [](Test& test)->std::string
 	{
 		Int x(LLONG_MIN);
 		x = (x + 2) * (x + 5) * (x + 12);
 		try
 		{
 			x.toInt();
-			fail("Entier trop petit.", "Un entier trop petit a été converti en un Int: " + std::to_string(x.toInt()) + ".");
+			return "Un entier trop petit a ete converti en un Int: " + std::to_string(x.toInt()) + ".";
 		}
-		catch (Int::IntTooBigException & e)
+		catch (Int::IntTooBigException& e)
 		{
-			pass("Entier trop petit.");
+			return "";
 		}
-	}
+	});
+
+	return "";
 }
 
-void testEgalite()
+std::string testEgalite(Test& test)
 {
-	displaySectionTitle("Test des opérateurs == et !=");
-
+	test.addSubTest("Comparaisons entiers egaux", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y(161803398874989);
 		if (x == y)
-			pass("Comparaison entiers égaux.");
+			return "";
 		else
-			fail("Comparaison entiers égaux.", "Le test d'égalité ne renvoie pas le résultat attendu.");
-	}
+			return "Le test d'egalite ne renvoie pas le resultat attendu.";
+	});
 
+	test.addSubTest("Comparaisons entiers egaux apres operations", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y(161803398874989);
 		x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
 		y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
 		if (x == y)
-			pass("Comparaison entiers égaux après opérations.");
+			return "";
 		else
-			fail("Comparaison entiers égaux après opérations.", "Le test d'égalité ne renvoie pas le résultat attendu.");
-	}
+			return "Le test d'egalite ne renvoie pas le resultat attendu.";
+	});
 
+	test.addSubTest("Comparaisons entiers differents", [](Test& test)->std::string
 	{
 		Int x(161803398874989), y(-161803398874989);
 		if (x != y)
-			pass("Comparaison entiers différents.");
+			return "";
 		else
-			fail("Comparaison entiers différents.", "Le test d'égalité ne renvoie pas le résultat attendu.");
-	}
+			return "Le test d'egalite ne renvoie pas le resultat attendu.";
+	});
 
+	test.addSubTest("Comparaisons autour de zero", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -628,7 +677,7 @@ void testEgalite()
 		if (!hasFailed && x != y)
 		{
 			hasFailed = true;
-			fail("Comparaison autour de zero", "Le test n°1 d'égalité ne renvoie pas le résultat attendu.");
+			return "Le test n°1 d'egalite ne renvoie pas le resultat attendu.";
 		}
 
 		x = -161803398874989;
@@ -637,7 +686,7 @@ void testEgalite()
 		if (!hasFailed && x != y)
 		{
 			hasFailed = true;
-			fail("Comparaison autour de zero", "Le test n°2 d'égalité ne renvoie pas le résultat attendu.");
+			return "Le test n°2 d'egalite ne renvoie pas le resultat attendu.";
 		}
 
 		x = -161803398874989;
@@ -646,19 +695,20 @@ void testEgalite()
 		if (!hasFailed && x != y)
 		{
 			hasFailed = true;
-			fail("Comparaison autour de zero", "Le test n°3 d'égalité ne renvoie pas le résultat attendu.");
+			return "Le test n°3 d'egalite ne renvoie pas le resultat attendu.";
 		}
 
 		if (!hasFailed)
-			pass("Comparaison autour de zero");
+			return "";
 
-	}
+	});
+
+	return "";
 }
 
-void testComparaison()
+std::string testComparaison(Test& test)
 {
-	displaySectionTitle("Test des opérateurs <= et >=");
-
+	test.addSubTest("Comparaisons entiers differents de meme signe", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -667,19 +717,20 @@ void testComparaison()
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Entiers différents de même signe.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && y >= x)
 		{
 			hasFailed = true;
-			fail("Entiers différents de même signe.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers différents de même signe.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers differents de signes differents", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -688,19 +739,20 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Entiers différents de signes différents.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && x >= y)
 		{
 			hasFailed = true;
-			fail("Entiers différents de signes différents.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers différents de signes différents.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers egaux positifs", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -709,19 +761,20 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Entiers égaux positifs.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Entiers égaux positifs.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers égaux positifs.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers egaux negatifs", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -730,19 +783,20 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Entiers égaux négatifs.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Entiers égaux négatifs.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers égaux négatifs.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons autour de zero", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -751,13 +805,13 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		x = -161803398874989;
@@ -767,13 +821,13 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°3 a échoué.");
+			return "La comparaison n°3 a echoue.";
 		}
 
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°4 a échoué.");
+			return "La comparaison n°4 a echoue.";
 		}
 
 		x = -161803398874989;
@@ -783,24 +837,25 @@ void testComparaison()
 		if (!hasFailed && !(y >= x))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°5 a échoué.");
+			return "La comparaison n°5 a echoue.";
 		}
 
 		if (!hasFailed && !(x >= y))
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°6 a échoué.");
+			return "La comparaison n°6 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Comparaisons autout de zero.");
-	}
+			return "";
+	});
+
+	return "";
 }
 
-void testComparaisonStricte()
+std::string testComparaisonStricte(Test& test)
 {
-	displaySectionTitle("Test des opérateurs < et >");
-
+	test.addSubTest("Comparaisons entiers differents de meme signe", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -809,19 +864,20 @@ void testComparaisonStricte()
 		if (!hasFailed && !(x > y))
 		{
 			hasFailed = true;
-			fail("Entiers différents de même signe.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Entiers différents de même signe.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers différents de même signe.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers differents de signes differents", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -830,19 +886,20 @@ void testComparaisonStricte()
 		if (!hasFailed && !(y > x))
 		{
 			hasFailed = true;
-			fail("Entiers différents de signes différents.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Entiers différents de signes différents.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers différents de signes différents.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers egaux positifs", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -851,19 +908,20 @@ void testComparaisonStricte()
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Entiers égaux positifs.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Entiers égaux positifs.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers égaux positifs.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons entiers egaux negatifs", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -872,19 +930,20 @@ void testComparaisonStricte()
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Entiers égaux négatifs.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Entiers égaux négatifs.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Entiers égaux négatifs.");
-	}
+			return "";
+	});
 
+	test.addSubTest("Comparaisons autour de zero", [](Test& test)->std::string
 	{
 		bool hasFailed(false);
 
@@ -893,13 +952,13 @@ void testComparaisonStricte()
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°1 a échoué.");
+			return "La comparaison n°1 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°2 a échoué.");
+			return "La comparaison n°2 a echoue.";
 		}
 
 		x = -161803398874989;
@@ -909,13 +968,13 @@ void testComparaisonStricte()
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°3 a échoué.");
+			return "La comparaison n°3 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°4 a échoué.");
+			return "La comparaison n°4 a echoue.";
 		}
 
 		x = -161803398874989;
@@ -925,197 +984,214 @@ void testComparaisonStricte()
 		if (!hasFailed && y > x)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°5 a échoué.");
+			return "La comparaison n°5 a echoue.";
 		}
 
 		if (!hasFailed && x > y)
 		{
 			hasFailed = true;
-			fail("Comparaisons autout de zero.", "La comparaison n°6 a échoué.");
+			return "La comparaison n°6 a echoue.";
 		}
 
 		if (!hasFailed)
-			pass("Comparaisons autout de zero.");
-	}
+			return "";
+	});
+
+	return "";
 }
 
-void testFlux()
+std::string testFlux(Test& test)
 {
-	displaySectionTitle("Test des opérations sur les flux");
-
+	test.addSubTest("Affichage de 0", [](Test& test)->std::string
 	{
 		Int x(0);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "0")
-			pass("Affichage 0.");
+			return "";
 		else
-			fail("Affichage 0.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affichage de -0", [](Test& test)->std::string
 	{
 		Int x(0);
 		std::stringstream stream;
 		stream << -x;
 		if (stream.str() == "0")
-			pass("Affichage -0.");
+			return "";
 		else
-			fail("Affichage -0.", "Résultat attendu: 0. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affichage d'entiers positifs", [](Test& test)->std::string
 	{
 		Int x(161803398874989);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "161803398874989")
-			pass("Affichage entier positif.");
+			return "";
 		else
-			fail("Affichage entier positif.", "Résultat attendu: 161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
 
+	test.addSubTest("Affichage d'entiers negatifs", [](Test& test)->std::string
 	{
 		Int x(-161803398874989);
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "-161803398874989")
-			pass("Affichage entier négatif.");
+			return "";
 		else
-			fail("Affichage entier négatif.", "Résultat attendu: -161803398874989. Résultat obtenu: " + stream.str() + ".");
-	}
+			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	return "";
 }
 
-void testDestructeur()
+std::string testDestructeur(Test& test)
 {
-	displaySectionTitle("Test du destructeur");
-
+	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
 	{
-		Int *x(new Int(161803398874989));
+		Int* x(new Int(161803398874989));
 		delete x;
-		pass("Destruction d'un entier simple.");
-	}
+		return "";
+	});
 
+	test.addSubTest("Destruction d'un entier cree par copie et de son original", [](Test& test)->std::string
 	{
-		Int *x(new Int(161803398874989)), *y(new Int(*x));
+		Int* x(new Int(161803398874989)), *y(new Int(*x));
 		delete x;
-		pass("Destruction de l'original d'un entier créé par copie.");
 		delete y;
-		pass("Destruction d'un entier créé par copie.");
-	}
+		return "";
+	});
 
+	test.addSubTest("Destruction d'un entier cree par deplacement et de son original", [](Test& test)->std::string
 	{
 		Int* x(new Int(161803398874989)), *y(new Int(std::move(*x)));
 		delete x;
-		pass("Destruction de l'original d'un entier créé par déplacement.");
 		delete y;
-		pass("Destruction d'un entier créé par déplacement.");
-	}
+		return "";
+	});
+
+	return "";
 }
 
-void testFonctionsInt()
+std::string testFonctionsInt(Test& test)
 {
-	displaySectionTitle("Test des fonctions définies en même temps que les Int");
-
+	test.addSubTest("Test expoRapide simple", [](Test& test)->std::string
 	{
 		int x(expoRapide(2, 16));
 		if (x == 65536)
-			pass("Test expoRapide simple.");
+			return "";
 		else
-			fail("Test expoRapide simple.", "Résultat attendu: 65536. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: 65536. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test expoRapide negatif", [](Test& test)->std::string
 	{
 		int x(expoRapide(-2, 11));
 		if (x == -2048)
-			pass("Test expoRapide négatif.");
+			return "";
 		else
-			fail("Test expoRapide négatif.", "Résultat attendu: -2048. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: -2048. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test expoRapide exposant nul", [](Test& test)->std::string
 	{
 		double x;
 		try
 		{
 			x = expoRapide(2.0, -10);
-			fail("Test expoRapide exposant nul.", "L'exposant nul a été accepté par la fonction expoRapide. Résultat obtenu: " + std::to_string(x));
+			return "L'exposant nul a ete accepte par la fonction expoRapide. Resultat obtenu: " + std::to_string(x);
 		}
 		catch (char const* e)
 		{
 			if (e == "Unexpected: n < 1")
-				pass("Test expoRapide exposant nul.");
+				return "";
 			else
-				fail("Test expoRapide exposant nul.", "L'erreur retournée n'est pas la bonne. Erreur retournée: " + std::string(e));
+				return "L'erreur retournee n'est pas la bonne. Erreur retournee: " + std::string(e);
 		}
-	}
+	});
 
+	test.addSubTest("Test PGCD simple", [](Test& test)->std::string
 	{
 		int x(pgcd(2755, 10353));
 		if (x == 29)
-			pass("Test PGCD simple.");
+			return "";
 		else
-			fail("Test PGCD simple.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: 29. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test PGCD negatif", [](Test& test)->std::string
 	{
 		int x(pgcd(-2755, 10353));
 		if (x == 29)
-			pass("Test PGCD négatif.");
+			return "";
 		else
-			fail("Test PGCD négatif.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: 29. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test PGCD double negatif", [](Test& test)->std::string
 	{
 		int x(pgcd(-2755, -10353));
 		if (x == 29)
-			pass("Test PGCD double négatif.");
+			return "";
 		else
-			fail("Test PGCD double négatif.", "Résultat attendu: 29. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: 29. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test PGCD nul", [](Test& test)->std::string
 	{
 		int x(pgcd(0, 10353));
 		if (x == 1)
-			pass("Test PGCD nul.");
+			return "";
 		else
-			fail("Test PGCD nul.", "Résultat attendu: 1. Résultat obtenu: " + std::to_string(x) + ".");
-	}
+			return "Resultat attendu: 1. Resultat obtenu: " + std::to_string(x) + ".";
+	});
 
+	test.addSubTest("Test binom simple", [](Test& test)->std::string
 	{
 		Int x(binom(20, 15));
 		if (x == 15504)
-			pass("Test binom simple.");
+			return "";
 		else
-			fail("Test binom simple.", "Résultat attendu: 15504. Résultat obtenu: " + x.toString() + ".");
-	}
+			return "Resultat attendu: 15504. Resultat obtenu: " + x.toString() + ".";
+	});
 
+	test.addSubTest("Test binom p negatif", [](Test& test)->std::string
 	{
 		Int x(binom(20, -1));
 		if (x == 0)
-			pass("Test binom p negatif.");
+			return "";
 		else
-			fail("Test binom p negatif.", "Résultat attendu: 0. Résultat obtenu: " + x.toString() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + x.toString() + ".";
+	});
 
+	test.addSubTest("Test binom p trop grand", [](Test& test)->std::string
 	{
 		Int x(binom(20, 21));
 		if (x == 0)
-			pass("Test binom p trop grand.");
+			return "";
 		else
-			fail("Test binom p trop grand.", "Résultat attendu: 0. Résultat obtenu: " + x.toString() + ".");
-	}
+			return "Resultat attendu: 0. Resultat obtenu: " + x.toString() + ".";
+	});
 
+	test.addSubTest("Test binom (0, 0)", [](Test& test)->std::string
 	{
 		Int x(binom(0, 0));
 		if (x == 1)
-			pass("Test binom (0, 0).");
+			return "";
 		else
-			fail("Test binom (0, 0).", "Résultat attendu: 1. Résultat obtenu: " + x.toString() + ".");
-	}
+			return "Resultat attendu: 1. Resultat obtenu: " + x.toString() + ".";
+	});
+
+	return "";
 }
 
-void testGeneraux()
+std::string testGeneraux(Test& test)
 {
-	displaySectionTitle("Test généraux");
-
+	test.addSubTest("Test aller-retour factorielle", [](Test& test)->std::string
 	{
 		Int x(1);
 		for (int i(1); i < 300; i++)
@@ -1127,37 +1203,39 @@ void testGeneraux()
 		std::stringstream stream;
 		stream << x;
 		if (stream.str() == "1")
-			pass("Test aller-retour factorielle.");
+			return "";
 		else
-			fail("Test aller-retour factorielle.", "La valeur obtenue n'est pas celle attendue. Valeur attendue: 1. Valeur obtenue: " + stream.str());
-	}
+			return "La valeur obtenue n'est pas celle attendue. Valeur attendue: 1. Valeur obtenue: " + stream.str();
+	});
+
+	return "";
 }
 
-void mainInt()
+std::string mainInt(Test& test)
 {
-	displayMainTitle("TEST DES ENTIERS");
+	test.addSubTest("Test des initialisations", &testInit);
+	test.addSubTest("Test des affectations", &testAffectation);
 
-	testInit();
-	testAffectation();
+	test.addSubTest("Test des additions", &testAddition);
+	test.addSubTest("Test des soustractions", &testSoustraction);
+	test.addSubTest("Test des multiplications", &testMultiplication);
+	test.addSubTest("Test des divisions", &testDivision);
+	test.addSubTest("Test des modulos", &testModulo);
+	test.addSubTest("Test des plus et moins unaires", &testUnaires);
 
-	testAddition();
-	testSoustraction();
-	testMultiplication();
-	testDivision();
-	testModulo();
-	testUnaires();
+	test.addSubTest("Test de la methode Int::toInt()", &testConversionInt);
 
-	testConversionInt();
+	test.addSubTest("Test des operateurs == et !=", &testEgalite);
+	test.addSubTest("Test des operateurs <= et >=", &testComparaison);
+	test.addSubTest("Test des operateurs < et >", &testComparaisonStricte);
 
-	testEgalite();
-	testComparaison();
-	testComparaisonStricte();
+	test.addSubTest("Test des operations sur les flux", &testFlux);
 
-	testFlux();
+	test.addSubTest("Test du destructeur", &testDestructeur);
 
-	testDestructeur();
+	test.addSubTest("Test des fonctions definies en meme temps que les Int", &testFonctionsInt);
 
-	testFonctionsInt();
+	test.addSubTest("Test generaux", &testGeneraux);
 
-	testGeneraux();
+	return "";
 }

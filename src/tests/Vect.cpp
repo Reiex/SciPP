@@ -1,6 +1,6 @@
 #include "main.h"
 
-void mainVect()
+std::string mainVect(Test& test)
 {
-	displayMainTitle("TEST DES VECTEURS");
+	return "";
 }

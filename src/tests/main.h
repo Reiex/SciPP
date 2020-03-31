@@ -1,19 +1,14 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <limits.h>
 #include "../SciPP/SciPP.h"
+#include "Test.h"
 
 
-void displayMainTitle(std::string const& title);
-void displaySectionTitle(std::string const& title);
-void pass(std::string const& message);
-void fail(std::string const& message, std::string const& reason);
-
-void mainInt();
-void mainFrac();
-void mainVect();
-void mainPolynome();
-void mainMatrice();
+std::string mainInt(Test& test);
+std::string mainFrac(Test& test);
+std::string mainVect(Test& test);
+std::string mainPolynome(Test& test);
+std::string mainMatrice(Test& test);

@@ -1,6 +1,6 @@
 #include "main.h"
 
-void mainPolynome()
+std::string mainPolynome(Test& test)
 {
-	displayMainTitle("TEST DES POLYNOMES");
+	return "";
 }
