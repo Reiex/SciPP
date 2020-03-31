@@ -46,9 +46,9 @@ std::string Test::operator()(int level, int detail)
 
 	if (level == detail)
 		if (retour.size() > 0)
-			std::cout << "\033[0;31m[FAILED]\033[0m " << m_title << std::endl << retour;
+			std::cout << "\e[0;31m[FAILED]\e[0m " << m_title << std::endl << retour;
 		else
-			std::cout << "\033[0;32m[PASSED]\033[0m " << m_title << std::endl;
+			std::cout << "\e[0;32m[PASSED]\e[0m " << m_title << std::endl;
 
 	return retour;
 }
@@ -72,16 +72,16 @@ void Test::displayTitle(int difference) const
 	int size(m_title.size() + 2), lineLength(80);
 	if (difference == 1)
 	{
-		std::cout << std::endl << std::string((lineLength-size)/2 + size % 2, '-') << " " << m_title << " " << std::string((lineLength-size)/2, '-') << std::endl;
+		std::cout << std::endl << "\e[0;33m" << std::string((lineLength-size)/2 + size % 2, '-') << " " << m_title << " " << std::string((lineLength-size)/2, '-') << "\e[0m" << std::endl;
 	}
 	else if (difference == 2)
 	{
-		std::cout << std::endl << std::string((lineLength-size)/2 + size % 2, '#') << " " << m_title << " " << std::string((lineLength-size)/2, '#') << std::endl;
+		std::cout << std::endl << "\e[0;33m" << std::string((lineLength-size)/2 + size % 2, '#') << " " << m_title << " " << std::string((lineLength-size)/2, '#') << "\e[0m" << std::endl;
 	}
 	else
 	{
-		std::cout << "+" << std::string(78, '=') << "+" << std::endl;
+		std::cout << "\e[0;33m" << "+" << std::string(78, '=') << "+" << std::endl;
 		std::cout << "|" << std::string((lineLength-size)/2 + size % 2, ' ') << m_title << std::string((lineLength-size)/2, ' ') << "|" << std::endl;
-		std::cout << "+" << std::string(78, '=') << "+" << std::endl << std::endl;
+		std::cout << "+" << std::string(78, '=') << "+" << "\e[0m" << std::endl << std::endl;
 	}
 }
