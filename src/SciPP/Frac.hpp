@@ -64,7 +64,10 @@ template<typename T> class Frac
 
 		/** \brief Constructeur par défaut, initialise la fraction à T(0)/T(1) */
 		Frac();
-		/** \brief Initialise la fraction à T(x)/T(1) */
+		/** 
+		 * \brief Initialise la fraction à T(x)/T(1)
+		 * \bug Pour *T* = *int*, il y a conflit avec Frac(T const&) et la construction ne peut pas se faire
+		*/
 		Frac(int x);
 		/** \brief Initialise la fraction à T(x)/T(1) */
 		Frac(T const& x);
