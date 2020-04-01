@@ -29,7 +29,7 @@
 template<typename T> T expoRapide(T const& x, int n)
 {
 	if (n < 1)
-		throw "Unexpected: n < 1";
+		throw std::string("Unexpected: n < 1");
 
 	if (n == 1)
 		return x;

@@ -5,71 +5,49 @@ static std::string testInit(Test& test)
 {
 	test.addSubTest("Initialisation par defaut", [](Test& test)->std::string
 	{
-		Int x;
+		Frac<long long int> x;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "0")
+		if (stream.str() == "(0/1)")
 			return "";
 		else
-			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (0/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Initialisation entier nul", [](Test& test)->std::string
 	{
-		Int x(0);
+		Frac<long long int> x(0);
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "0")
+		if (stream.str() == "(0/1)")
 			return "";
 		else
-			return "Resultat attendu: 0. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (0/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Initialisation entier positif", [](Test& test)->std::string
 	{
-		Int x(161803398874989);
+		Frac<long long int> x(1618);
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "161803398874989")
+		if (stream.str() == "(1618/1)")
 			return "";
 		else
-			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (1618/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Initialisation entier negatif", [](Test& test)->std::string
 	{
-		Int x(-161803398874989);
+		Frac<long long int> x(-1618);
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-161803398874989")
+		if (stream.str() == "(-1618/1)")
 			return "";
 		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (-1618/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Initialisation par copie", [](Test& test)->std::string
-	{
-		Int x(31415926535), y(x);
-		std::stringstream stream;
-		stream << y;
-		if (stream.str() == "31415926535")
-			return "";
-		else
-			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Initialisation par deplacement", [](Test& test)->std::string
-	{
-		Int x(31415926535), y(std::move(x));
-		std::stringstream stream;
-		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "31415926535")
-			return "";
-		else
-			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
-	});
+	// Différentes initialisations avec T et T, T
 
 	return "";
 }
