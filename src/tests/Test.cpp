@@ -76,10 +76,11 @@ void Test::displayTitle(int difference) const
 	}
 	else if (difference == 2)
 	{
-		std::cout << std::endl << "\e[0;33m" << std::string((lineLength-size)/2 + size % 2, '#') << " " << m_title << " " << std::string((lineLength-size)/2, '#') << "\e[0m" << std::endl;
+		std::cout << std::endl << std::endl << "\e[0;33m" << std::string((lineLength-size)/2 + size % 2, '#') << " " << m_title << " " << std::string((lineLength-size)/2, '#') << "\e[0m" << std::endl;
 	}
 	else
 	{
+		std::cout << std::endl << std::endl << std::endl;
 		std::cout << "\e[0;33m" << "+" << std::string(78, '=') << "+" << std::endl;
 		std::cout << "|" << std::string((lineLength-size)/2 + size % 2, ' ') << m_title << std::string((lineLength-size)/2, ' ') << "|" << std::endl;
 		std::cout << "+" << std::string(78, '=') << "+" << "\e[0m" << std::endl << std::endl;
