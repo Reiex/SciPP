@@ -10,6 +10,7 @@
 */
 
 #include <iostream>
+#include <exception>
 #include <string>
 #include <sstream>
 #include "Int.hpp"
@@ -55,6 +56,12 @@ template<typename T> class Frac
 {
 	public:
 
+		class ZeroDivisionException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
 		/** \brief Constructeur par défaut, initialise la fraction à T(0)/T(1) */
 		Frac();
 		/** \brief Initialise la fraction à T(x)/T(1) */
@@ -87,6 +94,11 @@ template<typename T> class Frac
 
 // Constructeurs
 
+template<typename T> const char* Frac<T>::ZeroDivisionException::what() const throw()
+{
+	return "Tentative de division par zero.";
+}
+
 template<typename T> Frac<T>::Frac()
 {
 	m_p = T(0);
@@ -108,7 +120,7 @@ template<typename T> Frac<T>::Frac(T const& x)
 template<typename T> Frac<T>::Frac(T const& p, T const& q)
 {
 	if (q == T(0))
-		throw "Division par zero.";
+		throw ZeroDivisionException();
 
 	m_p = p;
 	m_q = q;
