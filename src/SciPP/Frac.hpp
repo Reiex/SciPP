@@ -56,6 +56,9 @@ template<typename T> class Frac
 {
 	public:
 
+		/**
+		 * \brief Erreur renvoyée lors d'une tentative de division par zero dans une fraction
+		*/
 		class ZeroDivisionException : public std::exception
 		{
 			public:
@@ -127,6 +130,8 @@ template<typename T> Frac<T>::Frac(T const& p, T const& q)
 
 	m_p = p;
 	m_q = q;
+
+	simplifier();
 }
 
 
@@ -271,9 +276,13 @@ template<typename T> void Frac<T>::simplifier()
 		m_p = -m_p;
 	}
 
-	T x;
-	x = pgcd(m_p, m_q);
+	if (m_p == 0)
+	{
+		m_q = 1;
+		return;
+	}
 
+	T x(pgcd(m_p, m_q));
 	m_p /= x;
 	m_q /= x;
 }
