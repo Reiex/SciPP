@@ -263,56 +263,28 @@ static std::string testDivision(Test& test)
 
 static std::string testUnaires(Test& test)
 {
-	test.addSubTest("Moins unaire par creation d'un nouvel Int", [](Test& test)->std::string
+	test.addSubTest("Moins unaire", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y;
+		Frac<long long int> x(161803398874989, 31415926535), y;
 		y = -x;
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "-161803398874989")
+		if (stream.str() == "(-161803398874989/31415926535)")
 			return "";
 		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (-161803398874989/31415926535). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Plus unaire par creation d'un nouvel Int", [](Test& test)->std::string
+	test.addSubTest("Plus unaire", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y;
+		Frac<long long int> x(161803398874989, 31415926535), y;
 		y = +x;
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "161803398874989")
+		if (stream.str() == "(161803398874989/31415926535)")
 			return "";
 		else
-			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Moins unaire par deplacement", [](Test& test)->std::string
-	{
-		Int x(161803398874989), y;
-		y = -std::move(x);
-		std::stringstream stream;
-		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Plus unaire par deplacement", [](Test& test)->std::string
-	{
-		Int x(161803398874989), y;
-		y = +std::move(x);
-		std::stringstream stream;
-		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "161803398874989")
-			return "";
-		else
-			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (161803398874989/31415926535). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
