@@ -237,12 +237,12 @@ template<typename T> Frac<T> Frac<T>::operator+()
 
 template<typename T> bool operator==(Frac<T> const& a, Frac<T> const& b)
 {
-	return a.numerateur()*b.denominateur() == b.numerateur()*a.denominateur();
+	return a.numerateur() == b.numerateur() && a.denominateur() == b.denominateur();
 }
 
 template<typename T> bool operator!=(Frac<T> const& a, Frac<T> const& b)
 {
-	return a.numerateur()*b.denominateur() != b.numerateur()*a.denominateur();
+	return !(a == b);
 }
 
 template<typename T> bool operator>(Frac<T> const& a, Frac<T> const& b)
@@ -252,7 +252,7 @@ template<typename T> bool operator>(Frac<T> const& a, Frac<T> const& b)
 
 template<typename T> bool operator<(Frac<T> const& a, Frac<T> const& b)
 {
-	return a.numerateur()*b.denominateur() < b.numerateur()*a.denominateur();
+	return !(a >= b);
 }
 
 template<typename T> bool operator>=(Frac<T> const& a, Frac<T> const& b)
@@ -262,7 +262,7 @@ template<typename T> bool operator>=(Frac<T> const& a, Frac<T> const& b)
 
 template<typename T> bool operator<=(Frac<T> const& a, Frac<T> const& b)
 {
-	return a.numerateur()*b.denominateur() <= b.numerateur()*a.denominateur();
+	return !(a > b);
 }
 
 

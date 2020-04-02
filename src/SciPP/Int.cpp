@@ -705,17 +705,7 @@ bool operator>(Int const& x, Int const& y)
 
 bool operator<(Int const& x, Int const& y)
 {
-	if (x.m_positif != y.m_positif)
-		return !x.m_positif;
-
-	if (x.m_taille != y.m_taille)
-		return (x.m_positif == (x.m_taille < y.m_taille));
-
-	for (int i(x.m_taille - 1); i >= 0; i--)
-		if (x.m_x[i] != y.m_x[i])
-			return (x.m_positif == (x.m_x[i] < y.m_x[i]));
-
-	return false;
+	return !(x >= y);
 }
 
 bool operator>=(Int const& x, Int const& y)
@@ -735,17 +725,7 @@ bool operator>=(Int const& x, Int const& y)
 
 bool operator<=(Int const& x, Int const& y)
 {
-	if (x.m_positif != y.m_positif)
-		return !x.m_positif;
-
-	if (x.m_taille != y.m_taille)
-		return (x.m_positif == (x.m_taille < y.m_taille));
-
-	for (int i(x.m_taille - 1); i >= 0; i--)
-		if (x.m_x[i] != y.m_x[i])
-			return (x.m_positif == (x.m_x[i] < y.m_x[i]));
-
-	return true;
+	return !(x > y);
 }
 
 
