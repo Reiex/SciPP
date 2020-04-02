@@ -236,54 +236,26 @@ static std::string testDivision(Test& test)
 {
 	test.addSubTest("Division en place", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618);
+		Frac<long long int> x(231, 185), y(715, 399);
 		x /= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-19416518")
+		if (stream.str() == "(8379/12025)")
 			return "";
 		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (8379/12025). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Division externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Division externe", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618), z;
+		Frac<long long int> x(231, 185), y(715, 399), z;
 		z = x / y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-19416518")
+		if (stream.str() == "(8379/12025)")
 			return "";
 		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Division externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
-		z = std::move(x) / y;
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-19416518")
-			return "";
-		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Division externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
-		z = std::move(x) / std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-19416518")
-			return "";
-		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (8379/12025). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
