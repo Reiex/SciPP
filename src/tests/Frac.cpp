@@ -47,34 +47,99 @@ static std::string testInit(Test& test)
 			return "Resultat attendu: (-1618/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	// Différentes initialisations avec T et T, T
+	test.addSubTest("Initialisation T const&", [](Test& test)->std::string
+	{
+		Frac<long long int> x((long long int) 161803398874989);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(161803398874989/1)")
+			return "";
+		else
+			return "Resultat attendu: (161803398874989/1). Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Initialisation (T const&, T const&)", [](Test& test)->std::string
+	{
+		Frac<long long int> x(161803398874989, 31415926535);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(161803398874989/31415926535)")
+			return "";
+		else
+			return "Resultat attendu: (161803398874989/31415926535). Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Initialisation (T const&, T(0))", [](Test& test)->std::string
+	{
+		try
+		{
+			Frac<long long int> x(161803398874989, 0);
+			return "La fraction a ete accepte avec 0 comme denominateur";
+		}
+		catch (Frac<long long int>::ZeroDivisionException& e)
+		{
+			return "";
+		}
+	});
 
 	return "";
 }
 
-static std::string testDestructeur(Test& test)
+static std::string testSimplification(Test& test)
 {
-	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
+	test.addSubTest("Simplification (int > 0, int > 0)", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989));
-		delete x;
-		return "";
+		Frac<long long int> x(11067, 5115);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(119/55)")
+			return "";
+		else
+			return "Resultat attendu: (119/55). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Destruction d'un entier cree par copie et de son original", [](Test& test)->std::string
+	test.addSubTest("Simplification (0, int > 0)", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989)), * y(new Int(*x));
-		delete x;
-		delete y;
-		return "";
+		Frac<long long int> x(0, 5115);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(0/1)")
+			return "";
+		else
+			return "Resultat attendu: (0/1). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Destruction d'un entier cree par deplacement et de son original", [](Test& test)->std::string
+	test.addSubTest("Simplification (int < 0, int > 0)", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989)), * y(new Int(std::move(*x)));
-		delete x;
-		delete y;
-		return "";
+		Frac<long long int> x(-11067, 5115);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(-119/55)")
+			return "";
+		else
+			return "Resultat attendu: (-119/55). Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Simplification (int > 0, int < 0)", [](Test& test)->std::string
+	{
+		Frac<long long int> x(11067, -5115);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(-119/55)")
+			return "";
+		else
+			return "Resultat attendu: (-119/55). Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Simplification (int < 0, int < 0)", [](Test& test)->std::string
+	{
+		Frac<long long int> x(-11067, -5115);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "(119/55)")
+			return "";
+		else
+			return "Resultat attendu: (119/55). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
@@ -853,7 +918,7 @@ static std::string testGeneraux(Test& test)
 std::string mainFrac(Test& test)
 {
 	test.addSubTest("Test des initialisations", &testInit);
-	test.addSubTest("Test du destructeur", &testDestructeur);
+	test.addSubTest("Test de la simplification des fractions", &testSimplification);
 
 	test.addSubTest("Test des additions", &testAddition);
 	test.addSubTest("Test des soustractions", &testSoustraction);

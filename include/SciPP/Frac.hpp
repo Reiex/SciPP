@@ -56,6 +56,9 @@ template<typename T> class Frac
 {
 	public:
 
+		/**
+		 * \brief Erreur renvoyée lors d'une tentative de division par zero dans une fraction
+		*/
 		class ZeroDivisionException : public std::exception
 		{
 			public:
@@ -64,7 +67,10 @@ template<typename T> class Frac
 
 		/** \brief Constructeur par défaut, initialise la fraction à T(0)/T(1) */
 		Frac();
-		/** \brief Initialise la fraction à T(x)/T(1) */
+		/** 
+		 * \brief Initialise la fraction à T(x)/T(1)
+		 * \bug Pour *T* = *int*, il y a conflit avec Frac(T const&) et la construction ne peut pas se faire
+		*/
 		Frac(int x);
 		/** \brief Initialise la fraction à T(x)/T(1) */
 		Frac(T const& x);
@@ -124,6 +130,8 @@ template<typename T> Frac<T>::Frac(T const& p, T const& q)
 
 	m_p = p;
 	m_q = q;
+
+	simplifier();
 }
 
 
@@ -268,9 +276,13 @@ template<typename T> void Frac<T>::simplifier()
 		m_p = -m_p;
 	}
 
-	T x;
-	x = pgcd(m_p, m_q);
+	if (m_p == 0)
+	{
+		m_q = 1;
+		return;
+	}
 
+	T x(pgcd(m_p, m_q));
 	m_p /= x;
 	m_q /= x;
 }
