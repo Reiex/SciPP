@@ -178,68 +178,26 @@ static std::string testSoustraction(Test& test)
 {
 	test.addSubTest("Soustraction en place", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887);
+		Frac<long long int> x(231, 185), y(715, 399);
 		x -= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-15235586649")
+		if (stream.str() == "(-40106/73815)")
 			return "";
 		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (-40106/73815). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Soustraction externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Soustraction externe", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887), z;
+		Frac<long long int> x(231, 185), y(715, 399), z;
 		z = x - y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-15235586649")
+		if (stream.str() == "(-40106/73815)")
 			return "";
 		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Soustraction externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
-	{
-		Int x(-31415926536), y(-16180339887), z;
-		z = std::move(x) - y;
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Soustraction externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(-31415926536), y(-16180339887), z;
-		z = x - std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (y.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Soustraction externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(-31415926536), y(-16180339887), z;
-		z = std::move(x) - std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (-40106/73815). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
