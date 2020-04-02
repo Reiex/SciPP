@@ -207,68 +207,26 @@ static std::string testMultiplication(Test& test)
 {
 	test.addSubTest("Multiplication en place", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618);
+		Frac<long long int> x(231, 185), y(715, 399);
 		x *= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-50831088")
+		if (stream.str() == "(1573/703)")
 			return "";
 		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (1573/703). Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Multiplication externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Multiplication externe", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618), z;
+		Frac<long long int> x(231, 185), y(715, 399), z;
 		z = x * y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-50831088")
+		if (stream.str() == "(1573/703)")
 			return "";
 		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Multiplication externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
-	{
-		Int x(31416), y(-1618), z;
-		z = std::move(x) * y;
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Multiplication externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31416), y(-1618), z;
-		z = x * std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (y.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Multiplication externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31416), y(-1618), z;
-		z = std::move(x) * std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: (1573/703). Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
