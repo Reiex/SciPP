@@ -22,11 +22,17 @@ Rationnel::Rationnel(double x)
 	if (x == 0)
 		*this = 0;
 
-	Int num(0), denom(1);
+	Int num(0), denom(1), mult(1);
 	bool neg(x < 0);
 
 	if (neg)
 		x = -x;
+
+	while (x >= 10)
+	{
+		x /= 10;
+		mult *= 10;
+	}
 
 	while (x < 1)
 	{
@@ -34,7 +40,7 @@ Rationnel::Rationnel(double x)
 		denom *= 10;
 	}
 
-	for (int i(0); i < 20; i++)
+	for (int i(0); i < 16; i++)
 	{
 		if (x < 1)
 		{
@@ -46,7 +52,7 @@ Rationnel::Rationnel(double x)
 		x = x - int(x - int(x/10)*10);
 	}
 
-	*this = Rationnel(num, denom);
+	*this = Rationnel((1 - 2*neg)*num*mult, denom);
 }
 
 Rationnel::Rationnel(Frac<Int> const& x) : Frac<Int>(x.numerateur(), x.denominateur())

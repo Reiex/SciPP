@@ -300,7 +300,7 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 // Rationnels
 
 /** \brief Approche la valeur de \f$\pi\f$ */
-long double const PI = 3.141592653589793238;
+long double const PI = 3.141592653589793239;
 /** \brief Approche la valeur de \f$e\f$ */
 long double const E = 2.718281828459045235;
 
@@ -320,7 +320,11 @@ class Rationnel: public Frac<Int>
 		Rationnel(Int const& x);
 		/** \brief Initialise le nombre rationnel à p/q */
 		Rationnel(Int const& p, Int const& q);
-		/** \brief Initialise le nombre à une fraction approchée de x */
+		/**
+		 * \brief Initialise le nombre à une fraction approchée de x.
+		 *
+		 * On garanti, pour un nombre d'ordre de grandeur 1 une précision de l'approximation à \f$10^{-15}\f$ près.
+		*/
 		Rationnel(double x);
 		Rationnel(Frac<Int> const& x);
 };
