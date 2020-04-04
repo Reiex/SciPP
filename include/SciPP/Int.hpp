@@ -106,6 +106,15 @@ class Int
 		Int& operator=(Int const& x);
 		Int& operator=(Int&& x);
 
+		/**
+		 * \brief Erreur renvoyée lors d'une tentative de division par zero
+		*/
+		class ZeroDivisionException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
 		Int& operator+=(Int const& x);
 		Int& operator-=(Int const& x);
 		Int& operator*=(Int const& x);

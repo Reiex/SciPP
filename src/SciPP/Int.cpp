@@ -2,13 +2,13 @@
 
 // Constructeurs
 
-Int::Int()
+Int::Int() :
+	m_taille(1),
+	m_x(new uint8_t[m_taille]),
+	m_positif(true),
+	m_actif(true)
 {
-	m_taille = 1;
-	m_x = new uint8_t[m_taille];
 	m_x[0] = 0;
-	m_positif = true;
-	m_actif = true;
 }
 
 Int::Int(long long int x)
@@ -36,25 +36,22 @@ Int::Int(long long int x)
 	m_actif = true;
 }
 
-Int::Int(Int const& x)
+Int::Int(Int const& x):
+	m_positif(x.m_positif),
+	m_taille(x.m_taille),
+	m_x(new uint8_t[m_taille]),
+	m_actif(x.m_actif)
 {
-	m_positif = x.m_positif;
-	m_taille = x.m_taille;
-
-	m_x = new uint8_t[m_taille];
 	for (int i(0); i < m_taille; i++)
 		m_x[i] = x.m_x[i];
-
-	m_actif = x.m_actif;
 }
 
-Int::Int(Int&& x)
+Int::Int(Int&& x):
+	m_positif(x.m_positif),
+	m_taille(x.m_taille),
+	m_x(x.m_x),
+	m_actif(x.m_actif)
 {
-	m_positif = x.m_positif;
-	m_taille = x.m_taille;
-	m_x = x.m_x;
-	m_actif = x.m_actif;
-
 	x.m_actif = false;
 }
 
@@ -94,6 +91,11 @@ Int& Int::operator=(Int&& x)
 
 
 // Operations
+
+const char* Int::ZeroDivisionException::what() const throw()
+{
+	return "Tentative de division par zero.";
+}
 
 Int& Int::operator+=(Int const& x)
 {
@@ -364,7 +366,7 @@ int getNbBits(uint8_t x)
 Int& Int::operator/=(Int const& x)
 {
 	if (x == 0)
-		throw "Division par 0";
+		throw ZeroDivisionException();
 
 	int tailleBits((m_taille - 1)* 8 + getNbBits(m_x[m_taille - 1]));
 	int xTailleBits((x.m_taille - 1)* 8 + getNbBits(x.m_x[x.m_taille - 1]));

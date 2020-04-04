@@ -39,7 +39,7 @@ template<typename T> class Vect
 {
 	public:
 
-		/** \brief Constructeur par défaut, la taille du vecteur vaut 0. */
+		/** \brief Constructeur par défaut, construit un vecteur de taille nulle. */
 		Vect();
 		Vect(Vect<T> const& v);
 		Vect(Vect<T>&& v);

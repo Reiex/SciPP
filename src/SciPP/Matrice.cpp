@@ -95,7 +95,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 			else
 				fHat[i][j] /= (kx[j] * kx[j] + ky[i] * ky[i]);
 
-	// Calcul de la matrice complexe du r�sultat par transform�e inverse
+	// Calcul de la matrice complexe du résultat par transformée inverse
 
 	Matrice<std::complex<long double>> psiBar(IDFT2D(fHat));
 

@@ -387,7 +387,7 @@ static std::string testMultiplication(Test& test)
 
 static std::string testDivision(Test& test)
 {
-	test.addSubTest("Division en place", [](Test& test)->std::string
+	test.addSubTest("Division en place normale", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618);
 		x /= y;
@@ -397,6 +397,22 @@ static std::string testDivision(Test& test)
 			return "";
 		else
 			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Division par zero", [](Test& test)->std::string
+	{
+		try
+		{
+			Int x(31415926536);
+			x /= 0;
+			std::stringstream stream;
+			stream << x;
+			return "La division par zero a eu lieu. Valeur obtenue: " + stream.str() + ".";
+		}
+		catch (Int::ZeroDivisionException& e)
+		{
+			return "";
+		}
 	});
 
 	test.addSubTest("Division externe Int(Int const&, Int const&)", [](Test& test)->std::string
@@ -444,7 +460,7 @@ static std::string testDivision(Test& test)
 
 static std::string testModulo(Test& test)
 {
-	test.addSubTest("Modulo en place", [](Test& test)->std::string
+	test.addSubTest("Modulo en place normal", [](Test& test)->std::string
 	{
 		Int x(31415926536), y(-1618);
 		x %= y;
@@ -454,6 +470,22 @@ static std::string testModulo(Test& test)
 			return "";
 		else
 			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Modulo par zero", [](Test& test)->std::string
+	{
+		try
+		{
+			Int x(31415926536);
+			x %= 0;
+			std::stringstream stream;
+			stream << x;
+			return "Le modulo par zero a eu lieu. Valeur obtenue: " + stream.str() + ".";
+		}
+		catch (Int::ZeroDivisionException& e)
+		{
+			return "";
+		}
 	});
 
 	test.addSubTest("Modulo externe Int(Int const&, Int const&)", [](Test& test)->std::string
