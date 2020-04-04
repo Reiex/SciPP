@@ -81,12 +81,9 @@ template<typename T> class Matrice
 	private:
 
 		void liberer();
-		void copier(Matrice<T> const& M);
 
 		Vect<T>* m_lignes;
 		Vect<int> m_taille;
-
-		bool m_actif;
 };
 
 
@@ -96,13 +93,9 @@ template<typename T> Matrice<T>::Matrice()
 {
 	m_lignes = nullptr;
 	m_taille = Vect<int>(2);
-	m_taille[0] = 0;
-	m_taille[1] = 0;
-
-	m_actif = false;
 }
 
-template<typename T> Matrice<T>::Matrice(int m, int n)
+template<typename T> Matrice<T>::Matrice(int m, int n) : Matrice<T>()
 {
 	if (m > 0 && n > 0)
 	{
@@ -113,37 +106,20 @@ template<typename T> Matrice<T>::Matrice(int m, int n)
 		m_lignes = new Vect<T>[m];
 		for (int i(0); i < m; i++)
 			m_lignes[i] = Vect<T>(n);
-
-		m_actif = true;
-	}
-	else
-	{
-		m_lignes = nullptr;
-		m_taille = Vect<int>(2);
-		m_taille[0] = 0;
-		m_taille[1] = 0;
-
-		m_actif = false;
 	}
 }
 
-template<typename T> Matrice<T>::Matrice(Matrice<T> const& M)
+template<typename T> Matrice<T>::Matrice(Matrice<T> const& M) : Matrice<T>()
 {
-	copier(M);
-
-	m_actif = M.m_actif;
+	*this = M;
 }
 
-template<typename T> Matrice<T>::Matrice(Matrice<T>&& M)
+template<typename T> Matrice<T>::Matrice(Matrice<T>&& M) : Matrice<T>()
 {
-	m_taille = M.m_taille;
-	m_lignes = M.m_lignes;
-
-	m_actif = M.m_actif;
-	M.m_actif = false;
+	*this = std::move(M);
 }
 
-template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n)
+template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n) : Matrice<T>()
 {
 	if (m > 0 && n > 0)
 	{
@@ -158,37 +134,20 @@ template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n)
 			for (int j(0); j < n; j++)
 				m_lignes[i][j] = tab[i*n + j];
 		}
-
-		m_actif = true;
-	}
-	else
-	{
-		m_lignes = nullptr;
-		m_taille = Vect<int>(2);
-		m_taille[0] = 0;
-		m_taille[1] = 0;
-
-		m_actif = false;
 	}
 }
 
 
 // Copie et mouvement
 
-template<typename T> void Matrice<T>::copier(Matrice<T> const& M)
+template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T> const& M)
 {
+	liberer();
+	
 	m_taille = M.m_taille;
 	m_lignes = new Vect<T>[m_taille[0]];
 	for (int i(0); i < m_taille[0]; i++)
 		m_lignes[i] = M.m_lignes[i];
-}
-
-template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T> const& M)
-{
-	liberer();
-	copier(M);
-
-	m_actif = M.m_actif;
 
 	return *this;
 }
@@ -200,8 +159,8 @@ template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T>&& M)
 	m_taille = M.m_taille;
 	m_lignes = M.m_lignes;
 
-	m_actif = M.m_actif;
-	M.m_actif = false;
+	M.m_taille = Vect<int>(2);
+	M.m_lignes = nullptr;
 
 	return *this;
 }
@@ -232,7 +191,7 @@ template<typename T> Vect<int> const& Matrice<T>::taille() const
 
 template<typename T> void Matrice<T>::changerTaille(int m, int n)
 {
-	Vect<T>* lignesTmp = m_lignes;
+	Vect<T>* lignesTmp(m_lignes);
 
 	m_lignes = new Vect<T>[m];
 	for (int i(0); i < m; i++)
@@ -248,10 +207,11 @@ template<typename T> void Matrice<T>::changerTaille(int m, int n)
 		}
 	}
 
+	if (lignesTmp != nullptr)
+		delete[] lignesTmp;
+
 	m_taille[0] = m;
 	m_taille[1] = n;
-
-	delete[] lignesTmp;
 }
 
 
@@ -542,13 +502,16 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Matrice<T> c
 
 template<typename T> void Matrice<T>::liberer()
 {
-	delete[] m_lignes;
+	if (m_lignes != nullptr)
+		delete[] m_lignes;
+	
+	m_lignes = nullptr;
+	m_taille = Vect<int>(2);
 }
 
 template<typename T> Matrice<T>::~Matrice()
 {
-	if (m_actif)
-		liberer();
+	liberer();
 }
 
 

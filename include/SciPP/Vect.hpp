@@ -56,6 +56,7 @@ template<typename T> class Vect
 		/** \brief Retourne la taille du vecteur */
 		int taille() const;
 		/**
+		 * \deprecated Cette méthode devra être supprimée dès que de meilleurs conteneurs seront au point.
 		 * \brief Change la taille du vecteur
 		 * 
 		 * - Si la nouvelle taille est supérieure à la première, les valeurs actuelles sont gardées au début du vecteur
@@ -68,6 +69,8 @@ template<typename T> class Vect
 		Vect<T>& operator-=(Vect<T> const& v);
 		Vect<T>& operator*=(T x);
 		Vect<T>& operator/=(T x);
+		Vect<T> operator+();
+		Vect<T> operator-();
 
 		~Vect();
 
@@ -202,6 +205,11 @@ template<typename T> Vect<T>& Vect<T>::operator+=(Vect<T> const& v)
 	return *this;
 }
 
+template<typename T> Vect<T> Vect<T>::operator+()
+{
+	return *this;
+}
+
 template<typename T> Vect<T> operator+(Vect<T> const& u, Vect<T> const& v)
 {
 	Vect<T> w(u);
@@ -209,6 +217,25 @@ template<typename T> Vect<T> operator+(Vect<T> const& u, Vect<T> const& v)
 
 	return w;
 }
+
+template<typename T> Vect<T>& operator+(Vect<T>&& u, Vect<T> const& v)
+{
+	u += v;
+	return u;
+}
+
+template<typename T> Vect<T>& operator+(Vect<T> const& u, Vect<T>&& v)
+{
+	v += u;
+	return v;
+}
+
+template<typename T> Vect<T>& operator+(Vect<T>&& u, Vect<T>&& v)
+{
+	u += v;
+	return u;
+}
+
 
 template<typename T> Vect<T>& Vect<T>::operator-=(Vect<T> const& v)
 {
@@ -221,6 +248,16 @@ template<typename T> Vect<T>& Vect<T>::operator-=(Vect<T> const& v)
 	return *this;
 }
 
+template<typename T> Vect<T> Vect<T>::operator-()
+{
+	Vect<T> v(*this);
+
+	for (int i(0); i < m_n; i++)
+		v.m_x[i] = -v.m_x[i];
+
+	return v;
+}
+
 template<typename T> Vect<T> operator-(Vect<T> const& u, Vect<T> const& v)
 {
 	Vect<T> w(u);
@@ -228,6 +265,19 @@ template<typename T> Vect<T> operator-(Vect<T> const& u, Vect<T> const& v)
 
 	return w;
 }
+
+template<typename T> Vect<T>& operator-(Vect<T>&& u, Vect<T> const& v)
+{
+	u -= v;
+	return u;
+}
+
+template<typename T> Vect<T>& operator-(Vect<T>&& u, Vect<T>&& v)
+{
+	u -= v;
+	return u;
+}
+
 
 template<typename T> Vect<T>& Vect<T>::operator*=(T x)
 {
@@ -250,6 +300,18 @@ template<typename T> Vect<T> operator*(T x, Vect<T> const& v)
 	return v*x;
 }
 
+template<typename T> Vect<T>& operator*(Vect<T>&& v, T x)
+{
+	v *= x;
+	return v;
+}
+
+template<typename T> Vect<T>& operator*(T x, Vect<T>&& v)
+{
+	return std::move(v) * x;
+}
+
+
 template<typename T> Vect<T>& Vect<T>::operator/=(T x)
 {
 	for (int i(0); i < m_n; i++)
@@ -265,6 +327,13 @@ template<typename T> Vect<T> operator/(Vect<T> const& v, T x)
 
 	return w;
 }
+
+template<typename T> Vect<T> operator/(Vect<T>&& v, T x)
+{
+	v /= x;
+	return v;
+}
+
 
 template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 {
@@ -317,13 +386,13 @@ template<typename T> bool operator!=(Vect<T> const& u, Vect<T> const& v)
 
 template<typename T> std::ostream& operator<<(std::ostream& stream, Vect<T> const& v)
 {
-	stream << "(";
+	stream << "<";
 	for (int i(0); i < v.taille(); i++)
 		if (i == v.taille() - 1)
 			stream << v[i];
 		else
 			stream << v[i] << " ";
-	stream << ")";
+	stream << ">";
 
 	return stream;
 }
