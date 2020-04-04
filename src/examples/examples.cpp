@@ -8,8 +8,8 @@
 int main()
 {
 	// std::cout << neper(100) << std::endl << std::endl; system("pause");
-	simuDispersionVorticite(100, 1000);
-	// simuFluide2D();
+	// simuDispersionVorticite(100, 1000);
+	simuFluide2D(60, 60, 3);
 	// lancerInterpreteur();
 	// simuBalle();
 	// integrationFlot();
