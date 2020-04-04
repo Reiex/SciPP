@@ -74,12 +74,9 @@ template<typename T> class Vect
 	private:
 
 		void liberer();
-		void copier(Vect<T> const& v);
 
 		T* m_x;
 		int m_n;
-
-		bool m_actif;
 };
 
 
@@ -89,27 +86,19 @@ template<typename T> Vect<T>::Vect()
 {
 	m_n = 0;
 	m_x = nullptr;
-
-	m_actif = false;
 }
 
-template<typename T> Vect<T>::Vect(Vect<T> const& v)
+template<typename T> Vect<T>::Vect(Vect<T> const& v) : Vect<T>()
 {
-	copier(v);
-
-	m_actif = v.m_actif;
+	*this = std::move(v);
 }
 
-template<typename T> Vect<T>::Vect(Vect<T>&& v)
+template<typename T> Vect<T>::Vect(Vect<T>&& v) : Vect<T>()
 {
-	m_x = v.m_x;
-	m_n = v.m_n;
-
-	m_actif = v.m_actif;
-	v.m_actif = false;
+	*this = std::move(v);
 }
 
-template<typename T> Vect<T>::Vect(int n)
+template<typename T> Vect<T>::Vect(int n) : Vect<T>()
 {
 	if (n > 0)
 	{
@@ -118,19 +107,10 @@ template<typename T> Vect<T>::Vect(int n)
 
 		for (int i(0); i < m_n; i++)
 			m_x[i] = T();
-
-		m_actif = true;
-	}
-	else
-	{
-		m_n = 0;
-		m_x = nullptr;
-
-		m_actif = false;
 	}
 }
 
-template<typename T> Vect<T>::Vect(T const* tab, int taille)
+template<typename T> Vect<T>::Vect(T const* tab, int taille) : Vect<T>()
 {
 	if (taille > 0)
 	{
@@ -139,35 +119,20 @@ template<typename T> Vect<T>::Vect(T const* tab, int taille)
 
 		for (int i(0); i < m_n; i++)
 			m_x[i] = tab[i];
-
-		m_actif = true;
-	}
-	else
-	{
-		m_n = 0;
-		m_x = nullptr;
-
-		m_actif = false;
 	}
 }
 
 
 // Copie et mouvement
 
-template<typename T> void Vect<T>::copier(Vect<T> const& v)
+template<typename T> Vect<T>& Vect<T>::operator=(Vect<T> const& v)
 {
+	liberer();
+	
 	m_n = v.m_n;
 	m_x = new T[m_n];
 	for (int i(0); i < m_n; i++)
 		m_x[i] = v[i];
-}
-
-template<typename T> Vect<T>& Vect<T>::operator=(Vect<T> const& v)
-{
-	liberer();
-	copier(v);
-
-	m_actif = v.m_actif;
 
 	return *this;
 }
@@ -179,8 +144,8 @@ template<typename T> Vect<T>& Vect<T>::operator=(Vect<T>&& v)
 	m_x = v.m_x;
 	m_n = v.m_n;
 
-	m_actif = v.m_actif;
-	v.m_actif = false;
+	v.m_x = nullptr;
+	v.m_n = 0;
 
 	return *this;
 }
@@ -190,7 +155,6 @@ template<typename T> Vect<T>& Vect<T>::operator=(Vect<T>&& v)
 
 template<typename T> T& Vect<T>::operator[](int i)
 {
-
 	if (i < 0 || i >= m_n)
 		throw "L'indice est en dehors des limites.";
 
@@ -218,9 +182,10 @@ template<typename T> void Vect<T>::changerTaille(int taille)
 	for (int i(0); i < taille; i++)
 		m_x[i] = i < m_n ? xTmp[i] : T();
 
-	m_n = taille;
+	if (xTmp != nullptr)
+		delete[] xTmp;
 
-	delete[] xTmp;
+	m_n = taille;
 }
 
 
@@ -368,11 +333,14 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Vect<T> cons
 
 template<typename T> void Vect<T>::liberer()
 {
-	delete[] m_x;
+	if (m_x != nullptr)
+		delete[] m_x;
+
+	m_x = nullptr;
+	m_n = 0;
 }
 
 template<typename T> Vect<T>::~Vect()
 {
-	if (m_actif)
-		liberer();
+	liberer();
 }
