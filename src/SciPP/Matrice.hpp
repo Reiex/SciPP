@@ -55,13 +55,6 @@ template<typename T> class Matrice
 		Vect<T> const& operator[](int i) const;
 		/** \brief Retourne un vecteur contenant deux éléments, le nombre de lignes et le nombre de colonnes. */
 		Vect<int> const& size() const;
-		/**
-		 * \brief Change la taille de la matrice.
-		 * 
-		 * - Si la taille est supérieure, les "emplacements" ajoutés sont remplis avec `T()`.
-		 * - Si la taille est inférieure, la matrice est tronquée.
-		*/
-		void changerTaille(int m, int n);
 
 		Matrice<T>& operator+=(Matrice<T> const& M);
 		Matrice<T>& operator-=(Matrice<T> const& M);
@@ -187,31 +180,6 @@ template<typename T> Vect<T> const& Matrice<T>::operator[](int i) const
 template<typename T> Vect<int> const& Matrice<T>::size() const
 {
 	return m_taille;
-}
-
-template<typename T> void Matrice<T>::changerTaille(int m, int n)
-{
-	Vect<T>* lignesTmp(m_lignes);
-
-	m_lignes = new Vect<T>[m];
-	for (int i(0); i < m; i++)
-	{
-		if (i < m_taille[0])
-		{
-			m_lignes[i] = lignesTmp[i];
-			m_lignes[i].changerTaille(n);
-		}
-		else
-		{
-			m_lignes[i] = Vect<T>(n);
-		}
-	}
-
-	if (lignesTmp != nullptr)
-		delete[] lignesTmp;
-
-	m_taille[0] = m;
-	m_taille[1] = n;
 }
 
 
