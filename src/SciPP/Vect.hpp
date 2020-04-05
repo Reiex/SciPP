@@ -30,6 +30,7 @@
  * - Opérations
  * 		- (T)T*T
  * 		- (T)T/T
+ *      - (T)T%T
  * 		- (T)T+T
  * 		- (T)T-T
  * - Affichage
@@ -69,6 +70,7 @@ template<typename T> class Vect
 		Vect<T>& operator-=(Vect<T> const& v);
 		Vect<T>& operator*=(T x);
 		Vect<T>& operator/=(T x);
+		Vect<T>& operator%=(T x);
 		Vect<T> operator+();
 		Vect<T> operator-();
 
@@ -331,6 +333,29 @@ template<typename T> Vect<T> operator/(Vect<T> const& v, T x)
 template<typename T> Vect<T> operator/(Vect<T>&& v, T x)
 {
 	v /= x;
+	return v;
+}
+
+
+template<typename T> Vect<T>& Vect<T>::operator%=(T x)
+{
+	for (int i(0); i < m_n; i++)
+		m_x[i] %= x;
+
+	return *this;
+}
+
+template<typename T> Vect<T> operator%(Vect<T> const& v, T x)
+{
+	Vect<T> w(v);
+	w %= x;
+
+	return w;
+}
+
+template<typename T> Vect<T> operator%(Vect<T>&& v, T x)
+{
+	v %= x;
 	return v;
 }
 
