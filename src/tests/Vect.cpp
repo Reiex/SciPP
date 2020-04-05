@@ -28,7 +28,7 @@ static std::string testInit(Test& test)
 	{
 		Vect<int> x(10);
 		std::stringstream stream;
-		std::string r("");
+		std::string r;
 		stream << x;
 		if (stream.str() != "<0, 0, 0, 0, 0, 0, 0, 0, 0, 0>")
 			r += "Resultat attendu: <0, 0, 0, 0, 0, 0, 0, 0, 0, 0>. Resultat obtenu: " + stream.str() + ". ";
@@ -41,26 +41,61 @@ static std::string testInit(Test& test)
 
 	test.addSubTest("Initialisation par copie", [](Test& test)->std::string
 	{
-		Int x(31415926535), y(x);
+		Vect<int> x(3), y(x);
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "31415926535")
+		if (stream.str() == "<0, 0, 0>")
 			return "";
 		else
-			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <0, 0, 0>. Resultat obtenu: " + stream.str() + ". ";
 	});
 
 	test.addSubTest("Initialisation par deplacement", [](Test& test)->std::string
 	{
-		Int x(31415926535), y(std::move(x));
+		Vect<int> x(3), y(std::move(x));
 		std::stringstream stream;
+		std::string r;
 		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "31415926535")
+		if (stream.str() != "<0, 0, 0>")
+			r += "Resultat de y attendu: <0, 0, 0>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le vecteur d'origine n'a pas ete deplace. ";
+
+		return r;
+	});
+
+	test.addSubTest("Initialisation par liste d'initialisation vide", [](Test& test)->std::string
+	{
+		Vect<int> x({ });
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "<>")
 			return "";
 		else
-			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <>. Resultat obtenu: " + stream.str() + ". ";
+	});
+
+	test.addSubTest("Initialisation par liste d'initialisation normale", [](Test& test)->std::string
+	{
+		Vect<int> x({ 1, 2, 3, 4, 5 });
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "<1, 2, 3, 4, 5>")
+			return "";
+		else
+			return "Resultat attendu: <1, 2, 3, 4, 5>. Resultat obtenu: " + stream.str() + ". ";
+	});
+
+	test.addSubTest("Initialisation par tableau C", [](Test& test)->std::string
+	{
+		int tab[5] = { 1, 2, 3, 4, 5 };
+		Vect<int> x(tab, 5);
+		std::stringstream stream;
+		stream << x;
+		if (stream.str() == "<1, 2, 3, 4, 5>")
+			return "";
+		else
+			return "Resultat attendu: <1, 2, 3, 4, 5>. Resultat obtenu: " + stream.str() + ". ";
 	});
 
 	return "";
@@ -70,68 +105,58 @@ static std::string testAffectation(Test& test)
 {
 	test.addSubTest("Affectation par copie", [](Test& test)->std::string
 	{
-		Int x(-161803398874989), y;
+		Vect<int> x({1, 6, 1, 8, 0, 3}), y;
 		y = x;
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "-161803398874989")
+		if (stream.str() == "<1, 6, 1, 8, 0, 3>")
 			return "";
 		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <1, 6, 1, 8, 0, 3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Affectation par deplacement", [](Test& test)->std::string
 	{
-		Int x(-161803398874989), y;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y;
 		y = std::move(x);
 		std::stringstream stream;
+		std::string r;
 		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+		if (stream.str() != "<1, 6, 1, 8, 0, 3>")
+			r += "Resultat attendu: <1, 6, 1, 8, 0, 3>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le vecteur d'origine n'a pas ete deplace. ";
+
+		return r;
 	});
 
 	test.addSubTest("Affectation chainee par copie", [](Test& test)->std::string
 	{
-		Int x(-161803398874989), y, z, t;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y, z, t;
 		t = z = y = x;
 		std::stringstream stream;
 		stream << t;
-		if (stream.str() == "-161803398874989")
+		if (stream.str() == "<1, 6, 1, 8, 0, 3>")
 			return "";
 		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <1, 6, 1, 8, 0, 3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Affectation chainee par deplacement et copie", [](Test& test)->std::string
 	{
-		Int x(-161803398874989), y, z, t;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y, z, t;
 		t = std::move(z = y = x);
 		std::stringstream stream;
+		std::string r;
 		stream << t;
-		if (!x.estActif() || !y.estActif())
-			return "Un deplacement inattendu a eu lieu.";
-		if (z.estActif())
-			return "Le deplacement n'a pas eu lieu, un entier deplace est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
-	});
+		if (x.size() == 0 || y.size() == 0)
+			r += "Un deplacement inattendu a eu lieu. ";
+		if (z.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, un entier deplace est toujours actif. ";
+		else if (stream.str() != "<1, 6, 1, 8, 0, 3>")
+			r += "Resultat attendu: <1, 6, 1, 8, 0, 3>. Resultat obtenu: " + stream.str() + ". ";
 
-	test.addSubTest("Affectation par un entier immediat", [](Test& test)->std::string
-	{
-		Int x;
-		x = -161803398874989;
-		std::stringstream stream;
-		stream << x;
-		if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+		return r;
 	});
 
 	return "";
@@ -139,24 +164,24 @@ static std::string testAffectation(Test& test)
 
 static std::string testDestructeur(Test& test)
 {
-	test.addSubTest("Destruction d'un entier simple", [](Test& test)->std::string
+	test.addSubTest("Destruction d'un vecteur simple", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989));
+		Vect<int>* x(new Vect<int>({1, 6, 1, 8, 0, 3}));
 		delete x;
 		return "";
 	});
 
-	test.addSubTest("Destruction d'un entier cree par copie et de son original", [](Test& test)->std::string
+	test.addSubTest("Destruction d'un vecteur cree par copie et de son original", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989)), * y(new Int(*x));
+		Vect<int> *x(new Vect<int>({ 1, 6, 1, 8, 0, 3 })), *y(new Vect<int>(*x));
 		delete x;
 		delete y;
 		return "";
 	});
 
-	test.addSubTest("Destruction d'un entier cree par deplacement et de son original", [](Test& test)->std::string
+	test.addSubTest("Destruction d'un vecteur cree par deplacement et de son original", [](Test& test)->std::string
 	{
-		Int* x(new Int(161803398874989)), * y(new Int(std::move(*x)));
+		Vect<int> *x(new Vect<int>({ 1, 6, 1, 8, 0, 3 })), *y(new Vect<int>(std::move(*x)));
 		delete x;
 		delete y;
 		return "";
