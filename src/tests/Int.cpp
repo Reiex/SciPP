@@ -61,13 +61,14 @@ static std::string testInit(Test& test)
 	{
 		Int x(31415926535), y(std::move(x));
 		std::stringstream stream;
+		std::string r;
 		stream << y;
 		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "31415926535")
-			return "";
-		else
-			return "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ".";
+			r += "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif. ";
+		if (stream.str() != "31415926535")
+			r += "Resultat attendu: 31415926535. Resultat obtenu: " + stream.str() + ". ";
+
+		return r;
 	});
 
 	return "";
@@ -92,13 +93,14 @@ static std::string testAffectation(Test& test)
 		Int x(-161803398874989), y;
 		y = std::move(x);
 		std::stringstream stream;
+		std::string r;
 		stream << y;
 		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			r += "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif. ";
+		if (stream.str() != "-161803398874989")
+			r += "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ". ";
+
+		return r;
 	});
 
 	test.addSubTest("Affectation chainee par copie", [](Test& test)->std::string
@@ -118,15 +120,16 @@ static std::string testAffectation(Test& test)
 		Int x(-161803398874989), y, z, t;
 		t = std::move(z = y = x);
 		std::stringstream stream;
+		std::string r;
 		stream << t;
 		if (!x.estActif() || !y.estActif())
-			return "Un deplacement inattendu a eu lieu.";
+			r += "Un deplacement inattendu a eu lieu. ";
 		if (z.estActif())
-			return "Le deplacement n'a pas eu lieu, un entier deplace est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			r += "Le deplacement n'a pas eu lieu, un entier deplace est toujours actif. ";
+		else if (stream.str() != "-161803398874989")
+			r += "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ". ";
+
+		return r;
 	});
 
 	test.addSubTest("Affectation par un entier immediat", [](Test& test)->std::string
