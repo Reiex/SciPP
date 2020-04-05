@@ -9,6 +9,7 @@
 */
 
 #include <iostream>
+#include <initializer_list>
 #include "Frac.hpp"
 
 
@@ -46,6 +47,8 @@ template<typename T> class Vect
 		Vect(Vect<T>&& v);
 		/** \brief Initialise un vecteur avec `n` occurences de `T()` */
 		Vect(unsigned int n);
+		/** \brief Initialise un vecteur avec une liste d'initialisation */
+		Vect(std::initializer_list<T> tab);
 		/** \brief Initialise un vecteur avec les éléments de `tab`. Celui-ci doit contenir `taille` valeurs. */
 		Vect(T const* tab, unsigned int taille);
 
@@ -112,6 +115,17 @@ template<typename T> Vect<T>::Vect(unsigned int n) : Vect<T>()
 
 		for (int i(0); i < m_n; i++)
 			m_x[i] = T();
+	}
+}
+
+template<typename T> Vect<T>::Vect(std::initializer_list<T> tab) : Vect<T>()
+{
+	if (tab.size() > 0)
+	{
+		m_n = tab.size();
+		m_x = new T[m_n];
+		for (int i(0); i < m_n; i++)
+			m_x[i] = tab.begin()[i];
 	}
 }
 
