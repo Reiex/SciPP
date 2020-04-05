@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <complex>
+#include <initializer_list>
 #include "Vect.hpp"
 
 /**
@@ -45,6 +46,8 @@ template<typename T> class Matrice
 		Matrice(int m, int n);
 		Matrice(Matrice<T> const& M);
 		Matrice(Matrice<T>&& M);
+		/** \brief Initialise une matrice avec une liste d'initialisation */
+		Matrice(std::initializer_list<std::initializer_list<T>> tab);
 		/** \brief Initialise une matrice de m lignes et n colonnes. Il faut donc que `tab` soit de taille m*n. */
 		Matrice(T const* tab, int m, int n);
 
@@ -110,6 +113,27 @@ template<typename T> Matrice<T>::Matrice(Matrice<T> const& M) : Matrice<T>()
 template<typename T> Matrice<T>::Matrice(Matrice<T>&& M) : Matrice<T>()
 {
 	*this = std::move(M);
+}
+
+template<typename T> Matrice<T>::Matrice(std::initializer_list<std::initializer_list<T>> tab) : Matrice<T>()
+{
+	if (tab.size() == 0)
+		return;
+
+	if (tab.begin()[0].size() > 0)
+	{
+		m_taille = Vect<int>(2);
+		m_taille[0] = tab.size();
+		m_taille[1] = tab.begin()[0].size();
+
+		m_lignes = new Vect<T>[m_taille[0]];
+		for (int i(0); i < m_taille[0]; i++)
+		{
+			m_lignes[i] = Vect<T>(m_taille[1]);
+			for (int j(0); j < m_taille[1]; j++)
+				m_lignes[i][j] = tab.begin()[i].begin()[j];
+		}
+	}
 }
 
 template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n) : Matrice<T>()
