@@ -215,7 +215,7 @@ void parseInstr(Liste<Rationnel>& l)
 			parseToken(Token::VAR);
 			parseToken(Token::EQUAL);
 			x = parseExp2(l);
-			if (i >= l.taille())
+			if (i >= l.size())
 				for (int j(0); j < i + 1; j++)
 					l.ajouter(0);
 			l[i] = x;
@@ -224,7 +224,7 @@ void parseInstr(Liste<Rationnel>& l)
 
 		default:
 			x = parseExp2(l);
-			if (l.taille() == 0)
+			if (l.size() == 0)
 				l.ajouter(0);
 			l[0] = x;
 			std::cout << "#0 = " << x << std::endl << ">>> ";
@@ -256,7 +256,7 @@ Rationnel parseExp0(Liste<Rationnel>& l)
 
 		case Token::VAR:
 			i = current.value.numerateur().toInt();
-			if (i >= l.taille())
+			if (i >= l.size())
 				for (int j(0); j < i + 1; j++)
 					l.ajouter(0);
 			x = l[i];

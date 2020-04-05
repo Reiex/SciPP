@@ -33,8 +33,8 @@ static std::string testInit(Test& test)
 		if (stream.str() != "<0, 0, 0, 0, 0, 0, 0, 0, 0, 0>")
 			r += "Resultat attendu: <0, 0, 0, 0, 0, 0, 0, 0, 0, 0>. Resultat obtenu: " + stream.str() + ". ";
 		
-		if (x.taille() != 10)
-			r += "Taille anormale. Resultat attendu: 10. Resultat obtenu: " + std::to_string(x.taille()) + ". ";
+		if (x.size() != 10)
+			r += "Taille anormale. Resultat attendu: 10. Resultat obtenu: " + std::to_string(x.size()) + ". ";
 
 		return r;
 	});

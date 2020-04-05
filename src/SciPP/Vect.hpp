@@ -55,7 +55,7 @@ template<typename T> class Vect
 		T& operator[](unsigned int i);
 		T const& operator[](unsigned int i) const;
 		/** \brief Retourne la taille du vecteur */
-		unsigned int taille() const;
+		unsigned int size() const;
 		/**
 		 * \deprecated Cette méthode devra être supprimée dès que de meilleurs conteneurs seront au point.
 		 * \brief Change la taille du vecteur
@@ -174,7 +174,7 @@ template<typename T> T const& Vect<T>::operator[](unsigned int i) const
 	return m_x[i];
 }
 
-template<typename T> unsigned int Vect<T>::taille() const
+template<typename T> unsigned int Vect<T>::size() const
 {
 	return m_n;
 }
@@ -368,11 +368,11 @@ template<typename T> Vect<T> operator%(Vect<T>&& v, T x)
 
 template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 {
-	if (u.taille() != v.taille())
+	if (u.size() != v.size())
 		throw "Les deux Vects doivent avoir la meme taille.";
 
 	T x(0);
-	for (int i(0); i < u.taille(); i++)
+	for (int i(0); i < u.size(); i++)
 		x += u[i] * v[i];
 
 	return x;
@@ -397,10 +397,10 @@ template<typename T> Vect<T> operator^(Vect<T> const& u, Vect<T> const& v)
 
 template<typename T> bool operator==(Vect<T> const& u, Vect<T> const& v)
 {
-	if (u.taille() != v.taille())
+	if (u.size() != v.size())
 		return false;
 
-	for (int i(0); i < u.taille(); i++)
+	for (int i(0); i < u.size(); i++)
 		if (u[i] != v[i])
 			return false;
 
@@ -418,8 +418,8 @@ template<typename T> bool operator!=(Vect<T> const& u, Vect<T> const& v)
 template<typename T> std::ostream& operator<<(std::ostream& stream, Vect<T> const& v)
 {
 	stream << "<";
-	for (int i(0); i < v.taille(); i++)
-		if (i == v.taille() - 1)
+	for (int i(0); i < v.size(); i++)
+		if (i == v.size() - 1)
 			stream << v[i];
 		else
 			stream << v[i] << ", ";

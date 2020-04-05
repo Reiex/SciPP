@@ -54,7 +54,7 @@ template<typename T> class Matrice
 		Vect<T>& operator[](int i);
 		Vect<T> const& operator[](int i) const;
 		/** \brief Retourne un vecteur contenant deux éléments, le nombre de lignes et le nombre de colonnes. */
-		Vect<int> const& taille() const;
+		Vect<int> const& size() const;
 		/**
 		 * \brief Change la taille de la matrice.
 		 * 
@@ -184,7 +184,7 @@ template<typename T> Vect<T> const& Matrice<T>::operator[](int i) const
 	return m_lignes[i];
 }
 
-template<typename T> Vect<int> const& Matrice<T>::taille() const
+template<typename T> Vect<int> const& Matrice<T>::size() const
 {
 	return m_taille;
 }
@@ -295,12 +295,12 @@ template<typename T> Matrice<T> operator*(Matrice<T> const& M, Matrice<T> const&
 
 template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 {
-	if (M.taille()[1] != v.taille())
+	if (M.size()[1] != v.size())
 		throw "Les tailles sont incompatibles";
 
-	Vect<T> u(M.taille()[0]);
-	for (int i(0); i < M.taille()[0]; i++)
-		for (int k(0); k < M.taille()[1]; k++)
+	Vect<T> u(M.size()[0]);
+	for (int i(0); i < M.size()[0]; i++)
+		for (int k(0); k < M.size()[1]; k++)
 			u[i] += M[i][k] * v[k];
 
 	return u;
@@ -350,11 +350,11 @@ template<typename T> Matrice<T> operator/(Matrice<T> const& M, T const& x)
 
 template<typename T> bool operator==(Matrice<T> const& M, Matrice<T> const& N)
 {
-	if (M.taille()[0] != N.taille()[0] || M.taille()[1] != N.taille()[1])
+	if (M.size()[0] != N.size()[0] || M.size()[1] != N.size()[1])
 		return false;
 
-	for (int i(0); i < M.taille()[0]; i++)
-		for (int j(0); j < M.taille()[1]; j++)
+	for (int i(0); i < M.size()[0]; i++)
+		for (int j(0); j < M.size()[1]; j++)
 			if (M[i][j] != N[i][j])
 				return false;
 
@@ -485,10 +485,10 @@ template<typename T> Matrice<T> Matrice<T>::transpose() const
 template<typename T> std::ostream& operator<<(std::ostream& stream, Matrice<T> const& M)
 {
 	stream << "(";
-	for (int i(0); i < M.taille()[0]; i++)
+	for (int i(0); i < M.size()[0]; i++)
 		if (i == 0)
 			stream << M[i] << std::endl;
-		else if (i == M.taille()[0] - 1)
+		else if (i == M.size()[0] - 1)
 			stream << " " << M[i];
 		else
 			stream << " " << M[i] << std::endl;

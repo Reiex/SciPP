@@ -53,10 +53,10 @@ void Timeline::plot(long double x, long double y)
 
 void Timeline::plot(Vect<long double> x, Vect<long double> y)
 {
-	if (x.taille() != y.taille() || x.taille() < 1)
+	if (x.size() != y.size() || x.size() < 1)
 		throw "La taille des Vects est invalide.";
 
-	int n(x.taille());
+	int n(x.size());
 
 	sf::VertexArray figure(sf::LinesStrip, n);
 	long double min_x(x[0]), max_x(x[0]), min_y(y[0]), max_y(y[0]);
@@ -106,7 +106,7 @@ void Timeline::plot(Matrice<long double> M, long double min_z, long double max_z
 	sf::Image image;
 	image.create(w, h);
 
-	float facteurX(float(M.taille()[0]) / w), facteurY(float(M.taille()[1]) / h);
+	float facteurX(float(M.size()[0]) / w), facteurY(float(M.size()[1]) / h);
 	for (int x(0); x < w; x++)
 	{
 		for (int y(0); y < h; y++)
@@ -485,7 +485,7 @@ Polynome<long double> bernstein(int n, int i)
 
 Vect<long double> getBorder(Vect<long double> x, Vect<long double> y)
 {
-	int nbPoints(x.taille());
+	int nbPoints(x.size());
 	Vect<long double> border(4);
 
 	if (nbPoints != 0)
@@ -525,10 +525,10 @@ Vect<long double> getBorder(Vect<long double> x, Vect<long double> y)
 
 Vect<Vect<long double>> getBezier(Vect<long double> const& x, Vect<long double> const& y, int nbPoints)
 {
-    if (x.taille() != y.taille())
+    if (x.size() != y.size())
         throw "Les Vects x et y doivent être de même taille !";
 	
-	int n(x.taille());
+	int n(x.size());
     Polynome<long double> Bx, By;
 
     for (int i(0); i < n; i++)
@@ -553,7 +553,7 @@ Vect<Vect<long double>> getBezier(Vect<long double> const& x, Vect<long double> 
 
 Vect<Vect<long double>> plotBezier(Vect<long double> const& x, Vect<long double> const& y)
 {
-	int n(x.taille()), nbPoints(1000);
+	int n(x.size()), nbPoints(1000);
 	Vect<long double> xPolygone(x), yPolygone(y);
 	Vect<Vect<long double>> courbeBezier(getBezier(xPolygone, yPolygone, nbPoints));
 	
@@ -602,10 +602,10 @@ Vect<Vect<long double>> plotBezier(Vect<long double> const& x, Vect<long double>
 
 				n++;
 
-				xPolygone.changerTaille(xPolygone.taille() + 1);
-				xPolygone[xPolygone.taille() - 1] = pos[0];
-				yPolygone.changerTaille(yPolygone.taille() + 1);
-				yPolygone[yPolygone.taille() - 1] = pos[1];
+				xPolygone.changerTaille(xPolygone.size() + 1);
+				xPolygone[xPolygone.size() - 1] = pos[0];
+				yPolygone.changerTaille(yPolygone.size() + 1);
+				yPolygone[yPolygone.size() - 1] = pos[1];
 			
 				courbeBezier = getBezier(xPolygone, yPolygone, nbPoints);
 
@@ -663,10 +663,10 @@ Vect<Vect<long double>> plotBezier(Vect<long double> const& x, Vect<long double>
 
 Vect<Vect<long double>> getHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my, int nbPoints)
 {
-    if (x.taille() != y.taille() || mx.taille() != my.taille() || x.taille() != mx.taille())
+    if (x.size() != y.size() || mx.size() != my.size() || x.size() != mx.size())
         throw "Les tailles des Vects ne se correspondent pas !";
 	
-	int n(x.taille()), j(0);
+	int n(x.size()), j(0);
 	Vect<long double> xCourbe(nbPoints), yCourbe(nbPoints);
 	for (int k(0); k < n - 1; k++)
 	{
@@ -739,7 +739,7 @@ int deriveeSelectionnee(std::vector<sf::CircleShape> const& derivees, int xSouri
 Vect<Vect<long double>> plotHermite(Vect<long double> const& x, Vect<long double> const& y, Vect<long double> const& mx, Vect<long double> const& my)
 {
 	
-	int n(x.taille()), nbPoints(1000);
+	int n(x.size()), nbPoints(1000);
 	Vect<long double> xPolygone(x), yPolygone(y), mxPolygone(mx), myPolygone(my);
 	Vect<Vect<long double>> controle, courbeHermite(getHermite(xPolygone, yPolygone, mxPolygone, myPolygone, nbPoints));
 	
@@ -881,10 +881,10 @@ Vect<Vect<long double>> plotHermite(Vect<long double> const& x, Vect<long double
 
 Vect<Vect<long double>> getSmoothDerivatives(Vect<long double> const& x, Vect<long double> const& y, long double c)
 {
-	if (x.taille() != y.taille())
+	if (x.size() != y.size())
 		throw "Les tailles ne se correspondent pas !";
 
-	int n(x.taille());
+	int n(x.size());
 	Vect<Vect<long double>> m(2);
 	m[0] = Vect<long double>(n);
 	m[1] = Vect<long double>(n);
@@ -924,10 +924,10 @@ Polynome<long double> lagrangePolynome(int i, int n)
 
 Vect<Vect<long double>> getLagrange(Vect<long double> const& x, Vect<long double> const& y, int nbPoints)
 {
-    if (x.taille() != y.taille())
+    if (x.size() != y.size())
         throw "Les Vects x et y doivent être de même taille !";
 	
-	int n(x.taille());
+	int n(x.size());
     Polynome<long double> Bx, By;
 
     for (int i(0); i < n; i++)
@@ -953,7 +953,7 @@ Vect<Vect<long double>> getLagrange(Vect<long double> const& x, Vect<long double
 
 Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long double> const& y)
 {
-	int n(x.taille()), nbPoints(1000);
+	int n(x.size()), nbPoints(1000);
 	Vect<long double> xPolygone(x), yPolygone(y);
 	Vect<Vect<long double>> courbeLagrange(getLagrange(xPolygone, yPolygone, nbPoints));
 	
@@ -1002,10 +1002,10 @@ Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long doubl
 
 				n++;
 
-				xPolygone.changerTaille(xPolygone.taille() + 1);
-				xPolygone[xPolygone.taille() - 1] = pos[0];
-				yPolygone.changerTaille(yPolygone.taille() + 1);
-				yPolygone[yPolygone.taille() - 1] = pos[1];
+				xPolygone.changerTaille(xPolygone.size() + 1);
+				xPolygone[xPolygone.size() - 1] = pos[0];
+				yPolygone.changerTaille(yPolygone.size() + 1);
+				yPolygone[yPolygone.size() - 1] = pos[1];
 			
 				courbeLagrange = getLagrange(xPolygone, yPolygone, nbPoints);
 
@@ -1064,10 +1064,10 @@ Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long doubl
 
 Vect<long double> getCourbure(Vect<long double> const& x, Vect<long double> const& y)
 {
-    if (x.taille() != y.taille())
+    if (x.size() != y.size())
         throw "Les Vects x et y doivent être de même taille !";
 
-	int n(x.taille());
+	int n(x.size());
 	Vect<long double> c(n-2);
 
 	for (int i(1); i < n-1; i++)

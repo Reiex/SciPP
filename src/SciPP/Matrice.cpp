@@ -2,7 +2,7 @@
 
 Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 {
-	int n(v.taille());
+	int n(v.size());
 	Vect<std::complex<long double>> u(n);
 
 	for (int k(0); k < n; k++)
@@ -14,7 +14,7 @@ Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 
 Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
 {
-	int n(v.taille());
+	int n(v.size());
 	Vect<std::complex<long double>> u(n);
 
 	for (int k(0); k < n; k++)
@@ -26,7 +26,7 @@ Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
 
 Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M)
 {
-	int m(M.taille()[0]), n(M.taille()[1]);
+	int m(M.size()[0]), n(M.size()[1]);
 	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
 
 	for (int i(0); i < m; i++)
@@ -42,7 +42,7 @@ Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> cons
 
 Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M)
 {
-	int m(M.taille()[0]), n(M.taille()[1]);
+	int m(M.size()[0]), n(M.size()[1]);
 	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
 
 	for (int i(0); i < m; i++)
@@ -60,7 +60,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 {
 	// Conversion de f en matrice complexe
 
-	int Nx(f.taille()[1]), Ny(f.taille()[0]);
+	int Nx(f.size()[1]), Ny(f.size()[0]);
 	Matrice<std::complex<long double>> fHat(Ny, Nx);
 
 	for (int i(0); i < Ny; i++)
@@ -111,12 +111,12 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 
 Matrice<long double> cholesky(Matrice<long double> const& A)
 {
-	if (A.taille()[0] != A.taille()[1])
+	if (A.size()[0] != A.size()[1])
 		throw "La matrice doit etre carree.";
 
-	Matrice<long double> B(A.taille()[0], A.taille()[1]);
+	Matrice<long double> B(A.size()[0], A.size()[1]);
 
-	int n(A.taille()[0]);
+	int n(A.size()[0]);
 	for (int i(0); i < n; i++)
 	{
 		B[i][i] = A[i][i];

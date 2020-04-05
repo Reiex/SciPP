@@ -156,7 +156,7 @@ struct MatriceChainee
 
 void solveur1D(Vect<long double>& W, Vect<long double> const& U, long double kappa, long double dl, long double dt)
 {
-	int Nl(U.taille());
+	int Nl(U.size());
 	Matrice<long double> M(Nl, Nl), N(Nl, Nl);
 
 	long double c;
@@ -177,7 +177,7 @@ void solveur1D(Vect<long double>& W, Vect<long double> const& U, long double kap
 
 void solveur2D(Matrice<long double>& W, Matrice<long double> const& Ux, Matrice<long double> const& Uy, long double kappa, long double dx, long double dy, long double dt)
 {
-	int Nx(W.taille()[1]), Ny(W.taille()[0]);
+	int Nx(W.size()[1]), Ny(W.size()[0]);
 
 	for (int i(0); i < Ny; i++)
 		solveur1D(W[i], Ux[i], kappa, dx, dt);
@@ -210,7 +210,7 @@ long double wInit(long double x, long double y, long double delta, long double r
 
 void poissonCurlSolveur(Matrice<long double> const& W, Matrice<long double>& Ux, Matrice<long double>& Uy, long double Lx, long double Ly)
 {
-	int Nx(W.taille()[1]), Ny(W.taille()[0]);
+	int Nx(W.size()[1]), Ny(W.size()[0]);
 	Matrice<std::complex<long double>> WHat(Ny, Nx);
 
 	for (int i(0); i < Ny; i++)
@@ -268,8 +268,8 @@ void poissonCurlSolveur(Matrice<long double> const& W, Matrice<long double>& Ux,
 long double calculDt(Matrice<long double> const& U, long double dl)
 {
 	long double Umax(0);
-	for (int i(0); i < U.taille()[0]; i++)
-		for (int j(0); j < U.taille()[1]; j++)
+	for (int i(0); i < U.size()[0]; i++)
+		for (int j(0); j < U.size()[1]; j++)
 			if ((U[i][j] > 0 ? U[i][j] : -U[i][j]) > Umax)
 				Umax = (U[i][j] > 0 ? U[i][j] : -U[i][j]);
 	return dl / Umax;

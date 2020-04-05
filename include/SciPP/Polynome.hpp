@@ -312,7 +312,7 @@ template<typename T> Polynome<T>& Polynome<T>::operator%=(Polynome<T> const& P)
 
 		m_deg = 0;
 		T zero(0);
-		for (int i(0); i < m_coeffs.taille(); i++)
+		for (int i(0); i < m_coeffs.size(); i++)
 			if (m_coeffs[i] != zero)
 				m_deg = i;
 
@@ -390,9 +390,9 @@ template<typename T> Polynome<T> Polynome<T>::derivee() const
 	}
 	else
 	{
-		for (int i(0); i < P.m_coeffs.taille() - 1; i++)
+		for (int i(0); i < P.m_coeffs.size() - 1; i++)
 			P[i] = P[i+1];
-		P.m_coeffs.changerTaille(P.m_coeffs.taille() - 1);
+		P.m_coeffs.changerTaille(P.m_coeffs.size() - 1);
 		P.m_deg--;
 	}
 

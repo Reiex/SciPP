@@ -182,7 +182,7 @@ void conway()
 			{
 				Vect<Vect<int>> voisinage(voisins(i, j, w, h));
 				int s(0);
-				for (int k(0); k < voisinage.taille(); k++)
+				for (int k(0); k < voisinage.size(); k++)
 					s += M[voisinage[k][0]][voisinage[k][1]];
 				if (M[i][j] == 0 && s == 3)
 					N[i][j] = 1;

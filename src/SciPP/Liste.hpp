@@ -25,7 +25,7 @@ template<typename T> class Liste
 
 		void ajouter(T const& x);
 
-		int taille() const;
+		int size() const;
 
 		~Liste();
 
@@ -166,7 +166,7 @@ template<typename T> void Liste<T>::ajouter(T const& x)
 	m_queue = m_queue->suivante;
 }
 
-template<typename T> int Liste<T>::taille() const
+template<typename T> int Liste<T>::size() const
 {
 	return m_taille;
 }
@@ -185,9 +185,9 @@ template<typename T> Liste<T>::~Liste()
 template<typename T> std::ostream& operator<<(std::ostream& stream, Liste<T> const& l)
 {
 	stream << "[";
-	for (int i(0); i < l.taille(); i++)
+	for (int i(0); i < l.size(); i++)
 	{
-		if (i != l.taille() - 1)
+		if (i != l.size() - 1)
 			stream << l[i] << ", ";
 		else
 			stream << l[i];

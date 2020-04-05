@@ -45,17 +45,17 @@ template<typename T> class Vect
 		Vect(Vect<T> const& v);
 		Vect(Vect<T>&& v);
 		/** \brief Initialise un vecteur avec `n` occurences de `T()` */
-		Vect(int n);
+		Vect(unsigned int n);
 		/** \brief Initialise un vecteur avec les éléments de `tab`. Celui-ci doit contenir `taille` valeurs. */
-		Vect(T const* tab, int taille);
+		Vect(T const* tab, unsigned int taille);
 
 		Vect<T>& operator=(Vect<T> const& v);
 		Vect<T>& operator=(Vect<T>&& v);
 
-		T& operator[](int i);
-		T const& operator[](int i) const;
+		T& operator[](unsigned int i);
+		T const& operator[](unsigned int i) const;
 		/** \brief Retourne la taille du vecteur */
-		int taille() const;
+		unsigned int size() const;
 		/**
 		 * \deprecated Cette méthode devra être supprimée dès que de meilleurs conteneurs seront au point.
 		 * \brief Change la taille du vecteur
@@ -64,7 +64,7 @@ template<typename T> class Vect
 		 * et la fin du vecteur est remplie de `T()`
 		 * - Si la nouvelle taille est inférieure à la première, les valeurs sont tronquées.
 		*/
-		void changerTaille(int taille);
+		void changerTaille(unsigned int taille);
 
 		Vect<T>& operator+=(Vect<T> const& v);
 		Vect<T>& operator-=(Vect<T> const& v);
@@ -81,7 +81,7 @@ template<typename T> class Vect
 		void liberer();
 
 		T* m_x;
-		int m_n;
+		unsigned int m_n;
 };
 
 
@@ -103,7 +103,7 @@ template<typename T> Vect<T>::Vect(Vect<T>&& v) : Vect<T>()
 	*this = std::move(v);
 }
 
-template<typename T> Vect<T>::Vect(int n) : Vect<T>()
+template<typename T> Vect<T>::Vect(unsigned int n) : Vect<T>()
 {
 	if (n > 0)
 	{
@@ -115,7 +115,7 @@ template<typename T> Vect<T>::Vect(int n) : Vect<T>()
 	}
 }
 
-template<typename T> Vect<T>::Vect(T const* tab, int taille) : Vect<T>()
+template<typename T> Vect<T>::Vect(T const* tab, unsigned int taille) : Vect<T>()
 {
 	if (taille > 0)
 	{
@@ -158,29 +158,35 @@ template<typename T> Vect<T>& Vect<T>::operator=(Vect<T>&& v)
 
 // Acces et modification de la structure
 
-template<typename T> T& Vect<T>::operator[](int i)
+template<typename T> T& Vect<T>::operator[](unsigned int i)
 {
-	if (i < 0 || i >= m_n)
+	if (i >= m_n)
 		throw "L'indice est en dehors des limites.";
 
 	return m_x[i];
 }
 
-template<typename T> T const& Vect<T>::operator[](int i) const
+template<typename T> T const& Vect<T>::operator[](unsigned int i) const
 {
-	if (i < 0 || i >= m_n)
+	if (i >= m_n)
 		throw "L'indice est en dehors des limites.";
 
 	return m_x[i];
 }
 
-template<typename T> int Vect<T>::taille() const
+template<typename T> unsigned int Vect<T>::size() const
 {
 	return m_n;
 }
 
-template<typename T> void Vect<T>::changerTaille(int taille)
+template<typename T> void Vect<T>::changerTaille(unsigned int taille)
 {
+	if (taille == 0)
+	{
+		liberer();
+		return;
+	}
+
 	T* xTmp = m_x;
 
 	m_x = new T[taille];
@@ -362,11 +368,11 @@ template<typename T> Vect<T> operator%(Vect<T>&& v, T x)
 
 template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 {
-	if (u.taille() != v.taille())
+	if (u.size() != v.size())
 		throw "Les deux Vects doivent avoir la meme taille.";
 
 	T x(0);
-	for (int i(0); i < u.taille(); i++)
+	for (int i(0); i < u.size(); i++)
 		x += u[i] * v[i];
 
 	return x;
@@ -391,10 +397,10 @@ template<typename T> Vect<T> operator^(Vect<T> const& u, Vect<T> const& v)
 
 template<typename T> bool operator==(Vect<T> const& u, Vect<T> const& v)
 {
-	if (u.taille() != v.taille())
+	if (u.size() != v.size())
 		return false;
 
-	for (int i(0); i < u.taille(); i++)
+	for (int i(0); i < u.size(); i++)
 		if (u[i] != v[i])
 			return false;
 
@@ -412,11 +418,11 @@ template<typename T> bool operator!=(Vect<T> const& u, Vect<T> const& v)
 template<typename T> std::ostream& operator<<(std::ostream& stream, Vect<T> const& v)
 {
 	stream << "<";
-	for (int i(0); i < v.taille(); i++)
-		if (i == v.taille() - 1)
+	for (int i(0); i < v.size(); i++)
+		if (i == v.size() - 1)
 			stream << v[i];
 		else
-			stream << v[i] << " ";
+			stream << v[i] << ", ";
 	stream << ">";
 
 	return stream;
