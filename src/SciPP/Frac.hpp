@@ -56,9 +56,7 @@ template<typename T> class Frac
 {
 	public:
 
-		/**
-		 * \brief Erreur renvoyée lors d'une tentative de division par zero dans une fraction
-		*/
+		/** \brief Erreur renvoyée lors d'une tentative de division par zero dans une fraction. */
 		class ZeroDivisionException : public std::exception
 		{
 			public:
@@ -98,12 +96,15 @@ template<typename T> class Frac
 };
 
 
-// Constructeurs
+// Exceptions
 
 template<typename T> const char* Frac<T>::ZeroDivisionException::what() const throw()
 {
 	return "Tentative de division par zero.";
 }
+
+
+// Constructeurs
 
 template<typename T> Frac<T>::Frac()
 {

@@ -1,5 +1,19 @@
 #include "Int.hpp"
 
+
+// Exceptions
+
+const char* Int::ZeroDivisionException::what() const throw()
+{
+	return "Tentative de division par zero.";
+}
+
+const char* Int::IntTooBigException::what() const throw()
+{
+	return "Tentative de conversion d'un entier trop grand pour etre converti en long long int.";
+}
+
+
 // Constructeurs
 
 Int::Int() :
@@ -91,11 +105,6 @@ Int& Int::operator=(Int&& x)
 
 
 // Operations
-
-const char* Int::ZeroDivisionException::what() const throw()
-{
-	return "Tentative de division par zero.";
-}
 
 Int& Int::operator+=(Int const& x)
 {
@@ -475,11 +484,6 @@ Int Int::operator+() const
 
 
 // Fonctions specifiques
-
-const char* Int::IntTooBigException::what() const throw()
-{
-	return "Tentative de conversion d'un entier trop grand pour etre converti en long long int.";
-}
 
 std::string Int::toString() const
 {

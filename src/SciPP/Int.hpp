@@ -96,6 +96,20 @@ class Int
 {
 	public:
 
+		/** \brief Erreur renvoyée lors d'une tentative de division par zero. */
+		class ZeroDivisionException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
+		/** \brief Erreur renvoyée lors de la tentative de conversion d'un Int trop grand en un long long int. */
+		class IntTooBigException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
 		/** \brief Constructeur par défaut, initialise l'entier à 0. */
 		Int();
 		/** \brief Initialise l'entier à x. */
@@ -106,15 +120,6 @@ class Int
 		Int& operator=(Int const& x);
 		Int& operator=(Int&& x);
 
-		/**
-		 * \brief Erreur renvoyée lors d'une tentative de division par zero
-		*/
-		class ZeroDivisionException : public std::exception
-		{
-			public:
-				virtual const char* what() const throw();
-		};
-
 		Int& operator+=(Int const& x);
 		Int& operator-=(Int const& x);
 		Int& operator*=(Int const& x);
@@ -122,15 +127,6 @@ class Int
 		Int& operator%=(Int const& x);
 		Int operator-() const;
 		Int operator+() const;
-
-		/**
-		 * \brief Erreur renvoyée lors de la tentative de conversion d'un Int trop grand en un long long int
-		*/
-		class IntTooBigException : public std::exception
-		{
-			public:
-				virtual const char* what() const throw();
-		};
 
 		/**
 		 * \brief Retourne l'entier sous forme de chaine de caractères

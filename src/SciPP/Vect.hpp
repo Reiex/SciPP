@@ -41,6 +41,20 @@ template<typename T> class Vect
 {
 	public:
 
+		/** \brief Erreur renvoyée lors d'une tentative d'accès à un indice invalide du vecteur. */
+		class IndexException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
+		/** \brief Erreur renvoyée lors d'une utilisation non valide d'un vecteur à cause de sa taille. */
+		class SizeException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
 		/** \brief Constructeur par défaut, construit un vecteur de taille nulle. */
 		Vect();
 		Vect(Vect<T> const& v);
@@ -86,6 +100,19 @@ template<typename T> class Vect
 		T* m_x;
 		unsigned int m_n;
 };
+
+
+// Exceptions
+
+template<typename T> const char* Vect<T>::IndexException::what() const throw()
+{
+	return "Tentative d'accès à un indice invalide du vecteur.";
+}
+
+template<typename T> const char* Vect<T>::SizeException::what() const throw()
+{
+	return "Utilisation non valide d'un vecteur à cause de sa taille.";
+}
 
 
 // Constructeurs
@@ -175,7 +202,7 @@ template<typename T> Vect<T>& Vect<T>::operator=(Vect<T>&& v)
 template<typename T> T& Vect<T>::operator[](unsigned int i)
 {
 	if (i >= m_n)
-		throw "L'indice est en dehors des limites.";
+		throw IndexException();
 
 	return m_x[i];
 }
@@ -183,7 +210,7 @@ template<typename T> T& Vect<T>::operator[](unsigned int i)
 template<typename T> T const& Vect<T>::operator[](unsigned int i) const
 {
 	if (i >= m_n)
-		throw "L'indice est en dehors des limites.";
+		throw IndexException();
 
 	return m_x[i];
 }
@@ -219,7 +246,7 @@ template<typename T> void Vect<T>::changerTaille(unsigned int taille)
 template<typename T> Vect<T>& Vect<T>::operator+=(Vect<T> const& v)
 {
 	if (m_n != v.m_n)
-		throw "Les deux Vects doivent avoir la meme taille.";
+		throw SizeException();
 
 	for (int i(0); i < m_n; i++)
 		m_x[i] += v[i];
@@ -262,7 +289,7 @@ template<typename T> Vect<T>& operator+(Vect<T>&& u, Vect<T>&& v)
 template<typename T> Vect<T>& Vect<T>::operator-=(Vect<T> const& v)
 {
 	if (m_n != v.m_n)
-		throw "Les deux Vects doivent avoir la meme taille.";
+		throw SizeException();
 
 	for (int i(0); i < m_n; i++)
 		m_x[i] -= v[i];
@@ -383,7 +410,7 @@ template<typename T> Vect<T> operator%(Vect<T>&& v, T x)
 template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 {
 	if (u.size() != v.size())
-		throw "Les deux Vects doivent avoir la meme taille.";
+		throw typename Vect<T>::SizeException();
 
 	T x(0);
 	for (int i(0); i < u.size(); i++)
@@ -394,8 +421,8 @@ template<typename T> T operator*(Vect<T> const& u, Vect<T> const& v)
 
 template<typename T> Vect<T> operator^(Vect<T> const& u, Vect<T> const& v)
 {
-	if (u.taille != 3 || v.taille != 3)
-		throw "Les Vects doivent etre en dimension 3.";
+	if (u.size() != 3 || v.size() != 3)
+		throw typename Vect<T>::SizeException();
 
 	Vect<T> w(3);
 
