@@ -284,7 +284,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		for (long double j(0); j < Nx; j++)
 			W[i][j] = wInit(j / Nx, i / Ny, delta, rho);
 
-	long double t(0), dtx, dty, dt;
+	long double t(0), dtx, dty, dt, tSuivant(1.0/72);
 	long double iterations(0);
 	MatriceChainee *premiere, *derniere;
 	premiere = new MatriceChainee;
@@ -304,11 +304,16 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		dt = dtx < dty ? dtx : dty;
 
 		solveur2D(W, Ux, Uy, kappa, dx, dy, dt);
-
-		derniere->suivante = new MatriceChainee;
-		derniere = derniere->suivante;
-		derniere->matrice = W;
-		derniere->suivante = nullptr;
+		
+		if (t >= tSuivant)
+		{
+			std::cout << ">>";
+			derniere->suivante = new MatriceChainee;
+			derniere = derniere->suivante;
+			derniere->matrice = W;
+			derniere->suivante = nullptr;
+			tSuivant += 1.0 / 72;
+		}
 
 		t += dt;
 	}
@@ -335,7 +340,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	int i(1);
 	while (courante != nullptr)
 	{
-		std::cout << "> Calcul image " << i << "/" << iterations << std::endl;
+		std::cout << "> Calcul image " << i << std::endl;
 		timeline.plot(courante->matrice, Wmin, Wmax);
 		courante = courante->suivante;
 		i++;
@@ -350,7 +355,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		courante = tmp;
 	}
 
-	timeline.setFramerate(iterations/(t_simu*2));
+	timeline.setFramerate(24);
 	Timeline::show();
 }
 
