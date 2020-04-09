@@ -194,26 +194,26 @@ static std::string testAddition(Test& test)
 {
 	test.addSubTest("Addition en place", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-16180339887);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 });
 		x += y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "15235586649")
+		if (stream.str() == "<4, 7, 5, 9, 5, 12>")
 			return "";
 		else
-			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Addition externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Addition externe Vect(Vect const&, Vect const&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = x + y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "15235586649")
+		if (stream.str() == "<4, 7, 5, 9, 5, 12>")
 			return "";
 		else
-			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
 	});
 
 	test.addSubTest("Addition externe Int&&(Int&&, Int const&)", [](Test& test)->std::string

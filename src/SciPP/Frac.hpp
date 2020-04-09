@@ -45,9 +45,9 @@
  * - Opérations
  * 		- (T)T*T
  * 		- (T)T/T
+ * 		- (T)T\%T
  * 		- (T)T+T
  * 		- (T)T-T
- * 		- (T)T%T
  * - Affichage
  *		- (ostream)ostream<<T
  * 

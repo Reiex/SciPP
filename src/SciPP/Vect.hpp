@@ -31,7 +31,7 @@
  * - Opérations
  * 		- (T)T*T
  * 		- (T)T/T
- *      - (T)T%T
+ * 		- (T)T\%T
  * 		- (T)T+T
  * 		- (T)T-T
  * - Affichage
@@ -267,22 +267,22 @@ template<typename T> Vect<T> operator+(Vect<T> const& u, Vect<T> const& v)
 	return w;
 }
 
-template<typename T> Vect<T>& operator+(Vect<T>&& u, Vect<T> const& v)
+template<typename T> Vect<T>&& operator+(Vect<T>&& u, Vect<T> const& v)
 {
 	u += v;
-	return u;
+	return std::move(u);
 }
 
-template<typename T> Vect<T>& operator+(Vect<T> const& u, Vect<T>&& v)
+template<typename T> Vect<T>&& operator+(Vect<T> const& u, Vect<T>&& v)
 {
 	v += u;
-	return v;
+	return std::move(v);
 }
 
-template<typename T> Vect<T>& operator+(Vect<T>&& u, Vect<T>&& v)
+template<typename T> Vect<T>&& operator+(Vect<T>&& u, Vect<T>&& v)
 {
 	u += v;
-	return u;
+	return std::move(u);
 }
 
 
@@ -315,16 +315,16 @@ template<typename T> Vect<T> operator-(Vect<T> const& u, Vect<T> const& v)
 	return w;
 }
 
-template<typename T> Vect<T>& operator-(Vect<T>&& u, Vect<T> const& v)
+template<typename T> Vect<T>&& operator-(Vect<T>&& u, Vect<T> const& v)
 {
 	u -= v;
-	return u;
+	return std::move(u);
 }
 
-template<typename T> Vect<T>& operator-(Vect<T>&& u, Vect<T>&& v)
+template<typename T> Vect<T>&& operator-(Vect<T>&& u, Vect<T>&& v)
 {
 	u -= v;
-	return u;
+	return std::move(u);
 }
 
 
@@ -349,13 +349,13 @@ template<typename T> Vect<T> operator*(T x, Vect<T> const& v)
 	return v*x;
 }
 
-template<typename T> Vect<T>& operator*(Vect<T>&& v, T x)
+template<typename T> Vect<T>&& operator*(Vect<T>&& v, T x)
 {
 	v *= x;
-	return v;
+	return std::move(v);
 }
 
-template<typename T> Vect<T>& operator*(T x, Vect<T>&& v)
+template<typename T> Vect<T>&& operator*(T x, Vect<T>&& v)
 {
 	return std::move(v) * x;
 }
@@ -377,10 +377,10 @@ template<typename T> Vect<T> operator/(Vect<T> const& v, T x)
 	return w;
 }
 
-template<typename T> Vect<T> operator/(Vect<T>&& v, T x)
+template<typename T> Vect<T>&& operator/(Vect<T>&& v, T x)
 {
 	v /= x;
-	return v;
+	return std::move(v);
 }
 
 
@@ -400,10 +400,10 @@ template<typename T> Vect<T> operator%(Vect<T> const& v, T x)
 	return w;
 }
 
-template<typename T> Vect<T> operator%(Vect<T>&& v, T x)
+template<typename T> Vect<T>&& operator%(Vect<T>&& v, T x)
 {
 	v %= x;
-	return v;
+	return std::move(v);
 }
 
 
