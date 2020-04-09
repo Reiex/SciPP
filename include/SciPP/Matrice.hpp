@@ -229,6 +229,25 @@ template<typename T> Matrice<T> operator+(Matrice<T> const& M, Matrice<T> const&
 	return R;
 }
 
+template<typename T> Matrice<T>&& operator+(Matrice<T>&& M, Matrice<T> const& N)
+{
+	M += N;
+	return std::move(M);
+}
+
+template<typename T> Matrice<T>&& operator+(Matrice<T> const& M, Matrice<T>&& N)
+{
+	N += M;
+	return std::move(N);
+}
+
+template<typename T> Matrice<T>&& operator+(Matrice<T>&& M, Matrice<T>&& N)
+{
+	M += N;
+	return std::move(M);
+}
+
+
 template<typename T> Matrice<T>& Matrice<T>::operator-=(Matrice<T> const& M)
 {
 	if (M.m_taille[0] != m_taille[0] || M.m_taille[1] != m_taille[1])
@@ -248,6 +267,19 @@ template<typename T> Matrice<T> operator-(Matrice<T> const& M, Matrice<T> const&
 
 	return R;
 }
+
+template<typename T> Matrice<T>&& operator-(Matrice<T>&& M, Matrice<T> const& N)
+{
+	M -= N;
+	return std::move(M);
+}
+
+template<typename T> Matrice<T>&& operator-(Matrice<T>&& M, Matrice<T>&& N)
+{
+	M -= N;
+	return std::move(M);
+}
+
 
 template<typename T> Matrice<T>& Matrice<T>::operator*=(Matrice<T> const& M)
 {
@@ -319,6 +351,7 @@ template<typename T> Matrice<T> operator*(T const& x, Matrice<T> const& M)
 {
 	return M * x;
 }
+
 
 template<typename T> Matrice<T>& Matrice<T>::operator/=(T const& x)
 {
