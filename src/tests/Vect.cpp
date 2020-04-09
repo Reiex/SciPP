@@ -216,46 +216,49 @@ static std::string testAddition(Test& test)
 			return "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Addition externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Addition externe Vect&&(Vect&&, Vect const&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = std::move(x) + y;
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "15235586649")
-			return "";
-		else
-			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, le vecteur de depart est toujours actif. ";
+		else if (stream.str() != "<4, 7, 5, 9, 5, 12>")
+			r += "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
+		
+		return r;
 	});
 
-	test.addSubTest("Addition externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
+	test.addSubTest("Addition externe Vect&&(Vect const&, Vect&&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = x + std::move(y);
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (y.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "15235586649")
-			return "";
-		else
-			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+		if (y.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, le vecteur de depart est toujours actif. ";
+		else if (stream.str() != "<4, 7, 5, 9, 5, 12>")
+			r += "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
+
+		return r;
 	});
 
-	test.addSubTest("Addition externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
+	test.addSubTest("Addition externe Vect&&(Vect&&, Vect&&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = std::move(x) + std::move(y);
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "15235586649")
-			return "";
-		else
-			return "Resultat attendu: 15235586649. Resultat obtenu: " + stream.str() + ".";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, le vecteur de depart est toujours actif. ";
+		else if (stream.str() != "<4, 7, 5, 9, 5, 12>")
+			r += "Resultat attendu: <4, 7, 5, 9, 5, 12>. Resultat obtenu: " + stream.str() + ".";
+
+		return r;
 	});
 
 	return "";
@@ -265,68 +268,56 @@ static std::string testSoustraction(Test& test)
 {
 	test.addSubTest("Soustraction en place", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 });
 		x -= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-15235586649")
+		if (stream.str() == "<-2, 5, -3, 7, -5, -6>")
 			return "";
 		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <-2, 5, -3, 7, -5, -6>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Soustraction externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Soustraction externe Vect(Vect const&, Vect const&)", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = x - y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-15235586649")
+		if (stream.str() == "<-2, 5, -3, 7, -5, -6>")
 			return "";
 		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <-2, 5, -3, 7, -5, -6>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Soustraction externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Soustraction externe Vect&&(Vect&&, Vect const&)", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = std::move(x) - y;
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, le vecteur de depart est toujours actif. ";
+		else if (stream.str() != "<-2, 5, -3, 7, -5, -6>")
+			r += "Resultat attendu: <-2, 5, -3, 7, -5, -6>. Resultat obtenu: " + stream.str() + ".";
+
+		return r;
 	});
 
-	test.addSubTest("Soustraction externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
+	test.addSubTest("Soustraction externe Vect&&(Vect&&, Vect&&)", [](Test& test)->std::string
 	{
-		Int x(-31415926536), y(-16180339887), z;
-		z = x - std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (y.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Soustraction externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(-31415926536), y(-16180339887), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 3, 1, 4, 1, 5, 9 }), z;
 		z = std::move(x) - std::move(y);
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-15235586649")
-			return "";
-		else
-			return "Resultat attendu: -15235586649. Resultat obtenu: " + stream.str() + ".";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu, le vecteur de depart est toujours actif. ";
+		else if (stream.str() != "<-2, 5, -3, 7, -5, -6>")
+			r += "Resultat attendu: <-2, 5, -3, 7, -5, -6>. Resultat obtenu: " + stream.str() + ".";
+
+		return r;
 	});
 
 	return "";
