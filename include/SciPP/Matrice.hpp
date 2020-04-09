@@ -317,6 +317,7 @@ template<typename T> Matrice<T> operator*(Matrice<T> const& M, Matrice<T> const&
 	return R;
 }
 
+
 template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 {
 	if (M.size()[1] != v.size())
@@ -329,6 +330,7 @@ template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 
 	return u;
 }
+
 
 template<typename T> Matrice<T>& Matrice<T>::operator*=(T const& x)
 {
