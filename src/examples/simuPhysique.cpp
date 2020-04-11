@@ -291,11 +291,12 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	premiere->matrice = W;
 	premiere->suivante = nullptr;
 	derniere = premiere;
+	std::cout << "#";
 
 	while (t < t_simu)
 	{
 		iterations++;
-		std::cout << "> Iteration " << iterations << " a t=" << t << std::endl;
+		std::cout << " Iteration " << iterations << " a t=" << t << std::endl;
 
 		poissonCurlSolveur(W, Ux, Uy, Lx, Ly);
 
@@ -307,12 +308,16 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		
 		if (t >= tSuivant)
 		{
-			std::cout << ">>";
+			std::cout << "#";
 			derniere->suivante = new MatriceChainee;
 			derniere = derniere->suivante;
 			derniere->matrice = W;
 			derniere->suivante = nullptr;
 			tSuivant += 1.0 / 72;
+		}
+		else
+		{
+			std::cout << ">";
 		}
 
 		t += dt;
