@@ -325,70 +325,75 @@ static std::string testSoustraction(Test& test)
 
 static std::string testMultiplication(Test& test)
 {
-	test.addSubTest("Multiplication en place", [](Test& test)->std::string
+	test.addSubTest("Multiplication en place par un scalaire", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 });
+		int y(3);
 		x *= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-50831088")
+		if (stream.str() == "<3, 18, 3, 24, 0, 9>")
 			return "";
 		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <3, 18, 3, 24, 0, 9>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Multiplication externe Int(Int const&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Multiplication externe Vect(Vect const&, T const&)", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(3);
 		z = x * y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-50831088")
+		if (stream.str() == "<3, 18, 3, 24, 0, 9>")
 			return "";
 		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <3, 18, 3, 24, 0, 9>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Multiplication externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Multiplication externe Vect(T const&, Vect const&)", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(3);
+		z = y * x;
+		std::stringstream stream;
+		stream << z;
+		if (stream.str() == "<3, 18, 3, 24, 0, 9>")
+			return "";
+		else
+			return "Resultat attendu: <3, 18, 3, 24, 0, 9>. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Multiplication externe Vect&&(Vect&&, T const&)", [](Test& test)->std::string
+	{
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(3);
 		z = std::move(x) * y;
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+		if (stream.str() != "<3, 18, 3, 24, 0, 9>")
+			r += "Resultat attendu: <3, 18, 3, 24, 0, 9>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu. ";
+
+		return r;
 	});
 
-	test.addSubTest("Multiplication externe Int&&(Int const&, Int&&)", [](Test& test)->std::string
+	test.addSubTest("Multiplication externe Vect&&(T const&, Vect&&)", [](Test& test)->std::string
 	{
-		Int x(31416), y(-1618), z;
-		z = x * std::move(y);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(3);
+		z = y * std::move(x);
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (y.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
-	});
+		if (stream.str() != "<3, 18, 3, 24, 0, 9>")
+			r += "Resultat attendu: <3, 18, 3, 24, 0, 9>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu. ";
 
-	test.addSubTest("Multiplication externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31416), y(-1618), z;
-		z = std::move(x) * std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-50831088")
-			return "";
-		else
-			return "Resultat attendu: -50831088. Resultat obtenu: " + stream.str() + ".";
+		return r;
 	});
 
 	return "";
@@ -396,72 +401,46 @@ static std::string testMultiplication(Test& test)
 
 static std::string testDivision(Test& test)
 {
-	test.addSubTest("Division en place normale", [](Test& test)->std::string
+	test.addSubTest("Division en place par un scalaire", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 });
+		int y(2);
 		x /= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "-19416518")
+		if (stream.str() == "<0, 3, 0, 4, 0, 1>")
 			return "";
 		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <0, 3, 0, 4, 0, 1>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Division par zero", [](Test& test)->std::string
+	test.addSubTest("Division externe Vect(Vect const&, T const&)", [](Test& test)->std::string
 	{
-		try
-		{
-			Int x(31415926536);
-			x /= 0;
-			std::stringstream stream;
-			stream << x;
-			return "La division par zero a eu lieu. Valeur obtenue: " + stream.str() + ".";
-		}
-		catch (Int::ZeroDivisionException& e)
-		{
-			return "";
-		}
-	});
-
-	test.addSubTest("Division externe Int(Int const&, Int const&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(2);
 		z = x / y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "-19416518")
+		if (stream.str() == "<0, 3, 0, 4, 0, 1>")
 			return "";
 		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <0, 3, 0, 4, 0, 1>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Division externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Division externe Vect&&(Vect&&, T const&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(2);
 		z = std::move(x) / y;
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-19416518")
-			return "";
-		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Division externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
-		z = std::move(x) / std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-19416518")
-			return "";
-		else
-			return "Resultat attendu: -19416518. Resultat obtenu: " + stream.str() + ".";
+		if (stream.str() != "<0, 3, 0, 4, 0, 1>")
+			r += "Resultat attendu: <0, 3, 0, 4, 0, 1>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu. ";
+		
+		return r;
 	});
 
 	return "";
@@ -469,72 +448,46 @@ static std::string testDivision(Test& test)
 
 static std::string testModulo(Test& test)
 {
-	test.addSubTest("Modulo en place normal", [](Test& test)->std::string
+	test.addSubTest("Modulo en place par un scalaire", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 });
+		int y(5);
 		x %= y;
 		std::stringstream stream;
 		stream << x;
-		if (stream.str() == "412")
+		if (stream.str() == "<1, 1, 1, 3, 0, 3>")
 			return "";
 		else
-			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <1, 1, 1, 3, 0, 3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Modulo par zero", [](Test& test)->std::string
+	test.addSubTest("Modulo externe Vect(Vect const&, T const&)", [](Test& test)->std::string
 	{
-		try
-		{
-			Int x(31415926536);
-			x %= 0;
-			std::stringstream stream;
-			stream << x;
-			return "Le modulo par zero a eu lieu. Valeur obtenue: " + stream.str() + ".";
-		}
-		catch (Int::ZeroDivisionException& e)
-		{
-			return "";
-		}
-	});
-
-	test.addSubTest("Modulo externe Int(Int const&, Int const&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(5);
 		z = x % y;
 		std::stringstream stream;
 		stream << z;
-		if (stream.str() == "412")
+		if (stream.str() == "<1, 1, 1, 3, 0, 3>")
 			return "";
 		else
-			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <1, 1, 1, 3, 0, 3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Modulo externe Int&&(Int&&, Int const&)", [](Test& test)->std::string
+	test.addSubTest("Modulo externe Vect&&(Vect&&, T const&)", [](Test& test)->std::string
 	{
-		Int x(31415926536), y(-1618), z;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), z;
+		int y(5);
 		z = std::move(x) % y;
 		std::stringstream stream;
+		std::string r;
 		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "412")
-			return "";
-		else
-			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
-	});
+		if (stream.str() != "<1, 1, 1, 3, 0, 3>")
+			r += "Resultat attendu: <1, 1, 1, 3, 0, 3>. Resultat obtenu: " + stream.str() + ". ";
+		if (x.size() != 0)
+			r += "Le deplacement n'a pas eu lieu. ";
 
-	test.addSubTest("Modulo externe Int&&(Int&&, Int&&)", [](Test& test)->std::string
-	{
-		Int x(31415926536), y(-1618), z;
-		z = std::move(x) % std::move(y);
-		std::stringstream stream;
-		stream << z;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "412")
-			return "";
-		else
-			return "Resultat attendu: 412. Resultat obtenu: " + stream.str() + ".";
+		return r;
 	});
 
 	return "";
@@ -542,56 +495,28 @@ static std::string testModulo(Test& test)
 
 static std::string testUnaires(Test& test)
 {
-	test.addSubTest("Moins unaire par creation d'un nouvel Int", [](Test& test)->std::string
+	test.addSubTest("Moins unaire", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y;
 		y = -x;
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "-161803398874989")
+		if (stream.str() == "<-1, -6, -1, -8, 0, -3>")
 			return "";
 		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <-1, -6, -1, -8, 0, -3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
-	test.addSubTest("Plus unaire par creation d'un nouvel Int", [](Test& test)->std::string
+	test.addSubTest("Plus unaire", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y;
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y;
 		y = +x;
 		std::stringstream stream;
 		stream << y;
-		if (stream.str() == "161803398874989")
+		if (stream.str() == "<1, 6, 1, 8, 0, 3>")
 			return "";
 		else
-			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Moins unaire par deplacement", [](Test& test)->std::string
-	{
-		Int x(161803398874989), y;
-		y = -std::move(x);
-		std::stringstream stream;
-		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "-161803398874989")
-			return "";
-		else
-			return "Resultat attendu: -161803398874989. Resultat obtenu: " + stream.str() + ".";
-	});
-
-	test.addSubTest("Plus unaire par deplacement", [](Test& test)->std::string
-	{
-		Int x(161803398874989), y;
-		y = +std::move(x);
-		std::stringstream stream;
-		stream << y;
-		if (x.estActif())
-			return "Le deplacement n'a pas eu lieu, l'entier de depart est toujours actif.";
-		else if (stream.str() == "161803398874989")
-			return "";
-		else
-			return "Resultat attendu: 161803398874989. Resultat obtenu: " + stream.str() + ".";
+			return "Resultat attendu: <1, 6, 1, 8, 0, 3>. Resultat obtenu: " + stream.str() + ".";
 	});
 
 	return "";
@@ -599,67 +524,22 @@ static std::string testUnaires(Test& test)
 
 static std::string testEgalite(Test& test)
 {
-	test.addSubTest("Comparaisons entiers egaux", [](Test& test)->std::string
+	test.addSubTest("Comparaisons vecteurs egaux", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y(161803398874989);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 1, 6, 1, 8, 0, 3 });
 		if (x == y)
 			return "";
 		else
 			return "Le test d'egalite ne renvoie pas le resultat attendu.";
 	});
 
-	test.addSubTest("Comparaisons entiers egaux apres operations", [](Test& test)->std::string
+	test.addSubTest("Comparaisons vecteurs differents", [](Test& test)->std::string
 	{
-		Int x(161803398874989), y(161803398874989);
-		x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
-		y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
-		if (x == y)
-			return "";
-		else
-			return "Le test d'egalite ne renvoie pas le resultat attendu.";
-	});
-
-	test.addSubTest("Comparaisons entiers differents", [](Test& test)->std::string
-	{
-		Int x(161803398874989), y(-161803398874989);
+		Vect<int> x({ 1, 6, 1, 8, 0, 3 }), y({ 1, 6, 1, 8, 0, 4 });
 		if (x != y)
 			return "";
 		else
 			return "Le test d'egalite ne renvoie pas le resultat attendu.";
-	});
-
-	test.addSubTest("Comparaisons autour de zero", [](Test& test)->std::string
-	{
-		bool hasFailed(false);
-
-		Int x(0), y(-x);
-		if (!hasFailed && x != y)
-		{
-			hasFailed = true;
-			return "Le test n°1 d'egalite ne renvoie pas le resultat attendu.";
-		}
-
-		x = -161803398874989;
-		y = x - x;
-		x -= x;
-		if (!hasFailed && x != y)
-		{
-			hasFailed = true;
-			return "Le test n°2 d'egalite ne renvoie pas le resultat attendu.";
-		}
-
-		x = -161803398874989;
-		x -= x;
-		y = 0;
-		if (!hasFailed && x != y)
-		{
-			hasFailed = true;
-			return "Le test n°3 d'egalite ne renvoie pas le resultat attendu.";
-		}
-
-		if (!hasFailed)
-			return "";
-
 	});
 
 	return "";
@@ -667,21 +547,25 @@ static std::string testEgalite(Test& test)
 
 static std::string testGeneraux(Test& test)
 {
-	test.addSubTest("Test aller-retour factorielle", [](Test& test)->std::string
+	test.addSubTest("Produit scalaire", [](Test& test)->std::string
 	{
-		Int x(1);
-		for (int i(1); i < 300; i++)
-			x *= i;
-
-		for (unsigned long long int i(299); i > 0; i--)
-			x /= i;
-
-		std::stringstream stream;
-		stream << x;
-		if (stream.str() == "1")
+		Vect<int> x({ 1, 1, 0, 1, 1, 0, 1 }), y({ 1, 0, -1, 0, 1, 0, -1 });
+		int z(x * y);
+		if (z == 1)
 			return "";
 		else
-			return "La valeur obtenue n'est pas celle attendue. Valeur attendue: 1. Valeur obtenue: " + stream.str();
+			return "Resultat attendu: 1. Resultat obtenu: " + std::to_string(z) + ". ";
+	});
+
+	test.addSubTest("Produit vectoriel", [](Test& test)->std::string
+	{
+		Vect<int> x({ 1, 0, 0}), y({ 0, 1, 0 }), z(x^y);
+		std::stringstream stream;
+		stream << z;
+		if (stream.str() == "<0, 0, 1>")
+			return "";
+		else
+			return "Resultat attendu: <0, 0, 1>. Resultat obtenu: " + stream.str() + ". ";
 	});
 
 	return "";
