@@ -9,6 +9,7 @@
 */
 
 #include <iostream>
+#include <exception>
 #include <initializer_list>
 #include "Frac.hpp"
 
