@@ -9,8 +9,10 @@
 */
 
 #include <iostream>
+#include <exception>
 #include <complex>
 #include <initializer_list>
+#include <limits.h>
 #include "Vect.hpp"
 
 /**
@@ -43,21 +45,21 @@ template<typename T> class Matrice
 		/** \brief Constructeur par défaut, inotialise une matrice de taille nulle. */
 		Matrice();
 		/** \brief Initialise une matrice de m lignes et n colonnes avec `T()`. */
-		Matrice(int m, int n);
+		Matrice(unsigned int m, unsigned int n);
 		Matrice(Matrice<T> const& M);
 		Matrice(Matrice<T>&& M);
 		/** \brief Initialise une matrice avec une liste d'initialisation */
 		Matrice(std::initializer_list<std::initializer_list<T>> tab);
 		/** \brief Initialise une matrice de m lignes et n colonnes. Il faut donc que `tab` soit de taille m*n. */
-		Matrice(T const* tab, int m, int n);
+		Matrice(T const* tab, unsigned int m, unsigned int n);
 
 		Matrice<T>& operator=(Matrice<T> const& M);
 		Matrice<T>& operator=(Matrice<T>&& M);
 
-		Vect<T>& operator[](int i);
-		Vect<T> const& operator[](int i) const;
+		Vect<T>& operator[](unsigned int i);
+		Vect<T> const& operator[](unsigned int i) const;
 		/** \brief Retourne un vecteur contenant deux éléments, le nombre de lignes et le nombre de colonnes. */
-		Vect<int> const& size() const;
+		Vect<unsigned int> const& size() const;
 
 		Matrice<T>& operator+=(Matrice<T> const& M);
 		Matrice<T>& operator-=(Matrice<T> const& M);
@@ -79,7 +81,7 @@ template<typename T> class Matrice
 		void liberer();
 
 		Vect<T>* m_lignes;
-		Vect<int> m_taille;
+		Vect<unsigned int> m_taille;
 };
 
 
@@ -88,19 +90,19 @@ template<typename T> class Matrice
 template<typename T> Matrice<T>::Matrice()
 {
 	m_lignes = nullptr;
-	m_taille = Vect<int>(2);
+	m_taille = Vect<unsigned int>(2);
 }
 
-template<typename T> Matrice<T>::Matrice(int m, int n) : Matrice<T>()
+template<typename T> Matrice<T>::Matrice(unsigned int m, unsigned int n) : Matrice<T>()
 {
 	if (m > 0 && n > 0)
 	{
-		m_taille = Vect<int>(2);
+		m_taille = Vect<unsigned int>(2);
 		m_taille[0] = m;
 		m_taille[1] = n;
 
 		m_lignes = new Vect<T>[m];
-		for (int i(0); i < m; i++)
+		for (unsigned int i(0); i < m; i++)
 			m_lignes[i] = Vect<T>(n);
 	}
 }
@@ -122,33 +124,33 @@ template<typename T> Matrice<T>::Matrice(std::initializer_list<std::initializer_
 
 	if (tab.begin()[0].size() > 0)
 	{
-		m_taille = Vect<int>(2);
+		m_taille = Vect<unsigned int>(2);
 		m_taille[0] = tab.size();
 		m_taille[1] = tab.begin()[0].size();
 
 		m_lignes = new Vect<T>[m_taille[0]];
-		for (int i(0); i < m_taille[0]; i++)
+		for (unsigned int i(0); i < m_taille[0]; i++)
 		{
 			m_lignes[i] = Vect<T>(m_taille[1]);
-			for (int j(0); j < m_taille[1]; j++)
+			for (unsigned int j(0); j < m_taille[1]; j++)
 				m_lignes[i][j] = tab.begin()[i].begin()[j];
 		}
 	}
 }
 
-template<typename T> Matrice<T>::Matrice(T const* tab, int m, int n) : Matrice<T>()
+template<typename T> Matrice<T>::Matrice(T const* tab, unsigned int m, unsigned int n) : Matrice<T>()
 {
 	if (m > 0 && n > 0)
 	{
-		m_taille = Vect<int>(2);
+		m_taille = Vect<unsigned int>(2);
 		m_taille[0] = m;
 		m_taille[1] = n;
 
 		m_lignes = new Vect<T>[m];
-		for (int i(0); i < m; i++)
+		for (unsigned int i(0); i < m; i++)
 		{
 			m_lignes[i] = Vect<T>(n);
-			for (int j(0); j < n; j++)
+			for (unsigned int j(0); j < n; j++)
 				m_lignes[i][j] = tab[i*n + j];
 		}
 	}
@@ -163,7 +165,7 @@ template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T> const& M)
 	
 	m_taille = M.m_taille;
 	m_lignes = new Vect<T>[m_taille[0]];
-	for (int i(0); i < m_taille[0]; i++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
 		m_lignes[i] = M.m_lignes[i];
 
 	return *this;
@@ -176,7 +178,7 @@ template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T>&& M)
 	m_taille = M.m_taille;
 	m_lignes = M.m_lignes;
 
-	M.m_taille = Vect<int>(2);
+	M.m_taille = Vect<unsigned int>(2);
 	M.m_lignes = nullptr;
 
 	return *this;
@@ -185,23 +187,23 @@ template<typename T> Matrice<T>& Matrice<T>::operator=(Matrice<T>&& M)
 
 // Acces et modification de la structure
 
-template<typename T> Vect<T>& Matrice<T>::operator[](int i)
+template<typename T> Vect<T>& Matrice<T>::operator[](unsigned int i)
 {
-	if (i < 0 || i >= m_taille[0])
+	if (i >= m_taille[0])
 		throw "L'indice est en dehors des limites.";
 
 	return m_lignes[i];
 }
 
-template<typename T> Vect<T> const& Matrice<T>::operator[](int i) const
+template<typename T> Vect<T> const& Matrice<T>::operator[](unsigned int i) const
 {
-	if (i < 0 || i >= m_taille[0])
+	if (i >= m_taille[0])
 		throw "L'indice est en dehors des limites.";
 
 	return m_lignes[i];
 }
 
-template<typename T> Vect<int> const& Matrice<T>::size() const
+template<typename T> Vect<unsigned int> const& Matrice<T>::size() const
 {
 	return m_taille;
 }
@@ -214,8 +216,8 @@ template<typename T> Matrice<T>& Matrice<T>::operator+=(Matrice<T> const& M)
 	if (M.m_taille[0] != m_taille[0] || M.m_taille[1] != m_taille[1])
 		throw "Les matrices doivent etre de la meme taille.";
 
-	for (int i(0); i < m_taille[0]; i++)
-		for (int j(0); j < m_taille[1]; j++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
+		for (unsigned int j(0); j < m_taille[1]; j++)
 			m_lignes[i][j] += M.m_lignes[i][j];
 
 	return *this;
@@ -253,8 +255,8 @@ template<typename T> Matrice<T>& Matrice<T>::operator-=(Matrice<T> const& M)
 	if (M.m_taille[0] != m_taille[0] || M.m_taille[1] != m_taille[1])
 		throw "Les matrices doivent etre de la meme taille.";
 
-	for (int i(0); i < m_taille[0]; i++)
-		for (int j(0); j < m_taille[1]; j++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
+		for (unsigned int j(0); j < m_taille[1]; j++)
 			m_lignes[i][j] -= M.m_lignes[i][j];
 
 	return *this;
@@ -292,13 +294,13 @@ template<typename T> Matrice<T>& Matrice<T>::operator*=(Matrice<T> const& M)
 
 	m_taille[1] = p;
 	m_lignes = new Vect<T>[m];
-	for (int i(0); i < m; i++)
+	for (unsigned int i(0); i < m; i++)
 	{
 		m_lignes[i] = Vect<T>(p);
-		for (int j(0); j < p; j++)
+		for (unsigned int j(0); j < p; j++)
 		{
 			T x(0);
-			for (int k(0); k < n; k++)
+			for (unsigned int k(0); k < n; k++)
 				x += lignes[i][k] * M[k][j];
 			m_lignes[i][j] = x;
 		}
@@ -324,8 +326,8 @@ template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 		throw "Les tailles sont incompatibles";
 
 	Vect<T> u(M.size()[0]);
-	for (int i(0); i < M.size()[0]; i++)
-		for (int k(0); k < M.size()[1]; k++)
+	for (unsigned int i(0); i < M.size()[0]; i++)
+		for (unsigned int k(0); k < M.size()[1]; k++)
 			u[i] += M[i][k] * v[k];
 
 	return u;
@@ -334,8 +336,8 @@ template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 
 template<typename T> Matrice<T>& Matrice<T>::operator*=(T const& x)
 {
-	for (int i(0); i < m_taille[0]; i++)
-		for (int j(0); j < m_taille[1]; j++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
+		for (unsigned int j(0); j < m_taille[1]; j++)
 			m_lignes[i][j] *= x;
 
 	return *this;
@@ -357,8 +359,8 @@ template<typename T> Matrice<T> operator*(T const& x, Matrice<T> const& M)
 
 template<typename T> Matrice<T>& Matrice<T>::operator/=(T const& x)
 {
-	for (int i(0); i < m_taille[0]; i++)
-		for (int j(0); j < m_taille[1]; j++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
+		for (unsigned int j(0); j < m_taille[1]; j++)
 			m_lignes[i][j] /= x;
 
 	return *this;
@@ -380,8 +382,8 @@ template<typename T> bool operator==(Matrice<T> const& M, Matrice<T> const& N)
 	if (M.size()[0] != N.size()[0] || M.size()[1] != N.size()[1])
 		return false;
 
-	for (int i(0); i < M.size()[0]; i++)
-		for (int j(0); j < M.size()[1]; j++)
+	for (unsigned int i(0); i < M.size()[0]; i++)
+		for (unsigned int j(0); j < M.size()[1]; j++)
 			if (M[i][j] != N[i][j])
 				return false;
 
@@ -401,15 +403,15 @@ template<typename T> T Matrice<T>::det() const
 	if (m_taille[0] != m_taille[1] || m_taille[0] < 1)
 		throw "La matrice doit etre carree et de taille n >= 1.";
 
-	int n(m_taille[0]);
+	unsigned int n(m_taille[0]);
 	Matrice<T> M(*this);
 	T zero(0);
 
-	for (int j(0); j < n; j++)
+	for (unsigned int j(0); j < n; j++)
 	{
 		if (M[j][j] == zero)
 		{
-			for (int i(j+1); i < n; i++)
+			for (unsigned int i(j+1); i < n; i++)
 			{
 				if (M[i][j] != zero)
 				{
@@ -422,12 +424,12 @@ template<typename T> T Matrice<T>::det() const
 				return zero;
 		}
 
-		for (int i(j + 1); i < n; i++)
+		for (unsigned int i(j + 1); i < n; i++)
 			M[i] -= (M[i][j] / M[j][j]) * M[j];
 	}
 
 	T prod(M[0][0]);
-	for (int i(1); i < n; i++)
+	for (unsigned int i(1); i < n; i++)
 		prod *= M[i][i];
 
 	return prod;
@@ -438,18 +440,18 @@ template<typename T> Matrice<T> Matrice<T>::inv() const
 	if (m_taille[0] != m_taille[1] || m_taille[0] < 1)
 		throw "La matrice doit etre carree et de taille n >= 1.";
 
-	int n(m_taille[0]);
+	unsigned int n(m_taille[0]);
 	Matrice<T> M(*this), I(n, n);
 	T zero(0);
 
-	for (int i(0); i < n; i++)
+	for (unsigned int i(0); i < n; i++)
 		I[i][i] = 1;
 
-	for (int j(0); j < n; j++)
+	for (unsigned int j(0); j < n; j++)
 	{
 		if (M[j][j] == zero)
 		{
-			for (int i(j + 1); i < n; i++)
+			for (unsigned int i(j + 1); i < n; i++)
 			{
 				if (M[i][j] != zero)
 				{
@@ -470,7 +472,7 @@ template<typename T> Matrice<T> Matrice<T>::inv() const
 			M[j] /= M[j][j];
 		}
 
-		for (int i(j + 1); i < n; i++)
+		for (unsigned int i(j + 1); i < n; i++)
 		{
 			if (M[i][j] != zero)
 			{
@@ -480,9 +482,9 @@ template<typename T> Matrice<T> Matrice<T>::inv() const
 		}
 	}
 
-	for (int j(n - 1); j >= 0; j--)
+	for (unsigned int j(n - 1); j != UINT_MAX; j--)
 	{
-		for (int i(j - 1); i >= 0; i--)
+		for (unsigned int i(j - 1); i != UINT_MAX; i--)
 		{
 			if (M[i][j] != zero)
 			{
@@ -499,8 +501,8 @@ template<typename T> Matrice<T> Matrice<T>::transpose() const
 {
 	Matrice<T> M(m_taille[1], m_taille[0]);
 
-	for (int i(0); i < m_taille[0]; i++)
-		for (int j(0); j < m_taille[1]; j++)
+	for (unsigned int i(0); i < m_taille[0]; i++)
+		for (unsigned int j(0); j < m_taille[1]; j++)
 			M[j][i] = m_lignes[i][j];
 
 	return M;
@@ -512,7 +514,7 @@ template<typename T> Matrice<T> Matrice<T>::transpose() const
 template<typename T> std::ostream& operator<<(std::ostream& stream, Matrice<T> const& M)
 {
 	stream << "(";
-	for (int i(0); i < M.size()[0]; i++)
+	for (unsigned int i(0); i < M.size()[0]; i++)
 		if (i == 0)
 			stream << M[i] << std::endl;
 		else if (i == M.size()[0] - 1)
@@ -533,7 +535,7 @@ template<typename T> void Matrice<T>::liberer()
 		delete[] m_lignes;
 	
 	m_lignes = nullptr;
-	m_taille = Vect<int>(2);
+	m_taille = Vect<unsigned int>(2);
 }
 
 template<typename T> Matrice<T>::~Matrice()
