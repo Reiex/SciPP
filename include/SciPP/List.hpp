@@ -86,7 +86,7 @@ template<typename T> const char* List<T>::IndexException::what() const throw()
 }
 
 
-template<typename T> List<T>::List() : m_n(0), m_x(nullptr)
+template<typename T> List<T>::List() : m_n(0), m_allocSize(0), m_x(nullptr)
 {
 
 }
@@ -99,7 +99,7 @@ template<typename T> List<T>::List(unsigned int n) : List()
 		while (m_n > m_allocSize)
 			incAllocSize();
 		m_x = new T[m_allocSize];
-		for (int i(0); i < m_n; i++)
+		for (unsigned int i(0); i < m_n; i++)
 			m_x[i] = T();
 	}
 }
@@ -112,7 +112,7 @@ template<typename T> List<T>::List(std::initializer_list<T> tab) : List()
 		while (m_n > m_allocSize)
 			incAllocSize();
 		m_x = new T[m_allocSize];
-		for (int i(0); i < m_n; i++)
+		for (unsigned int i(0); i < m_n; i++)
 			m_x[i] = tab.begin()[i];
 	}
 }
@@ -125,7 +125,7 @@ template<typename T> List<T>::List(T const* tab, unsigned int taille) : List()
 		while (m_n > m_allocSize)
 			incAllocSize();
 		m_x = new T[m_allocSize];
-		for (int i(0); i < m_n; i++)
+		for (unsigned int i(0); i < m_n; i++)
 			m_x[i] = tab[i];
 	}
 }
@@ -197,7 +197,7 @@ template<typename T> void List<T>::append(T const& x)
 		m_x = new T[m_allocSize];
 		if (oldX != nullptr)
 		{
-			for (int i(0); i < m_n - 1; i++)
+			for (unsigned int i(0); i < m_n - 1; i++)
 				m_x[i] = oldX[i];
 			delete[] oldX;
 		}
@@ -213,7 +213,7 @@ template<typename T> void List<T>::remove(unsigned int i)
 
 	m_n--;
 
-	for (int j(i); j < m_n; j++)
+	for (unsigned int j(i); j < m_n; j++)
 		m_x[j] = m_x[j + 1];
 }
 
@@ -228,13 +228,13 @@ template<typename T> List<T>& List<T>::operator+=(List<T> const& l)
 		m_x = new T[m_allocSize];
 		if (oldX != nullptr)
 		{
-			for (int i(0); i < m_n - 1; i++)
+			for (unsigned int i(0); i < m_n - 1; i++)
 				m_x[i] = oldX[i];
 			delete[] oldX;
 		}
 	}
 
-	for (int i(0); i < l.m_n; i++)
+	for (unsigned int i(0); i < l.m_n; i++)
 		m_x[m_n + i] = l.m_x[i];
 	m_n += l.m_n;
 }
@@ -274,7 +274,7 @@ template<typename T> void List<T>::incAllocSize()
 template<typename T> std::ostream& operator<<(std::ostream& stream, List<T> const& l)
 {
 	stream << "[";
-	for (int i(0); i < l.size(); i++)
+	for (unsigned int i(0); i < l.size(); i++)
 	{
 		if (i != l.size() - 1)
 			stream << l[i] << ", ";
