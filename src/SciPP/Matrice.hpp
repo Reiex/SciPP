@@ -546,14 +546,24 @@ template<typename T> Matrice<T>::~Matrice()
 
 // Autres
 
-/** \brief Transformée de Fourier discrète d'un vecteur */
+/** \brief Transformée de Fourier discrète d'un vecteur. */
 Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v);
-/** \brief Transformée de Fourier discrète inverse d'un vecteur */
+/** \brief Transformée de Fourier discrète inverse d'un vecteur. */
 Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v);
-/** \brief Transformée de Fourier discrète d'une matrice */
+/** \brief Transformée de Fourier discrète d'une matrice. */
 Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M);
-/** \brief Transformée de Fourier discrète inverse d'une matrice */
+/** \brief Transformée de Fourier discrète inverse d'une matrice. */
 Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M);
+
+/** \brief Transformée de cosinus discrète (Type II corrigée) d'un vecteur. */
+Vect<long double> DCT(Vect<long double> const& v);
+/** \brief Transformée inverse de cosinus discrète (Type II corrigée) d'un vecteur. */
+Vect<long double> IDCT(Vect<long double> const& v);
+/** \brief Transformée de cosinus discrète (Type II corrigée) d'une matrice. */
+Matrice<long double> DCT(Matrice<long double> const& M);
+/** \brief Transformée inverse de cosinus discrète (Type II corrigée) d'une matrice. */
+Matrice<long double> IDCT(Matrice<long double> const& M);
+
 /** \brief Résout l'équation \f$\Delta u = f \f$ en passant dans le domaine fréquentiel */
 Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly);
 Matrice<long double> cholesky(Matrice<long double> const& A);

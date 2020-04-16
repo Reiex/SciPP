@@ -2,11 +2,11 @@
 
 Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 {
-	int n(v.size());
+	unsigned int n(v.size());
 	Vect<std::complex<long double>> u(n);
 
-	for (int k(0); k < n; k++)
-		for (int i(0); i < n; i++)
+	for (unsigned int k(0); k < n; k++)
+		for (unsigned int i(0); i < n; i++)
 			u[k] += v[i] * exp(std::complex<long double>(0, -2*PI*k*i/n));
 
 	return u;
@@ -14,11 +14,11 @@ Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 
 Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
 {
-	int n(v.size());
+	unsigned int n(v.size());
 	Vect<std::complex<long double>> u(n);
 
-	for (int k(0); k < n; k++)
-		for (int i(0); i < n; i++)
+	for (unsigned int k(0); k < n; k++)
+		for (unsigned int i(0); i < n; i++)
 			u[k] += v[i] * exp(std::complex<long double>(0, 2*PI*k*i / n));
 
 	return u/std::complex<long double>(n);
@@ -26,15 +26,15 @@ Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
 
 Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M)
 {
-	int m(M.size()[0]), n(M.size()[1]);
+	unsigned int m(M.size()[0]), n(M.size()[1]);
 	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
 
-	for (int i(0); i < m; i++)
-		for (int j(0); j < m; j++)
+	for (unsigned int i(0); i < m; i++)
+		for (unsigned int j(0); j < m; j++)
 			wM[i][j] = exp(std::complex<long double>(0, -2*PI*i*j/m));
 
-	for (int i(0); i < n; i++)
-		for (int j(0); j < n; j++)
+	for (unsigned int i(0); i < n; i++)
+		for (unsigned int j(0); j < n; j++)
 			wN[i][j] = exp(std::complex<long double>(0, -2*PI*i*j/n));
 
 	return wM * M * wN;
@@ -42,18 +42,92 @@ Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> cons
 
 Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M)
 {
-	int m(M.size()[0]), n(M.size()[1]);
+	unsigned int m(M.size()[0]), n(M.size()[1]);
 	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
 
-	for (int i(0); i < m; i++)
-		for (int j(0); j < m; j++)
+	for (unsigned int i(0); i < m; i++)
+		for (unsigned int j(0); j < m; j++)
 			wM[i][j] = exp(std::complex<long double>(0, 2*PI*i*j/m));
 
-	for (int i(0); i < n; i++)
-		for (int j(0); j < n; j++)
+	for (unsigned int i(0); i < n; i++)
+		for (unsigned int j(0); j < n; j++)
 			wN[i][j] = exp(std::complex<long double>(0, 2*PI*i*j/n));
 
 	return wM * M * wN / std::complex<long double>(m*n, 0);
+}
+
+static long double g(unsigned int N, unsigned int k, unsigned int i)
+{
+	if (k == 0)
+		return cos(PI * (i + 0.5) * k / N) / sqrt(N);
+	else
+		return sqrt(2.0 / N) * cos(PI * (i + 0.5) * k / N);
+}
+
+Vect<long double> DCT(Vect<long double> const& v)
+{
+	unsigned int n(v.size());
+	Vect<long double> u(n);
+	
+	for (unsigned int k(0); k < n; k++)
+		for (unsigned int i(0); i < n; i++)
+			u[k] += v[i] * g(n, k, i);
+	
+	return u;
+}
+
+Vect<long double> IDCT(Vect<long double> const& v)
+{
+	unsigned int n(v.size());
+	Vect<long double> u(n);
+
+
+	for (unsigned int k(0); k < n; k++)
+		for (unsigned int i(0); i < n; i++)
+			u[k] += v[i] * g(n, i, k);
+
+	return u;
+}
+
+static long double G(unsigned int N, unsigned int p, unsigned int q, unsigned int n, unsigned int m)
+{
+	long double r(2*cos(PI*p*(n + 0.5)/N)*cos(PI*q*(m + 0.5)/N)/N);
+
+	if (p == 0)
+		r /= sqrt(2);
+
+	if (q == 0)
+		r /= sqrt(2);
+
+	return r;
+}
+
+Matrice<long double> DCT(Matrice<long double> const& M)
+{
+	unsigned int n(M.size()[0]);
+	Matrice<long double> N(n, n);
+
+	for (unsigned int i(0); i < n; i++)
+		for (unsigned int j(0); j < n; j++)
+			for (unsigned int k(0); k < n; k++)
+				for (unsigned int l(0); l < n; l++)
+					N[i][j] += M[k][l]*G(n, i, j, k, l);
+
+	return N;
+}
+
+Matrice<long double> IDCT(Matrice<long double> const& M)
+{
+	unsigned int n(M.size()[0]);
+	Matrice<long double> N(n, n);
+
+	for (unsigned int i(0); i < n; i++)
+		for (unsigned int j(0); j < n; j++)
+			for (unsigned int k(0); k < n; k++)
+				for (unsigned int l(0); l < n; l++)
+					N[i][j] += M[k][l] * G(n, k, l, i, j);
+
+	return N;
 }
 
 Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly)
