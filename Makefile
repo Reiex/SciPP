@@ -16,7 +16,7 @@ INCLUDE_DIR = include
 INCLUDE_LIBRARY_DIR = $(INCLUDE_DIR)/SciPP
 
 LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o $(OBJ_LIBRARY_DIR)/Matrice.o $(OBJ_LIBRARY_DIR)/Interpreteur.o $(OBJ_LIBRARY_DIR)/Plot.o
-TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o $(OBJ_TESTS_DIR)/Frac.o $(OBJ_TESTS_DIR)/Vect.o $(OBJ_TESTS_DIR)/Polynome.o $(OBJ_TESTS_DIR)/Matrice.o
+TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o $(OBJ_TESTS_DIR)/Frac.o $(OBJ_TESTS_DIR)/Vect.o $(OBJ_TESTS_DIR)/Polynome.o $(OBJ_TESTS_DIR)/Matrice.o $(OBJ_TESTS_DIR)/List.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/examples.o $(OBJ_EXAMPLES_DIR)/simuPhysique.o $(OBJ_EXAMPLES_DIR)/jeuxArithmetiques.o
 
 # Règles générales
@@ -56,7 +56,7 @@ lineCount:
 # Compilation de la librairie
 
 $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a: $(LIBRARY_OBJS)
-	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp
+	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
 	cp $(SRC_LIBRARY_DIR)/*.h $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
 	ar rcs $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(LIBRARY_OBJS)
 

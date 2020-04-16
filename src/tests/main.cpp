@@ -8,6 +8,7 @@ int main()
 		test.addSubTest("TEST DES VECTEURS", &mainVect);
 		test.addSubTest("TEST DES POLYNOMES", &mainPolynome);
 		test.addSubTest("TEST DES MATRICES", &mainMatrice);
+		test.addSubTest("TEST DES LISTES", &mainList);
 		return "";
 	});
 

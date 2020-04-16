@@ -12,3 +12,4 @@ std::string mainFrac(Test& test);
 std::string mainVect(Test& test);
 std::string mainPolynome(Test& test);
 std::string mainMatrice(Test& test);
+std::string mainList(Test& test);

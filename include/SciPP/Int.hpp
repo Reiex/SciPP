@@ -136,8 +136,7 @@ class Int
 		 * \brief Retourne, si c'est possible, l'entier sous forme de long long int.
 		 * 
 		 * Si l'entier est trop grand (ou trop petit) pour être converti en long long int, la 
-		 * fonction retournera un entier d'apparence aléatoire, il appartient au programmeur de
-		 * vérifier si l'on peut convertir l'entier.
+		 * fonction retournera une erreur IntTooBigException.
 		 * 
 		*/
 		long long int toInt() const;

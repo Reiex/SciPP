@@ -1,24 +1,44 @@
 #pragma once
 
+/**
+ * \file Containers/List.hpp
+ * \brief Ensemble des fonctions et classes permettant la manipulation de listes
+ * \author Reiex
+ * 
+ * Pour une description plus détaillée, voir la description de la classe List
+ * 
+ */
 
 #include <iostream>
 #include <exception>
 #include <initializer_list>
 
-
+/**
+ * \class List
+ * \brief Classe permettant de manipuler des listes
+ * 
+ * Par liste on entend un tableau réalloué dynamiquement.
+ * 
+ * Cette classe est template mais ne requiert que les opérateurs d'affectations de copie et de déplacement classiques.
+ */
 template<typename T> class List
 {
 	public:
 
+		/** \brief Erreur renvoyée lors d'une tentative d'accès à un indice invalide de la liste. */
 		class IndexException : public std::exception
 		{
 			public:
 				virtual const char* what() const throw();
 		};
 
+		/** \brief Constructeur par défaut, initialise une liste vide. */
 		List();
+		/** \brief Initialise une liste de taille n contenant n instances T(). */
 		List(unsigned int n);
+		/** \brief Initialise une liste avec une liste d'initialisation. */
 		List(std::initializer_list<T> tab);
+		/** \brief Initialise une liste contenant les éléments du tableau tab */
 		List(T const* tab, unsigned int taille);
 		List(List<T> const& l);
 		List(List<T>&& l);
@@ -28,10 +48,23 @@ template<typename T> class List
 		T& operator[](unsigned int i);
 		T const& operator[](unsigned int i) const;
 		
+		/** \brief Retourne la taille de la liste. */
 		unsigned int size() const;
+		/** \brief Ajout un élément à la fin de la liste. */
 		void append(T const& x);
+		/**
+		 * \brief Retire l'élément d'indice i de la liste.
+		 * 
+		 * Tout les éléments d'indice supérieur à i sont alors décalés d'un rang.
+		 */
 		void remove(unsigned int i);
 
+		/**
+		 * \todo unsigned int find(T const& x);
+		 * \todo void sort(int (*key)(T const&));
+		 */
+
+		/** \brief Concaténation de deux listes. */
 		List<T>& operator+=(List<T> const& l);
 
 		~List();
@@ -49,7 +82,7 @@ template<typename T> class List
 
 template<typename T> const char* List<T>::IndexException::what() const throw()
 {
-	return "Tentative d'acc�s � un indice invalide de la liste.";
+	return "Tentative d'accès à un indice invalide de la liste.";
 }
 
 
@@ -67,7 +100,7 @@ template<typename T> List<T>::List(unsigned int n) : List()
 			incAllocSize();
 		m_x = new T[m_allocSize];
 		for (int i(0); i < m_n; i++)
-			m_x[i] = T()
+			m_x[i] = T();
 	}
 }
 
@@ -238,7 +271,7 @@ template<typename T> void List<T>::incAllocSize()
 }
 
 
-template<typename T> std::ostream& operator<<(std::ostream& stream, Liste<T> const& l)
+template<typename T> std::ostream& operator<<(std::ostream& stream, List<T> const& l)
 {
 	stream << "[";
 	for (int i(0); i < l.size(); i++)

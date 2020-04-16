@@ -5,7 +5,7 @@
  * \brief Fichier d'inclusion, c'est ce fichier qui doit ête inclus pour importer la bibliothèque SciPP.
 */
 
-#include "Containers/Liste.hpp"
+#include "List.hpp"
 #include "Int.hpp"
 #include "Frac.hpp"
 #include "Liste.hpp"
