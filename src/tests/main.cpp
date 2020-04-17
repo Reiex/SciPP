@@ -14,5 +14,7 @@ int main()
 
 	mainTest(0, 3);
 
+	std::cout << std::endl;
+
 	return 0;
 }
