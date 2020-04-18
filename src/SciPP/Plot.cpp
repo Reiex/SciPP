@@ -1,6 +1,6 @@
 #include "Plot.h"
 
-int Timeline::TAILLE_PLOT[] = { 600, 600 };
+int Timeline::TAILLE_PLOT[] = { 800, 800 };
 std::vector<Timeline*> Timeline::timelineList;
 
 Timeline::Timeline()
@@ -270,6 +270,12 @@ void Timeline::show()
 	}
 }
 
+void Timeline::resetPlotSize()
+{
+	TAILLE_PLOT[0] = 800;
+	TAILLE_PLOT[1] = 800;
+}
+
 Timeline::~Timeline()
 {
 	for (int i(0); i < timelineList.size(); i++)
@@ -321,7 +327,7 @@ void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord)
 
 	// Ouverture de la fenêtre
 
-	sf::RenderWindow window(sf::VideoMode(600, 600), "Plot SciPP");
+	sf::RenderWindow window(sf::VideoMode(Timeline::TAILLE_PLOT[0], Timeline::TAILLE_PLOT[1]), "Plot SciPP");
 
 	sf::Event event;
 	while (window.isOpen())
@@ -391,7 +397,7 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 
 	// Ouverture de la fenêtre
 
-	sf::RenderWindow window(sf::VideoMode(600, 600), "Plot SciPP");
+	sf::RenderWindow window(sf::VideoMode(Timeline::TAILLE_PLOT[0], Timeline::TAILLE_PLOT[1]), "Plot SciPP");
 	std::vector<sf::VertexArray> orbites;
 	sf::Event event;
 	while (window.isOpen())
@@ -435,8 +441,8 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 				orbites.push_back(sf::VertexArray(sf::LineStrip, courbe.size()));
 				for (int i(0); i < courbe.size(); i++)
 				{
-					orbites[orbites.size() - 1][i].position.x = 600*(courbe[i][0] - coord[0])/(coord[1] - coord[0]);
-					orbites[orbites.size() - 1][i].position.y = 600*(1 - (courbe[i][1] - coord[2])/(coord[3] - coord[2]));
+					orbites[orbites.size() - 1][i].position.x = Timeline::TAILLE_PLOT[0]*(courbe[i][0] - coord[0])/(coord[1] - coord[0]);
+					orbites[orbites.size() - 1][i].position.y = Timeline::TAILLE_PLOT[1]*(1 - (courbe[i][1] - coord[2])/(coord[3] - coord[2]));
 					orbites[orbites.size() - 1][i].color = sf::Color(0, 0, 255);
 				}
 			}
