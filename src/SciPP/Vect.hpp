@@ -86,9 +86,9 @@ template<typename T> class Vect
 
 		Vect<T>& operator+=(Vect<T> const& v);
 		Vect<T>& operator-=(Vect<T> const& v);
-		Vect<T>& operator*=(T const& x);
-		Vect<T>& operator/=(T const& x);
-		Vect<T>& operator%=(T const& x);
+		Vect<T>& operator*=(T x);
+		Vect<T>& operator/=(T x);
+		Vect<T>& operator%=(T x);
 		Vect<T> operator+();
 		Vect<T> operator-();
 
@@ -329,7 +329,7 @@ template<typename T> Vect<T>&& operator-(Vect<T>&& u, Vect<T>&& v)
 }
 
 
-template<typename T> Vect<T>& Vect<T>::operator*=(T const& x)
+template<typename T> Vect<T>& Vect<T>::operator*=(T x)
 {
 	for (int i(0); i < m_n; i++)
 		m_x[i] *= x;
@@ -362,7 +362,7 @@ template<typename T> Vect<T>&& operator*(T const& x, Vect<T>&& v)
 }
 
 
-template<typename T> Vect<T>& Vect<T>::operator/=(T const& x)
+template<typename T> Vect<T>& Vect<T>::operator/=(T x)
 {
 	for (int i(0); i < m_n; i++)
 		m_x[i] /= x;
@@ -385,7 +385,7 @@ template<typename T> Vect<T>&& operator/(Vect<T>&& v, T const& x)
 }
 
 
-template<typename T> Vect<T>& Vect<T>::operator%=(T const& x)
+template<typename T> Vect<T>& Vect<T>::operator%=(T x)
 {
 	for (int i(0); i < m_n; i++)
 		m_x[i] %= x;
