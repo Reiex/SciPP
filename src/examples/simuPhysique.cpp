@@ -148,12 +148,6 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 
 // 2 Dimensions
 
-struct MatriceChainee
-{
-	Matrice<long double> matrice;
-	MatriceChainee* suivante;
-};
-
 void solveur1D(Vect<long double>& W, Vect<long double> const& U, long double kappa, long double dl, long double dt)
 {
 	int Nl(U.size());
@@ -286,11 +280,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 
 	long double t(0), dtx, dty, dt, tSuivant(1.0/72);
 	long double iterations(0);
-	MatriceChainee *premiere, *derniere;
-	premiere = new MatriceChainee;
-	premiere->matrice = W;
-	premiere->suivante = nullptr;
-	derniere = premiere;
+	List<Matrice<long double>> resultats({ W });
 	std::cout << "#";
 
 	while (t < t_simu)
@@ -309,10 +299,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		if (t >= tSuivant)
 		{
 			std::cout << "#";
-			derniere->suivante = new MatriceChainee;
-			derniere = derniere->suivante;
-			derniere->matrice = W;
-			derniere->suivante = nullptr;
+			resultats.append(W);
 			tSuivant += 1.0 / 72;
 		}
 		else
@@ -326,38 +313,22 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 
 	std::cout << std::endl << "## Simulation terminée, mise en place de l'affichage..." << std::endl;
 
-	long double Wmin(premiere->matrice[0][0]), Wmax(Wmin);
-	MatriceChainee* courante(premiere);
-	while (courante != nullptr)
-	{
+	long double Wmin(resultats[0][0][0]), Wmax(Wmin);
+
+	for (int k(0); k < resultats.size(); k++)
 		for (int i(0); i < Ny; i++)
 			for (int j(0); j < Nx; j++)
-				if (courante->matrice[i][j] > Wmax)
-					Wmax = courante->matrice[i][j];
-				else if (courante->matrice[i][j] < Wmin)
-					Wmin = courante->matrice[i][j];
-
-		courante = courante->suivante;
-	}
+				if (resultats[k][i][j] > Wmax)
+					Wmax = resultats[k][i][j];
+				else if (resultats[k][i][j] < Wmin)
+					Wmin = resultats[k][i][j];
 
 	Timeline timeline;
-	courante = premiere;
-	int i(1);
-	while (courante != nullptr)
-	{
-		std::cout << "> Calcul image " << i << std::endl;
-		timeline.plot(courante->matrice, Wmin, Wmax);
-		courante = courante->suivante;
-		i++;
-	}
 
-	courante = premiere;
-	MatriceChainee* tmp;
-	while (courante != nullptr)
+	for (int k(0); k < resultats.size(); k++)
 	{
-		tmp = courante->suivante;
-		delete courante;
-		courante = tmp;
+		std::cout << "> Calcul image " << k+1 << "/" << resultats.size() << std::endl;
+		timeline.plot(resultats[k], Wmin, Wmax);
 	}
 
 	timeline.setFramerate(24);
