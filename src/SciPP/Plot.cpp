@@ -293,6 +293,7 @@ Timeline::~Timeline()
 void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord)
 {
 	int nbCases(40);
+	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
 	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
 	Matrice<Vect<double>> M(nbCases, nbCases);
@@ -314,12 +315,12 @@ void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord)
 		for (int j(0); j < nbCases; j++)
 		{
 			Vect<double> v(4);
-			v[0] = i * 15 + 8;
-			v[1] = j * 15 + 8;
+			v[0] = (i + 0.5) * (w / nbCases);
+			v[1] = (j + 0.5) * (h / nbCases);
 
 			M[i][j] /= sqrt(M[i][j] * M[i][j]);
-			v[2] = v[0] + M[i][j][0]*7;
-			v[3] = v[1] - M[i][j][1]*7;
+			v[2] = v[0] + M[i][j][0] * w / (2 * nbCases);
+			v[3] = v[1] - M[i][j][1] * h / (2 * nbCases);
 
 			M[i][j] = v;
 		}
@@ -327,7 +328,7 @@ void plotChampVect2D(Vect<double>(*f)(Vect<double>), Vect<double> coord)
 
 	// Ouverture de la fenêtre
 
-	sf::RenderWindow window(sf::VideoMode(Timeline::TAILLE_PLOT[0], Timeline::TAILLE_PLOT[1]), "Plot SciPP");
+	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
 
 	sf::Event event;
 	while (window.isOpen())
@@ -363,6 +364,7 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 	// Calculer le champ vectoriel a afficher
 
 	int nbCases(40);
+	int w(Timeline::TAILLE_PLOT[0]), h(Timeline::TAILLE_PLOT[1]);
 
 	double pasX((coord[1] - coord[0]) / (nbCases - 1)), pasY((coord[3] - coord[2]) / (nbCases - 1));
 	Matrice<Vect<double>> M(nbCases, nbCases);
@@ -384,12 +386,12 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 		for (int j(0); j < nbCases; j++)
 		{
 			Vect<double> v(4);
-			v[0] = i * 15 + 8;
-			v[1] = j * 15 + 8;
+			v[0] = (i + 0.5) * (w/nbCases);
+			v[1] = (j + 0.5) * (h/nbCases);
 
 			M[i][j] /= sqrt(M[i][j] * M[i][j]);
-			v[2] = v[0] + M[i][j][0] * 7;
-			v[3] = v[1] - M[i][j][1] * 7;
+			v[2] = v[0] + M[i][j][0] * w / (2*nbCases);
+			v[3] = v[1] - M[i][j][1] * h / (2*nbCases);
 
 			M[i][j] = v;
 		}
@@ -397,7 +399,7 @@ void plotFlot2D(Vect<double>(*f)(Vect<double>), Vect<double> coord, int precisio
 
 	// Ouverture de la fenêtre
 
-	sf::RenderWindow window(sf::VideoMode(Timeline::TAILLE_PLOT[0], Timeline::TAILLE_PLOT[1]), "Plot SciPP");
+	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
 	std::vector<sf::VertexArray> orbites;
 	sf::Event event;
 	while (window.isOpen())

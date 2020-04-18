@@ -68,8 +68,7 @@ void fonctionLogistique()
 	timeline.plot(f, 0, 1);
 	Timeline::show();
 
-	Timeline::TAILLE_PLOT[0] = 600;
-	Timeline::TAILLE_PLOT[1] = 600;
+	Timeline::resetPlotSize();
 }
 
 void mandelbrot(double xCentre, double yCentre, double zoom)
@@ -110,8 +109,7 @@ void mandelbrot(double xCentre, double yCentre, double zoom)
 	timeline.plot(f, 0, 2);
 	Timeline::show();
 
-	Timeline::TAILLE_PLOT[0] = 600;
-	Timeline::TAILLE_PLOT[1] = 600;
+	Timeline::resetPlotSize();
 }
 
 Vect<Vect<int>> voisins(int x, int y, int w, int h)
