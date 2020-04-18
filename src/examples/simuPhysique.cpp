@@ -211,7 +211,7 @@ void poissonCurlSolveur(Matrice<long double> const& W, Matrice<long double>& Ux,
 		for (int j(0); j < Nx; j++)
 			WHat[i][j] = W[i][j];
 
-	WHat = DFT2D(WHat);
+	WHat = FFT(WHat);
 
 	Vect<std::complex<long double>> kx(Nx), ky(Ny);
 	for (int i(0); i < Nx; i++)
@@ -246,8 +246,8 @@ void poissonCurlSolveur(Matrice<long double> const& W, Matrice<long double>& Ux,
 	}
 		
 
-	Matrice<std::complex<long double>> UxBar(IDFT2D(UxHat));
-	Matrice<std::complex<long double>> UyBar(IDFT2D(UyHat));
+	Matrice<std::complex<long double>> UxBar(IFFT(UxHat));
+	Matrice<std::complex<long double>> UyBar(IFFT(UyHat));
 
 	for (int i(0); i < Ny; i++)
 	{

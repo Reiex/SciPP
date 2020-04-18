@@ -1,6 +1,6 @@
 #include "Matrice.hpp"
 
-Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
+Vect<std::complex<long double>> FFT(Vect<std::complex<long double>> const& v)
 {
 	unsigned int n(v.size());
 	Vect<std::complex<long double>> u(n);
@@ -12,19 +12,23 @@ Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v)
 	return u;
 }
 
-Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v)
+Vect<std::complex<long double>> IFFT(Vect<std::complex<long double>> const& v)
 {
 	unsigned int n(v.size());
-	Vect<std::complex<long double>> u(n);
+	Vect<std::complex<long double>> u(v);
 
-	for (unsigned int k(0); k < n; k++)
-		for (unsigned int i(0); i < n; i++)
-			u[k] += v[i] * exp(std::complex<long double>(0, 2*PI*k*i / n));
+	for (unsigned int i(0); i < n; i++)
+		u[i] = std::complex<long double>(u[i].real(), -u[i].imag());
+	
+	u = FFT(u);
+
+	for (unsigned int i(0); i < n; i++)
+		u[i] = std::complex<long double>(u[i].real(), -u[i].imag());
 
 	return u/std::complex<long double>(n);
 }
 
-Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M)
+Matrice<std::complex<long double>> FFT(Matrice<std::complex<long double>> const& M)
 {
 	unsigned int m(M.size()[0]), n(M.size()[1]);
 	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
@@ -40,20 +44,22 @@ Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> cons
 	return wM * M * wN;
 }
 
-Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M)
+Matrice<std::complex<long double>> IFFT(Matrice<std::complex<long double>> const& M)
 {
 	unsigned int m(M.size()[0]), n(M.size()[1]);
-	Matrice<std::complex<long double>> wM(m, m), wN(n, n);
-
-	for (unsigned int i(0); i < m; i++)
-		for (unsigned int j(0); j < m; j++)
-			wM[i][j] = exp(std::complex<long double>(0, 2*PI*i*j/m));
+	Matrice<std::complex<long double>> N(M);
 
 	for (unsigned int i(0); i < n; i++)
 		for (unsigned int j(0); j < n; j++)
-			wN[i][j] = exp(std::complex<long double>(0, 2*PI*i*j/n));
+			N[i][j] = std::complex<long double>(N[i][j].real(), -N[i][j].imag());
+	
+	N = FFT(N);
 
-	return wM * M * wN / std::complex<long double>(m*n, 0);
+	for (unsigned int i(0); i < n; i++)
+		for (unsigned int j(0); j < n; j++)
+			N[i][j] = std::complex<long double>(N[i][j].real(), -N[i][j].imag());
+
+	return N / std::complex<long double>(m*n, 0);
 }
 
 static long double g(unsigned int N, unsigned int k, unsigned int i)
@@ -143,7 +149,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 
 	// Calcul de la transformée de Fourier
 
-	fHat = DFT2D(fHat);
+	fHat = FFT(fHat);
 
 	// Calcul des nombres d'ondes
 
@@ -171,7 +177,7 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 
 	// Calcul de la matrice complexe du résultat par transformée inverse
 
-	Matrice<std::complex<long double>> psiBar(IDFT2D(fHat));
+	Matrice<std::complex<long double>> psiBar(IFFT(fHat));
 
 	// Calcul du r�sultat
 

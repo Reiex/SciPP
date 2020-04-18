@@ -547,13 +547,13 @@ template<typename T> Matrice<T>::~Matrice()
 // Autres
 
 /** \brief Transformée de Fourier discrète d'un vecteur. */
-Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v);
+Vect<std::complex<long double>> FFT(Vect<std::complex<long double>> const& v);
 /** \brief Transformée de Fourier discrète inverse d'un vecteur. */
-Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v);
+Vect<std::complex<long double>> IFFT(Vect<std::complex<long double>> const& v);
 /** \brief Transformée de Fourier discrète d'une matrice. */
-Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M);
+Matrice<std::complex<long double>> FFT(Matrice<std::complex<long double>> const& M);
 /** \brief Transformée de Fourier discrète inverse d'une matrice. */
-Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M);
+Matrice<std::complex<long double>> IFFT(Matrice<std::complex<long double>> const& M);
 
 /** \brief Transformée de cosinus discrète (Type II corrigée) d'un vecteur. */
 Vect<long double> DCT(Vect<long double> const& v);
