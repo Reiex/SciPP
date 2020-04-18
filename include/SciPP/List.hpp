@@ -66,6 +66,18 @@ template<typename T> class List
 
 		/** \brief Concaténation de deux listes. */
 		List<T>& operator+=(List<T> const& l);
+		/**
+		 * \brief Comparaison de deux listes.
+		 * 
+		 * Deux listes sont égales si et seulement si elles font la même taille et que tout leurs éléments sont égaux
+		 */
+		bool operator==(List<T> const& l) const;
+		/**
+		 * \brief Comparaison de deux listes.
+		 *
+		 * Deux listes sont égales si et seulement si elles font la même taille et que tout leurs éléments sont égaux
+		 */
+		bool operator!=(List<T> const& l) const;
 
 		~List();
 
@@ -150,6 +162,8 @@ template<typename T> List<T>& List<T>::operator=(List<T> const& l)
 	m_x = new T[m_allocSize];
 	for (unsigned int i(0); i < m_n; i++)
 		m_x[i] = l.m_x[i];
+
+	return *this;
 }
 
 template<typename T> List<T>& List<T>::operator=(List<T>&& l)
@@ -163,6 +177,8 @@ template<typename T> List<T>& List<T>::operator=(List<T>&& l)
 	l.m_n = 0;
 	l.m_allocSize = 0;
 	l.m_x = nullptr;
+
+	return *this;
 }
 
 template<typename T> T& List<T>::operator[](unsigned int i)
@@ -245,6 +261,23 @@ template<typename T> List<T> operator+(List<T> const& a, List<T> const& b)
 	c += b;
 
 	return c;
+}
+
+template<typename T> bool List<T>::operator==(List<T> const& l) const
+{
+	if (m_n != l.m_n)
+		return false;
+	
+	for (unsigned int i(0); i < m_n; i++)
+		if (m_x[i] != l.m_x[i])
+			return false;
+
+	return true;
+}
+
+template<typename T> bool List<T>::operator!=(List<T> const& l) const
+{
+	return !(*this == l);
 }
 
 

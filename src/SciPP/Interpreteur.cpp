@@ -176,15 +176,15 @@ void parseToken(Token::Type expected)
 // Gestion des expressions
 
 
-void parseInput(Liste<Rationnel>& l);
-void parseInstr(Liste<Rationnel>& l);
-Rationnel parseExp0(Liste<Rationnel>& l);
-Rationnel parseExp1(Liste<Rationnel>& l);
-Rationnel parseExp1p(Liste<Rationnel>& l, Rationnel const& y);
-Rationnel parseExp2(Liste<Rationnel>& l);
-Rationnel parseExp2p(Liste<Rationnel>& l, Rationnel const& y);
+void parseInput(List<Rationnel>& l);
+void parseInstr(List<Rationnel>& l);
+Rationnel parseExp0(List<Rationnel>& l);
+Rationnel parseExp1(List<Rationnel>& l);
+Rationnel parseExp1p(List<Rationnel>& l, Rationnel const& y);
+Rationnel parseExp2(List<Rationnel>& l);
+Rationnel parseExp2p(List<Rationnel>& l, Rationnel const& y);
 
-void parseInput(Liste<Rationnel>& l)
+void parseInput(List<Rationnel>& l)
 {
 	switch (current.type)
 	{
@@ -202,7 +202,7 @@ void parseInput(Liste<Rationnel>& l)
 	}
 }
 
-void parseInstr(Liste<Rationnel>& l)
+void parseInstr(List<Rationnel>& l)
 {
 	Rationnel x;
 	int i;
@@ -217,7 +217,7 @@ void parseInstr(Liste<Rationnel>& l)
 			x = parseExp2(l);
 			if (i >= l.size())
 				for (int j(0); j < i + 1; j++)
-					l.ajouter(0);
+					l.append(0);
 			l[i] = x;
 			std::cout << ">>> ";
 			break;
@@ -225,14 +225,14 @@ void parseInstr(Liste<Rationnel>& l)
 		default:
 			x = parseExp2(l);
 			if (l.size() == 0)
-				l.ajouter(0);
+				l.append(0);
 			l[0] = x;
 			std::cout << "#0 = " << x << std::endl << ">>> ";
 			break;
 	}
 }
 
-Rationnel parseExp0(Liste<Rationnel>& l)
+Rationnel parseExp0(List<Rationnel>& l)
 {
 	Rationnel x, x0;
 	int i;
@@ -258,7 +258,7 @@ Rationnel parseExp0(Liste<Rationnel>& l)
 			i = current.value.numerateur().toInt();
 			if (i >= l.size())
 				for (int j(0); j < i + 1; j++)
-					l.ajouter(0);
+					l.append(0);
 			x = l[i];
 			parseToken(Token::VAR);
 			return x;
@@ -268,14 +268,14 @@ Rationnel parseExp0(Liste<Rationnel>& l)
 	}
 }
 
-Rationnel parseExp1(Liste<Rationnel>& l)
+Rationnel parseExp1(List<Rationnel>& l)
 {
 	Rationnel x0;
 	x0 = parseExp0(l);
 	return parseExp1p(l, x0);
 }
 
-Rationnel parseExp1p(Liste<Rationnel>& l, Rationnel const& y)
+Rationnel parseExp1p(List<Rationnel>& l, Rationnel const& y)
 {
 	Rationnel x0, x;
 	switch (current.type)
@@ -297,14 +297,14 @@ Rationnel parseExp1p(Liste<Rationnel>& l, Rationnel const& y)
 	}
 }
 
-Rationnel parseExp2(Liste<Rationnel>& l)
+Rationnel parseExp2(List<Rationnel>& l)
 {
 	Rationnel x0;
 	x0 = parseExp1(l);
 	return parseExp2p(l, x0);
 }
 
-Rationnel parseExp2p(Liste<Rationnel>& l, Rationnel const& y)
+Rationnel parseExp2p(List<Rationnel>& l, Rationnel const& y)
 {
 	Rationnel x0, x;
 	switch (current.type)
@@ -331,7 +331,7 @@ Rationnel parseExp2p(Liste<Rationnel>& l, Rationnel const& y)
 
 void lancerInterpreteur()
 {
-	Liste<Rationnel> l;
+	List<Rationnel> l;
 
 	std::cout << ">>> ";
 	parseLexeme();

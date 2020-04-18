@@ -8,7 +8,6 @@
 #include "List.hpp"
 #include "Int.hpp"
 #include "Frac.hpp"
-#include "Liste.hpp"
 #include "Vect.hpp"
 #include "Polynome.hpp"
 #include "Matrice.hpp"
