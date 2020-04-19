@@ -93,6 +93,7 @@ template<typename T> class Frac
 
 		T m_p;
 		T m_q;
+
 };
 
 
@@ -297,6 +298,13 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 	return stream;
 }
 
+/**
+ * \brief Operateur de flux entrant pour les fractions
+ * 
+ * La regex acceptee est: `\(T/T\)`
+ * 
+ * Où T est le format accepté pour le type T
+ */
 template<typename T> std::istream& operator>>(std::istream& stream, Frac<T>& a)
 {
 	if (!stream)

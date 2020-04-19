@@ -166,6 +166,7 @@ class Int
 	friend bool operator<=(Int const& x, Int const& y);
 
 	friend std::ostream& operator<<(std::ostream& stream, Int const& x);
+	friend std::istream& operator>>(std::istream& stream, Int& x);
 };
 
 
