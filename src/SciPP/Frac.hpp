@@ -297,6 +297,49 @@ template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> cons
 	return stream;
 }
 
+template<typename T> std::istream& operator>>(std::istream& stream, Frac<T>& a)
+{
+	if (!stream)
+		return stream;
+
+	T x, y;
+	char c;
+
+	stream.get(c);
+	if (c != '(')
+	{
+		if (stream) stream.putback(c);
+		stream.setstate(std::ios::failbit);
+		return stream;
+	}
+
+	stream >> x;
+	if (!stream) return stream;
+
+	stream.get(c);
+	if (c != '/')
+	{
+		if (stream) stream.putback(c);
+		stream.setstate(std::ios::failbit);
+		return stream;
+	}
+
+	stream >> y;
+	if (!stream) return stream;
+
+	stream.get(c);
+	if (c != ')')
+	{
+		if (stream) stream.putback(c);
+		stream.setstate(std::ios::failbit);
+		return stream;
+	}
+
+	a = Frac<T>(x, y);
+
+	return stream;
+}
+
 
 // Rationnels
 

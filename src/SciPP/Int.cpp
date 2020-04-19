@@ -765,6 +765,49 @@ std::ostream& operator<<(std::ostream& stream, Int const& x)
 	return stream;
 }
 
+std::istream& operator>>(std::istream& stream, Int& x)
+{
+	if (!stream)
+		return stream;
+
+	Int y(0);
+
+	char c;
+
+	stream.get(c);
+	if (c < 48 || c > 57)
+	{
+		stream.putback(c);
+		stream.setstate(std::ios::failbit);
+		return stream;
+	}
+
+	while (stream)
+	{
+		switch (c)
+		{
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				y = 10 * y + Int((int)c - 48);
+				break;
+			default:
+				x = y;
+				stream.putback(c);
+				return stream;
+		}
+		stream.get(c);
+	}
+	return stream;
+}
+
 
 // Autres
 

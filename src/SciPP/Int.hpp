@@ -211,6 +211,7 @@ bool operator<=(Int const& x, Int const& y);
 // Affichage
 
 std::ostream& operator<<(std::ostream& stream, Int const& x);
+std::istream& operator>>(std::istream& stream, Int& x);
 
 // Autres
 
