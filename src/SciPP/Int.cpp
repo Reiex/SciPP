@@ -765,13 +765,6 @@ std::ostream& operator<<(std::ostream& stream, Int const& x)
 	return stream;
 }
 
-/**
- * \brief Operateur de flux entrant pour les entiers
- *
- * La regex acceptee est: `[0-9]+.`
- * 
- * Cependant l'opération ne consomme pas le dernier caractère.
- */
 std::istream& operator>>(std::istream& stream, Int& x)
 {
 	if (!stream)

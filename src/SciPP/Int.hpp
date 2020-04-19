@@ -212,6 +212,13 @@ bool operator<=(Int const& x, Int const& y);
 // Affichage
 
 std::ostream& operator<<(std::ostream& stream, Int const& x);
+/**
+ * \brief Operateur de flux entrant pour les entiers
+ *
+ * La regex acceptee est: `[0-9]+.`
+ *
+ * Cependant l'opération ne consomme pas le dernier caractère.
+ */
 std::istream& operator>>(std::istream& stream, Int& x);
 
 // Autres
