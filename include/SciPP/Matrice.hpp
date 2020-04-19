@@ -42,16 +42,16 @@ template<typename T> class Matrice
 {
 	public:
 
-		/** \brief Constructeur par défaut, inotialise une matrice de taille nulle. */
+		/** \brief Constructeur par défaut, initialise une matrice de taille nulle. */
 		Matrice();
 		/** \brief Initialise une matrice de m lignes et n colonnes avec `T()`. */
 		Matrice(unsigned int m, unsigned int n);
-		Matrice(Matrice<T> const& M);
-		Matrice(Matrice<T>&& M);
 		/** \brief Initialise une matrice avec une liste d'initialisation */
 		Matrice(std::initializer_list<std::initializer_list<T>> tab);
 		/** \brief Initialise une matrice de m lignes et n colonnes. Il faut donc que `tab` soit de taille m*n. */
 		Matrice(T const* tab, unsigned int m, unsigned int n);
+		Matrice(Matrice<T> const& M);
+		Matrice(Matrice<T>&& M);
 
 		Matrice<T>& operator=(Matrice<T> const& M);
 		Matrice<T>& operator=(Matrice<T>&& M);
@@ -67,11 +67,11 @@ template<typename T> class Matrice
 		Matrice<T>& operator*=(T const& x);
 		Matrice<T>& operator/=(T const& x);
 
-		/** \brief Retourne le déterminant de la matrice */
+		/** \brief Retourne le déterminant de la matrice. */
 		T det() const;
-		/** \brief Retourne l'inverse de la matrice */
+		/** \brief Retourne l'inverse de la matrice. */
 		Matrice<T> inv() const;
-		/** \brief Retourne la transposée de la matrice */
+		/** \brief Retourne la transposée de la matrice. */
 		Matrice<T> transpose() const;
 
 		~Matrice();
@@ -105,16 +105,6 @@ template<typename T> Matrice<T>::Matrice(unsigned int m, unsigned int n) : Matri
 		for (unsigned int i(0); i < m; i++)
 			m_lignes[i] = Vect<T>(n);
 	}
-}
-
-template<typename T> Matrice<T>::Matrice(Matrice<T> const& M) : Matrice<T>()
-{
-	*this = M;
-}
-
-template<typename T> Matrice<T>::Matrice(Matrice<T>&& M) : Matrice<T>()
-{
-	*this = std::move(M);
 }
 
 template<typename T> Matrice<T>::Matrice(std::initializer_list<std::initializer_list<T>> tab) : Matrice<T>()
@@ -154,6 +144,16 @@ template<typename T> Matrice<T>::Matrice(T const* tab, unsigned int m, unsigned 
 				m_lignes[i][j] = tab[i*n + j];
 		}
 	}
+}
+
+template<typename T> Matrice<T>::Matrice(Matrice<T> const& M) : Matrice<T>()
+{
+	*this = M;
+}
+
+template<typename T> Matrice<T>::Matrice(Matrice<T>&& M) : Matrice<T>()
+{
+	*this = std::move(M);
 }
 
 
@@ -546,24 +546,58 @@ template<typename T> Matrice<T>::~Matrice()
 
 // Autres
 
-/** \brief Transformée de Fourier discrète d'un vecteur. */
-Vect<std::complex<long double>> DFT(Vect<std::complex<long double>> const& v);
-/** \brief Transformée de Fourier discrète inverse d'un vecteur. */
-Vect<std::complex<long double>> IDFT(Vect<std::complex<long double>> const& v);
-/** \brief Transformée de Fourier discrète d'une matrice. */
-Matrice<std::complex<long double>> DFT2D(Matrice<std::complex<long double>> const& M);
-/** \brief Transformée de Fourier discrète inverse d'une matrice. */
-Matrice<std::complex<long double>> IDFT2D(Matrice<std::complex<long double>> const& M);
+/**
+ * \relates Vect
+ * \brief Transformée de Fourier discrète d'un vecteur.
+ */
+Vect<std::complex<long double>> FFT(Vect<std::complex<long double>> const& v);
+/**
+ * \relates Vect
+ * \brief Transformée de Fourier discrète inverse d'un vecteur.
+ */
+Vect<std::complex<long double>> IFFT(Vect<std::complex<long double>> const& v);
+/**
+ * \relates Matrice
+ * \brief Transformée de Fourier discrète d'une matrice.
+ */
+Matrice<std::complex<long double>> FFT(Matrice<std::complex<long double>> const& M);
+/**
+ * \relates Matrice
+ * \brief Transformée de Fourier discrète inverse d'une matrice.
+ */
+Matrice<std::complex<long double>> IFFT(Matrice<std::complex<long double>> const& M);
 
-/** \brief Transformée de cosinus discrète (Type II corrigée) d'un vecteur. */
+
+/**
+ * \relates Vect
+ * \brief Transformée de cosinus discrète (Type II corrigée) d'un vecteur.
+ */
 Vect<long double> DCT(Vect<long double> const& v);
-/** \brief Transformée inverse de cosinus discrète (Type II corrigée) d'un vecteur. */
+/**
+ * \relates Vect
+ * \brief Transformée inverse de cosinus discrète (Type II corrigée) d'un vecteur.
+ */
 Vect<long double> IDCT(Vect<long double> const& v);
-/** \brief Transformée de cosinus discrète (Type II corrigée) d'une matrice. */
+/**
+ * \relates Matrice
+ * \brief Transformée de cosinus discrète (Type II corrigée) d'une matrice.
+ */
 Matrice<long double> DCT(Matrice<long double> const& M);
-/** \brief Transformée inverse de cosinus discrète (Type II corrigée) d'une matrice. */
+/**
+ * \relates Matrice
+ * \brief Transformée inverse de cosinus discrète (Type II corrigée) d'une matrice.
+ */
 Matrice<long double> IDCT(Matrice<long double> const& M);
 
-/** \brief Résout l'équation \f$\Delta u = f \f$ en passant dans le domaine fréquentiel */
+
+/**
+ * \relates Matrice
+ * \brief Résout l'équation \f$\Delta u = f \f$ en passant dans le domaine fréquentiel.
+ */
 Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly);
+/**
+ * \relates Matrice
+ * \brief Obtient la matrice de decomposition de Cholesky associée au système \f$Ax = B\f$
+ * \deprecated Cette fonction est vouée à changer pour résoudre directement le systeme à partir de A et B
+ */
 Matrice<long double> cholesky(Matrice<long double> const& A);

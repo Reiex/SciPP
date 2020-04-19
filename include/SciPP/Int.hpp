@@ -166,6 +166,7 @@ class Int
 	friend bool operator<=(Int const& x, Int const& y);
 
 	friend std::ostream& operator<<(std::ostream& stream, Int const& x);
+	friend std::istream& operator>>(std::istream& stream, Int& x);
 };
 
 
@@ -211,6 +212,14 @@ bool operator<=(Int const& x, Int const& y);
 // Affichage
 
 std::ostream& operator<<(std::ostream& stream, Int const& x);
+/**
+ * \brief Operateur de flux entrant pour les entiers
+ *
+ * La regex acceptee est: `[0-9]+.`
+ *
+ * Cependant l'opération ne consomme pas le dernier caractère.
+ */
+std::istream& operator>>(std::istream& stream, Int& x);
 
 // Autres
 

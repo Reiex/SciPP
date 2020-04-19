@@ -77,6 +77,8 @@ class Timeline
 
 		/** \brief Permet de lancer l'affichage de toutes les courbes. */
 		static void show();
+        /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut */
+        static void resetPlotSize();
 
 		~Timeline();
 
