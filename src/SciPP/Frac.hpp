@@ -292,16 +292,22 @@ template<typename T> void Frac<T>::simplifier()
 
 // Affichage
 
+/**
+ * \relates Frac
+ * \brief Opérateur de flux sortant pour les fractions
+ * 
+ * Inscrit dans le flux la fraction sous le format: `(Numerateur/Denominateur)`
+ */
 template<typename T> std::ostream& operator<<(std::ostream& stream, Frac<T> const& a)
 {
 	stream << "(" << a.numerateur() << "/" << a.denominateur() << ")";
 	return stream;
 }
-
 /**
- * \brief Operateur de flux entrant pour les fractions
+ * \relates Frac
+ * \brief Opérateur de flux entrant pour les fractions
  * 
- * La regex acceptee est: `\(T/T\)`
+ * La regex acceptée est: `\(T/T\)`
  * 
  * Où T est le format accepté pour le type T
  */
@@ -351,9 +357,15 @@ template<typename T> std::istream& operator>>(std::istream& stream, Frac<T>& a)
 
 // Rationnels
 
-/** \brief Approche la valeur de \f$\pi\f$ */
+/**
+ * \relates Rationnel
+ * \brief Approche la valeur de \f$\pi\f$.
+ */
 long double const PI = 3.141592653589793239;
-/** \brief Approche la valeur de \f$e\f$ */
+/**
+ * \relates Rationnel
+ * \brief Approche la valeur de \f$e\f$.
+ */
 long double const E = 2.718281828459045235;
 
 /**
@@ -381,6 +393,7 @@ class Rationnel: public Frac<Int>
 		Rationnel(Frac<Int> const& x);
 };
 
+
 /**
  * \brief Renvoie une chaine de caractères avec les n premières décimales de x.
  * 
@@ -388,5 +401,13 @@ class Rationnel: public Frac<Int>
  * une virgule et la partie entière de x.
 */
 std::string decimales(Rationnel const& x, int n);
+/**
+ * \relates Rationnel
+ * \brief Opérateur de flux sortant pour les rationnels
+ * 
+ * Si le rationnel est un nombre décimal, affiche le nombre en entier (un point sert de virgule).
+ * 
+ * Sinon le format est: `Numerateur/Denominateur`
+ */
 std::ostream& operator<<(std::ostream& stream, Rationnel const& x);
 
