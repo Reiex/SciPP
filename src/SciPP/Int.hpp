@@ -213,6 +213,7 @@ bool operator<=(Int const& x, Int const& y);
 
 std::ostream& operator<<(std::ostream& stream, Int const& x);
 /**
+ * \relates Int
  * \brief Operateur de flux entrant pour les entiers
  *
  * La regex acceptee est: `[0-9]+.`
@@ -224,6 +225,7 @@ std::istream& operator>>(std::istream& stream, Int& x);
 // Autres
 
 /**
+ * \relates Int
  * \brief Calcule le coefficient binomial de deux entiers et le renvoie sous forme d'Int.
  * 
  * La conversion en Int ne se fait que sur la valeur de retour (et non pas en entrée) pour des

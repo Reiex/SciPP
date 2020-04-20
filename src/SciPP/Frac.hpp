@@ -395,6 +395,7 @@ class Rationnel: public Frac<Int>
 
 
 /**
+ * \relates Rationnel
  * \brief Renvoie une chaine de caractères avec les n premières décimales de x.
  * 
  * Attention, la chaine de caractère n'est pas de taille n, parce qu'elle contient également
