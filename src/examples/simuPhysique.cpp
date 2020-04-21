@@ -123,7 +123,7 @@ void simuDispersionVorticite(int Nx, int Nt, long double kappa, long double t_si
 		Phi0[k][0] = phiInit((k - 1)*dx);
 	}
 
-	Vect<long double> x(Nx), y(Nx);
+	List<long double> x(Nx), y(Nx);
 	for (int i(0); i < Nx; i++)
 	{
 		x[i] = i;
@@ -328,7 +328,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	for (int k(0); k < resultats.size(); k++)
 	{
 		std::cout << "> Calcul image " << k+1 << "/" << resultats.size() << std::endl;
-		timeline.plot(resultats[k], Wmin, Wmax);
+		timeline.plot(resultats[k].transpose());
 	}
 
 	timeline.setFramerate(24);
@@ -517,7 +517,7 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 	}
 
 	Timeline timeline;
-	timeline.plot(U, Umin, Umax);
+	timeline.plot(U.transpose());
 	long double t(0);
 	int nbIterations(0), nbImages(0);
 	Matrice<long double> Up(Nx, Ny);
@@ -543,7 +543,7 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 		if (t > double(nbImages + 1)/2400)
 		{
 			nbImages += 1;
-			timeline.plot(U, Umin, Umax);
+			timeline.plot(U.transpose());
 			std::cout << max << ", " << t << ", " << dt << std::endl;
 		}
 		nbIterations++;

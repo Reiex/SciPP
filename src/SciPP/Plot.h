@@ -14,7 +14,9 @@
 */
 
 #include <string>
+#include <exception>
 #include <SFML/Graphics.hpp>
+#include "List.hpp"
 #include "Matrice.hpp"
 #include "Polynome.hpp"
 
@@ -41,7 +43,28 @@ class Timeline
 {
 	public:
 
-		static int TAILLE_PLOT[];
+		static int WINDOW_SIZE[];
+
+		/** \brief Erreur renvoyée lors d'une tentative de plot d'une matrice alors que des courbes font déjà partie de la timeline. */
+		class IllegalMatrixPlotException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
+        /** \brief Erreur renvoyée lors d'une tentative de plot d'une courbe alors que des matrices font déjà partie de la timeline. */
+		class IllegalCurvePlotException : public std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
+
+        /** \brief Erreur renvoyée lors d'une tentative de plot d'une courbe où le nombre de coordonnées selon x et selon y n'est pas le même. */
+        class InvalidCurveException : public std::exception
+        {
+            public:
+                virtual const char* what() const throw();
+        };
 
 		/** \brief Constructeur par défaut d'une timeline. */
 		Timeline();
@@ -66,31 +89,28 @@ class Timeline
 		*/
 		void plot(long double x, long double y);
 		/** \brief Ajoute une courbe affichée par la timeline. */
-		void plot(Vect<long double> x, Vect<long double> y);
-		/**
-		 * \brief Ajouter un champ scalaire affiché par la timeline.
-		 * 
-		 * Les couleurs des pixels dans le champs scalaire seront calculées en considérant
-		 * que `min_z` et `max_z` sont les valeurs minimales et maximales de la matrice M.
-		*/
-		void plot(Matrice<long double> M, long double min_z, long double max_z);
+		void plot(List<long double> const& x, List<long double> const& y);
+		/** \brief Ajouter un champ scalaire affiché par la timeline. */
+		void plot(Matrice<long double> const& M);
 
 		/** \brief Permet de lancer l'affichage de toutes les courbes. */
 		static void show();
         /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut */
-        static void resetPlotSize();
+        static void resetWindowSize();
 
 		~Timeline();
 
 	private:
 
-		static std::vector<Timeline*> timelineList;
+        static Vect<long double> computeBorders();
+        static Vect<long double> computeMatrixLimits();
+        void display(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, long double time) const;
 
-		long double m_delay;
-		std::vector<sf::VertexArray> m_courbes;
-		std::vector<sf::Image> m_matrices;
-		Vect<long double> m_border;
-		bool m_borderSet;
+		static List<Timeline*> m_timelineList;
+
+        int m_framerate;
+		List<Vect<List<long double>>> m_courbes;
+		List<Matrice<long double>> m_matrices;
 		Vect<int> m_color;
 };
 

@@ -34,8 +34,8 @@ void fonctionLogistique()
 {
 	int w(1920), h(1017);
 
-	Timeline::TAILLE_PLOT[0] = w;
-	Timeline::TAILLE_PLOT[1] = h;
+	Timeline::WINDOW_SIZE[0] = w;
+	Timeline::WINDOW_SIZE[1] = h;
 
 	int n(100000);
 	Matrice<long double> f(w, h);
@@ -65,18 +65,18 @@ void fonctionLogistique()
 	}
 
 	Timeline timeline;
-	timeline.plot(f, 0, 1);
+	timeline.plot(f.transpose());
 	Timeline::show();
 
-	Timeline::resetPlotSize();
+	Timeline::resetWindowSize();
 }
 
 void mandelbrot(double xCentre, double yCentre, double zoom)
 {
 	int w(1920), h(1080);
 
-	Timeline::TAILLE_PLOT[0] = w;
-	Timeline::TAILLE_PLOT[1] = h;
+	Timeline::WINDOW_SIZE[0] = w;
+	Timeline::WINDOW_SIZE[1] = h;
 
 	int n(200);
 	Matrice<long double> f(w, h);
@@ -106,10 +106,10 @@ void mandelbrot(double xCentre, double yCentre, double zoom)
 	}
 
 	Timeline timeline;
-	timeline.plot(f, 0, 2);
+	timeline.plot(f.transpose());
 	Timeline::show();
 
-	Timeline::resetPlotSize();
+	Timeline::resetWindowSize();
 }
 
 Vect<Vect<int>> voisins(int x, int y, int w, int h)
@@ -170,7 +170,7 @@ void conway()
 	// Jeu de la vie lui même
 
 	Timeline timeline;
-	timeline.plot(M, 0, 1);
+	timeline.plot(M.transpose());
 	for (int dt(0); dt < t; dt++)
 	{
 		std::cout << "Iteration: " << dt << std::endl;
@@ -192,7 +192,7 @@ void conway()
 		}
 
 		M = N;
-		timeline.plot(M, 0, 1);
+		timeline.plot(M.transpose());
 	}
 
 	timeline.setFramerate(double(t)/tR + 1);
