@@ -129,14 +129,7 @@ class Timeline
 		void setCurveStyle(CurveStyle style);
         void setMatrixStyle(MatrixStyle style);
 
-		/**
-		 * \brief Ajoute un point aux courbes affichées par la timeline.
-		 * 
-		 * Un point seul, pour être affiché lisiblement, doit avoir une épaisseur. Par défaut,
-		 * utiliser Timeline::plot(Vect<long double> x, Vect<long double> y) utilise des vertex
-		 * qui n'ont donc pas d'épaisseur.
-		 * Cette fonction affiche un disque de rayon 3 pixels à la place.
-		*/
+		/** \brief Ajoute une courbe composée d'un seul point affichée par la timeline. */
 		void plot(long double x, long double y);
 		/** \brief Ajoute une courbe affichée par la timeline. */
 		void plot(List<long double> const& x, List<long double> const& y);
@@ -154,7 +147,13 @@ class Timeline
 
         static Vect<long double> computeBorders();
         static Vect<long double> computeMatrixLimits();
+
         void display(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, long double time) const;
+
+        void drawLineLinkCurve(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, List<long double> const& x, List<long double> const& y) const;
+
+        void drawCircleMarkerCurve(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, List<long double> const& x, List<long double> const& y) const;
+
         void drawFlatMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const;
         void drawSmoothMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const;
 

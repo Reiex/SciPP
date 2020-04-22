@@ -106,6 +106,9 @@ void Timeline::plot(long double x, long double y)
 		throw IllegalCurvePlotException();
 
 	m_curves.append({ {x}, {y} });
+
+	if (m_curveStyle.getMarkerStyle() == CurveStyle::MarkerStyle::Hidden)
+		m_curveStyle = CurveStyle(CurveStyle::MarkerStyle::Circle, CurveStyle::LinkStyle::Hidden, { 0, 0, 0 });
 }
 
 void Timeline::plot(List<long double> const& x, List<long double> const& y)
@@ -262,17 +265,11 @@ void Timeline::display(sf::RenderTarget& target, Vect<long double> const& mathBo
 	{
 		i %= m_curves.size();
 
-		int n(m_curves[i][0].size());
-		sf::VertexArray vertices(sf::PrimitiveType::LineStrip, n);
+		if (m_curveStyle.getLinkStyle() == CurveStyle::LinkStyle::Line)
+			drawLineLinkCurve(target, mathBorders, targetBorders, m_curves[i][0], m_curves[i][1]);
 
-		for (int j(0); j < n; j++)
-		{
-			vertices[j].position.x = xTarget + wTarget*(m_curves[i][0][j] - xMath)/wMath;
-			vertices[j].position.y = yTarget + hTarget*(1 - (m_curves[i][1][j] - yMath)/hMath);
-			vertices[j].color = sf::Color(m_curveStyle.getColor()[0], m_curveStyle.getColor()[1], m_curveStyle.getColor()[2]);
-		}
-
-		target.draw(vertices);
+		if (m_curveStyle.getMarkerStyle() == CurveStyle::MarkerStyle::Circle)
+			drawCircleMarkerCurve(target, mathBorders, targetBorders, m_curves[i][0], m_curves[i][1]);
 	}
 	else if (m_matrices.size() != 0)
 	{
@@ -282,6 +279,41 @@ void Timeline::display(sf::RenderTarget& target, Vect<long double> const& mathBo
 			drawFlatMatrix(target, mathBorders, targetBorders, matrixLimits, m_matrices[i]); 
 		else if (m_matrixStyle.getDisplayStyle() == MatrixStyle::DisplayStyle::Smooth)
 			drawSmoothMatrix(target, mathBorders, targetBorders, matrixLimits, m_matrices[i]);
+	}
+}
+
+void Timeline::drawLineLinkCurve(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, List<long double> const& x, List<long double> const& y) const
+{
+	long double xMath(mathBorders[0]), yMath(mathBorders[1]), wMath(mathBorders[2] - mathBorders[0]), hMath(mathBorders[3] - mathBorders[1]);
+	long double xTarget(targetBorders[0]), yTarget(targetBorders[1]), wTarget(targetBorders[2] - targetBorders[0]), hTarget(targetBorders[3] - targetBorders[1]);
+
+	int n(x.size());
+	sf::VertexArray vertices(sf::PrimitiveType::LineStrip, n);
+	sf::Color color = sf::Color(m_curveStyle.getColor()[0], m_curveStyle.getColor()[1], m_curveStyle.getColor()[2]);
+	for (int j(0); j < n; j++)
+	{
+		vertices[j].position.x = xTarget + wTarget * (x[j] - xMath) / wMath;
+		vertices[j].position.y = yTarget + hTarget * (1 - (y[j] - yMath) / hMath);
+		vertices[j].color = color;
+	}
+
+	target.draw(vertices);
+}
+
+void Timeline::drawCircleMarkerCurve(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, List<long double> const& x, List<long double> const& y) const
+{
+	long double xMath(mathBorders[0]), yMath(mathBorders[1]), wMath(mathBorders[2] - mathBorders[0]), hMath(mathBorders[3] - mathBorders[1]);
+	long double xTarget(targetBorders[0]), yTarget(targetBorders[1]), wTarget(targetBorders[2] - targetBorders[0]), hTarget(targetBorders[3] - targetBorders[1]);
+
+	int n(x.size());
+	sf::Color color = sf::Color(m_curveStyle.getColor()[0], m_curveStyle.getColor()[1], m_curveStyle.getColor()[2]);
+	for (int j(0); j < n; j++)
+	{
+		sf::CircleShape circle;
+		circle.setRadius(3);
+		circle.setFillColor(color);
+		circle.setPosition(xTarget + wTarget * (x[j] - xMath) / wMath - 3, yTarget + hTarget * (1 - (y[j] - yMath) / hMath) - 3);
+		target.draw(circle);
 	}
 }
 
