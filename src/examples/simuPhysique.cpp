@@ -332,6 +332,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 	}
 
 	timeline.setFramerate(24);
+	timeline.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
 	Timeline::show();
 }
 
@@ -552,5 +553,6 @@ void dispertionChaleur2D(int Nx, int Ny, double t_simu)
 	std::cout << nbImages << std::endl;
 
 	timeline.setFramerate(24);
+	timeline.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
 	Timeline::show();
 }

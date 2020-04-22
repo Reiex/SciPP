@@ -20,6 +20,55 @@
 #include "Matrice.hpp"
 #include "Polynome.hpp"
 
+class CurveStyle
+{
+    public:
+
+        enum class LinkStyle {
+            Hidden,
+            Line
+        };
+
+        enum class MarkerStyle {
+            Hidden,
+            Circle
+        };
+
+        CurveStyle();
+        CurveStyle(MarkerStyle markerStyle, LinkStyle linkStyle, Vect<int> const& color);
+
+        Vect<int> const& getColor() const;
+        LinkStyle getLinkStyle() const;
+        MarkerStyle getMarkerStyle() const;
+
+    private:
+
+        Vect<int> m_color;
+        LinkStyle m_linkStyle;
+        MarkerStyle m_markerStyle;
+};
+
+class MatrixStyle
+{
+    public:
+
+        enum DisplayStyle {
+            Flat,
+            Smooth
+        };
+
+        MatrixStyle();
+        MatrixStyle(DisplayStyle displayStyle, Vect<int> const& color);
+
+        Vect<int> const& getColor() const;
+        DisplayStyle getDisplayStyle() const;
+
+    private:
+
+        Vect<int> m_color;
+        DisplayStyle m_displayStyle;
+};
+
 /**
  * \class Timeline
  * \brief Classe permettant la manipulation et l'affichages de courbes simples ou animées.
@@ -76,8 +125,9 @@ class Timeline
 		 * scalaires par seconde.
 		*/
 		void setFramerate(int framerate);
-		/** \brief Permet de modifier la couleur de la courbe affichée (ne s'applique pas pour les champs scalaires). */
-		void setColor(int r, int g, int b);
+
+		void setCurveStyle(CurveStyle style);
+        void setMatrixStyle(MatrixStyle style);
 
 		/**
 		 * \brief Ajoute un point aux courbes affichées par la timeline.
@@ -105,13 +155,16 @@ class Timeline
         static Vect<long double> computeBorders();
         static Vect<long double> computeMatrixLimits();
         void display(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, long double time) const;
+        void drawFlatMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const;
+        void drawSmoothMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const;
 
 		static List<Timeline*> m_timelineList;
 
         int m_framerate;
-		List<Vect<List<long double>>> m_courbes;
+		List<Vect<List<long double>>> m_curves;
 		List<Matrice<long double>> m_matrices;
-		Vect<int> m_color;
+        CurveStyle m_curveStyle;
+        MatrixStyle m_matrixStyle;
 };
 
 /**

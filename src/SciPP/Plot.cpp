@@ -1,5 +1,66 @@
 #include "Plot.h"
 
+// CurveStyle
+
+CurveStyle::CurveStyle() :
+	m_color({0, 0, 0}),
+	m_linkStyle(LinkStyle::Line),
+	m_markerStyle(MarkerStyle::Hidden)
+{
+
+}
+
+CurveStyle::CurveStyle(MarkerStyle markerStyle, LinkStyle linkStyle, Vect<int> const& color) :
+	m_color(color),
+	m_linkStyle(linkStyle),
+	m_markerStyle(markerStyle)
+{
+
+}
+
+Vect<int> const& CurveStyle::getColor() const
+{
+	return m_color;
+}
+
+CurveStyle::LinkStyle CurveStyle::getLinkStyle() const
+{
+	return m_linkStyle;
+}
+
+CurveStyle::MarkerStyle CurveStyle::getMarkerStyle() const
+{
+	return m_markerStyle;
+}
+
+// MatrixStyle
+
+MatrixStyle::MatrixStyle() :
+	m_color({255, 255, 255}),
+	m_displayStyle(DisplayStyle::Flat)
+{
+
+}
+
+MatrixStyle::MatrixStyle(DisplayStyle displayStyle, Vect<int> const& color) :
+	m_color(color),
+	m_displayStyle(displayStyle)
+{
+
+}
+
+Vect<int> const& MatrixStyle::getColor() const
+{
+	return m_color;
+}
+
+MatrixStyle::DisplayStyle MatrixStyle::getDisplayStyle() const
+{
+	return m_displayStyle;
+}
+
+// Plot
+
 int Timeline::WINDOW_SIZE[] = { 800, 800 };
 List<Timeline*> Timeline::m_timelineList;
 
@@ -19,7 +80,6 @@ char const* Timeline::InvalidCurveException::what() const throw()
 }
 
 Timeline::Timeline() :
-	m_color(3),
 	m_framerate(60)
 {
 	m_timelineList.append(this);
@@ -30,9 +90,14 @@ void Timeline::setFramerate(int framerate)
 	m_framerate = framerate;
 }
 
-void Timeline::setColor(int r, int g, int b)
+void Timeline::setCurveStyle(CurveStyle style)
 {
-	m_color = { r, g, b };
+	m_curveStyle = style;
+}
+
+void Timeline::setMatrixStyle(MatrixStyle style)
+{
+	m_matrixStyle = style;
 }
 
 void Timeline::plot(long double x, long double y)
@@ -40,7 +105,7 @@ void Timeline::plot(long double x, long double y)
 	if (m_matrices.size() != 0)
 		throw IllegalCurvePlotException();
 
-	m_courbes.append({ {x}, {y} });
+	m_curves.append({ {x}, {y} });
 }
 
 void Timeline::plot(List<long double> const& x, List<long double> const& y)
@@ -48,12 +113,12 @@ void Timeline::plot(List<long double> const& x, List<long double> const& y)
 	if (m_matrices.size() != 0)
 		throw IllegalCurvePlotException();
 
-	m_courbes.append({ x, y });
+	m_curves.append({ x, y });
 }
 
 void Timeline::plot(Matrice<long double> const& M)
 {
-	if (m_courbes.size() != 0)
+	if (m_curves.size() != 0)
 		throw IllegalMatrixPlotException();
 
 	m_matrices.append(M);
@@ -113,20 +178,20 @@ Vect<long double> Timeline::computeBorders()
 
 	for (int i(0); i < m_timelineList.size(); i++)
 	{
-		if (m_timelineList[i]->m_courbes.size() != 0)
+		if (m_timelineList[i]->m_curves.size() != 0)
 		{
-			borders = { m_timelineList[i]->m_courbes[0][0][0], m_timelineList[i]->m_courbes[0][1][0] , m_timelineList[i]->m_courbes[0][0][0] , m_timelineList[i]->m_courbes[0][1][0] };
+			borders = { m_timelineList[i]->m_curves[0][0][0], m_timelineList[i]->m_curves[0][1][0] , m_timelineList[i]->m_curves[0][0][0] , m_timelineList[i]->m_curves[0][1][0] };
 			break;
 		}
 	}
 
 	for (int i(0); i < m_timelineList.size(); i++)
 	{
-		for (int j(0); j < m_timelineList[i]->m_courbes.size(); j++)
+		for (int j(0); j < m_timelineList[i]->m_curves.size(); j++)
 		{
-			for (int k(0); k < m_timelineList[i]->m_courbes[j][0].size(); k++)
+			for (int k(0); k < m_timelineList[i]->m_curves[j][0].size(); k++)
 			{
-				List<long double>& x(m_timelineList[i]->m_courbes[j][0]), y(m_timelineList[i]->m_courbes[j][1]);
+				List<long double>& x(m_timelineList[i]->m_curves[j][0]), y(m_timelineList[i]->m_curves[j][1]);
 				if (x[k] < borders[0]) borders[0] = x[k];
 				if (x[k] > borders[2]) borders[2] = x[k];
 				if (y[k] < borders[1]) borders[1] = y[k];
@@ -193,18 +258,18 @@ void Timeline::display(sf::RenderTarget& target, Vect<long double> const& mathBo
 	long double xTarget(targetBorders[0]), yTarget(targetBorders[1]), wTarget(targetBorders[2] - targetBorders[0]), hTarget(targetBorders[3] - targetBorders[1]);
 
 	unsigned int i(time * m_framerate);
-	if (m_courbes.size() != 0)
+	if (m_curves.size() != 0)
 	{
-		i %= m_courbes.size();
+		i %= m_curves.size();
 
-		int n(m_courbes[i][0].size());
+		int n(m_curves[i][0].size());
 		sf::VertexArray vertices(sf::PrimitiveType::LineStrip, n);
 
 		for (int j(0); j < n; j++)
 		{
-			vertices[j].position.x = xTarget + wTarget*(m_courbes[i][0][j] - xMath)/wMath;
-			vertices[j].position.y = yTarget + hTarget*(1 - (m_courbes[i][1][j] - yMath)/hMath);
-			vertices[j].color = sf::Color(m_color[0], m_color[1], m_color[2]);
+			vertices[j].position.x = xTarget + wTarget*(m_curves[i][0][j] - xMath)/wMath;
+			vertices[j].position.y = yTarget + hTarget*(1 - (m_curves[i][1][j] - yMath)/hMath);
+			vertices[j].color = sf::Color(m_curveStyle.getColor()[0], m_curveStyle.getColor()[1], m_curveStyle.getColor()[2]);
 		}
 
 		target.draw(vertices);
@@ -213,39 +278,72 @@ void Timeline::display(sf::RenderTarget& target, Vect<long double> const& mathBo
 	{
 		i %= m_matrices.size();
 
-		int m(m_matrices[i].size()[0]), n(m_matrices[i].size()[1]);
-		sf::VertexArray vertices(sf::PrimitiveType::Triangles, 6*m*n);
+		if (m_matrixStyle.getDisplayStyle() == MatrixStyle::DisplayStyle::Flat)
+			drawFlatMatrix(target, mathBorders, targetBorders, matrixLimits, m_matrices[i]); 
+		else if (m_matrixStyle.getDisplayStyle() == MatrixStyle::DisplayStyle::Smooth)
+			drawSmoothMatrix(target, mathBorders, targetBorders, matrixLimits, m_matrices[i]);
+	}
+}
 
-		for (int j(0); j < m; j++)
+void Timeline::drawFlatMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const
+{
+	long double xMath(mathBorders[0]), yMath(mathBorders[1]), wMath(mathBorders[2] - mathBorders[0]), hMath(mathBorders[3] - mathBorders[1]);
+	long double xTarget(targetBorders[0]), yTarget(targetBorders[1]), wTarget(targetBorders[2] - targetBorders[0]), hTarget(targetBorders[3] - targetBorders[1]);
+
+	int m(M.size()[0]), n(M.size()[1]);
+	sf::VertexArray vertices(sf::PrimitiveType::Triangles, 6*m*n);
+
+	for (int j(0); j < m; j++)
+	{
+		for (int k(0); k < n; k++)
 		{
-			for (int k(0); k < n; k++)
+			Vect<int> const& col(m_matrixStyle.getColor());
+			Vect<int> x({k, k+1, k, k+1, k, k+1}), y({j, j, j+1, j, j+1, j+1});
+			int i(x.size()*(j*n + k));
+
+			for (int l(0); l < x.size(); l++)
 			{
-				vertices[6*(j*n + k)].position.x = xTarget + k*wTarget/n;
-				vertices[6*(j*n + k)].position.y = yTarget + j*hTarget/m;
-
-				vertices[6*(j*n + k) + 1].position.x = xTarget + (k+1)*wTarget/n;
-				vertices[6*(j*n + k) + 1].position.y = yTarget + j*hTarget/m;
-
-				vertices[6*(j*n + k) + 2].position.x = xTarget + k*wTarget/n;
-				vertices[6*(j*n + k) + 2].position.y = yTarget + (j+1)*hTarget/m;
-
-				vertices[6*(j*n + k) + 3].position.x = xTarget + (k+1)*wTarget/n;
-				vertices[6*(j*n + k) + 3].position.y = yTarget + j*hTarget/m;
-
-				vertices[6*(j*n + k) + 4].position.x = xTarget + k*wTarget/n;
-				vertices[6*(j*n + k) + 4].position.y = yTarget + (j+1)*hTarget/m;
-
-				vertices[6*(j*n + k) + 5].position.x = xTarget + (k+1)*wTarget/n;
-				vertices[6*(j*n + k) + 5].position.y = yTarget + (j+1)*hTarget/m;
-
-				long double c(255*(m_matrices[i][j][k] - matrixLimits[0])/(matrixLimits[1] - matrixLimits[0]));
-				for (int l(0); l < 6; l++)
-					vertices[6*(j*n + k) + l].color = sf::Color(c, c, c);
+				vertices[i + l].position.x = xTarget + x[l]*wTarget/n;
+				vertices[i + l].position.y = yTarget + y[l]*hTarget/m;
+				long double c((M[j][k] - matrixLimits[0])/(matrixLimits[1] - matrixLimits[0]));
+				vertices[i + l].color = sf::Color(col[0]*c, col[1]*c, col[2]*c);
 			}
 		}
-
-		target.draw(vertices);
 	}
+
+	target.draw(vertices);
+}
+
+void Timeline::drawSmoothMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const
+{
+	long double xMath(mathBorders[0]), yMath(mathBorders[1]), wMath(mathBorders[2] - mathBorders[0]), hMath(mathBorders[3] - mathBorders[1]);
+	long double xTarget(targetBorders[0]), yTarget(targetBorders[1]), wTarget(targetBorders[2] - targetBorders[0]), hTarget(targetBorders[3] - targetBorders[1]);
+
+	int m(M.size()[0]), n(M.size()[1]);
+	sf::VertexArray vertices(sf::PrimitiveType::Triangles, 12*(m-1)*(n-1));
+
+	for (int j(0); j < m-1; j++)
+	{
+		for (int k(0); k < n-1; k++)
+		{
+			Vect<int> const& col(m_matrixStyle.getColor());
+			Vect<long double> y({double(k), double(k)+1, double(k)+0.5, double(k)+1, double(k)+1, double(k)+0.5, double(k), double(k)+0.5, double(k)+1, double(k), double(k)+0.5, double(k)});
+			Vect<long double> x({double(j), double(j), double(j)+0.5, double(j), double(j)+1, double(j)+0.5, double(j)+1, double(j)+0.5, double(j)+1, double(j), double(j)+0.5, double(j)+1});
+			long double moyenne((M[k][j] + M[k+1][j] + M[k][j+1] + M[k+1][j+1])/4);
+			Vect<long double> Mvalues({ M[k][j], M[k+1][j], moyenne, M[k+1][j], M[k+1][j+1], moyenne, M[k][j+1], moyenne, M[k+1][j+1], M[k][j], moyenne, M[k][j+1] });
+			int i(x.size()*(j*(n-1) + k));
+
+			for (int l(0); l < x.size(); l++)
+			{
+				vertices[i + l].position.x = xTarget + x[l]*wTarget/(n-1);
+				vertices[i + l].position.y = yTarget + y[l]*hTarget/(m-1);
+				long double c((Mvalues[l] - matrixLimits[0])/(matrixLimits[1] - matrixLimits[0]));
+				vertices[i + l].color = sf::Color(col[0]*c, col[1]*c, col[2]*c);
+			}
+		}
+	}
+
+	target.draw(vertices);
 }
 
 // Graphes 2D
