@@ -1,6 +1,6 @@
 #include "Plot.h"
 
-// CurveStyle
+// Styles
 
 CurveStyle::CurveStyle() :
 	m_color({0, 0, 0}),
@@ -33,7 +33,6 @@ CurveStyle::MarkerStyle CurveStyle::getMarkerStyle() const
 	return m_markerStyle;
 }
 
-// MatrixStyle
 
 MatrixStyle::MatrixStyle() :
 	m_color({255, 255, 255}),
@@ -63,6 +62,7 @@ MatrixStyle::DisplayStyle MatrixStyle::getDisplayStyle() const
 
 int Timeline::WINDOW_SIZE[] = { 800, 800 };
 List<Timeline*> Timeline::m_timelineList;
+List<Vect<long double>> Timeline::m_subplotBorders;
 
 char const* Timeline::IllegalMatrixPlotException::what() const throw()
 {
@@ -79,8 +79,25 @@ char const* Timeline::InvalidCurveException::what() const throw()
 	return "Tentative de plot d'une courbe où le nombre de coordonnées selon x et selon y n'est pas le même.";
 }
 
+char const* Timeline::InvalidSubplotBordersException::what() const throw()
+{
+	return "Les frontières des subplots ne sont pas bien définies.";
+}
+
 Timeline::Timeline() :
-	m_framerate(60)
+	m_framerate(60),
+	m_subplot(0)
+{
+	m_timelineList.append(this);
+}
+
+Timeline::Timeline(Timeline const& timeline) :
+	m_framerate(timeline.m_framerate),
+	m_curves(timeline.m_curves),
+	m_matrices(timeline.m_matrices),
+	m_curveStyle(timeline.m_curveStyle),
+	m_matrixStyle(timeline.m_matrixStyle),
+	m_subplot(timeline.m_subplot)
 {
 	m_timelineList.append(this);
 }
@@ -98,6 +115,16 @@ void Timeline::setCurveStyle(CurveStyle style)
 void Timeline::setMatrixStyle(MatrixStyle style)
 {
 	m_matrixStyle = style;
+}
+
+void Timeline::setSubplot(int i)
+{
+	m_subplot = i;
+}
+
+void Timeline::setSubplotBorders(List<Vect<long double>> const& borders)
+{
+	m_subplotBorders = borders;
 }
 
 void Timeline::plot(long double x, long double y)
@@ -134,8 +161,12 @@ void Timeline::show()
 	if (m_timelineList.size() == 0)
 		return;
 
+	if (m_subplotBorders.size() != 0)
+		checkSubplotBorders();
+	else
+		computeSubplotBorders(w, h);
+
 	Vect<long double> mathBorders(Timeline::computeBorders());
-	Vect<long double> targetBorders({ 0.0, 0.0, w-0.0, h-0.0});
 	Vect<long double> matrixLimits(Timeline::computeMatrixLimits());
 
 	// Ouverture de la fenêtre
@@ -153,7 +184,7 @@ void Timeline::show()
 				window.close();
 
 		for (int i(0); i < m_timelineList.size(); i++)
-			m_timelineList[i]->display(window, mathBorders, targetBorders, matrixLimits, clock.getElapsedTime().asSeconds());
+			m_timelineList[i]->display(window, mathBorders, m_subplotBorders[m_timelineList[i]->m_subplot], matrixLimits, clock.getElapsedTime().asSeconds());
 	}
 }
 
@@ -253,6 +284,54 @@ Vect<long double> Timeline::computeMatrixLimits()
 	}
 
 	return limits;
+}
+
+void Timeline::checkSubplotBorders()
+{
+	for (int i(0); i < m_timelineList.size(); i++)
+		if (m_timelineList[i]->m_subplot >= m_subplotBorders.size())
+			throw InvalidSubplotBordersException();
+
+	for (int i(0); i < m_subplotBorders.size(); i++)
+		if (m_subplotBorders[i].size() != 4)
+			throw InvalidSubplotBordersException();
+}
+
+void Timeline::computeSubplotBorders(int w, int h)
+{
+	int n(0);
+	for (int i(0); i < m_timelineList.size(); i++)
+		if (m_timelineList[i]->m_subplot > n)
+			n = m_timelineList[i]->m_subplot;
+	n++;
+
+	if (n == 1)
+	{
+		m_subplotBorders = { {0, 0, double(w), double(h)} };
+	}
+	else if (n == 2)
+	{
+		m_subplotBorders = { {0, 0, double(w), double(h)/2},
+							 {0, double(h)/2, double(w), double(h)} };
+	}
+	else if (n == 3)
+	{
+		m_subplotBorders = { {0, 0, double(w), double(h)/2},
+							 {0, double(h)/2, double(w)/2, double(h)},
+							 {double(w)/2, double(h)/2, double(w), double(h)} };
+	}
+	else if (n == 4)
+	{
+		m_subplotBorders = { {0, 0, double(w)/2, double(h)/2},
+							 {double(w)/2, 0, double(w), double(h)/2},
+							 {0, double(h)/2, double(w)/2, double(h)},
+							 {double(w)/2, double(h)/2, double(w), double(h)} };
+	}
+	else
+	{
+		for (int i(0); i < n; i++)
+			m_subplotBorders.append({0, i*double(h)/n, double(w), (i+1)*double(h)/n});
+	}
 }
 
 void Timeline::display(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, long double time) const
@@ -1158,7 +1237,6 @@ Vect<Vect<long double>> plotLagrange(Vect<long double> const& x, Vect<long doubl
 
 	return r;
 }
-
 
 Vect<long double> getCourbure(Vect<long double> const& x, Vect<long double> const& y)
 {

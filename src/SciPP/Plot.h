@@ -115,8 +115,17 @@ class Timeline
                 virtual const char* what() const throw();
         };
 
+        /** \brief Erreur renvoyée lorsque les frontières des subplots ne sont pas bien définies. */
+        class InvalidSubplotBordersException : public std::exception
+        {
+            public:
+                virtual const char* what() const throw();
+        };
+
 		/** \brief Constructeur par défaut d'une timeline. */
 		Timeline();
+        /** \brief Constructeur par copie d'une timeline. */
+        Timeline(Timeline const& timeline);
 
 		/** 
 		 * \brief Permet de changer la fréquence d'actualisation de la timeline lors de l'affichage.
@@ -128,6 +137,9 @@ class Timeline
 
 		void setCurveStyle(CurveStyle style);
         void setMatrixStyle(MatrixStyle style);
+
+        void setSubplot(int i);
+        static void setSubplotBorders(List<Vect<long double>> const& borders);
 
 		/** \brief Ajoute une courbe composée d'un seul point affichée par la timeline. */
 		void plot(long double x, long double y);
@@ -148,6 +160,9 @@ class Timeline
         static Vect<long double> computeBorders();
         static Vect<long double> computeMatrixLimits();
 
+        static void checkSubplotBorders();
+        static void computeSubplotBorders(int w, int h);
+
         void display(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, long double time) const;
 
         void drawLineLinkCurve(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, List<long double> const& x, List<long double> const& y) const;
@@ -158,12 +173,14 @@ class Timeline
         void drawSmoothMatrix(sf::RenderTarget& target, Vect<long double> const& mathBorders, Vect<long double> const& targetBorders, Vect<long double> const& matrixLimits, Matrice<long double> const& M) const;
 
 		static List<Timeline*> m_timelineList;
+        static List<Vect<long double>> m_subplotBorders;
 
         int m_framerate;
 		List<Vect<List<long double>>> m_curves;
 		List<Matrice<long double>> m_matrices;
         CurveStyle m_curveStyle;
         MatrixStyle m_matrixStyle;
+        int m_subplot;
 };
 
 /**
