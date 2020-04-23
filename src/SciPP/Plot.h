@@ -5,12 +5,11 @@
  * \brief Ensemble des fonctions et classes permettant l'affichage de données à l'écran.
  * \author Reiex
  * 
- * Pour les affichages les plus basiques - courbes simples ou animées, champs scalaires - la classe
- * Timeline a été mise en place. Plus de détails sont disponnibles dans la description de cette
- * classe.
+ * Pour les affichages de courbes et champs scalaires, la classe Timeline a été mise en place, il faut donc
+ * se référer à la documentation de cette classe.
  * 
- * Pour les affichages plus complexes - affichage de champs vectoriels, affichages avec interractions
- * avec l'utilisateur - des fonctions plus spécifiques ont été mises en place.
+ * Pour certains cas spécifiques plus complexes, comme les champs vectoriels avec interaction, des fonctions
+ * spécifiques ont été mises en place.
 */
 
 #include <string>
@@ -20,20 +19,46 @@
 #include "Matrice.hpp"
 #include "Polynome.hpp"
 
+/**
+ * \class CurveStyle
+ * \brief Classe permettant de spécifier l'apparence d'une courbe à l'écran.
+ * 
+ * Cette classe ne sert pas à spécifier la place de la courbe dans l'écran, mais la manière dont celle-ci est affichée, c'est à
+ * dire la couleur de la courbe, la méthode par laquelle les points sont liés (s'ils sont liés) et comment les points sont
+ * marqués.
+ */
 class CurveStyle
 {
     public:
-
+           
+        /**
+         * \enum LinkStyle
+         * \brief Façon dont les points sont reliés entre eux dans la courbe.
+         */
         enum class LinkStyle {
-            Hidden,
-            Line
+            Hidden,  /**< Aucune liaison, la courbe est alors un nuage de points. */
+            Line  /**< Liaison par une ligne droite simple, d'épaisseur 1px. */
         };
 
+        /**
+         * \enum MarkerStyle
+         * \brief Façon dont les points eux mêmes sont affichés.
+         */
         enum class MarkerStyle {
-            Hidden,
-            Circle
+            Hidden,  /**< Les points ne sont pas affichés. */
+            Circle  /**< Les points sont affichés par des disques de 3px de rayon. */
         };
 
+        /**
+         * \brief Constructeur par défaut.
+         * 
+         * Le style par défaut est:
+         * | Paramètre | Valeur              |
+         * | --------- | :-----------------: |
+         * | Marqueur  | MarkerStyle::Hidden |
+         * | Lien      | LinkStyle::Line     |
+         * | Couleur   | {0, 0, 0} (Noir)    |
+         */
         CurveStyle();
         CurveStyle(MarkerStyle markerStyle, LinkStyle linkStyle, Vect<int> const& color);
 
@@ -48,15 +73,34 @@ class CurveStyle
         MarkerStyle m_markerStyle;
 };
 
+/**
+ * \class MatrixStyle
+ * \brief Classe permettant de spécifier l'apparence d'un champ scalaire à l'écran.
+ * 
+ * Cette classe ne sert pas à spécifier la place du champ dans l'écran, mais la manière dont celui-ci est affiché.
+ */
 class MatrixStyle
 {
     public:
 
+        /**
+         * \enum DisplayStyle
+         * \brief Façon dont les éléments du champ scalaire sont affichés.
+         */
         enum DisplayStyle {
-            Flat,
-            Smooth
+            Flat,  /**< Simples carrés de couleur unie. */
+            Smooth  /**< Lissage simple. */
         };
 
+        /**
+         * \brief Constructeur par défaut.
+         *
+         * Le style par défaut est:
+         * | Paramètre     | Valeur                     |
+         * | ---------     | :------------------------: |
+         * | DisplayStyle  | DisplayStyle::Flat         |
+         * | Couleur       | {255, 255, 255} (Blanc)    |
+         */
         MatrixStyle();
         MatrixStyle(DisplayStyle displayStyle, Vect<int> const& color);
 
@@ -71,27 +115,33 @@ class MatrixStyle
 
 /**
  * \class Timeline
- * \brief Classe permettant la manipulation et l'affichages de courbes simples ou animées.
+ * \brief Classe permettant l'affichage de courbes et de champs scalaires.
  * 
  * La classe Timeline représente, comme son nom l'indique, une ligne temporelle.
- * C'est en fait une suite de courbes qui seront affichées les unes à la suite des autres.
+ * C'est en fait une suite de données qui seront affichées les unes à la suite des autres.
  * 
- * Chaque timeline a une frequence d'actualisation indépendante et boucle sur ses courbes affichées.
- * C'est donc à l'utilisateur de bien manipuler la fréquence d'actualisation et les courbes
+ * Chaque timeline a une frequence d'actualisation indépendante et boucle sur ses données affichées.
+ * C'est donc à l'utilisateur de bien manipuler la fréquence d'actualisation et les données
  * enregistrées pour afficher l'animation désirée.
  * 
- * Il faut de plus savoir que l'affichage de champs scalaires et de courbes est exclusif dans une
+ * Il faut de plus savoir que l'affichage de courbes et de champs scalaires est exclusif dans une
  * même timeline. Il est donc possible d'afficher une courbe animée dans une timeline en même
  * temps qu'un champs scalaire dans une autre timeline, mais il est impossible d'afficher dans
  * une même timeline une courbe puis un champs scalaire.
  * 
- * Enfin, plusieurs champs scalaires ne peuvent pas être affichés en même temps. Une seule timeline
- * doit donc contenir des champs scalaires.
+ * Les timelines se regroupent en subplot. Une fenêtre ouverte par Timeline::show est ainsi divisée
+ * en plusieurs subplots qu'il est possible de placer comme on le souhaite (bien qu'ils aient une disposition
+ * par défaut pour faciliter l'utilisation) grâce à la fonction Timeline::setSubplotBorders et dans
+ * lesquelles on peut placer les timeline qu'on souhaite grâce à la fonction Timeline::setSubplot.
+ * 
+ * Enfin, plusieurs champs scalaires ne peuvent pas être affichés sur un même subplot. Une seule timeline
+ * par subplot peut donc contenir des champs scalaires.
 */
 class Timeline
 {
 	public:
 
+        /** \brief Taille de la fenêtre ouverte lors de l'appel de Timeline::show. */
 		static int WINDOW_SIZE[];
 
 		/** \brief Erreur renvoyée lors d'une tentative de plot d'une matrice alors que des courbes font déjà partie de la timeline. */
@@ -122,23 +172,41 @@ class Timeline
                 virtual const char* what() const throw();
         };
 
-		/** \brief Constructeur par défaut d'une timeline. */
+		/**
+		 * \brief Constructeur par défaut d'une timeline.
+		 * 
+		 * Une timeline construite par ce constructeur est placée dans le subplot 0 et contient les styles par
+		 * défaut. La fréquence d'actualisation par défaut est 60FPS.
+		 */
 		Timeline();
-        /** \brief Constructeur par copie d'une timeline. */
         Timeline(Timeline const& timeline);
 
-		/** 
-		 * \brief Permet de changer la fréquence d'actualisation de la timeline lors de l'affichage.
-		 * 
-		 * L'unité est l'image par seconde. Par défaut, une timeline affiche 24 courbes ou champs
-		 * scalaires par seconde.
-		*/
+		/** \brief Permet de changer la fréquence d'actualisation de la timeline lors de l'affichage. */
 		void setFramerate(int framerate);
 
 		void setCurveStyle(CurveStyle style);
         void setMatrixStyle(MatrixStyle style);
 
+        /**
+         * \brief Change le subplot auquel appartient la timeline.
+         * 
+         * Les subplots affichés sont à considérer comme un tableau dont la taille est déterminée lors de
+         * l'appel à Timeline::show. Ainsi, si je n'ai qu'une timeline mais que son subplot est 1000, la fenêtre
+         * ouverte lors de l'appel à Timeline::show sera fractionnée en 1001 subplots dont 1000 vides (l'indexation
+         * commençant à 0).
+         * 
+         * Plusieurs timeline peuvent bien sûr occuper le même subplot (dans les limites décrites dans la déscription de
+         * la classe Timeline), l'affichage sera alors superposé.
+         */
         void setSubplot(int i);
+        /**
+         * \brief Change la répartition des subplots à l'écran.
+         * 
+         * Permet de spécifier pour chaque subplot le rectangle dans lequel il est affiché, l'argument est une liste
+         * de taille *n* (le nombre total de subplots) contenant des vecteurs de taille 4.
+         * Chaque vecteur est de la forme `{x1, y1, x2, y2}` avec p1(x1, y1) le coin supérieur gauche du rectangle et
+         * p2(x2, y2) le coin inférieur droit de l'écran.
+         */
         static void setSubplotBorders(List<Vect<long double>> const& borders);
 
 		/** \brief Ajoute une courbe composée d'un seul point affichée par la timeline. */
@@ -148,9 +216,9 @@ class Timeline
 		/** \brief Ajouter un champ scalaire affiché par la timeline. */
 		void plot(Matrice<long double> const& M);
 
-		/** \brief Permet de lancer l'affichage de toutes les courbes. */
+		/** \brief Lance l'affichage. */
 		static void show();
-        /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut */
+        /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut. */
         static void resetWindowSize();
 
 		~Timeline();
@@ -276,7 +344,7 @@ Vect<Vect<long double>> getLagrange(Vect<long double> const& x, Vect<long double
 /** \brief Cette fonction est identique à plotBezier() mais pour une interpolation de Lagrange */
 Vect<Vect<long double>> plotLagrange(Vect<long double> const& x = Vect<long double>(0), Vect<long double> const& y = Vect<long double>(0));
 
-/**
+/** 
  * \brief Retourne une courbe approchée de la fonction de courbure de la courbe (x, y).
  * 
  * On suppose pour cela que le pas de temps entre deux points de la courbe passée en paramètres
