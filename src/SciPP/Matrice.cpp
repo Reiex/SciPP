@@ -189,33 +189,50 @@ Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double L
 	return psi;
 }
 
-Matrice<long double> cholesky(Matrice<long double> const& A)
+Vect<long double> cholesky(Matrice<long double> const& A, Vect<long double> const& B)
 {
 	if (A.size()[0] != A.size()[1])
 		throw "La matrice doit etre carree.";
+	
+	if (A.size()[0] != B.size())
+		throw "Le vecteur doit etre de la meme taille que la matrice.";
 
-	Matrice<long double> B(A.size()[0], A.size()[1]);
+	int n(B.size());
 
-	int n(A.size()[0]);
-	for (int i(0); i < n; i++)
+	Vect<long double> X(n);
+	Matrice<long double> L(n, n);
+
+	for (int j(0); j < n; j++)
 	{
-		B[i][i] = A[i][i];
+		L[j][j] = A[j][j];
+		for (int k(0); k < j; k++)
+			L[j][j] -= L[j][k];
+		L[j][j] = sqrt(L[j][j]);
 
-		for (int k(0); k < i; k++)
-			B[i][i] -= B[i][k] * B[i][k];
-
-		B[i][i] = sqrt(B[i][i]);
-
-		for (int j(i + 1); j < n; j++)
+		for (int i(j+1); i < n; i++)
 		{
-			B[j][i] = A[i][j];
+			L[i][j] = A[i][j];
+			for (int k(0); k < j-1; k++)
+				L[i][j] -= L[i][k]*L[j][k];
 
-			for (int k(0); k < i; k++)
-				B[j][i] -= B[i][k] * B[j][k];
-
-			B[j][i] /= B[i][i];
+			L[i][j] /= L[j][j];
 		}
 	}
 
-	return B;
+	for (int i(0); i < n; i++)
+	{
+		X[i] = B[i];
+		for (int k(0); k < i-1; k++)
+			X[i] -= L[i][k]*X[k];
+		X[i] /= L[i][i];
+	}
+
+	for (int i(n-1); i >= 0; i--)
+	{
+		for (int k(n-1); k > i; k--)
+			X[i] -= L[k][i] * X[k];
+		X[i] /= L[i][i];
+	}
+
+	return X;
 }

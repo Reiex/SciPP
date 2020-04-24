@@ -597,7 +597,8 @@ Matrice<long double> IDCT(Matrice<long double> const& M);
 Matrice<long double> poissonSolveur(Matrice<long double> const& f, long double Lx, long double Ly);
 /**
  * \relates Matrice
- * \brief Obtient la matrice de decomposition de Cholesky associée au système \f$Ax = B\f$
- * \deprecated Cette fonction est vouée à changer pour résoudre directement le systeme à partir de A et B
+ * \brief Retourne un vecteur \f$X\f$ tel que \f$AX = B\f$ en utilisant la décomposition de Cholesky
+ * 
+ * Attention, il appartient à l'utilisateur de vérifier que la matrice \f$A\f$ est symétrique positive.
  */
-Matrice<long double> cholesky(Matrice<long double> const& A);
+Vect<long double> cholesky(Matrice<long double> const& A, Vect<long double> const& B);
