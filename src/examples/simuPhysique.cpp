@@ -193,7 +193,7 @@ void solveur2D(Matrice<long double>& W, Matrice<long double> const& Ux, Matrice<
 
 long double wInit(long double x, long double y, long double delta, long double rho)
 {
-	long double w(2 * PI*delta*cos(2 * PI*x));
+	long double w(2*PI*delta*cos(2 * PI*x));
 	if (y <= 0.5)
 		w -= rho/(cosh(rho*(y - 0.25))*cosh(rho*(y - 0.25)));
 	else
@@ -280,7 +280,7 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 
 	long double t(0), dtx, dty, dt, tSuivant(1.0/72);
 	long double iterations(0);
-	List<Matrice<long double>> resultats({ W });
+	Timeline timelineW, timelineUx, timelineUy;
 	std::cout << "#";
 
 	while (t < t_simu)
@@ -299,7 +299,9 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 		if (t >= tSuivant)
 		{
 			std::cout << "#";
-			resultats.append(W);
+			timelineW.plot(W);
+			timelineUx.plot(Ux);
+			timelineUy.plot(Uy);
 			tSuivant += 1.0 / 72;
 		}
 		else
@@ -309,30 +311,20 @@ void simuFluide2D(int Nx, int Ny, long double t_simu, long double nu, long doubl
 
 		t += dt;
 	}
-	iterations++;
 
-	std::cout << std::endl << "## Simulation terminée, mise en place de l'affichage..." << std::endl;
+	Timeline::setSubplotBorders({ {200, 0, 600, 400}, {0, 400, 400, 800}, {400, 400, 800, 800} });
 
-	long double Wmin(resultats[0][0][0]), Wmax(Wmin);
+	timelineW.setFramerate(24);
+	timelineW.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
 
-	for (int k(0); k < resultats.size(); k++)
-		for (int i(0); i < Ny; i++)
-			for (int j(0); j < Nx; j++)
-				if (resultats[k][i][j] > Wmax)
-					Wmax = resultats[k][i][j];
-				else if (resultats[k][i][j] < Wmin)
-					Wmin = resultats[k][i][j];
+	timelineUx.setFramerate(24);
+	timelineUx.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
+	timelineUx.setSubplot(1);
 
-	Timeline timeline;
+	timelineUy.setFramerate(24);
+	timelineUy.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
+	timelineUy.setSubplot(2);
 
-	for (int k(0); k < resultats.size(); k++)
-	{
-		std::cout << "> Calcul image " << k+1 << "/" << resultats.size() << std::endl;
-		timeline.plot(resultats[k].transpose());
-	}
-
-	timeline.setFramerate(24);
-	timeline.setMatrixStyle(MatrixStyle(MatrixStyle::DisplayStyle::Smooth, { 255, 255, 255 }));
 	Timeline::show();
 }
 
