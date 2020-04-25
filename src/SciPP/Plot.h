@@ -219,7 +219,7 @@ class Timeline
 		/** \brief Lance l'affichage à partir d'une fenêtre déjà ouverte. */
 		static void show(sf::RenderWindow& window);
         /** \brief Créer une fenêtre et y lance l'affichage */
-        static void show();
+        static void show(std::string const& title="Plot SciPP");
 
         /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut. */
         static void resetWindowSize();
@@ -228,8 +228,8 @@ class Timeline
 
 	private:
 
-        static Vect<long double> computeBorders();
-        static Vect<long double> computeMatrixLimits();
+        static List<Vect<long double>> computeBorders();
+        static List<Vect<long double>> computeMatrixLimits();
 
         static void checkSubplotBorders();
         static void computeSubplotBorders(int w, int h);

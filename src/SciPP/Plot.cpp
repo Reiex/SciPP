@@ -166,9 +166,8 @@ void Timeline::show(sf::RenderWindow& window)
 	else
 		computeSubplotBorders(w, h);
 
-	/** \bug List<Vect<long double>> */
-	Vect<long double> mathBorders(Timeline::computeBorders());
-	Vect<long double> matrixLimits(Timeline::computeMatrixLimits());
+	List<Vect<long double>> mathBorders(Timeline::computeBorders());
+	List<Vect<long double>> matrixLimits(Timeline::computeMatrixLimits());
 
 	// Ouverture de la fenêtre
 
@@ -184,16 +183,19 @@ void Timeline::show(sf::RenderWindow& window)
 				window.close();
 
 		for (int i(0); i < m_timelineList.size(); i++)
-			m_timelineList[i]->display(window, mathBorders, m_subplotBorders[m_timelineList[i]->m_subplot], matrixLimits, clock.getElapsedTime().asSeconds());
+		{
+			int s(m_timelineList[i]->m_subplot);
+			m_timelineList[i]->display(window, mathBorders[s], m_subplotBorders[m_timelineList[i]->m_subplot], matrixLimits[s], clock.getElapsedTime().asSeconds());
+		}
 	}
 }
 
-void Timeline::show()
+void Timeline::show(std::string const& title)
 {
 	if (m_timelineList.size() == 0)
 		return;
 
-	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE[0], WINDOW_SIZE[1]), "Plot SciPP");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE[0], WINDOW_SIZE[1]), title);
 
 	Timeline::show(window);
 }
@@ -216,84 +218,107 @@ Timeline::~Timeline()
 	}
 }
 
-Vect<long double> Timeline::computeBorders()
+List<Vect<long double>> Timeline::computeBorders()
 {
-	Vect<long double> borders(4);
+	int n(m_subplotBorders.size());
+	List<Vect<long double>> borderList(n);
 
-	for (int i(0); i < m_timelineList.size(); i++)
+	for (int s(0); s < n; s++)
 	{
-		if (m_timelineList[i]->m_curves.size() != 0)
-		{
-			borders = { m_timelineList[i]->m_curves[0][0][0], m_timelineList[i]->m_curves[0][1][0] , m_timelineList[i]->m_curves[0][0][0] , m_timelineList[i]->m_curves[0][1][0] };
-			break;
-		}
-	}
+		Vect<long double> borders(4);
 
-	for (int i(0); i < m_timelineList.size(); i++)
-	{
-		for (int j(0); j < m_timelineList[i]->m_curves.size(); j++)
+		for (int i(0); i < m_timelineList.size(); i++)
 		{
-			for (int k(0); k < m_timelineList[i]->m_curves[j][0].size(); k++)
+			if (m_timelineList[i]->m_subplot == s && m_timelineList[i]->m_curves.size() != 0)
 			{
-				List<long double>& x(m_timelineList[i]->m_curves[j][0]), y(m_timelineList[i]->m_curves[j][1]);
-				if (x[k] < borders[0]) borders[0] = x[k];
-				if (x[k] > borders[2]) borders[2] = x[k];
-				if (y[k] < borders[1]) borders[1] = y[k];
-				if (y[k] > borders[3]) borders[3] = y[k];
+				borders = { m_timelineList[i]->m_curves[0][0][0], m_timelineList[i]->m_curves[0][1][0] , m_timelineList[i]->m_curves[0][0][0] , m_timelineList[i]->m_curves[0][1][0] };
+				break;
 			}
 		}
-	}
 
-	if (borders[0] == borders[2])
-	{
-		borders[0] -= 1;
-		borders[2] += 1;
-	}
-
-	if (borders[1] == borders[3])
-	{
-		borders[1] -= 1;
-		borders[3] += 1;
-	}
-
-	return borders;
-}
-
-Vect<long double> Timeline::computeMatrixLimits()
-{
-	Vect<long double> limits(2);
-
-	for (int i(0); i < m_timelineList.size(); i++)
-	{
-		if (m_timelineList[i]->m_matrices.size() != 0)
+		for (int i(0); i < m_timelineList.size(); i++)
 		{
-			limits = { m_timelineList[i]->m_matrices[0][0][0], m_timelineList[i]->m_matrices[0][0][0] };
-			break;
-		}
-	}
-
-	for (int i(0); i < m_timelineList.size(); i++)
-	{
-		for (int j(0); j < m_timelineList[i]->m_matrices.size(); j++)
-		{
-			for (int k(0); k < m_timelineList[i]->m_matrices[j].size()[0]; k++)
+			if (m_timelineList[i]->m_subplot == s)
 			{
-				for (int l(0); l < m_timelineList[i]->m_matrices[j].size()[1]; l++)
+				for (int j(0); j < m_timelineList[i]->m_curves.size(); j++)
 				{
-					if (m_timelineList[i]->m_matrices[j][k][l] < limits[0]) limits[0] = m_timelineList[i]->m_matrices[j][k][l];
-					if (m_timelineList[i]->m_matrices[j][k][l] > limits[1]) limits[1] = m_timelineList[i]->m_matrices[j][k][l];
+					for (int k(0); k < m_timelineList[i]->m_curves[j][0].size(); k++)
+					{
+						List<long double>& x(m_timelineList[i]->m_curves[j][0]), y(m_timelineList[i]->m_curves[j][1]);
+						if (x[k] < borders[0]) borders[0] = x[k];
+						if (x[k] > borders[2]) borders[2] = x[k];
+						if (y[k] < borders[1]) borders[1] = y[k];
+						if (y[k] > borders[3]) borders[3] = y[k];
+					}
 				}
 			}
 		}
+
+		if (borders[0] == borders[2])
+		{
+			borders[0] -= 1;
+			borders[2] += 1;
+		}
+
+		if (borders[1] == borders[3])
+		{
+			borders[1] -= 1;
+			borders[3] += 1;
+		}
+
+		borderList[s] = borders;
 	}
 
-	if (limits[0] == limits[1])
+	return borderList;
+}
+
+List<Vect<long double>> Timeline::computeMatrixLimits()
+{
+	int n(m_subplotBorders.size());
+	List<Vect<long double>> limitList(n);
+
+	for (int s(0); s < n; s++)
 	{
-		limits[0] -= 1;
-		limits[1] += 1;
-	}
+		Vect<long double> limits(2);
 
-	return limits;
+		for (int i(0); i < m_timelineList.size(); i++)
+		{
+			if (m_timelineList[i]->m_subplot == s && m_timelineList[i]->m_matrices.size() != 0)
+			{
+				limits = { m_timelineList[i]->m_matrices[0][0][0], m_timelineList[i]->m_matrices[0][0][0] };
+				break;
+			}
+		}
+
+		for (int i(0); i < m_timelineList.size(); i++)
+		{
+			if (m_timelineList[i]->m_subplot == s)
+			{
+				for (int j(0); j < m_timelineList[i]->m_matrices.size(); j++)
+				{
+					for (int k(0); k < m_timelineList[i]->m_matrices[j].size()[0]; k++)
+					{
+						for (int l(0); l < m_timelineList[i]->m_matrices[j].size()[1]; l++)
+						{
+							if (m_timelineList[i]->m_matrices[j][k][l] < limits[0]) limits[0] = m_timelineList[i]->m_matrices[j][k][l];
+							if (m_timelineList[i]->m_matrices[j][k][l] > limits[1]) limits[1] = m_timelineList[i]->m_matrices[j][k][l];
+						}
+					}
+				}
+			}
+		}
+
+		if (limits[0] == limits[1])
+		{
+			limits[0] -= 1;
+			limits[1] += 1;
+		}
+
+		limitList[s] = limits;
+	}
+	
+
+	return limitList;
 }
 
 void Timeline::checkSubplotBorders()
