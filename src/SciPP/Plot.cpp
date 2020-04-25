@@ -154,9 +154,9 @@ void Timeline::plot(Matrice<long double> const& M)
 	m_matrices.append(M);
 }
 
-void Timeline::show()
+void Timeline::show(sf::RenderWindow& window)
 {
-	int w(WINDOW_SIZE[0]), h(WINDOW_SIZE[1]);
+	int w(window.getSize().x), h(window.getSize().y);
 
 	if (m_timelineList.size() == 0)
 		return;
@@ -166,12 +166,12 @@ void Timeline::show()
 	else
 		computeSubplotBorders(w, h);
 
+	/** \bug List<Vect<long double>> */
 	Vect<long double> mathBorders(Timeline::computeBorders());
 	Vect<long double> matrixLimits(Timeline::computeMatrixLimits());
 
 	// Ouverture de la fenêtre
 
-	sf::RenderWindow window(sf::VideoMode(w, h), "Plot SciPP");
 	sf::Clock clock;
 	sf::Event event;
 	while (window.isOpen())
@@ -186,6 +186,16 @@ void Timeline::show()
 		for (int i(0); i < m_timelineList.size(); i++)
 			m_timelineList[i]->display(window, mathBorders, m_subplotBorders[m_timelineList[i]->m_subplot], matrixLimits, clock.getElapsedTime().asSeconds());
 	}
+}
+
+void Timeline::show()
+{
+	if (m_timelineList.size() == 0)
+		return;
+
+	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE[0], WINDOW_SIZE[1]), "Plot SciPP");
+
+	Timeline::show(window);
 }
 
 void Timeline::resetWindowSize()

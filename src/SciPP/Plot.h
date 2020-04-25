@@ -216,8 +216,11 @@ class Timeline
 		/** \brief Ajouter un champ scalaire affiché par la timeline. */
 		void plot(Matrice<long double> const& M);
 
-		/** \brief Lance l'affichage. */
-		static void show();
+		/** \brief Lance l'affichage à partir d'une fenêtre déjà ouverte. */
+		static void show(sf::RenderWindow& window);
+        /** \brief Créer une fenêtre et y lance l'affichage */
+        static void show();
+
         /** \brief Réinitialise la taille de la fenêtre à sa taille par défaut. */
         static void resetWindowSize();
 
