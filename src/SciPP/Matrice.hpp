@@ -67,12 +67,24 @@ template<typename T> class Matrice
 		Matrice<T>& operator*=(T const& x);
 		Matrice<T>& operator/=(T const& x);
 
+		/**
+		 * \enum ConvolveMethod
+		 * \brief Spécifie la méthode utilisée pour la gestion des bords de la matrice lors d'une convolution
+		 */
+		enum class ConvolveMethod {
+			Periodic,  /**< La matrice est considérée comme periodique et est donc répétée. */
+			Continuous,  /**< La matrice est prolongée par le dernier élément. */
+			Zero  /**< La matrice est prolongée par des zeros. */
+		};
+
 		/** \brief Retourne le déterminant de la matrice. */
 		T det() const;
 		/** \brief Retourne l'inverse de la matrice. */
 		Matrice<T> inv() const;
 		/** \brief Retourne la transposée de la matrice. */
 		Matrice<T> transpose() const;
+		/** \brief Retourne l'application du filtre de convolution M sur la matrice */
+		Matrice<T> convolved(Matrice<T> const& M, ConvolveMethod method=ConvolveMethod::Periodic) const;
 
 		~Matrice();
 
@@ -333,6 +345,19 @@ template<typename T> Vect<T> operator*(Matrice<T> const& M, Vect<T> const& v)
 	return u;
 }
 
+template<typename T> Vect<T> operator*(Vect<T> const& v, Matrice<T> const& M)
+{
+	if (M.size()[0] != v.size())
+		throw "Les tailles sont incompatibles";
+
+	Vect<T> u(M.size()[1]);
+	for (unsigned int j(0); j < M.size()[1]; j++)
+		for (unsigned int k(0); k < M.size()[0]; k++)
+			u[j] += M[k][j] * v[k];
+	
+	return u;
+}
+
 
 template<typename T> Matrice<T>& Matrice<T>::operator*=(T const& x)
 {
@@ -506,6 +531,59 @@ template<typename T> Matrice<T> Matrice<T>::transpose() const
 			M[j][i] = m_lignes[i][j];
 
 	return M;
+}
+
+template<typename T> Matrice<T> Matrice<T>::convolved(Matrice<T> const& M, ConvolveMethod method) const
+{
+	unsigned int m(m_taille[0]), n(m_taille[1]), z(M.m_taille[0]), t(M.m_taille[1]);
+
+	if (z % 2 == 0 || t % 2 == 0)
+		throw "Les tailles sont incompatibles";
+
+	Matrice<T> R(m_taille[0], m_taille[1]);
+
+	for (unsigned int i(0); i < m; i++)
+	{
+		for (unsigned int j(0); j < n; j++)
+		{
+			R[i][j] = 0;
+			for (unsigned int k(0); k < z; k++)
+			{
+				for (unsigned int l(0); l < t; l++)
+				{
+					int ox((int)k - z/2), oy((int)l - t/2);
+					T I;
+					if (method == ConvolveMethod::Periodic)
+					{
+						I = m_lignes[(i + ox)%m][(j + oy)%n];
+					}
+					else if (method == ConvolveMethod::Continuous)
+					{
+						if (i + ox > m - 1)
+							ox = m - 1 - i;
+						if (i + ox < 0)
+							ox = -i;
+						if (j + oy > n - 1)
+							oy = n - 1 - j;
+						if (j + oy < 0)
+							oy = -j;
+
+						I = m_lignes[i + ox][j + oy];
+					}
+					else if (method == ConvolveMethod::Zero)
+					{
+						if (i + ox > m - 1 || i + ox < 0 || j + oy > n - 1 || j + oy < 0)
+							I = 0;
+						else
+							I = m_lignes[i + ox][j + oy];
+					}
+					R[i][j] += I * M[k][l];
+				}
+			}
+		}
+	}
+
+	return R;
 }
 
 
