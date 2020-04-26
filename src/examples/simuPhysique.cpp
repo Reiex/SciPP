@@ -490,13 +490,13 @@ long double tempInit(double x, double y)
 		return 0;
 }
 
-void diffusionThermique(int Nx, int Ny, long double t_simu, long double nu)
+void diffusionThermique(int Nx, int Ny, long double t_simu, long double D)
 {
 	long double t(0), dt, dx(1.0 / Nx), dy(1.0 / Ny), t_suivant(0);
-	Matrice<long double> T(Nx, Ny), D;
-	Matrice<long double> L({ {0,  1, 0},
-							 {1, -4, 1},
-							 {0,  1, 0} });
+	Matrice<long double> T(Nx, Ny), dT;
+	Matrice<long double> Fx({ {1, -2, 1} }), Fy({ {1}, {-2}, {1} });
+	Fx /= dx * dx;
+	Fy /= dy * dy;
 
 	for (int i(0); i < Nx; i++)
 		for (int j(0); j < Ny; j++)
@@ -511,13 +511,34 @@ void diffusionThermique(int Nx, int Ny, long double t_simu, long double nu)
 		
 		if (t > t_suivant)
 		{
+			std::cout << "# ";
 			timeline.plot(T);
-			t_suivant += 1.0 / 24;
+			t_suivant += 1.0 / 6;
+		}
+		else
+		{
+			std::cout << "> ";
 		}
 
-		D = T.convolved(L, Matrice<long double>::ConvolveMethod::Zero);
-		dt = 0.01;
-		T = T + nu*dt*D;
+		dT = D*(T.convolved(Fx, Matrice<long double>::ConvolveMethod::Zero) + T.convolved(Fy, Matrice<long double>::ConvolveMethod::Zero));
+
+		long double maxdT(dT[0][0]), mindT(dT[0][0]), maxT(T[0][0]), minT(T[0][0]);
+		for (int i(0); i < Nx; i++)
+		{
+			for (int j(0); j < Ny; j++)
+			{
+				if (dT[i][j] > maxdT) maxdT = dT[i][j];
+				if (dT[i][j] < mindT) mindT = dT[i][j];
+				if (T[i][j] > maxT) maxT = T[i][j];
+				if (T[i][j] < minT) minT = T[i][j];
+			}
+		}
+
+		dt = 0.01*(maxT - minT)/(maxdT - mindT);
+		if (dt > 1.0 / 6)
+			dt = 1.0 / 6;
+
+		T = T + dt*dT;
 		t += dt;
 	}
 

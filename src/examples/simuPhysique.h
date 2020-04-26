@@ -53,4 +53,4 @@ void simuBalle(long double t = 10, long double x = 0, long double y = 10, long d
 
 void integrationFlot();
 
-void diffusionThermique(int Nx, int Ny, long double t_simu = 5.0, long double nu = 10.0);
+void diffusionThermique(int Nx, int Ny, long double t_simu = 10.0, long double D = 127.2e-6);

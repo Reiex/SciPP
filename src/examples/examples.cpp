@@ -16,7 +16,7 @@ int main()
 	// fonctionLogistique();
 	// mandelbrot(-0.76, 0.1, 100); // mandelbrot(0.33, 0.552, 1000);
 	// conway();
-	diffusionThermique(100, 100);
+	// diffusionThermique(300, 300);
 
 	return 0;
 }
