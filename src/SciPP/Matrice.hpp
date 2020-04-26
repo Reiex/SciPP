@@ -562,11 +562,11 @@ template<typename T> Matrice<T> Matrice<T>::convolved(Matrice<T> const& M, Convo
 						if (i + ox > m - 1)
 							ox = m - 1 - i;
 						if (i + ox < 0)
-							ox = -i;
+							ox = -(int)i;
 						if (j + oy > n - 1)
 							oy = n - 1 - j;
 						if (j + oy < 0)
-							oy = -j;
+							oy = -(int)j;
 
 						I = m_lignes[i + ox][j + oy];
 					}

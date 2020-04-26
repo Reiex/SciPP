@@ -391,7 +391,6 @@ void simuBalle(long double t, long double x, long double y, long double vx, long
 
 // Simulations de systemes dynamiques
 
-
 Vect<double> fEquilibreRotation(Vect<double> x)
 {
 	double omega = 2;
@@ -477,3 +476,53 @@ void integrationFlot()
 	coord[0] = -1; coord[1] = 1.5; coord[2] = -1; coord[3] = 1;
 	plotFlot2D(fOscillateurQuadratique, coord, 1000, 7.5);
 }
+
+
+// Equation de la chaleur
+
+long double tempInit(double x, double y)
+{
+	long double d(sqrt((x-0.5)*(x-0.5) + (y-0.5)*(y-0.5)));
+
+	if (d < 0.2)
+		return 1.0 - 5*d;
+	else
+		return 0;
+}
+
+void diffusionThermique(int Nx, int Ny, long double t_simu, long double nu)
+{
+	long double t(0), dt, dx(1.0 / Nx), dy(1.0 / Ny), t_suivant(0);
+	Matrice<long double> T(Nx, Ny), D;
+	Matrice<long double> L({ {1,  1, 1},
+							 {1, -8, 1},
+							 {1,  1, 1} });
+
+	for (int i(0); i < Nx; i++)
+		for (int j(0); j < Ny; j++)
+			T[i][j] = tempInit(i * dx, j * dy);
+
+	Timeline timeline;
+	int i(0);
+	while (t < t_simu)
+	{
+		i++;
+		std::cout << "Iteration " << i << " a t=" << t << std::endl;
+		
+		if (t > t_suivant)
+		{
+			timeline.plot(T);
+			t_suivant += 1.0 / 24;
+		}
+
+		D = T.convolved(L, Matrice<long double>::ConvolveMethod::Zero);
+		dt = 0.01;
+		T = T + nu*dt*D;
+		t += dt;
+	}
+
+	timeline.setFramerate(24);
+	Timeline::show();
+}
+
+

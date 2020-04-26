@@ -52,3 +52,5 @@ void simuFluide2D(int Nx = 60, int Ny = 60, long double t_simu = 7.5, long doubl
 void simuBalle(long double t = 10, long double x = 0, long double y = 10, long double vx = 0, long double vy = 0);
 
 void integrationFlot();
+
+void diffusionThermique(int Nx, int Ny, long double t_simu = 5.0, long double nu = 10.0);
