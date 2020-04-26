@@ -494,9 +494,9 @@ void diffusionThermique(int Nx, int Ny, long double t_simu, long double nu)
 {
 	long double t(0), dt, dx(1.0 / Nx), dy(1.0 / Ny), t_suivant(0);
 	Matrice<long double> T(Nx, Ny), D;
-	Matrice<long double> L({ {1,  1, 1},
-							 {1, -8, 1},
-							 {1,  1, 1} });
+	Matrice<long double> L({ {0,  1, 0},
+							 {1, -4, 1},
+							 {0,  1, 0} });
 
 	for (int i(0); i < Nx; i++)
 		for (int j(0); j < Ny; j++)
