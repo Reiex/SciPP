@@ -58,6 +58,18 @@ template<typename T> class List
 		 * Tout les éléments d'indice supérieur à i sont alors décalés d'un rang.
 		 */
 		void remove(unsigned int i);
+		/** \brief Retourne l'indice i le plus petit tel que (*this)[i] == x. et la taille de la liste si l'élément n'est pas présent*/
+		unsigned int find(T const& x) const;
+		/**
+		 * \brief Trie la liste dans l'ordre croissant selon key((*this)[i]) entre les indices i inclus et j exclus avec i > j.
+		 */
+		void sort(int (*key)(T const&), unsigned int i, unsigned int j);
+		/**
+		 * \brief Trie la liste dans l'ordre croissant selon key((*this)[i]).
+		 * 
+		 * Le tri utilisé est un tri par tas.
+		 */
+		void sort(int (*key)(T const&));
 
 		/**
 		 * \todo unsigned int find(T const& x);
@@ -231,6 +243,63 @@ template<typename T> void List<T>::remove(unsigned int i)
 
 	for (unsigned int j(i); j < m_n; j++)
 		m_x[j] = m_x[j + 1];
+}
+
+template<typename T> unsigned int List<T>::find(T const& x) const
+{
+	for (unsigned int i(0); i < m_n; i++)
+		if (m_x[i] == x)
+			return i;
+	
+	return m_n;
+}
+
+template<typename T> void List<T>::sort(int (*key)(T const&))
+{
+	for (unsigned int i(0); i < m_n / 2; i++)
+	{
+		bool twoLeaves(2*i + 1 < m_n);
+		if (key(m_x[i]) < key(m_x[2*i]) || (twoLeaves && key(m_x[i]) < key(m_x[2*i + 1])))
+		{
+			unsigned int j(2*i);
+			if (twoLeaves && key(m_x[2*i + 1]) > key(m_x[2*i]))
+				j++;
+
+			while (key(m_x[j/2]) < key(m_x[j]))
+			{
+				T tmp(m_x[j]);
+				m_x[j] = m_x[j/2];
+				m_x[j/2] = tmp;
+				j /= 2;
+			}
+		}
+	}
+
+	for (unsigned int i(m_n - 1); i != UINT_MAX; i--)
+	{
+		T tmp(m_x[i]);
+		m_x[i] = m_x[0];
+		m_x[0] = tmp;
+
+		unsigned int j(0);
+		while ((2*j < i && key(m_x[j]) < key(m_x[2*j])) || (2*j+1 < i && key(m_x[j]) < key(m_x[2*j+1])))
+		{
+			if (2*j + 1 >= i || key(m_x[2*j]) > key(m_x[2*j+1]))
+			{
+				tmp = m_x[j];
+				m_x[j] = m_x[2*j];
+				m_x[2*j] = tmp;
+				j = 2*j;
+			}
+			else
+			{
+				tmp = m_x[j];
+				m_x[j] = m_x[2*j+1];
+				m_x[2*j+1] = tmp;
+				j = 2*j+1;
+			}
+		}
+	}
 }
 
 
