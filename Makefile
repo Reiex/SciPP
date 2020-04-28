@@ -43,11 +43,8 @@ folders:
 	mkdir $(OBJ_DIR) $(OBJ_LIBRARY_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)
 	mkdir $(INCLUDE_DIR) $(INCLUDE_LIBRARY_DIR) $(INCLUDE_LIBRARY_DIR)/bin
 
-doxy:
+docs:
 	doxygen doc/doxygen
-
-doxyClean:
-	rm -rf doc/html
 
 lineCount:
 	git ls-files | xargs wc -l
