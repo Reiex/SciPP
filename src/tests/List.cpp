@@ -238,7 +238,7 @@ std::string mainList(Test& test)
 
 	test.addSubTest("Test de la concatenation", &testConcatenation);
 	test.addSubTest("Test des operateurs == et !=", &testEgalite);
-	test.addSubTest("Test des fonctions spécifiques", &testFonctionsSpecifiques);
+	test.addSubTest("Test des fonctions spÃ©cifiques", &testFonctionsSpecifiques);
 	test.addSubTest("Test generaux", &testGeneraux);
 
 	return "";

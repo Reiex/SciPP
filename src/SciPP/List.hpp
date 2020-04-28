@@ -12,6 +12,7 @@
 #include <iostream>
 #include <exception>
 #include <initializer_list>
+#include <limits.h>
 
 /**
  * \class List
