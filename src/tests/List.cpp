@@ -183,11 +183,130 @@ static std::string testConcatenation(Test& test)
 
 static std::string testEgalite(Test& test)
 {
+	test.addSubTest("Listes égales", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3 }), m({ 1, 6, 1, 8, 0, 3 });
+		if (l == m)
+			return "";
+		else
+			return "Les listes ne sont pas considérées égales.";
+	});
+
+	test.addSubTest("Listes tailles différentes", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3 }), m({ 1, 6, 1});
+		if (l != m)
+			return "";
+		else
+			return "Les listes sont considérées égales.";
+	});
+
+	test.addSubTest("Listes tailles égales éléments différents", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3 }), m({ 1, 6, 1, 8, 0, 4 });
+		if (l != m)
+			return "";
+		else
+			return "Les listes sont considérées égales.";
+	});
+
 	return "";
 }
 
 static std::string testFonctionsSpecifiques(Test& test)
 {
+	test.addSubTest("Append", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0 });
+		l.append(3);
+		std::stringstream stream;
+		stream << l;
+		if (stream.str() == "[1, 6, 1, 8, 0, 3]")
+			return "";
+		else
+			return "Resultat attendu: [1, 6, 1, 8, 0, 3]. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Append qui nécessite une nouvelle allocation", [](Test& test)->std::string
+	{
+		List<int> l(32);
+		l.append(0);
+		std::stringstream stream;
+		stream << l;
+		if (stream.str() == "[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]")
+			return "";
+		else
+			return "Resultat attendu: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Remove normal", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3 });
+		l.remove(2);
+		std::stringstream stream;
+		stream << l;
+		if (stream.str() == "[1, 6, 8, 0, 3]")
+			return "";
+		else
+			return "Resultat attendu: [1, 6, 8, 0, 3]. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Remove en dehors des limites", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3 });
+		std::string r;
+		std::stringstream stream;
+
+		try {
+			l.remove(105);
+			stream << l;
+			r += "Echec test n°1. Etat de la liste: " + stream.str() + ".";
+		}
+		catch (List<int>::IndexException& e) {}
+
+		try {
+			l.remove(-1);
+			stream.clear();
+			stream << l;
+			r += "Echec test n°2. Etat de la liste: " + stream.str() + ".";
+		}
+		catch (List<int>::IndexException& e) {}
+
+		try {
+			l.remove(6);
+			stream.clear();
+			stream << l;
+			r += "Echec test n°3. Etat de la liste: " + stream.str() + ".";
+		}
+		catch (List<int>::IndexException& e) {}
+
+		return r;
+	});
+
+	test.addSubTest("Sort liste stricte", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 8, 0, 3, 9, 7, 4 });
+		l.sort([](const int& x) {return x; });
+		std::stringstream stream;
+		stream << l;
+		if (stream.str() == "[0, 1, 3, 4, 6, 7, 8, 9]")
+			return "";
+		else
+			return "Resultat attendu: [0, 1, 3, 4, 6, 7, 8, 9]. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Sort liste avec éléments égaux", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3, 3, 9, 8, 8, 7, 4, 9, 8, 9 });
+		l.sort([](const int& x) {return x; });
+		std::stringstream stream;
+		stream << l;
+		if (stream.str() == "[0, 1, 1, 3, 3, 4, 6, 7, 8, 8, 8, 8, 9, 9, 9]")
+			return "";
+		else
+			return "Resultat attendu: [0, 1, 1, 3, 3, 4, 6, 7, 8, 8, 8, 8, 9, 9, 9]. Resultat obtenu: " + stream.str() + ".";
+	});
+
 	return "";
 }
 
