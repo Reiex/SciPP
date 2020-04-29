@@ -7,6 +7,8 @@
 #include "../SciPP/SciPP.h"
 #include "Test.h"
 
+using namespace scp;
+
 
 std::string mainInt(Test& test);
 std::string mainFrac(Test& test);
