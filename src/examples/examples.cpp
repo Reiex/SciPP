@@ -4,7 +4,6 @@
 #include "simuPhysique.h"
 #include "jeuxArithmetiques.h"
 
-
 int main()
 {
 	// std::cout << neper(100) << std::endl << std::endl; system("pause");

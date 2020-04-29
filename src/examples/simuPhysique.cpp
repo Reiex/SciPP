@@ -1,6 +1,5 @@
 #include "simuPhysique.h"
 
-
 // Générale
 
 Force::Force()

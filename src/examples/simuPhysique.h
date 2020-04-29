@@ -1,8 +1,8 @@
 #pragma once
 
-
 #include "../SciPP/SciPP.h"
 
+using namespace scp;
 
 class Point;
 

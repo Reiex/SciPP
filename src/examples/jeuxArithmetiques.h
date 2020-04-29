@@ -1,9 +1,10 @@
 #pragma once
 
-
 #include <iostream>
 #include <sstream>
 #include "../SciPP/SciPP.h"
+
+using namespace scp;
 
 std::string neper(int n);
 
