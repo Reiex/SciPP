@@ -113,6 +113,29 @@ static std::string testAffectation(Test& test)
 
 static std::string testDestructeur(Test& test)
 {
+	test.addSubTest("Destruction d'une liste simple", [](Test& test)->std::string
+	{
+		List<int>* l(new List<int>({ 1, 6, 1, 8, 0, 3 }));
+		delete l;
+		return "";
+	});
+
+	test.addSubTest("Destruction d'une liste creee par copie et de son original", [](Test& test)->std::string
+	{
+		List<int>* l(new List<int>({ 1, 6, 1, 8, 0, 3 })), *m(new List<int>(*l));
+		delete l;
+		delete m;
+		return "";
+	});
+
+	test.addSubTest("Destruction d'une liste creee par deplacement et de son original", [](Test& test)->std::string
+	{
+		List<int>* l(new List<int>({ 1, 6, 1, 8, 0, 3 })), * m(new List<int>(std::move(*l)));
+		delete l;
+		delete m;
+		return "";
+	});
+
 	return "";
 }
 
@@ -305,6 +328,26 @@ static std::string testFonctionsSpecifiques(Test& test)
 			return "";
 		else
 			return "Resultat attendu: [0, 1, 1, 3, 3, 4, 6, 7, 8, 8, 8, 8, 9, 9, 9]. Resultat obtenu: " + stream.str() + ".";
+	});
+
+	test.addSubTest("Find avec élément présent", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3, 3, 9, 8, 8, 7, 4, 9, 8, 9 });
+		unsigned int i = l.find(8);
+		if (i == 3)
+			return "";
+		else
+			return "Resultat attendu: 3. Resultat obtenu: " + std::to_string(i) + ".";
+	});
+
+	test.addSubTest("Find avec élément absent", [](Test& test)->std::string
+	{
+		List<int> l({ 1, 6, 1, 8, 0, 3, 3, 9, 8, 8, 7, 4, 9, 8, 9 });
+		unsigned int i = l.find(5);
+		if (i == 15)
+			return "";
+		else
+			return "Resultat attendu: 15. Resultat obtenu: " + std::to_string(i) + ".";
 	});
 
 	return "";

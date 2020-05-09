@@ -73,13 +73,15 @@ namespace scp
 		 * Le tri utilisé est un tri par tas.
 		 */
 		void sort(int (*key)(T const&));
-
 		/**
-		 * \todo unsigned int find(T const& x);
-		 * \todo void sort(int (*key)(T const&));
+		 * \brief Retourne l'indice le plus petit tel que l[i] == x.
+		 * 
+		 * Si l'élément n'est pas trouvé dans la liste, renvoie la taille de la liste.
 		 */
+		unsigned int find(T const& x);
 
-		 /** \brief Concaténation de deux listes. */
+
+		/** \brief Concaténation de deux listes. */
 		List<T>& operator+=(List<T> const& l);
 		/**
 		 * \brief Comparaison de deux listes.
@@ -303,6 +305,15 @@ namespace scp
 				}
 			}
 		}
+	}
+
+	template<typename T> unsigned int List<T>::find(T const& x)
+	{
+		for (unsigned int i(0); i < m_n; i++)
+			if (m_x[i] == x)
+				return i;
+
+		return m_n;
 	}
 
 
