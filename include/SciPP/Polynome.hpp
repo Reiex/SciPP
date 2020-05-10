@@ -41,7 +41,7 @@ namespace scp
 	{
 	public:
 
-		/** \brief Constructeur par défaut, initialise le polynome à 0. */
+		/** \brief Constructeur par défaut, initialise le polynome à T(0). */
 		Polynome();
 		/** \brief Initialise le polynome à la constante T(x). */
 		Polynome(int x);
@@ -411,7 +411,7 @@ namespace scp
 			if (i == P.degre())
 				stream << P[i];
 			else
-				stream << P[i] << " ";
+				stream << P[i] << ", ";
 		stream << ")";
 
 		return stream;
