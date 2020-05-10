@@ -9,6 +9,7 @@
 */
 
 #include <iostream>
+#include <initializer_list>
 #include "Vect.hpp"
 
 namespace scp
@@ -47,7 +48,9 @@ namespace scp
 		Polynome(int x);
 		/** \brief Initialise le polynome à la constante x. */
 		Polynome(T const& x);
-		/** \brief Initialise le polynome à partir de `tab` avec `tab[]` le coefficient devant \f$x^i\f$. */
+		/** \brief Initialise le polynome à partir d'une liste d'initialisation avec `tab[i]` le coefficient devant \f$x^i\f$. */
+		Polynome(std::initializer_list<T> tab);
+		/** \brief Initialise le polynome à partir de `tab` avec `tab[i]` le coefficient devant \f$x^i\f$. */
 		Polynome(T const* tab, int taille);
 
 		T& operator[](int i);
@@ -95,6 +98,20 @@ namespace scp
 		m_coeffs = Vect<T>(1);
 		m_coeffs[0] = x;
 		m_deg = 0;
+	}
+
+	template<typename T> Polynome<T>::Polynome(std::initializer_list<T> tab)
+	{
+		m_deg = 0;
+		T zero(0);
+		for (int i(0); i < tab.size(); i++)
+			if (tab.begin()[i] != zero)
+				m_deg = i;
+
+		m_coeffs = Vect<T>(m_deg + 1);
+		if (tab.size() != 0)
+			for (int i(0); i < m_deg + 1; i++)
+				m_coeffs[i] = tab.begin()[i];
 	}
 
 	template<typename T> Polynome<T>::Polynome(T const* tab, int taille)
