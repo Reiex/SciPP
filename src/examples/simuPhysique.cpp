@@ -546,3 +546,72 @@ void diffusionThermique(int Nx, int Ny, long double t_simu, long double D)
 }
 
 
+// Surface d'océans
+
+long double philipsDispersion(Vect<long double> k, long double freqSimu)
+{
+	return freqSimu*((int)(sqrt(9.81 * sqrt(k * k))/freqSimu + 0.5));
+}
+
+long double philipsSpectrum(long double A, Vect<long double> w, Vect<long double> k)
+{
+	long double g(9.81), kNorm(sqrt(k * k)), wNorm(sqrt(w * w));
+	return A * exp(-pow(g / (kNorm * wNorm * wNorm), 2)) * pow(k * w, 2) / pow(kNorm, 4);
+}
+
+std::complex<long double> philipsAmplitude(long double A, Vect<long double> w, long double epsR, long double epsI, Vect<long double> k)
+{
+	return std::complex<long double>(epsR, epsI)*sqrt(philipsSpectrum(A, w, k)/2);
+}
+
+std::complex<long double> philipsHeight(long double epsR, long double epsI, Vect<long double> w, long double A, long double freqSimu, Vect<long double> k, long double t)
+{
+	if (k * k == 0)
+		return std::complex<long double>(0);
+
+	std::complex<long double> h0(philipsAmplitude(A, w, epsR, epsI, k));
+	long double freq(philipsDispersion(k, freqSimu));
+	return h0 * std::complex<long double>(2 * cos(freq * t));
+}
+
+void philipsWaves(int Nx, int Ny, long double tSimu, long double Lx, long double Ly)
+{
+	Timeline timeline;
+	Matrice<long double> epsR(Nx, Ny), epsI(Nx, Ny), wave(Nx, Ny);
+	Matrice<std::complex<long double>> complexWave(Nx, Ny), coeff(Nx, Ny);
+	Vect<long double> w({ 10.0, 20.0 });
+	long double A(1.0), t(0.0);
+
+	std::default_random_engine generator;
+	std::normal_distribution<double> distribution(0.0, 1.0);
+
+	for (int i(0); i < Nx; i++)
+	{
+		for (int j(0); j < Ny; j++)
+		{
+			epsR[i][j] = distribution(generator);
+			epsI[i][j] = distribution(generator);
+		}
+	}
+
+	while (t < tSimu)
+	{
+		std::cout << "t = " << t << std::endl;
+		for (int i(0); i < Nx; i++)
+			for (int j(0); j < Ny; j++)
+				coeff[i][j] = philipsHeight(epsR[i][j], epsI[i][j], w, A, (PI*2)/tSimu, {(PI*2*i)/Lx, (PI*2*j)/Ly}, t);
+		
+		complexWave = IFFT(coeff);
+
+		for (int i(0); i < Nx; i++)
+			for (int j(0); j < Ny; j++)
+				wave[i][j] = complexWave[i][j].real();
+		
+		timeline.plot(wave);
+
+		t += 1.0 / 24;
+	}
+
+	timeline.setFramerate(24);
+	timeline.show();
+}
