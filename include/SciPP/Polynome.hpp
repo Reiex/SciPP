@@ -123,8 +123,9 @@ namespace scp
 				m_deg = i;
 
 		m_coeffs = Vect<T>(m_deg + 1);
-		for (int i(0); i < m_deg + 1; i++)
-			m_coeffs[i] = tab[i];
+		if (taille != 0)
+			for (int i(0); i < m_deg + 1; i++)
+				m_coeffs[i] = tab[i];
 	}
 
 
@@ -194,6 +195,25 @@ namespace scp
 		return R;
 	}
 
+	template<typename T> Polynome<T>&& operator+(Polynome<T>&& P, Polynome<T> const& Q)
+	{
+		P += Q;
+		return std::move(P);
+	}
+
+	template<typename T> Polynome<T>&& operator+(Polynome<T> const& P, Polynome<T>&& Q)
+	{
+		Q += P;
+		return std::move(Q);
+	}
+
+	template<typename T> Polynome<T>&& operator+(Polynome<T>&& P, Polynome<T>&& Q)
+	{
+		P += Q;
+		return std::move(P);
+	}
+
+
 	template<typename T> Polynome<T>& Polynome<T>::operator-=(Polynome<T> const& P)
 	{
 		if (P.m_deg < m_deg)
@@ -234,6 +254,19 @@ namespace scp
 		return R;
 	}
 
+	template<typename T> Polynome<T>&& operator-(Polynome<T>&& P, Polynome<T> const& Q)
+	{
+		P -= Q;
+		return std::move(P);
+	}
+
+	template<typename T> Polynome<T>&& operator-(Polynome<T>&& P, Polynome<T>&& Q)
+	{
+		P -= Q;
+		return std::move(P);
+	}
+
+
 	template<typename T> Polynome<T>& Polynome<T>::operator*=(Polynome<T> const& P)
 	{
 		T zero(0);
@@ -268,15 +301,24 @@ namespace scp
 		return R;
 	}
 
-	template<typename T> Polynome<T> operator*(Polynome<T> const& P, T const& x)
+	template<typename T> Polynome<T>&& operator*(Polynome<T>&& P, Polynome<T> const& Q)
 	{
-		return P * Polynome<T>(x);
+		P *= Q;
+		return std::move(P);
 	}
 
-	template<typename T> Polynome<T> operator*(T const& x, Polynome<T> const& P)
+	template<typename T> Polynome<T>&& operator*(Polynome<T> const& P, Polynome<T>&& Q)
 	{
-		return Polynome<T>(x) * P;
+		Q *= P;
+		return std::move(Q);
 	}
+
+	template<typename T> Polynome<T>&& operator*(Polynome<T>&& P, Polynome<T>&& Q)
+	{
+		P *= Q;
+		return std::move(P);
+	}
+
 
 	template<typename T> Polynome<T>& Polynome<T>::operator/=(Polynome<T> const& P)
 	{
@@ -314,6 +356,19 @@ namespace scp
 		return R;
 	}
 
+	template<typename T> Polynome<T>&& operator/(Polynome<T>&& P, Polynome<T> const& Q)
+	{
+		P /= Q;
+		return std::move(P);
+	}
+
+	template<typename T> Polynome<T>&& operator/(Polynome<T>&& P, Polynome<T>&& Q)
+	{
+		P /= Q;
+		return std::move(P);
+	}
+
+
 	template<typename T> Polynome<T>& Polynome<T>::operator%=(Polynome<T> const& P)
 	{
 		if (P.m_deg <= m_deg)
@@ -348,6 +403,19 @@ namespace scp
 
 		return R;
 	}
+	
+	template<typename T> Polynome<T>&& operator%(Polynome<T>&& P, Polynome<T> const& Q)
+	{
+		P %= Q;
+		return std::move(P);
+	}
+
+	template<typename T> Polynome<T>&& operator%(Polynome<T>&& P, Polynome<T>&& Q)
+	{
+		P %= Q;
+		return std::move(P);
+	}
+
 
 	template<typename T> Polynome<T> Polynome<T>::operator-()
 	{
@@ -410,7 +478,7 @@ namespace scp
 		else
 		{
 			for (int i(0); i < P.m_coeffs.size() - 1; i++)
-				P[i] = P[i + 1];
+				P[i] = (i+1)*P[i + 1];
 			P.m_coeffs.changerTaille(P.m_coeffs.size() - 1);
 			P.m_deg--;
 		}

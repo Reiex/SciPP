@@ -478,7 +478,7 @@ namespace scp
 		else
 		{
 			for (int i(0); i < P.m_coeffs.size() - 1; i++)
-				P[i] = P[i + 1];
+				P[i] = (i+1)*P[i + 1];
 			P.m_coeffs.changerTaille(P.m_coeffs.size() - 1);
 			P.m_deg--;
 		}

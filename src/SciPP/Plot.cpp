@@ -690,11 +690,11 @@ namespace scp
 		if (n == 0)
 			return coeff;
 		if (i == 0)
-			return coeff * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
+			return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
 		if (i == n)
-			return coeff * expoRapide(Polynome<long double>(tab, 2), i);
+			return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(tab, 2), i);
 
-		return coeff * expoRapide(Polynome<long double>(tab, 2), i) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
+		return Polynome<long double>(coeff) * expoRapide(Polynome<long double>(tab, 2), i) * expoRapide(Polynome<long double>(1) - Polynome<long double>(tab, 2), n - i);
 	}
 
 	Vect<long double> getBorder(Vect<long double> x, Vect<long double> y)
