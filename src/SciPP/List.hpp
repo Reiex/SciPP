@@ -336,6 +336,8 @@ namespace scp
 		for (unsigned int i(0); i < l.m_n; i++)
 			m_x[m_n + i] = l.m_x[i];
 		m_n += l.m_n;
+
+		return *this;
 	}
 
 	template<typename T> List<T> operator+(List<T> const& a, List<T> const& b)

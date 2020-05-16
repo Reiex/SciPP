@@ -16,5 +16,11 @@ int main()
 
 	std::cout << std::endl;
 
+#ifdef SCP_TEST_PAUSE
+
+	system("pause");
+
+#endif
+
 	return 0;
 }
