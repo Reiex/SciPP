@@ -15,36 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\tests\Frac.cpp">
+    <ClCompile Include="..\..\src\tests\Frac.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\Int.cpp">
+    <ClCompile Include="..\..\src\tests\Int.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\List.cpp">
+    <ClCompile Include="..\..\src\tests\List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\main.cpp">
+    <ClCompile Include="..\..\src\tests\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\Matrice.cpp">
+    <ClCompile Include="..\..\src\tests\Matrice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\Polynome.cpp">
+    <ClCompile Include="..\..\src\tests\Polynome.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\Test.cpp">
+    <ClCompile Include="..\..\src\tests\Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\tests\Vect.cpp">
+    <ClCompile Include="..\..\src\tests\Vect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\tests\main.h">
+    <ClInclude Include="..\..\src\tests\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\tests\Test.h">
+    <ClInclude Include="..\..\src\tests\Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

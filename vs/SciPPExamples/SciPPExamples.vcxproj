@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{3DDCD33E-9280-4BE2-8F6C-A42AFB3543F0}</ProjectGuid>
-    <RootNamespace>SciPPTests</RootNamespace>
+    <ProjectGuid>{B9824F27-CFC6-45B4-9903-8726AA8F7634}</ProjectGuid>
+    <RootNamespace>SciPPExamples</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,11 +71,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\vs\$(ProjectName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\vs\$(ProjectName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -89,9 +89,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SCP_TEST_PAUSE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;D:\Programmation\Projets\SciPP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,9 +106,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SCP_TEST_PAUSE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;D:\Programmation\Projets\SciPP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,18 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\tests\Frac.cpp" />
-    <ClCompile Include="..\src\tests\Int.cpp" />
-    <ClCompile Include="..\src\tests\List.cpp" />
-    <ClCompile Include="..\src\tests\main.cpp" />
-    <ClCompile Include="..\src\tests\Matrice.cpp" />
-    <ClCompile Include="..\src\tests\Polynome.cpp" />
-    <ClCompile Include="..\src\tests\Test.cpp" />
-    <ClCompile Include="..\src\tests\Vect.cpp" />
+    <ClCompile Include="..\..\src\examples\examples.cpp" />
+    <ClCompile Include="..\..\src\examples\jeuxArithmetiques.cpp" />
+    <ClCompile Include="..\..\src\examples\simuPhysique.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\tests\main.h" />
-    <ClInclude Include="..\src\tests\Test.h" />
+    <ClInclude Include="..\..\src\examples\jeuxArithmetiques.h" />
+    <ClInclude Include="..\..\src\examples\simuPhysique.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SciPP\SciPP.vcxproj">

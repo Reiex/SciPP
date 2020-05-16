@@ -24,13 +24,13 @@ EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/examples.o $(OBJ_EXAMPLES_DIR)/simuPhysique.
 all: folders SciPP tests examples
 
 check: tests
-	valgrind ./SciPPTest
+	valgrind ./SciPPTests
 
 examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(EXAMPLES_OBJS)
-	$(CC) $(EXAMPLES_OBJS) -o SciPPExample $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
 
 tests: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(TESTS_OBJS)
-	$(CC) $(TESTS_OBJS) -o SciPPTest $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) $(TESTS_OBJS) -o SciPPTests $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
 
 SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
 

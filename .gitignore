@@ -1,8 +1,8 @@
 /.vs/
-/SciPP/Release
-/SciPPTests/Release
-/SciPPExamples/Release
+/vs/SciPP/Release
+/vs/SciPPTests/Release
+/vs/SciPPExamples/Release
 /doc/html/
 /obj/
-/SciPPExample
-/SciPPTest
+/SciPPExamples
+/SciPPTests

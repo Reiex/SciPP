@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPP", "SciPP\SciPP.vcxproj", "{7DF651C6-E3F7-4709-A7E0-667781156237}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPP", "vs\SciPP\SciPP.vcxproj", "{7DF651C6-E3F7-4709-A7E0-667781156237}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPPExamples", "SciPPExamples\SciPPExamples.vcxproj", "{B9824F27-CFC6-45B4-9903-8726AA8F7634}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPPExamples", "vs\SciPPExamples\SciPPExamples.vcxproj", "{B9824F27-CFC6-45B4-9903-8726AA8F7634}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPPTests", "SciPPTests\SciPPTests.vcxproj", "{3DDCD33E-9280-4BE2-8F6C-A42AFB3543F0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciPPTests", "vs\SciPPTests\SciPPTests.vcxproj", "{3DDCD33E-9280-4BE2-8F6C-A42AFB3543F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

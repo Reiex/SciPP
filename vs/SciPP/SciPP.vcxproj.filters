@@ -15,54 +15,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\SciPP\Frac.cpp">
+    <ClCompile Include="..\..\src\SciPP\Frac.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SciPP\Int.cpp">
+    <ClCompile Include="..\..\src\SciPP\Int.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SciPP\Interpreteur.cpp">
+    <ClCompile Include="..\..\src\SciPP\Interpreteur.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SciPP\Matrice.cpp">
+    <ClCompile Include="..\..\src\SciPP\Matrice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SciPP\Plot.cpp">
+    <ClCompile Include="..\..\src\SciPP\Plot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SciPP\Random.cpp">
+    <ClCompile Include="..\..\src\SciPP\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\SciPP\Frac.hpp">
+    <ClInclude Include="..\..\src\SciPP\Frac.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Int.hpp">
+    <ClInclude Include="..\..\src\SciPP\Int.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Interpreteur.h">
+    <ClInclude Include="..\..\src\SciPP\Interpreteur.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\List.hpp">
+    <ClInclude Include="..\..\src\SciPP\List.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Matrice.hpp">
+    <ClInclude Include="..\..\src\SciPP\Matrice.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Plot.h">
+    <ClInclude Include="..\..\src\SciPP\Plot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Polynome.hpp">
+    <ClInclude Include="..\..\src\SciPP\Polynome.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Random.h">
+    <ClInclude Include="..\..\src\SciPP\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\SciPP.h">
+    <ClInclude Include="..\..\src\SciPP\SciPP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SciPP\Vect.hpp">
+    <ClInclude Include="..\..\src\SciPP\Vect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
