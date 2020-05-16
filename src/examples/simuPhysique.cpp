@@ -582,15 +582,12 @@ void philipsWaves(int Nx, int Ny, long double tSimu, long double Lx, long double
 	Vect<long double> w({ 10.0, 20.0 });
 	long double A(1.0), t(0.0);
 
-	std::default_random_engine generator;
-	std::normal_distribution<double> distribution(0.0, 1.0);
-
 	for (int i(0); i < Nx; i++)
 	{
 		for (int j(0); j < Ny; j++)
 		{
-			epsR[i][j] = distribution(generator);
-			epsI[i][j] = distribution(generator);
+			epsR[i][j] = normalRand();
+			epsI[i][j] = normalRand();
 		}
 	}
 
