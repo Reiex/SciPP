@@ -556,7 +556,7 @@ long double philipsDispersion(Vect<long double> k, long double freqSimu)
 long double philipsSpectrum(long double A, Vect<long double> w, Vect<long double> k)
 {
 	long double g(9.81), kNorm(sqrt(k * k)), wNorm(sqrt(w * w));
-	return A * exp(-pow(g / (kNorm * wNorm * wNorm), 2)) * pow(k * w, 2) / pow(kNorm, 4);
+	return A * exp(-pow(g / (kNorm * wNorm * wNorm), 2)) * pow(k * w, 2) / (pow(kNorm, 4)*pow(kNorm*wNorm, 2));
 }
 
 std::complex<long double> philipsAmplitude(long double A, Vect<long double> w, long double epsR, long double epsI, Vect<long double> k)
@@ -569,9 +569,9 @@ std::complex<long double> philipsHeight(long double epsR, long double epsI, Vect
 	if (k * k == 0)
 		return std::complex<long double>(0);
 
-	std::complex<long double> h0(philipsAmplitude(A, w, epsR, epsI, k));
+	std::complex<long double> h0(philipsAmplitude(A, w, epsR, epsI, k)), h0t(philipsAmplitude(A, w, epsR, epsI, -k));
 	long double freq(philipsDispersion(k, freqSimu));
-	return h0 * std::complex<long double>(2 * cos(freq * t));
+	return h0 * exp(std::complex<long double>(0, freq*t)) + std::conj(h0t) * exp(std::complex<long double>(0, -freq*t));
 }
 
 void philipsWaves(int Nx, int Ny, long double tSimu, long double Lx, long double Ly)
@@ -579,7 +579,7 @@ void philipsWaves(int Nx, int Ny, long double tSimu, long double Lx, long double
 	Timeline timeline;
 	Matrice<long double> epsR(Nx, Ny), epsI(Nx, Ny), wave(Nx, Ny);
 	Matrice<std::complex<long double>> complexWave(Nx, Ny), coeff(Nx, Ny);
-	Vect<long double> w({ 10.0, 20.0 });
+	Vect<long double> w({ 31.0, 0.0 });
 	long double A(1.0), t(0.0);
 
 	for (int i(0); i < Nx; i++)
@@ -596,7 +596,7 @@ void philipsWaves(int Nx, int Ny, long double tSimu, long double Lx, long double
 		std::cout << "t = " << t << std::endl;
 		for (int i(0); i < Nx; i++)
 			for (int j(0); j < Ny; j++)
-				coeff[i][j] = philipsHeight(epsR[i][j], epsI[i][j], w, A, (PI*2)/tSimu, {(PI*2*i)/Lx, (PI*2*j)/Ly}, t);
+				coeff[(i + Nx/2) % Nx][(j + Ny/2) % Ny] = philipsHeight(epsR[i][j], epsI[i][j], w, A, (PI*2)/tSimu, {PI*2*(i - Nx/2)/Lx, PI*2*(j - Ny/2)/Ly}, t);
 		
 		complexWave = IFFT(coeff);
 
