@@ -1,4 +1,4 @@
-# SciPP - Bibliothèque scientifique en C++
+# SciPP - Bibliothèque scientifique en C++ {#mainpage}
 
 ## Description
 
