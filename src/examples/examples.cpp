@@ -17,7 +17,7 @@ int main()
 	// conway();
 	// diffusionThermique(300, 300);
 	// Int i(1000000000);  while (true) { if (isPrime(i)) std::cout << i << std::endl; i += 1; }
-	// philipsWaves(256, 256, 20);
+	philipsWaves(256, 256, 30);
 
 	return 0;
 }

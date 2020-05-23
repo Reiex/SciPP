@@ -44,7 +44,7 @@ folders:
 	mkdir $(INCLUDE_DIR) $(INCLUDE_LIBRARY_DIR) $(INCLUDE_LIBRARY_DIR)/bin
 
 docs:
-	doxygen doc/doxygen
+	doxygen doc/doxyfilerc
 
 lineCount:
 	git ls-files | xargs wc -l
