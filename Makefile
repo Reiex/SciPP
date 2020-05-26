@@ -26,13 +26,13 @@ all: folders SciPP tests examples
 check: tests
 	valgrind ./SciPPTests
 
-examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(EXAMPLES_OBJS)
-	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+examples: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so $(EXAMPLES_OBJS)
+	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so -lsfml-graphics -lsfml-window -lsfml-system
 
-tests: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(TESTS_OBJS)
-	$(CC) $(TESTS_OBJS) -o SciPPTests $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a -lsfml-graphics -lsfml-window -lsfml-system
+tests: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so $(TESTS_OBJS)
+	$(CC) $(TESTS_OBJS) -o SciPPTests $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so -lsfml-graphics -lsfml-window -lsfml-system
 
-SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
+SciPP: $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so
 
 clean:
 	rm -rf $(OBJ_LIBRARY_DIR)/*.o $(OBJ_TESTS_DIR)/*.o $(OBJ_EXAMPLES_DIR)/*.o
@@ -52,12 +52,13 @@ lineCount:
 
 # Compilation de la librairie
 
-$(INCLUDE_LIBRARY_DIR)/bin/SciPP.a: $(LIBRARY_OBJS)
+$(INCLUDE_LIBRARY_DIR)/bin/SciPP.so: $(LIBRARY_OBJS)
 	rm -rf $(INCLUDE_LIBRARY_DIR)/*.h $(INCLUDE_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a
 	cp $(SRC_LIBRARY_DIR)/*.h $(SRC_LIBRARY_DIR)/*.hpp $(INCLUDE_LIBRARY_DIR)
-	ar rcs $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(LIBRARY_OBJS)
+	$(CC) -shared -o $(INCLUDE_LIBRARY_DIR)/bin/SciPP.so $(LIBRARY_OBJS)
+	# ar rcs $(INCLUDE_LIBRARY_DIR)/bin/SciPP.a $(LIBRARY_OBJS)
 
 # Compilations spécifiques
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) -o $@ -c $<
+	$(CC) -fpic -c $< -o $@
