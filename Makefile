@@ -81,7 +81,7 @@ $(LIB_DIR): $(LIBRARY_OBJS)
 	find include -type f -exec rm -rf \{\} \;
 	cp $(SRC_LIBRARY_DIR)/*.h $(SRC_LIBRARY_DIR)/*.hpp $(LIB_HEADERS_DIR)
 	$(CC) -shared -o $(LIB_BINARIES_DIR)/libSciPP.so $(LIBRARY_OBJS)
-	cp $(WIN_LIB_DIR)/SciPP.lib $(LIB_BINARIES_DIR)
+	-cp $(WIN_LIB_DIR)/SciPP.lib $(LIB_BINARIES_DIR)
 
 $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 	$(CC) -fpic -c $< -o $@
