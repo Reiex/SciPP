@@ -3,9 +3,6 @@
 ###############################################################################
 
 
-# Compilateur utilisé
-CC = g++
-
 # Arborescence des sources
 SRC_DIR = src
 SRC_LIBRARY_DIR = $(SRC_DIR)/SciPP
@@ -22,11 +19,20 @@ OBJ_EXAMPLES_DIR = $(OBJ_DIR)/examples
 LIB_DIR = include
 LIB_HEADERS_DIR = $(LIB_DIR)/SciPP
 LIB_BINARIES_DIR = $(LIB_HEADERS_DIR)/bin
+WIN_LIB_DIR = vs/SciPP/Release
 
 # Fichiers compilés
 LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o $(OBJ_LIBRARY_DIR)/Matrice.o $(OBJ_LIBRARY_DIR)/Interpreteur.o $(OBJ_LIBRARY_DIR)/Plot.o $(OBJ_LIBRARY_DIR)/Random.o
 TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o $(OBJ_TESTS_DIR)/Frac.o $(OBJ_TESTS_DIR)/Vect.o $(OBJ_TESTS_DIR)/Polynome.o $(OBJ_TESTS_DIR)/Matrice.o $(OBJ_TESTS_DIR)/List.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/examples.o $(OBJ_EXAMPLES_DIR)/simuPhysique.o $(OBJ_EXAMPLES_DIR)/jeuxArithmetiques.o
+
+
+# Compilateur utilisé
+CC = g++
+# Parametres du linker
+LDFLAGS = -L$(LIB_BINARIES_DIR) -Wl,-rpath=$(LIB_BINARIES_DIR)
+# Librairies liées
+LDLIBS = -lSciPP -lsfml-graphics -lsfml-window -lsfml-system
 
 
 ###############################################################################
@@ -55,10 +61,10 @@ clean:
 SciPP: $(LIB_DIR)
 
 examples: $(LIB_DIR) $(EXAMPLES_OBJS)
-	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(LIB_BINARIES_DIR)/SciPP.so -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(LDFLAGS) $(LDLIBS)
 
 tests: $(LIB_DIR) $(TESTS_OBJS)
-	$(CC) $(TESTS_OBJS) -o SciPPTests $(LIB_BINARIES_DIR)/SciPP.so -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(LDLIBS)
 
 folders:
 	rm -rf $(LIB_DIR) $(OBJ_DIR)
@@ -72,9 +78,10 @@ folders:
 
 
 $(LIB_DIR): $(LIBRARY_OBJS)
-	rm -rf $(LIB_HEADERS_DIR)/*.h $(LIB_HEADERS_DIR)/*.hpp $(LIB_BINARIES_DIR)/SciPP.so
+	find include -type f -exec rm -rf \{\} \;
 	cp $(SRC_LIBRARY_DIR)/*.h $(SRC_LIBRARY_DIR)/*.hpp $(LIB_HEADERS_DIR)
-	$(CC) -shared -o $(LIB_BINARIES_DIR)/SciPP.so $(LIBRARY_OBJS)
+	$(CC) -shared -o $(LIB_BINARIES_DIR)/libSciPP.so $(LIBRARY_OBJS)
+	cp $(WIN_LIB_DIR)/SciPP.lib $(LIB_BINARIES_DIR)
 
 $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 	$(CC) -fpic -c $< -o $@
