@@ -61,10 +61,10 @@ clean:
 SciPP: $(LIB_DIR)
 
 examples: $(LIB_DIR) $(EXAMPLES_OBJS)
-	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_OBJS) -o SciPPExamples $(LDFLAGS) $(LDLIBS)
 
 tests: $(LIB_DIR) $(TESTS_OBJS)
-	$(CC) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(LDLIBS)
 
 folders:
 	rm -rf $(LIB_DIR) $(OBJ_DIR)
@@ -93,4 +93,4 @@ $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) -c $< -o $@
+	$(CC) -I$(LIB_DIR) -c $< -o $@

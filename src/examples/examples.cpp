@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
-#include "../SciPP/SciPP.h"
+#include <SciPP/SciPP.h>
 #include "simuPhysique.h"
 #include "jeuxArithmetiques.h"
 

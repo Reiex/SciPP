@@ -4,7 +4,7 @@
 #include <sstream>
 #include <limits.h>
 #include <iostream>
-#include "../SciPP/SciPP.h"
+#include <SciPP/SciPP.h>
 #include "Test.h"
 
 using namespace scp;

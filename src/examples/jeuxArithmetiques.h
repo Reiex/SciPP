@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "../SciPP/SciPP.h"
+#include <SciPP/SciPP.h>
 
 using namespace scp;
 

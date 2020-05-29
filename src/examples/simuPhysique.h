@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../SciPP/SciPP.h"
+#include <SciPP/SciPP.h>
 #include <random>
 
 using namespace scp;
