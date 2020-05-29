@@ -67,7 +67,7 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 	$(CC) $(CFLAGS) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(LDLIBS)
 
 folders:
-	rm -rf $(LIB_DIR) $(OBJ_DIR)
+	-rm -rf $(LIB_DIR) $(OBJ_DIR)
 	mkdir $(OBJ_DIR) $(OBJ_LIBRARY_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)
 	mkdir $(LIB_DIR) $(LIB_HEADERS_DIR) $(LIB_BINARIES_DIR)
 
