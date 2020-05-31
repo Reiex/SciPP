@@ -35,34 +35,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\SciPP\Frac.hpp">
+    <ClInclude Include="..\..\include\SciPP\Frac.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Int.hpp">
+    <ClInclude Include="..\..\include\SciPP\Int.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Interpreteur.h">
+    <ClInclude Include="..\..\include\SciPP\List.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\List.hpp">
+    <ClInclude Include="..\..\include\SciPP\Matrice.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Matrice.hpp">
+    <ClInclude Include="..\..\include\SciPP\Polynome.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Plot.h">
+    <ClInclude Include="..\..\include\SciPP\Vect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Polynome.hpp">
+    <ClInclude Include="..\..\include\SciPP\SciPP.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Random.h">
+    <ClInclude Include="..\..\include\SciPP\Plot.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\SciPP.h">
+    <ClInclude Include="..\..\include\SciPP\Random.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SciPP\Vect.hpp">
+    <ClInclude Include="..\..\include\SciPP\Interpreteur.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

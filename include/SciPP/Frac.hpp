@@ -13,7 +13,7 @@
 #include <exception>
 #include <string>
 #include <sstream>
-#include "Int.hpp"
+#include <SciPP/Int.hpp>
 
 namespace scp
 {

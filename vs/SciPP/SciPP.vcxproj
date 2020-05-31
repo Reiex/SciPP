@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\vs\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\vs\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include;D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include;D:\Programmation\Cpp\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,16 +163,16 @@
     <ClCompile Include="..\..\src\SciPP\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\SciPP\Frac.hpp" />
-    <ClInclude Include="..\..\src\SciPP\Int.hpp" />
-    <ClInclude Include="..\..\src\SciPP\Interpreteur.h" />
-    <ClInclude Include="..\..\src\SciPP\List.hpp" />
-    <ClInclude Include="..\..\src\SciPP\Matrice.hpp" />
-    <ClInclude Include="..\..\src\SciPP\Plot.h" />
-    <ClInclude Include="..\..\src\SciPP\Polynome.hpp" />
-    <ClInclude Include="..\..\src\SciPP\Random.h" />
-    <ClInclude Include="..\..\src\SciPP\SciPP.h" />
-    <ClInclude Include="..\..\src\SciPP\Vect.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Frac.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Int.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Interpreteur.hpp" />
+    <ClInclude Include="..\..\include\SciPP\List.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Matrice.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Plot.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Polynome.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Random.hpp" />
+    <ClInclude Include="..\..\include\SciPP\SciPP.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Vect.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

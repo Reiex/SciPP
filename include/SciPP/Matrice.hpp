@@ -13,7 +13,7 @@
 #include <complex>
 #include <initializer_list>
 #include <limits.h>
-#include "Vect.hpp"
+#include <SciPP/Vect.hpp>
 
 namespace scp
 {

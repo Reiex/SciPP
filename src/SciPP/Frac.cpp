@@ -1,4 +1,4 @@
-#include "Frac.hpp"
+#include <SciPP/Frac.hpp>
 
 namespace scp
 {

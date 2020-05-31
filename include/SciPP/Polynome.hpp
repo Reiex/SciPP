@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <initializer_list>
-#include "Vect.hpp"
+#include <SciPP/Vect.hpp>
 
 namespace scp
 {

@@ -1,4 +1,4 @@
-#include "Matrice.hpp"
+#include <SciPP/Matrice.hpp>
 
 namespace scp
 {

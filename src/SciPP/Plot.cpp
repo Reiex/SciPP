@@ -1,4 +1,4 @@
-#include "Plot.h"
+#include <SciPP/Plot.hpp>
 
 namespace scp
 {

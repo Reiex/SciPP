@@ -1,4 +1,4 @@
-#include "Interpreteur.h"
+#include <SciPP/Interpreteur.hpp>
 
 namespace scp
 {

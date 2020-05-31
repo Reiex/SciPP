@@ -1,4 +1,4 @@
-#include "Random.h"
+#include <SciPP/Random.hpp>
 
 uint16_t scp::randInt(uint16_t min, uint16_t max)
 {
