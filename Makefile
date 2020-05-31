@@ -4,10 +4,10 @@
 
 
 # Arborescence des sources
-SRC_DIR = src
-SRC_LIBRARY_DIR = $(SRC_DIR)/SciPP
-SRC_TESTS_DIR = $(SRC_DIR)/tests
-SRC_EXAMPLES_DIR = $(SRC_DIR)/examples
+
+SRC_LIBRARY_DIR = src/SciPP
+SRC_TESTS_DIR = tests
+SRC_EXAMPLES_DIR = examples
 
 # Arborescence des includes
 INCLUDE_DIR = include
@@ -94,5 +94,8 @@ $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 ###############################################################################
 
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_TESTS_DIR)/%.o: $(SRC_TESTS_DIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_EXAMPLES_DIR)/%.o: $(SRC_EXAMPLES_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@

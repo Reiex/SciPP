@@ -146,18 +146,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\examples\examples.cpp" />
-    <ClCompile Include="..\..\src\examples\jeuxArithmetiques.cpp" />
-    <ClCompile Include="..\..\src\examples\simuPhysique.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\examples\jeuxArithmetiques.h" />
-    <ClInclude Include="..\..\src\examples\simuPhysique.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SciPP\SciPP.vcxproj">
       <Project>{7df651c6-e3f7-4709-a7e0-667781156237}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\examples\jeuxArithmetiques.h" />
+    <ClInclude Include="..\..\examples\simuPhysique.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\examples\examples.cpp" />
+    <ClCompile Include="..\..\examples\jeuxArithmetiques.cpp" />
+    <ClCompile Include="..\..\examples\simuPhysique.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

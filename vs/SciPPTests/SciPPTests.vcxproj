@@ -146,23 +146,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\tests\Frac.cpp" />
-    <ClCompile Include="..\..\src\tests\Int.cpp" />
-    <ClCompile Include="..\..\src\tests\List.cpp" />
-    <ClCompile Include="..\..\src\tests\main.cpp" />
-    <ClCompile Include="..\..\src\tests\Matrice.cpp" />
-    <ClCompile Include="..\..\src\tests\Polynome.cpp" />
-    <ClCompile Include="..\..\src\tests\Test.cpp" />
-    <ClCompile Include="..\..\src\tests\Vect.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\tests\main.h" />
-    <ClInclude Include="..\..\src\tests\Test.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SciPP\SciPP.vcxproj">
       <Project>{7df651c6-e3f7-4709-a7e0-667781156237}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\tests\main.h" />
+    <ClInclude Include="..\..\tests\Test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\tests\Frac.cpp" />
+    <ClCompile Include="..\..\tests\Int.cpp" />
+    <ClCompile Include="..\..\tests\List.cpp" />
+    <ClCompile Include="..\..\tests\main.cpp" />
+    <ClCompile Include="..\..\tests\Matrice.cpp" />
+    <ClCompile Include="..\..\tests\Polynome.cpp" />
+    <ClCompile Include="..\..\tests\Test.cpp" />
+    <ClCompile Include="..\..\tests\Vect.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
