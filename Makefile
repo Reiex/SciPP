@@ -11,7 +11,6 @@ SRC_EXAMPLES_DIR = examples
 
 # Arborescence des includes
 INCLUDE_DIR = include
-INCLUDE_HEADERS_DIR = $(LIB_DIR)/SciPP
 
 # Arborescence des .obj générés
 OBJ_DIR = obj
