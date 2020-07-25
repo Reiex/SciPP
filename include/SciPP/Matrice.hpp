@@ -135,6 +135,14 @@ namespace scp
 			m_lignes = new Vect<T>[m_taille[0]];
 			for (unsigned int i(0); i < m_taille[0]; i++)
 			{
+				if (tab.begin()[i].size() != m_taille[1])
+				{
+					std::string error;
+					error = "Invalid matrix size. Detected size: " + std::to_string(m_taille[0]) + "x" + std::to_string(m_taille[1]) + ".\n";
+					error = "But row " + std::to_string(i) + " has size " + std::to_string(tab.begin()[i].size()) + ".";
+					throw std::out_of_range(error);
+				}
+
 				m_lignes[i] = Vect<T>(m_taille[1]);
 				for (unsigned int j(0); j < m_taille[1]; j++)
 					m_lignes[i][j] = tab.begin()[i].begin()[j];
@@ -595,12 +603,17 @@ namespace scp
 	{
 		stream << "(";
 		for (unsigned int i(0); i < M.size()[0]; i++)
-			if (i == 0)
-				stream << M[i] << std::endl;
-			else if (i == M.size()[0] - 1)
-				stream << " " << M[i];
-			else
-				stream << " " << M[i] << std::endl;
+		{
+			if (i != 0)
+				stream << " ";
+			for (unsigned int j(0); j < M.size()[1]; j++)
+				if (j == M.size()[1] - 1)
+					stream << M[i][j];
+				else
+					stream << M[i][j] << " ";
+			if (i != M.size()[0] - 1)
+				stream << std::endl;
+		}
 		stream << ")";
 
 		return stream;
