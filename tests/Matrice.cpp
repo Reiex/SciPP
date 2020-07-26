@@ -108,6 +108,194 @@ static std::string testInit(Test& test)
 	return "";
 }
 
+static std::string testAccesseurC(Test& test)
+{
+	test.addSubTest("Vect<T>& operator[](unsigned int i)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} });
+
+			std::stringstream stream;
+			stream << x[0][2];
+			if (stream.str() != "3")
+				result += "Resultat attendu: 3. Resultat obtenu: " + stream.str() + ".\n";
+
+			stream.str("");
+			try
+			{
+				stream << x[2][0];
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu: " + stream.str() + ".\n";
+			}
+			catch (char const* e) {}
+
+			x[0][2] = 5;
+
+			stream.str("");
+			stream << x[0][2];
+			if (stream.str() != "5")
+				result += "Resultat attendu: 5. Resultat obtenu: " + stream.str() + ".\n";
+
+			return result;
+		});
+
+	test.addSubTest("Vect<T> const& operator[](unsigned int i) const", [](Test& test)->std::string
+		{
+			std::string result;
+
+			const Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} });
+
+			std::stringstream stream;
+			stream << x[0][2];
+			if (stream.str() != "3")
+				result += "Resultat attendu: 3. Resultat obtenu: " + stream.str() + ".\n";
+
+			stream.str("");
+			try
+			{
+				stream << x[2][0];
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu: " + stream.str() + ".\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	return "";
+}
+
+static std::string testAffectation(Test& test)
+{
+	test.addSubTest("Matrice<T>& Matrice<T>::operator=(Matrice<T> const& M)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x(0, 0), y(0, 0);
+			y = x;
+
+			std::stringstream stream;
+			stream << y;
+			if (stream.str() != "()")
+				result += "Copie matrice vide dans matrice vide:\nResultat attendu: (). Resultat obtenu: " + stream.str() + ".\n";
+
+			x = Matrice<long double>({ { 1, 0 }, { 0, 1 } });
+			y = Matrice<long double>(0, 0);
+			y = x;
+
+			stream.str("");
+			stream << y;
+			if (stream.str() != "(1 0\n 0 1)")
+				result += "Copie matrice normale dans matrice vide:\nResultat attendu:\n(1 0\n 0 1)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ { 1, 0 }, { 0, 1 } });
+			y = Matrice<long double>({ { 1, 2, 3 }, { 4, 5, 6 } });
+			y = x;
+
+			stream.str("");
+			stream << y;
+			if (stream.str() != "(1 0\n 0 1)")
+				result += "Copie matrice normale dans matrice normale:\nResultat attendu:\n(1 0\n 0 1)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			y[0][0] = 5;
+
+			stream.str("");
+			stream << x[0][0];
+			if (stream.str() != "1")
+				result += "Changement apres copie - Matrice copiee:\nResultat attendu: 1. Resultat obtenu: " + stream.str() + ".\n";
+
+			stream.str("");
+			stream << y[0][0];
+			if (stream.str() != "5")
+				result += "Changement apres copie - Matrice destination:\nResultat attendu: 5. Resultat obtenu: " + stream.str() + ".\n";
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>& Matrice<T>::operator=(Matrice<T>&& M)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x(0, 0), y(0, 0);
+			y = std::move(x);
+
+			std::stringstream stream;
+			stream << y;
+			if (stream.str() != "()")
+				result += "Deplacement matrice vide dans matrice vide:\nResultat attendu: (). Resultat obtenu: " + stream.str() + ".\n";
+
+			x = Matrice<long double>({ { 1, 0 }, { 0, 1 } });
+			y = Matrice<long double>(0, 0);
+			y = std::move(x);
+
+			stream.str("");
+			stream << y;
+			if (stream.str() != "(1 0\n 0 1)")
+				result += "Deplacement matrice normale dans matrice vide:\nResultat attendu:\n(1 0\n 0 1)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ { 1, 0 }, { 0, 1 } });
+			y = Matrice<long double>({ { 1, 2, 3 }, { 4, 5, 6 } });
+			y = std::move(x);
+
+			stream.str("");
+			stream << y;
+			if (stream.str() != "(1 0\n 0 1)")
+				result += "Deplacement matrice normale dans matrice normale:\nResultat attendu:\n(1 0\n 0 1)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			stream.str("");
+			stream << x;
+			if (stream.str() != "()")
+				result += "Suppression origine apres deplacement:\nResultat attendu: (). Resultat obtenu: " + stream.str() + ".";
+
+			y[0][0] = 5;
+
+			stream.str("");
+			stream << y[0][0];
+			if (stream.str() != "5")
+				result += "Changement apres deplacement:\nResultat attendu: 5. Resultat obtenu: " + stream.str() + ".\n";
+
+			return result;
+		});
+
+	return "";
+}
+
+static std::string testDestructeur(Test& test)
+{
+	test.addSubTest("Destruction d'une matrice vide", [](Test& test)->std::string
+		{
+			Matrice<long double>* x(new Matrice<long double>());
+			delete x;
+			return "";
+		});
+
+	test.addSubTest("Destruction d'une matrice normale", [](Test& test)->std::string
+		{
+			Matrice<long double>* x(new Matrice<long double>(5, 3));
+			delete x;
+			return "";
+		});
+
+	test.addSubTest("Destruction d'une matrice copie", [](Test& test)->std::string
+		{
+			Matrice<long double> *x(new Matrice<long double>(5, 3)), *y(new Matrice<long double>());
+			*y = *x;
+			delete y;
+			delete x;
+			return "";
+		});
+
+	test.addSubTest("Destruction d'une matrice deplace", [](Test& test)->std::string
+		{
+			Matrice<long double> *x(new Matrice<long double>(5, 3)), *y(new Matrice<long double>());
+			*y = std::move(*x);
+			delete y;
+			delete x;
+			return "";
+		});
+
+	return "";
+}
+
 static std::string testAddition(Test& test)
 {
 	return "";
@@ -151,6 +339,9 @@ static std::string testGeneraux(Test& test)
 std::string mainMatrice(Test& test)
 {
 	test.addSubTest("Test des initialisations", &testInit);
+	test.addSubTest("Test de l'operateur []", &testAccesseurC);
+	test.addSubTest("Test des affectations", &testAffectation);
+	test.addSubTest("Test du destructeur", &testDestructeur);
 
 	test.addSubTest("Test des additions", &testAddition);
 	test.addSubTest("Test des soustractions", &testSoustraction);
