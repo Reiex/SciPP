@@ -298,11 +298,254 @@ static std::string testDestructeur(Test& test)
 
 static std::string testAddition(Test& test)
 {
+	test.addSubTest("Matrice<T>& operator+=(Matrice<T> const& M)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} });
+			x += y;
+
+			std::stringstream stream;
+			stream << x;
+			if (stream.str() != "(-6 10 -6\n 14 -6 18)")
+				result += "Resultat attendu:\n(-6 10 -6\n 14 -6 18)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				x += y;
+				stream << x;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T> operator+(Matrice<T> const& M, Matrice<T> const& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = x + y;
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(-6 10 -6\n 14 -6 18)")
+				result += "Resultat attendu:\n(-6 10 -6\n 14 -6 18)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = x + y;
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>&& operator+(Matrice<T>&& M, Matrice<T> const& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = std::move(x) + y;
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(-6 10 -6\n 14 -6 18)")
+				result += "Resultat attendu:\n(-6 10 -6\n 14 -6 18)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = std::move(x) + y;
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>&& operator+(Matrice<T> const& M, Matrice<T>&& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = x + std::move(y);
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(-6 10 -6\n 14 -6 18)")
+				result += "Resultat attendu:\n(-6 10 -6\n 14 -6 18)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = x + std::move(y);
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>&& operator+(Matrice<T>&& M, Matrice<T>&& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = std::move(x) + std::move(y);
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(-6 10 -6\n 14 -6 18)")
+				result += "Resultat attendu:\n(-6 10 -6\n 14 -6 18)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = std::move(x) + std::move(y);
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
 	return "";
 }
 
 static std::string testSoustraction(Test& test)
 {
+	test.addSubTest("Matrice<T>& operator-=(Matrice<T> const& M)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} });
+			x -= y;
+
+			std::stringstream stream;
+			stream << x;
+			if (stream.str() != "(8 -6 12\n -6 16 -6)")
+				result += "Resultat attendu:\n(8 -6 12\n -6 16 -6)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				x -= y;
+				stream << x;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T> operator-(Matrice<T> const& M, Matrice<T> const& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = x - y;
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(8 -6 12\n -6 16 -6)")
+				result += "Resultat attendu:\n(8 -6 12\n -6 16 -6)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = x - y;
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>&& operator-(Matrice<T>&& M, Matrice<T> const& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = std::move(x) - y;
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(8 -6 12\n -6 16 -6)")
+				result += "Resultat attendu:\n(8 -6 12\n -6 16 -6)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = std::move(x) - y;
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
+	test.addSubTest("Matrice<T>&& operator-(Matrice<T>&& M, Matrice<T>&& N)", [](Test& test)->std::string
+		{
+			std::string result;
+
+			Matrice<long double> x({ {1, 2, 3}, {4, 5, 6} }), y({ {-7, 8, -9}, {10, -11, 12} }), z;
+			z = std::move(x) - std::move(y);
+
+			std::stringstream stream;
+			stream << z;
+			if (stream.str() != "(8 -6 12\n -6 16 -6)")
+				result += "Resultat attendu:\n(8 -6 12\n -6 16 -6)\nResultat obtenu:\n" + stream.str() + "\n";
+
+			x = Matrice<long double>({ {1, 2, 3}, {4, 5, 6} });
+			y = Matrice<long double>();
+
+			stream.str("");
+			try
+			{
+				z = std::move(x) - std::move(y);
+				stream << z;
+				result += "Erreur attendue. Aucune erreur detectee. Resultat obtenu:\n" + stream.str() + "\n";
+			}
+			catch (char const* e) {}
+
+			return result;
+		});
+
 	return "";
 }
 
@@ -312,11 +555,6 @@ static std::string testMultiplication(Test& test)
 }
 
 static std::string testDivision(Test& test)
-{
-	return "";
-}
-
-static std::string testUnaires(Test& test)
 {
 	return "";
 }
@@ -347,7 +585,6 @@ std::string mainMatrice(Test& test)
 	test.addSubTest("Test des soustractions", &testSoustraction);
 	test.addSubTest("Test des multiplications", &testMultiplication);
 	test.addSubTest("Test des divisions", &testDivision);
-	test.addSubTest("Test des plus et moins unaires", &testUnaires);
 
 	test.addSubTest("Test des operateurs == et !=", &testEgalite);
 
