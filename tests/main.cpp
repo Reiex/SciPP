@@ -2,25 +2,18 @@
 
 int main()
 {
-	Test mainTest("TEST DE LA BIBLIOTHEQUE SCIPP", [](Test& test)->std::string {
-		test.addSubTest("TEST DES ENTIERS", &mainInt);
-		test.addSubTest("TEST DES FRACTIONS", &mainFrac);
-		test.addSubTest("TEST DES VECTEURS", &mainVect);
-		test.addSubTest("TEST DES POLYNOMES", &mainPolynome);
-		test.addSubTest("TEST DES MATRICES", &mainMatrice);
-		test.addSubTest("TEST DES LISTES", &mainList);
-		return "";
-	});
+    Test mainTest("SCIPP TEST", [](Test& test)->std::string {
+        test.addSubTest("TEST DES ENTIERS", &mainInt);
+        return "";
+    });
 
-	mainTest(0, 3);
+    mainTest(0, 3);
 
-	std::cout << std::endl;
+    std::cout << std::endl;
 
-#ifdef SCP_TEST_PAUSE
+    #ifdef SCP_TEST_PAUSE
+    system("pause");
+    #endif
 
-	system("pause");
-
-#endif
-
-	return 0;
+    return 0;
 }

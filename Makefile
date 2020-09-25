@@ -22,9 +22,9 @@ OBJ_EXAMPLES_DIR = $(OBJ_DIR)/examples
 LIB_DIR = lib
 
 # Fichiers compilés
-LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o $(OBJ_LIBRARY_DIR)/Matrice.o $(OBJ_LIBRARY_DIR)/Interpreteur.o $(OBJ_LIBRARY_DIR)/Plot.o $(OBJ_LIBRARY_DIR)/Random.o
-TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o $(OBJ_TESTS_DIR)/Frac.o $(OBJ_TESTS_DIR)/Vect.o $(OBJ_TESTS_DIR)/Polynome.o $(OBJ_TESTS_DIR)/Matrice.o $(OBJ_TESTS_DIR)/List.o
-EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/examples.o $(OBJ_EXAMPLES_DIR)/simuPhysique.o $(OBJ_EXAMPLES_DIR)/jeuxArithmetiques.o
+LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/misc.o $(OBJ_LIBRARY_DIR)/Int.o
+TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o
+EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o
 
 
 # Compilateur utilisé

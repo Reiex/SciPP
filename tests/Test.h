@@ -5,24 +5,24 @@
 
 class Test
 {
-	public:
+    public:
 
-		Test(std::string const& title, std::string (*testFunction)(Test&));
+        Test(std::string const& title, std::string (*testFunction)(Test&));
 
-		void addSubTest(std::string const& title, std::string (*testFunction)(Test&));
+        void addSubTest(std::string const& title, std::string (*testFunction)(Test&));
 
-		std::string operator()(int level, int detail);
+        std::string operator()(int level, int detail);
 
-		~Test();
+        ~Test();
 
-	private:
+    private:
 
-		void displayTitle(int difference) const;
+        void displayTitle(int difference) const;
 
-		std::string m_title;
+        std::string m_title;
 
-		std::string (*m_testFunction)(Test&);
+        std::string (*m_testFunction)(Test&);
 
-		Test* m_nextSubTest;
-		Test* m_nextTest;
+        Test* m_nextSubTest;
+        Test* m_nextTest;
 };

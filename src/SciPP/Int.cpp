@@ -1,831 +1,707 @@
-#include <SciPP/Int.hpp>
-
+#include <SciPP/SciPP.hpp>
 
 namespace scp
 {
-	// Exceptions
-
-	const char* Int::ZeroDivisionException::what() const throw()
-	{
-		return "Tentative de division par zero.";
-	}
-
-	const char* Int::IntTooBigException::what() const throw()
-	{
-		return "Tentative de conversion d'un entier trop grand pour etre converti en long long int.";
-	}
-
-
-	// Constructeurs
-
-	Int::Int() :
-		m_taille(1),
-		m_x(new uint8_t[m_taille]),
-		m_positif(true),
-		m_actif(true)
-	{
-		m_x[0] = 0;
-	}
-
-	Int::Int(long long int x)
-	{
-		m_positif = (x >= 0);
-
-		if (x < 0)
-			x = -x;
-
-		long long int y(x / 256);
-		m_taille = 1;
-		while (y != 0)
-		{
-			y /= 256;
-			m_taille += 1;
-		}
-
-		m_x = new uint8_t[m_taille];
-		for (int i(0); i < m_taille; i++)
-		{
-			m_x[i] = x % 256;
-			x /= 256;
-		}
-
-		m_actif = true;
-	}
-
-	Int::Int(Int const& x) :
-		m_positif(x.m_positif),
-		m_taille(x.m_taille),
-		m_x(new uint8_t[m_taille]),
-		m_actif(x.m_actif)
-	{
-		for (int i(0); i < m_taille; i++)
-			m_x[i] = x.m_x[i];
-	}
-
-	Int::Int(Int&& x) :
-		m_positif(x.m_positif),
-		m_taille(x.m_taille),
-		m_x(x.m_x),
-		m_actif(x.m_actif)
-	{
-		x.m_actif = false;
-	}
-
-
-	// Copie et mouvement
-
-	Int& Int::operator=(Int const& x)
-	{
-		delete[] m_x;
-
-		m_positif = x.m_positif;
-		m_taille = x.m_taille;
-
-		m_x = new uint8_t[m_taille];
-		for (int i(0); i < m_taille; i++)
-			m_x[i] = x.m_x[i];
-
-		m_actif = x.m_actif;
-
-		return *this;
-	}
-
-	Int& Int::operator=(Int&& x)
-	{
-		if (m_actif)
-			delete[] m_x;
-
-		m_positif = x.m_positif;
-		m_taille = x.m_taille;
-		m_x = x.m_x;
-		m_actif = x.m_actif;
-
-		x.m_actif = false;
-
-		return *this;
-	}
-
-
-	// Operations
-
-	Int& Int::operator+=(Int const& x)
-	{
-		if (m_positif == x.m_positif)
-		{
-			uint16_t buffer;
-			int taille;
-			uint8_t* oldX(m_x);
-
-			// Determiner la taille de l'Int
-
-			if (m_taille > x.m_taille)
-			{
-				int i(m_taille - 1);
-				taille = m_taille;
-				while (i >= x.m_taille && m_x[i] == 255)
-					i--;
-
-				if (i == x.m_taille - 1)
-				{
-					buffer = m_x[i] + x.m_x[i];
-					while (buffer >= 255)
-					{
-						if (buffer >= 256)
-						{
-							taille = m_taille + 1;
-							break;
-						}
-
-						i--;
-						if (i < 0)
-							break;
-						else
-							buffer = m_x[i] + x.m_x[i];
-					}
-				}
-			}
-			else if (m_taille < x.m_taille)
-			{
-				int i(x.m_taille - 1);
-				taille = x.m_taille;
-				while (i >= m_taille && x.m_x[i] == 255)
-					i--;
-
-				if (i == m_taille - 1)
-				{
-					buffer = m_x[i] + x.m_x[i];
-					while (buffer >= 255)
-					{
-						if (buffer >= 256)
-						{
-							taille = m_taille + 1;
-							break;
-						}
-
-						i--;
-						if (i < 0)
-							break;
-						else
-							buffer = m_x[i] + x.m_x[i];
-					}
-				}
-			}
-			else
-			{
-				int i(m_taille - 1);
-				buffer = m_x[i] + x.m_x[i];
-				taille = m_taille;
-				while (buffer >= 255)
-				{
-					if (buffer >= 256)
-					{
-						taille = m_taille + 1;
-						break;
-					}
-
-					i--;
-					if (i < 0)
-						break;
-					else
-						buffer = m_x[i] + x.m_x[i];
-				}
-			}
-
-			// Allouer un nouvel espace memoire si necessaire
-
-			if (taille != m_taille)
-				m_x = new uint8_t[taille];
-
-			// Faire la somme elle-meme
-
-			buffer = 0;
-			for (int i(0); i < taille; i++)
-			{
-				if (i < m_taille)
-					buffer += oldX[i];
-				if (i < x.m_taille)
-					buffer += x.m_x[i];
-				m_x[i] = buffer % 256;
-				buffer >>= 8;
-			}
-
-			// Supprimer les espaces memoires inutilement alloues s'il y en a
-
-			if (taille != m_taille)
-			{
-				m_taille = taille;
-				delete[] oldX;
-			}
-		}
-		else
-		{
-			m_positif = !m_positif;
-			*this -= x;
-			m_positif = !m_positif;
-		}
-
-		return *this;
-	}
-
-	Int& Int::operator-=(Int const& x)
-	{
-		if (m_positif == x.m_positif)
-		{
-			uint8_t* oldX(m_x);
-			uint8_t* grand;
-			uint8_t* petit;
-			int grandeTaille, petiteTaille;
-
-			if (*this == x)
-			{
-				delete[] m_x;
-				m_taille = 1;
-				m_x = new uint8_t[1];
-				m_x[0] = 0;
-				m_positif = true;
-
-				return *this;
-			}
-
-			if ((m_positif && *this > x) || (!m_positif && *this < x))
-			{
-				grand = m_x;
-				grandeTaille = m_taille;
-				petit = x.m_x;
-				petiteTaille = x.m_taille;
-			}
-			else
-			{
-				grand = x.m_x;
-				grandeTaille = x.m_taille;
-				petit = m_x;
-				petiteTaille = m_taille;
-				m_positif = !m_positif;
-			}
-
-			int taille(grandeTaille);
-			if (grandeTaille == petiteTaille)
-				while (grand[taille - 1] == petit[taille - 1] && taille > 1)
-					taille--;
-
-			m_x = new uint8_t[taille];
-
-			for (int i(taille - 1); i >= 0; i--)
-			{
-				m_x[i] = grand[i];
-				if (i < petiteTaille)
-				{
-					if (grand[i] >= petit[i])
-					{
-						m_x[i] -= petit[i];
-					}
-					else
-					{
-						m_x[i] += 256 - petit[i];
-						int j(1);
-						while (m_x[i + j] == 0)
-							j++;
-						m_x[i + j]--;
-						for (int k(1); k < j; k++)
-							m_x[i + k] = 255;
-					}
-				}
-			}
-
-			if (m_x[taille - 1] == 0)
-			{
-				uint8_t* newX(new uint8_t[taille - 1]);
-				for (int i(0); i < taille - 1; i++)
-					newX[i] = m_x[i];
-
-				delete[] m_x;
-
-				m_x = newX;
-				taille--;
-			}
-
-			m_taille = taille;
-			delete[] oldX;
-		}
-		else
-		{
-			m_positif = !m_positif;
-			*this += x;
-			m_positif = !m_positif;
-		}
-
-		return *this;
-	}
-
-	Int& Int::operator*=(Int const& x)
-	{
-		if (*this == 0 || x == 0)
-		{
-			delete[] m_x;
-			m_taille = 1;
-			m_x = new uint8_t[m_taille];
-			m_x[0] = 0;
-			m_positif = true;
-		}
-		else
-		{
-			uint16_t buffer;
-			uint8_t* xTmp(new uint8_t[m_taille + x.m_taille]);
-			for (int i(0); i < m_taille + x.m_taille; i++)
-				xTmp[i] = 0;
-			for (int i(0); i < m_taille; i++)
-			{
-				buffer = 0;
-				for (int j(0); j < x.m_taille; j++)
-				{
-					buffer += m_x[i] * x.m_x[j];
-					buffer += xTmp[i + j];
-					xTmp[i + j] = buffer % 256;
-					buffer >>= 8;
-				}
-				xTmp[i + x.m_taille] += buffer;
-			}
-
-			int taille(m_taille + x.m_taille);
-			while (xTmp[taille - 1] == 0)
-				taille--;
-
-			delete[] m_x;
-			m_x = new uint8_t[taille];
-			m_taille = taille;
-			m_positif = (m_positif == x.m_positif);
-			for (int i(0); i < taille; i++)
-				m_x[i] = xTmp[i];
-			delete[] xTmp;
-		}
-
-		return *this;
-	}
-
-	int getNbBits(uint8_t x)
-	{
-		int i(0);
-		while (x != 0)
-		{
-			x >>= 1;
-			i++;
-		}
-
-		return i;
-	}
-
-	Int& Int::operator/=(Int const& x)
-	{
-		if (x == 0)
-			throw ZeroDivisionException();
-
-		int tailleBits((m_taille - 1) * 8 + getNbBits(m_x[m_taille - 1]));
-		int xTailleBits((x.m_taille - 1) * 8 + getNbBits(x.m_x[x.m_taille - 1]));
-
-		if (xTailleBits > tailleBits || *this == 0)
-		{
-			delete[] m_x;
-			m_taille = 1;
-			m_x = new uint8_t[m_taille];
-			m_x[0] = 0;
-			m_positif = true;
-
-			return *this;
-		}
-
-		int taille((tailleBits - xTailleBits + 1) / 8 + ((tailleBits - xTailleBits + 1) % 8 != 0));
-		uint8_t* newX(new uint8_t[taille]);
-		for (int i(0); i < taille; i++)
-			newX[i] = 0;
-
-		for (int i(tailleBits - xTailleBits); i >= 0; i--)
-		{
-			bool soustrairePossible(true);
-			uint8_t bitA, bitB;
-			int k;
-			if (i != tailleBits - xTailleBits && (m_x[(i + xTailleBits) >> 3] >> ((i + xTailleBits) % 8)) % 2)
-			{
-				soustrairePossible = true;
-			}
-			else
-			{
-				for (int j(xTailleBits - 1); j >= 0; j--)
-				{
-					bitA = (x.m_x[j >> 3] >> (j % 8)) % 2;
-					bitB = (m_x[(i + j) >> 3] >> ((i + j) % 8)) % 2;
-
-					if (bitA < bitB)
-					{
-						soustrairePossible = true;
-						break;
-					}
-					else if (bitA > bitB)
-					{
-						soustrairePossible = false;
-						break;
-					}
-				}
-			}
-
-			if (soustrairePossible)
-			{
-				for (int j(xTailleBits - 1); j >= 0; j--)
-				{
-					k = i + j;
-					bitA = (x.m_x[j >> 3] >> (j % 8)) % 2;
-					bitB = (m_x[k >> 3] >> (k % 8)) % 2;
-					if (bitA && bitB)
-						m_x[k >> 3] -= 1 << (k % 8);
-					else if (bitA && !bitB)
-					{
-						int l(1);
-						while (!((m_x[(k + l) >> 3] >> ((k + l) % 8)) % 2))
-							l++;
-						m_x[(k + l) >> 3] -= 1 << ((k + l) % 8);
-						l--;
-						while (l >= 0)
-						{
-							m_x[(k + l) >> 3] += 1 << ((k + l) % 8);
-							l--;
-						}
-					}
-				}
-
-				newX[i >> 3] += 1 << (i % 8);
-			}
-		}
-
-		delete[] m_x;
-		m_x = newX;
-		m_taille = taille;
-		m_positif = (m_positif == x.m_positif);
-
-		return *this;
-	}
-
-	Int& Int::operator%=(Int const& x)
-	{
-		*this -= (*this / x) * x;
-		return *this;
-	}
-
-	Int Int::operator-() const
-	{
-		Int x(*this);
-
-		if (m_taille != 1 || m_x[0] != 0)
-			x.m_positif = !m_positif;
-
-		return x;
-	}
-
-	Int Int::operator+() const
-	{
-		return Int(*this);
-	}
-
-
-	// Fonctions specifiques
-
-	std::string Int::toString() const
-	{
-		std::stringstream stream;
-		stream << *this;
-
-		return stream.str();
-	}
-
-	long long int Int::toInt() const
-	{
-		int t(sizeof(long long int));
-
-		if (*this > LLONG_MAX || *this < LLONG_MIN)
-			throw IntTooBigException();
-
-		long long int x(0);
-
-		for (int i(m_taille - 1); i >= 0; i--)
-		{
-			x = x << 8;
-			x += m_x[i];
-		}
-
-		if (!m_positif)
-			x = -x;
-
-		return x;
-	}
-
-	bool Int::estActif() const
-	{
-		return m_actif;
-	}
-
-
-	// Destructeur
-
-	Int::~Int()
-	{
-		if (m_actif)
-		{
-			delete[] m_x;
-		}
-	}
-
-
-	/*
-		------------------------------------------------------------------------
-		-------------------- FONCTIONS EXTERNES A LA CLASSE --------------------
-		------------------------------------------------------------------------
-	*/
-
-
-	// Operations
-
-	Int operator+(Int const& x, Int const& y)
-	{
-		Int z(x);
-		z += y;
-		return z;
-	}
-
-	Int&& operator+(Int&& x, Int const& y)
-	{
-		x += y;
-		return std::move(x);
-	}
-
-	Int&& operator+(Int const& x, Int&& y)
-	{
-		y += x;
-		return std::move(y);
-	}
-
-	Int&& operator+(Int&& x, Int&& y)
-	{
-		x += y;
-		return std::move(x);
-	}
-
-
-	Int operator-(Int const& x, Int const& y)
-	{
-		Int z(x);
-		z -= y;
-		return z;
-	}
-
-	Int&& operator-(Int&& x, Int const& y)
-	{
-		x -= y;
-		return std::move(x);
-	}
-
-	Int&& operator-(Int const& x, Int&& y)
-	{
-		y -= x;
-		return -std::move(y);
-	}
-
-	Int&& operator-(Int&& x, Int&& y)
-	{
-		x -= y;
-		return std::move(x);
-	}
-
-
-	Int operator*(Int const& x, Int const& y)
-	{
-		Int z(x);
-		z *= y;
-		return z;
-	}
-
-	Int&& operator*(Int&& x, Int const& y)
-	{
-		x *= y;
-		return std::move(x);
-	}
-
-	Int&& operator*(Int const& x, Int&& y)
-	{
-		y *= x;
-		return std::move(y);
-	}
-
-	Int&& operator*(Int&& x, Int&& y)
-	{
-		x *= y;
-		return std::move(x);
-	}
-
-
-	Int operator/(Int const& x, Int const& y)
-	{
-		Int z(x);
-		z /= y;
-		return z;
-	}
-
-	Int&& operator/(Int&& x, Int const& y)
-	{
-		x /= y;
-		return std::move(x);
-	}
-
-	Int&& operator/(Int&& x, Int&& y)
-	{
-		x /= y;
-		return std::move(x);
-	}
-
-
-	Int operator%(Int const& x, Int const& y)
-	{
-		Int z(x);
-		z %= y;
-		return z;
-	}
-
-	Int&& operator%(Int&& x, Int const& y)
-	{
-		x %= y;
-		return std::move(x);
-	}
-
-	Int&& operator%(Int&& x, Int&& y)
-	{
-		x %= y;
-		return std::move(x);
-	}
-
-
-	Int&& operator-(Int&& x)
-	{
-		if (x.m_taille != 1 || x.m_x[0] != 0)
-			x.m_positif = !x.m_positif;
-
-		return std::move(x);
-	}
-
-	Int&& operator+(Int&& x)
-	{
-		return std::move(x);
-	}
-
-
-	// Comparaisons
-
-	bool operator==(Int const& x, Int const& y)
-	{
-		if (x.m_taille != y.m_taille)
-			return false;
-
-		if (x.m_positif != y.m_positif)
-			return false;
-
-		for (int i(x.m_taille - 1); i >= 0; i--)
-			if (x.m_x[i] != y.m_x[i])
-				return false;
-
-		return true;
-	}
-
-	bool operator!=(Int const& x, Int const& y)
-	{
-		return !(x == y);
-	}
-
-	bool operator>(Int const& x, Int const& y)
-	{
-		if (x.m_positif != y.m_positif)
-			return x.m_positif;
-
-		if (x.m_taille != y.m_taille)
-			return (x.m_positif == (x.m_taille > y.m_taille));
-
-		for (int i(x.m_taille - 1); i >= 0; i--)
-			if (x.m_x[i] != y.m_x[i])
-				return (x.m_positif == (x.m_x[i] > y.m_x[i]));
-
-		return false;
-	}
-
-	bool operator<(Int const& x, Int const& y)
-	{
-		return !(x >= y);
-	}
-
-	bool operator>=(Int const& x, Int const& y)
-	{
-		if (x.m_positif != y.m_positif)
-			return x.m_positif;
-
-		if (x.m_taille != y.m_taille)
-			return (x.m_positif == (x.m_taille > y.m_taille));
-
-		for (int i(x.m_taille - 1); i >= 0; i--)
-			if (x.m_x[i] != y.m_x[i])
-				return (x.m_positif == (x.m_x[i] > y.m_x[i]));
-
-		return true;
-	}
-
-	bool operator<=(Int const& x, Int const& y)
-	{
-		return !(x > y);
-	}
-
-
-	// Affichage
-
-	std::ostream& operator<<(std::ostream& stream, Int const& x)
-	{
-		if (x == 0)
-		{
-			stream << "0";
-			return stream;
-		}
-
-		Int p(1), y(x);
-		if (x < 0)
-		{
-			stream << "-";
-			y = -x;
-		}
-
-		while (p <= y)
-			p *= 10;
-		p /= 10;
-		while (p > 0)
-		{
-			stream << int((y / p).m_x[0]);
-			y %= p;
-			p /= 10;
-		}
-
-		return stream;
-	}
-
-	std::istream& operator>>(std::istream& stream, Int& x)
-	{
-		if (!stream)
-			return stream;
-
-		Int y(0);
-
-		char c;
-
-		stream.get(c);
-		if (c < 48 || c > 57)
-		{
-			stream.putback(c);
-			stream.setstate(std::ios::failbit);
-			return stream;
-		}
-
-		while (stream)
-		{
-			switch (c)
-			{
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				y = 10 * y + Int((int)c - 48);
-				break;
-			default:
-				x = y;
-				stream.putback(c);
-				return stream;
-			}
-			stream.get(c);
-		}
-		return stream;
-	}
-
-
-	// Autres
-
-	Int binom(long long int n, long long int p)
-	{
-		if (p > n || p < 0)
-			return 0;
-
-		Int num(1), denom(1);
-
-		for (long long int i(0); i < p; i++)
-		{
-			num *= n - i;
-			denom *= p - i;
-		}
-
-		return num / denom;
-	}
+    namespace
+    {
+        const uint64_t CAPACITY = 1ULL << 32;
+        const uint64_t MAX = CAPACITY - 1;
+    }
+
+    // Constructors
+
+    Int::Int() :
+        _values(1, 0),
+        _sign(true)
+    {
+    }
+
+    Int::Int(int64_t x) :
+        _sign(x >= 0)
+    {
+        if (!_sign)
+            x = -x;
+
+        int64_t y = x / CAPACITY;
+        uint64_t size = y == 0 ? 1: 2;
+
+        _values.resize(size);
+        _values[0] = x % CAPACITY;
+        if (size == 2)
+            _values[1] = y;
+    }
+
+
+    // Operators
+
+    Int& Int::operator+=(const Int& x)
+    {
+        if (_sign == x._sign)
+        {
+            uint64_t buffer;
+            uint64_t size;
+
+            // Determiner la taille de l'Int
+
+            if (_values.size() > x._values.size())
+            {
+                uint64_t i(_values.size() - 1);
+                size = _values.size();
+                while (i >= x._values.size() && _values[i] == MAX)
+                    i--;
+
+                if (i == x._values.size() - 1)
+                {
+                    buffer = _values[i] + x._values[i];
+                    while (buffer >= MAX)
+                    {
+                        if (buffer >= CAPACITY)
+                        {
+                            size = _values.size() + 1;
+                            break;
+                        }
+
+                        i--;
+                        if (i < 0)
+                            break;
+                        else
+                            buffer = _values[i] + x._values[i];
+                    }
+                }
+            }
+            else if (_values.size() < x._values.size())
+            {
+                uint64_t i(x._values.size() - 1);
+                size = x._values.size();
+                while (i >= _values.size() && x._values[i] == MAX)
+                    i--;
+
+                if (i == _values.size() - 1)
+                {
+                    buffer = _values[i] + x._values[i];
+                    while (buffer >= MAX)
+                    {
+                        if (buffer >= CAPACITY)
+                        {
+                            size = _values.size() + 1;
+                            break;
+                        }
+
+                        i--;
+                        if (i < 0)
+                            break;
+                        else
+                            buffer = _values[i] + x._values[i];
+                    }
+                }
+            }
+            else
+            {
+                uint64_t i(_values.size() - 1);
+                buffer = _values[i] + x._values[i];
+                size = _values.size();
+                while (buffer >= MAX)
+                {
+                    if (buffer >= CAPACITY)
+                    {
+                        size = _values.size() + 1;
+                        break;
+                    }
+
+                    i--;
+                    if (i < 0)
+                        break;
+                    else
+                        buffer = _values[i] + x._values[i];
+                }
+            }
+
+            // Allouer un nouvel espace memoire si necessaire
+
+            if (size != _values.size())
+                _values.resize(size);
+
+            // Faire la somme elle-meme
+
+            buffer = 0;
+            for (uint64_t i(0); i < size; i++)
+            {
+                if (i < _values.size())
+                    buffer += _values[i];
+                if (i < x._values.size())
+                    buffer += x._values[i];
+                _values[i] = buffer % CAPACITY;
+                buffer >>= 32;
+            }
+        }
+        else
+        {
+            _sign = !_sign;
+            *this -= x;
+            _sign = !_sign;
+        }
+
+        return *this;
+    }
+
+    Int& Int::operator-=(const Int& x)
+    {
+        if (_sign == x._sign)
+        {
+            std::vector<uint32_t> grand, petit;
+            uint64_t grandeTaille, petiteTaille;
+
+            if (*this == x)
+            {
+                _values.clear();
+                _values.resize(1, 0);
+                _sign = true;
+
+                return *this;
+            }
+
+            if ((_sign && *this > x) || (!_sign && *this < x))
+            {
+                grand = _values;
+                grandeTaille = _values.size();
+                petit = x._values;
+                petiteTaille = x._values.size();
+            }
+            else
+            {
+                grand = x._values;
+                grandeTaille = x._values.size();
+                petit = _values;
+                petiteTaille = _values.size();
+                _sign = !_sign;
+            }
+
+            uint64_t taille(grandeTaille);
+            if (grandeTaille == petiteTaille)
+                while (grand[taille - 1] == petit[taille - 1] && taille > 1)
+                    taille--;
+
+            _values.resize(taille);
+
+            for (uint64_t i(taille - 1); i != UINT64_MAX; i--)
+            {
+                _values[i] = grand[i];
+                if (i < petiteTaille)
+                {
+                    if (grand[i] >= petit[i])
+                    {
+                        _values[i] -= petit[i];
+                    }
+                    else
+                    {
+                        _values[i] += CAPACITY - petit[i];
+                        uint64_t j(1);
+                        while (_values[i + j] == 0)
+                            j++;
+                        _values[i + j]--;
+                        for (uint64_t k(1); k < j; k++)
+                            _values[i + k] = MAX;
+                    }
+                }
+            }
+
+            if (_values[_values.size() - 1] == 0)
+                _values.resize(_values.size() - 1);
+        }
+        else
+        {
+            _sign = !_sign;
+            *this += x;
+            _sign = !_sign;
+        }
+
+        return *this;
+    }
+
+    Int& Int::operator*=(const Int& x)
+    {
+        if (*this == 0 || x == 0)
+        {
+            _values.clear();
+            _values.resize(1, 0);
+            _sign = true;
+        }
+        else
+        {
+            uint64_t buffer;
+            std::vector<uint32_t> tmp(_values.size() + x._values.size(), 0);
+            for (uint64_t i(0); i < _values.size(); i++)
+            {
+                buffer = 0;
+                for (uint64_t j(0); j < x._values.size(); j++)
+                {
+                    buffer += (uint64_t) _values[i] * (uint64_t) x._values[j];
+                    buffer += tmp[i + j];
+                    tmp[i + j] = buffer % CAPACITY;
+                    buffer >>= 32;
+                }
+                tmp[i + x._values.size()] = buffer;
+            }
+
+            uint64_t taille(_values.size() + x._values.size());
+            while (tmp[taille - 1] == 0)
+                taille--;
+
+            _sign = (_sign == x._sign);
+            _values.resize(taille);
+            for (int i(0); i < taille; i++)
+                _values[i] = tmp[i];
+        }
+
+        return *this;
+    }
+
+    uint64_t getNbBits(uint32_t x)
+    {
+        uint64_t i(0);
+        while (x != 0)
+        {
+            x >>= 1;
+            i++;
+        }
+
+        return i;
+    }
+
+    Int& Int::operator/=(const Int& x)
+    {
+        if (x == 0)
+            throw std::runtime_error(scippError("Division of Int by 0."));
+
+        uint64_t tailleBits((_values.size() - 1) * 32 + getNbBits(_values[_values.size() - 1]));
+        uint64_t xTailleBits((x._values.size() - 1) * 32 + getNbBits(x._values[x._values.size() - 1]));
+
+        if (xTailleBits > tailleBits || *this == 0)
+        {
+            _values.clear();
+            _values.resize(1, 0);
+            _sign = true;
+
+            return *this;
+        }
+
+        uint64_t taille((tailleBits - xTailleBits + 1) / 32 + ((tailleBits - xTailleBits + 1) % 32 != 0));
+        std::vector<uint32_t> newValues(taille, 0);
+
+        for (uint64_t i(tailleBits - xTailleBits); i != UINT64_MAX; i--)
+        {
+            bool soustrairePossible(true);
+            uint8_t bitA, bitB;
+            uint64_t k;
+            if (i != tailleBits - xTailleBits && (_values[(i + xTailleBits) >> 5] >> ((i + xTailleBits) % 32)) % 2)
+            {
+                soustrairePossible = true;
+            }
+            else
+            {
+                for (uint64_t j(xTailleBits - 1); j != UINT64_MAX; j--)
+                {
+                    bitA = (x._values[j >> 5] >> (j % 32)) % 2;
+                    bitB = (_values[(i + j) >> 5] >> ((i + j) % 32)) % 2;
+
+                    if (bitA < bitB)
+                    {
+                        soustrairePossible = true;
+                        break;
+                    }
+                    else if (bitA > bitB)
+                    {
+                        soustrairePossible = false;
+                        break;
+                    }
+                }
+            }
+
+            if (soustrairePossible)
+            {
+                for (uint64_t j(xTailleBits - 1); j != UINT64_MAX; j--)
+                {
+                    k = i + j;
+                    bitA = (x._values[j >> 5] >> (j % 32)) % 2;
+                    bitB = (_values[k >> 5] >> (k % 32)) % 2;
+                    if (bitA && bitB)
+                        _values[k >> 5] -= 1 << (k % 32);
+                    else if (bitA && !bitB)
+                    {
+                        uint64_t l(1);
+                        while (!((_values[(k + l) >> 5] >> ((k + l) % 32)) % 2))
+                            l++;
+                        _values[(k + l) >> 5] -= 1 << ((k + l) % 32);
+                        l--;
+                        while (l != UINT64_MAX)
+                        {
+                            _values[(k + l) >> 5] += 1 << ((k + l) % 32);
+                            l--;
+                        }
+                    }
+                }
+
+                newValues[i >> 5] += 1 << (i % 32);
+            }
+        }
+
+        _sign = (_sign == x._sign);
+        _values = newValues;
+
+        return *this;
+    }
+
+    Int& Int::operator%=(const Int& x)
+    {
+        *this -= (*this / x) * x;
+        return *this;
+    }
+
+
+    // Fonctions specifiques
+
+    std::string Int::toString() const
+    {
+        std::stringstream stream;
+        stream << *this;
+
+        return stream.str();
+    }
+
+    int64_t Int::toInt() const
+    {
+        if (*this > INT64_MAX || *this < INT64_MIN)
+            throw std::runtime_error("Int to big to be converted to int64_t.");
+
+        int64_t x(0);
+
+        for (int64_t i(_values.size() - 1); i >= 0; i--)
+        {
+            x <<= 32;
+            x += _values[i];
+        }
+
+        if (!_sign)
+            x = -x;
+
+        return x;
+    }
+
+    void Int::setSign(bool sign)
+    {
+        if (*this != 0)
+            _sign = sign;
+    }
+
+    bool Int::getSign() const
+    {
+        return _sign;
+    }
+
+    /*
+        ------------------------------------------------------------------------
+        -------------------- FONCTIONS EXTERNES A LA CLASSE --------------------
+        ------------------------------------------------------------------------
+    */
+
+
+    // Operations
+
+    Int operator+(const Int& x, const Int& y)
+    {
+        Int z(x);
+        z += y;
+        return z;
+    }
+
+    Int&& operator+(Int&& x, const Int& y)
+    {
+        x += y;
+        return std::move(x);
+    }
+
+    Int&& operator+(const Int& x, Int&& y)
+    {
+        y += x;
+        return std::move(y);
+    }
+
+    Int&& operator+(Int&& x, Int&& y)
+    {
+        x += y;
+        return std::move(x);
+    }
+
+
+    Int operator-(const Int& x, const Int& y)
+    {
+        Int z(x);
+        z -= y;
+        return z;
+    }
+
+    Int&& operator-(Int&& x, const Int& y)
+    {
+        x -= y;
+        return std::move(x);
+    }
+
+    Int&& operator-(const Int& x, Int&& y)
+    {
+        y -= x;
+        return -std::move(y);
+    }
+
+    Int&& operator-(Int&& x, Int&& y)
+    {
+        x -= y;
+        return std::move(x);
+    }
+
+
+    Int operator*(const Int& x, const Int& y)
+    {
+        Int z(x);
+        z *= y;
+        return z;
+    }
+
+    Int&& operator*(Int&& x, const Int& y)
+    {
+        x *= y;
+        return std::move(x);
+    }
+
+    Int&& operator*(const Int& x, Int&& y)
+    {
+        y *= x;
+        return std::move(y);
+    }
+
+    Int&& operator*(Int&& x, Int&& y)
+    {
+        x *= y;
+        return std::move(x);
+    }
+
+
+    Int operator/(const Int& x, const Int& y)
+    {
+        Int z(x);
+        z /= y;
+        return z;
+    }
+
+    Int&& operator/(Int&& x, const Int& y)
+    {
+        x /= y;
+        return std::move(x);
+    }
+
+    Int&& operator/(Int&& x, Int&& y)
+    {
+        x /= y;
+        return std::move(x);
+    }
+
+
+    Int operator%(const Int& x, const Int& y)
+    {
+        Int z(x);
+        z %= y;
+        return z;
+    }
+
+    Int&& operator%(Int&& x, const Int& y)
+    {
+        x %= y;
+        return std::move(x);
+    }
+
+    Int&& operator%(Int&& x, Int&& y)
+    {
+        x %= y;
+        return std::move(x);
+    }
+
+
+    Int operator-(const Int& x)
+    {
+        Int y(x);
+        y.setSign(!y.getSign());
+
+        return y;
+    }
+
+    Int&& operator-(Int&& x)
+    {
+        x.setSign(!x.getSign());
+        return std::move(x);
+    }
+
+    Int operator+(const Int& x)
+    {
+        return x;
+    }
+
+    Int&& operator+(Int&& x)
+    {
+        return std::move(x);
+    }
+
+
+    // Comparaisons
+
+    bool operator==(const Int& x, const Int& y)
+    {
+        if (x._values.size() != y._values.size())
+            return false;
+
+        if (x._sign != y._sign)
+            return false;
+
+        for (uint64_t i(x._values.size() - 1); i != UINT64_MAX; i--)
+            if (x._values[i] != y._values[i])
+                return false;
+
+        return true;
+    }
+
+    bool operator!=(const Int& x, const Int& y)
+    {
+        return !(x == y);
+    }
+
+    bool operator>(const Int& x, const Int& y)
+    {
+        if (x._sign != y._sign)
+            return x._sign;
+
+        if (x._values.size() != y._values.size())
+            return (x._sign == (x._values.size() > y._values.size()));
+
+        for (uint64_t i(x._values.size() - 1); i != UINT64_MAX; i--)
+            if (x._values[i] != y._values[i])
+                return (x._sign == (x._values[i] > y._values[i]));
+
+        return false;
+    }
+
+    bool operator<(const Int& x, const Int& y)
+    {
+        return !(x >= y);
+    }
+
+    bool operator>=(const Int& x, const Int& y)
+    {
+        if (x._sign != y._sign)
+            return x._sign;
+
+        if (x._values.size() != y._values.size())
+            return (x._sign == (x._values.size() > y._values.size()));
+
+        for (uint64_t i(x._values.size() - 1); i != UINT64_MAX; i--)
+            if (x._values[i] != y._values[i])
+                return (x._sign == (x._values[i] > y._values[i]));
+
+        return true;
+    }
+
+    bool operator<=(const Int& x, const Int& y)
+    {
+        return !(x > y);
+    }
+
+
+    // Affichage
+
+    std::ostream& operator<<(std::ostream& stream, const Int& x)
+    {
+        if (x == 0)
+        {
+            stream << "0";
+            return stream;
+        }
+
+        Int p(1), y(x);
+        if (x < 0)
+        {
+            stream << "-";
+            y = -x;
+        }
+
+        while (p <= y)
+            p *= 10;
+        p /= 10;
+        while (p > 0)
+        {
+            stream << int((y / p)._values[0]);
+            y %= p;
+            p /= 10;
+        }
+
+        return stream;
+    }
+
+    std::istream& operator>>(std::istream& stream, Int& x)
+    {
+        if (!stream)
+            return stream;
+
+        Int y(0);
+
+        char c;
+
+        stream.get(c);
+        if (c < 48 || c > 57)
+        {
+            stream.putback(c);
+            stream.setstate(std::ios::failbit);
+            return stream;
+        }
+
+        while (stream)
+        {
+            switch (c)
+            {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                y = 10 * y + Int((int)c - 48);
+                break;
+            default:
+                x = y;
+                stream.putback(c);
+                return stream;
+            }
+            stream.get(c);
+        }
+        return stream;
+    }
+
+
+    // Autres
+
+    Int binom(const Int& n, const Int& p)
+    {
+        if (p > n || p < 0)
+            return 0;
+
+        Int num(1), denom(1);
+
+        for (Int i(0); i < p; i += 1)
+        {
+            num *= n - i;
+            denom *= p - i;
+        }
+
+        return num / denom;
+    }
 }
