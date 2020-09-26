@@ -1,0 +1,143 @@
+#pragma once
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file Int.hpp
+/// \brief Functions and classes for fractions manipulation.
+/// \author Reiex
+/// 
+/// For a more detailed description, see class Int.
+/// 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <SciPP/types.hpp>
+
+namespace scp
+{
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \class Frac
+    /// \brief Class for fractions manipulation.
+    /// 
+    /// The class Frac is not only intended to be used with integers but can represent any algebraic fraction.
+    /// For example, with T=Polynomial, the class represents a rational fraction.
+    ///
+    /// For representing rational numbers (arithmetic fraction) especially, see class Rational.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T>
+    class Frac
+    {
+        public:
+        
+            Frac();                        ///< Default constructor. Init the fraction to T(0)/T(1).
+            Frac(int64_t x);               ///< Init the fraction to T(x)/T(1).
+            Frac(const T& x);              ///< Init the fraction to x/T(1).
+            Frac(const T& p, const T& q);  ///< Init the fraction p/q.
+
+            const T& num() const;    ///< Returns the numerator of the fraction.
+            const T& denom() const;  ///< Returns the denominator of the fraction.
+
+            Frac<T>& operator+=(const Frac<T>& a);
+            Frac<T>& operator-=(const Frac<T>& a);
+            Frac<T>& operator*=(const Frac<T>& a);
+            Frac<T>& operator/=(const Frac<T>& a);
+
+        private:
+
+            void simplify();
+
+            T m_p;
+            T m_q;
+    };
+
+
+    // Operators
+
+    template<typename T>
+    Frac<T> operator+(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T> operator-(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T> operator*(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T> operator/(const Frac<T>& a, const Frac<T>& b);
+
+    template<typename T>
+    Frac<T> operator-(const Frac<T>& a);
+    template<typename T>
+    Frac<T> operator+(const Frac<T>& a);
+
+
+    // Comparators
+
+    template<typename T>
+    bool operator==(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    bool operator!=(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    bool operator>(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    bool operator<(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    bool operator>=(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    bool operator<=(const Frac<T>& a, const Frac<T>& b);
+
+
+    // Display
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Frac
+    /// \brief Output stream for class Frac
+    /// 
+    /// Write the fraction into the stream with the format: `(Numerator/Denominator)`.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T>
+    std::ostream& operator<<(std::ostream& stream, const Frac<T>& a);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Frac
+    /// \brief Input stream for class Frac
+    /// 
+    /// The evaluated regular expression is: `\(T/T\)`
+    /// Where T is the regular expression accepted by the input stream for T.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T>
+    std::istream& operator>>(std::istream& stream, Frac<T>& a);
+
+
+    // Rational
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \class Rational
+    /// \brief Class for rational numbers manipulation.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    class Rational: public Frac<Int>
+    {
+        public:
+
+            Rational();                            ///< Default constructor. Init the rational to 0/1.
+            Rational(int64_t x);                   ///< Init the rational to x/1.
+            Rational(Int const& x);                ///< Init the rational to x/1.
+            Rational(Int const& p, Int const& q);  ///< Init the rational to p/q.
+            Rational(long double x);               ///< Init the rational to an approximation of x.
+            Rational(Frac<Int> const& x);          ///< Init the rational to x.
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// \brief Returns a string with the integer part, a comma and the n first decimals of x.
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            std::string decimals(int64_t n);
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Rationnel
+    /// \brief Opérateur de flux sortant pour les rationnels
+    /// 
+    /// Si le rationnel est un nombre décimal, affiche le nombre en entier (un point sert de virgule).
+    /// 
+    /// Sinon le format est: `Numerateur/Denominateur`
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::ostream& operator<<(std::ostream& stream, Rational const& x);
+}
+
+#include <SciPP/FracT.hpp>

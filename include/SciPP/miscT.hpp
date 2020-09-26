@@ -5,7 +5,7 @@
 namespace scp
 {
     template<typename TBase, typename TPow = uint64_t>
-    TBase expoRapide(TBase const& x, TPow n)
+    TBase expoSq(TBase const& x, TPow n)
     {
         if (n == 0)
             return 1;

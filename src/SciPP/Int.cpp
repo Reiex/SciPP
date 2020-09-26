@@ -32,7 +32,7 @@ namespace scp
     }
 
 
-    // Operators
+    // Intern operators
 
     Int& Int::operator+=(const Int& x)
     {
@@ -358,7 +358,7 @@ namespace scp
     }
 
 
-    // Fonctions specifiques
+    // Specific methods
 
     std::string Int::toString() const
     {
@@ -398,14 +398,7 @@ namespace scp
         return _sign;
     }
 
-    /*
-        ------------------------------------------------------------------------
-        -------------------- FONCTIONS EXTERNES A LA CLASSE --------------------
-        ------------------------------------------------------------------------
-    */
-
-
-    // Operations
+    // Extern operators
 
     Int operator+(const Int& x, const Int& y)
     {
@@ -550,7 +543,7 @@ namespace scp
     }
 
 
-    // Comparaisons
+    // Comparators
 
     bool operator==(const Int& x, const Int& y)
     {
@@ -613,7 +606,7 @@ namespace scp
     }
 
 
-    // Affichage
+    // Display
 
     std::ostream& operator<<(std::ostream& stream, const Int& x)
     {
@@ -684,24 +677,5 @@ namespace scp
             stream.get(c);
         }
         return stream;
-    }
-
-
-    // Autres
-
-    Int binom(const Int& n, const Int& p)
-    {
-        if (p > n || p < 0)
-            return 0;
-
-        Int num(1), denom(1);
-
-        for (Int i(0); i < p; i += 1)
-        {
-            num *= n - i;
-            denom *= p - i;
-        }
-
-        return num / denom;
     }
 }

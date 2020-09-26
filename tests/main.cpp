@@ -2,8 +2,8 @@
 
 int main()
 {
-    Test mainTest("SCIPP TEST", [](Test& test)->std::string {
-        test.addSubTest("TEST DES ENTIERS", &mainInt);
+    Test mainTest("TESTS OF THE LIBRARY SCIPP", [](Test& test)->std::string {
+        test.addSubTest("INTEGERS", &mainInt);
         return "";
     });
 
