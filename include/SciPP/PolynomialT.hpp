@@ -30,7 +30,7 @@ namespace scp
     
     template<typename T>
     Polynomial<T>::Polynomial(const std::vector<T>& values) :
-        _coeffs(x)
+        _coeffs(values)
     {
         reduce();
     }
