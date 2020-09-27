@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <sstream>
@@ -21,4 +22,8 @@ namespace scp
     template<typename T> class Polynomial;
 
     template<typename T, uint64_t n, uint64_t m> class Mat;
+
+    // Pour continuer
+
+    template<typename T> class Quaternion;
 }
