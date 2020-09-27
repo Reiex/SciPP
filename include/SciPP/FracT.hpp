@@ -4,63 +4,48 @@
 
 namespace scp
 {
-    // Constructeurs
+    // Constructors
 
     template<typename T>
     Frac<T>::Frac() :
-        m_p(0),
-        m_q(1)
+        _p(0),
+        _q(1)
     {
     }
 
     template<typename T>
     Frac<T>::Frac(int64_t x) :
-        m_p(x),
-        m_q(1)
+        _p(x),
+        _q(1)
     {
     }
 
     template<typename T>
     Frac<T>::Frac(const T& x) :
-        m_p(x),
-        m_q(1)
+        _p(x),
+        _q(1)
     {
     }
 
     template<typename T>
     Frac<T>::Frac(const T& p, const T& q) :
-        m_p(p),
-        m_q(q)
+        _p(p),
+        _q(q)
     {
         if (q == 0)
-            throw std::runtime_error("You cannot init a Frac with the denominator at 0.");
+            throw std::runtime_error(scippError("You cannot init a Frac with the denominator at 0."));
 
         simplify();
     }
 
 
-    // Acces et modification de la structure
-
-    template<typename T>
-    const T& Frac<T>::num() const
-    {
-        return m_p;
-    }
-
-    template<typename T>
-    const T& Frac<T>::denom() const
-    {
-        return m_q;
-    }
-
-
-    // Operations internes
+    // Intern operators
 
     template<typename T>
     Frac<T>& Frac<T>::operator+=(const Frac<T>& a)
     {
-        m_p = m_p * a.m_q + a.m_p*m_q;
-        m_q *= a.m_q;
+        _p = _p * a._q + a._p*_q;
+        _q *= a._q;
 
         simplify();
 
@@ -70,8 +55,8 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator-=(const Frac<T>& a)
     {
-        m_p = m_p * a.m_q - a.m_p*m_q;
-        m_q *= a.m_q;
+        _p = _p * a._q - a._p*_q;
+        _q *= a._q;
 
         simplify();
 
@@ -81,8 +66,8 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator*=(const Frac<T>& a)
     {
-        m_p *= a.m_p;
-        m_q *= a.m_q;
+        _p *= a._p;
+        _q *= a._q;
 
         simplify();
 
@@ -92,8 +77,8 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator/=(const Frac<T>& a)
     {
-        m_p *= a.m_q;
-        m_q *= a.m_p;
+        _p *= a._q;
+        _q *= a._p;
 
         simplify();
 
@@ -101,29 +86,41 @@ namespace scp
     }
 
 
-    // Fonctions specifiques
+    // Specific functions
+
+    template<typename T>
+    const T& Frac<T>::num() const
+    {
+        return _p;
+    }
+
+    template<typename T>
+    const T& Frac<T>::denom() const
+    {
+        return _q;
+    }
 
     template<typename T>
     void Frac<T>::simplify()
     {
-        if (m_q < 0)
+        if (_q < 0)
         {
-            m_q = -m_q;
-            m_p = -m_p;
+            _q = -_q;
+            _p = -_p;
         }
 
-        if (m_p == 0)
+        if (_p == 0)
         {
-            m_q = 1;
+            _q = 1;
             return;
         }
 
-        T x(gcd(m_p, m_q));
-        m_p /= x;
-        m_q /= x;
+        T x(gcd(_p, _q));
+        _p /= x;
+        _q /= x;
     }
 
-    // Operations externes
+    // Extern operators
 
     template<typename T>
     Frac<T> operator+(const Frac<T>& a, const Frac<T>& b)
@@ -135,6 +132,28 @@ namespace scp
     }
 
     template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a, const Frac<T>& b)
+    {
+        a += b;
+        return std::move(a);
+    }
+
+    template<typename T>
+    Frac<T>&& operator+(const Frac<T>& a, Frac<T>&& b)
+    {
+        b += a;
+        return std::move(a);
+    }
+    
+    template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a, Frac<T>&& b)
+    {
+        a += b;
+        return std::move(a);
+    }
+    
+
+    template<typename T>
     Frac<T> operator-(const Frac<T>& a, const Frac<T>& b)
     {
         Frac<T> c(a);
@@ -142,6 +161,28 @@ namespace scp
 
         return c;
     }
+
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a, const Frac<T>& b)
+    {
+        a -= b;
+        return std::move(a);
+    }
+
+    template<typename T>
+    Frac<T>&& operator-(const Frac<T>& a, Frac<T>&& b)
+    {
+        b -= a;
+        return -std::move(b);
+    }
+    
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a, Frac<T>&& b)
+    {
+        a -= b;
+        return std::move(a);
+    }
+    
 
     template<typename T>
     Frac<T> operator*(const Frac<T>& a, const Frac<T>& b)
@@ -153,6 +194,28 @@ namespace scp
     }
 
     template<typename T>
+    Frac<T>&& operator*(Frac<T>&& a, const Frac<T>& b)
+    {
+        a *= b;
+        return std::move(a);
+    }
+
+    template<typename T>
+    Frac<T>&& operator*(const Frac<T>& a, Frac<T>&& b)
+    {
+        b *= a;
+        return std::move(b);
+    }
+    
+    template<typename T>
+    Frac<T>&& operator*(Frac<T>&& a, Frac<T>&& b)
+    {
+        a *= b;
+        return std::move(a);
+    }
+    
+
+    template<typename T>
     Frac<T> operator/(const Frac<T>& a, const Frac<T>& b)
     {
         Frac<T> c(a);
@@ -161,6 +224,20 @@ namespace scp
         return c;
     }
 
+    template<typename T>
+    Frac<T>&& operator/(Frac<T>&& a, const Frac<T>& b)
+    {
+        a /= b;
+        return std::move(a);
+    }
+    
+    template<typename T>
+    Frac<T>&& operator/(Frac<T>&& a, Frac<T>&& b)
+    {
+        a /= b;
+        return std::move(b);
+    }
+    
 
     template<typename T>
     Frac<T> operator-(const Frac<T>& a)
@@ -174,8 +251,21 @@ namespace scp
         return a;
     }
 
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a)
+    {
+        a._p = -a._p;
+        return std::move(a);
+    }
 
-    // Comparaisons
+    template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a)
+    {
+        return std::move(a);
+    }
+
+
+    // Comparators
 
     template<typename T>
     bool operator==(const Frac<T>& a, const Frac<T>& b)
@@ -214,7 +304,7 @@ namespace scp
     }
 
 
-    // Affichage
+    // Dsiplay
 
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Frac<T>& a)

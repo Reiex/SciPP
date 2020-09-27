@@ -9,6 +9,8 @@
 
 namespace scp
 {
+    std::string scippError(const std::string& error);
+
     class Int;
 
     template<typename T> class Frac;

@@ -33,20 +33,25 @@ namespace scp
             Frac(const T& x);              ///< Init the fraction to x/T(1).
             Frac(const T& p, const T& q);  ///< Init the fraction p/q.
 
-            const T& num() const;    ///< Returns the numerator of the fraction.
-            const T& denom() const;  ///< Returns the denominator of the fraction.
-
             Frac<T>& operator+=(const Frac<T>& a);
             Frac<T>& operator-=(const Frac<T>& a);
             Frac<T>& operator*=(const Frac<T>& a);
             Frac<T>& operator/=(const Frac<T>& a);
 
+            const T& num() const;    ///< Returns the numerator of the fraction.
+            const T& denom() const;  ///< Returns the denominator of the fraction.
+
         private:
 
             void simplify();
 
-            T m_p;
-            T m_q;
+            T _p;
+            T _q;
+        
+        template<typename U>
+        friend Frac<U>&& operator-(Frac<U>&& a);
+        template<typename U>
+        friend Frac<U>&& operator+(Frac<U>&& a);
     };
 
 
@@ -55,16 +60,45 @@ namespace scp
     template<typename T>
     Frac<T> operator+(const Frac<T>& a, const Frac<T>& b);
     template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator+(const Frac<T>& a, Frac<T>&& b);
+    template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a, Frac<T>&& b);
+
+    template<typename T>
     Frac<T> operator-(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator-(const Frac<T>& a, Frac<T>&& b);
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a, Frac<T>&& b);
+
     template<typename T>
     Frac<T> operator*(const Frac<T>& a, const Frac<T>& b);
     template<typename T>
+    Frac<T>&& operator*(Frac<T>&& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator*(const Frac<T>& a, Frac<T>&& b);
+    template<typename T>
+    Frac<T>&& operator*(Frac<T>&& a, Frac<T>&& b);
+
+    template<typename T>
     Frac<T> operator/(const Frac<T>& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator/(Frac<T>&& a, const Frac<T>& b);
+    template<typename T>
+    Frac<T>&& operator/(Frac<T>&& a, Frac<T>&& b);
 
     template<typename T>
     Frac<T> operator-(const Frac<T>& a);
     template<typename T>
     Frac<T> operator+(const Frac<T>& a);
+    template<typename T>
+    Frac<T>&& operator-(Frac<T>&& a);
+    template<typename T>
+    Frac<T>&& operator+(Frac<T>&& a);
 
 
     // Comparators
@@ -87,7 +121,7 @@ namespace scp
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Frac
-    /// \brief Output stream for class Frac
+    /// \brief Output stream operator for class Frac
     /// 
     /// Write the fraction into the stream with the format: `(Numerator/Denominator)`.
     ///
@@ -96,7 +130,7 @@ namespace scp
     std::ostream& operator<<(std::ostream& stream, const Frac<T>& a);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Frac
-    /// \brief Input stream for class Frac
+    /// \brief Input stream operator for class Frac
     /// 
     /// The evaluated regular expression is: `\(T/T\)`
     /// Where T is the regular expression accepted by the input stream for T.
@@ -131,11 +165,11 @@ namespace scp
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Rationnel
-    /// \brief Opérateur de flux sortant pour les rationnels
+    /// \brief Output stream operator for class Rational
     /// 
-    /// Si le rationnel est un nombre décimal, affiche le nombre en entier (un point sert de virgule).
+    /// If the rational is in the decimal set then it is fully written (ex: 3/4 is written 0.75) else the Frac format
+    /// is kept.
     /// 
-    /// Sinon le format est: `Numerateur/Denominateur`
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::ostream& operator<<(std::ostream& stream, Rational const& x);
 }
