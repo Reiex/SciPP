@@ -99,13 +99,6 @@ namespace scp
     template<typename T, uint64_t n>
     Vec<T, n>&& operator+(Vec<T, n>&& v);
 
-    // Specific operators
-
-    template<typename T, uint64_t n>
-    T dot(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T>
-    Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v);
-
     // Comparators
 
     template<typename T, uint64_t n>
@@ -124,6 +117,13 @@ namespace scp
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T, uint64_t n>
     std::ostream& operator<<(std::ostream& stream, const Vec<T, n>& v);
+
+    // Specific functions
+
+    template<typename T, uint64_t n>
+    T dot(const Vec<T, n>& u, const Vec<T, n>& v);
+    template<typename T>
+    Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v);
 }
 
 #include <SciPP/VecT.hpp>

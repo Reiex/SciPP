@@ -304,7 +304,7 @@ namespace scp
     }
 
 
-    // Dsiplay
+    // Display
 
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Frac<T>& a)

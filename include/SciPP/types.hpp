@@ -21,7 +21,7 @@ namespace scp
 
     template<typename T> class Polynomial;
 
-    template<typename T, uint64_t n, uint64_t m> class Mat;
+    template<typename T, uint64_t m, uint64_t n> class Mat;
 
     // Pour continuer
 

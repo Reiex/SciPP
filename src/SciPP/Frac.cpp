@@ -2,6 +2,8 @@
 
 namespace scp
 {
+	// Constructors
+
 	Rational::Rational() : Frac<Int>()
 	{
 	}
@@ -60,6 +62,9 @@ namespace scp
 	{
 	}
 
+
+	// Specific functions
+
 	std::string Rational::decimals(int64_t n)
 	{
 		std::string chaine;
@@ -80,6 +85,9 @@ namespace scp
 
 		return s.str();
 	}
+
+
+	// Display
 
 	std::ostream& operator<<(std::ostream& stream, Rational const& x)
 	{

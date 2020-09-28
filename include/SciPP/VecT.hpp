@@ -285,26 +285,6 @@ namespace scp
         return std::move(v);
     }
 
-
-    // Specific operators
-    
-    template<typename T, uint64_t n>
-    T dot(const Vec<T, n>& u, const Vec<T, n>& v)
-    {
-        T x;
-        for (uint64_t i(0); i < n; i++)
-            x += u[i] * v[i];
-        
-        return x;
-    }
-    
-    template<typename T>
-    Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v)
-    {
-        return Vec<T, 3>({u[1]*v[2] - u[2]*v[1], u[2]*v[0] - u[0]*v[2], u[0]*v[1] - u[1]*v[0]});
-    }
-
-
     // Comparators
     
     template<typename T, uint64_t n>
@@ -339,4 +319,24 @@ namespace scp
 
 		return stream;
     }
+
+
+    // Specific functions
+    
+    template<typename T, uint64_t n>
+    T dot(const Vec<T, n>& u, const Vec<T, n>& v)
+    {
+        T x;
+        for (uint64_t i(0); i < n; i++)
+            x += u[i] * v[i];
+        
+        return x;
+    }
+    
+    template<typename T>
+    Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v)
+    {
+        return Vec<T, 3>({u[1]*v[2] - u[2]*v[1], u[2]*v[0] - u[0]*v[2], u[0]*v[1] - u[1]*v[0]});
+    }
+
 }

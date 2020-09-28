@@ -1,0 +1,74 @@
+#pragma once
+
+#include <SciPP/types.hpp>
+
+namespace scp
+{
+    template<typename T, uint64_t m, uint64_t n = m>
+    class Mat
+    {
+        public:
+
+            Mat();
+            Mat(uint64_t x);
+            Mat(const T& x);
+            Mat(const std::vector<std::vector<T>>& values);
+
+            Mat<T, m, n>& operator+=(const Mat<T, m, n>& a);
+            Mat<T, m, n>& operator-=(const Mat<T, m, n>& a);
+
+            Vec<T, n>& operator[](uint64_t i);
+            const Vec<T, n>& operator[](uint64_t i) const;
+
+        private:
+
+            Vec<T, n> _values[m];
+    };
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> operator+(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, const Mat<T, m, n>& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator+(const Mat<T, m, n>& a, Mat<T, m, n>&& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, Mat<T, m, n>&& b);
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> operator-(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, const Mat<T, m, n>& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator-(const Mat<T, m, n>& a, Mat<T, m, n>&& b);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, Mat<T, m, n>&& b);
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> operator*(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
+
+    template<typename T, uint64_t m, uint64_t n>
+    std::ostream& operator<<(std::ostream& stream, const Mat<T, m, n>& a);
+
+    enum class ConvolveMethod
+    {
+        Periodic,
+        Continuous,
+        Zero
+    };
+
+    template<typename T, uint64_t m, uint64_t n, uint64_t p, uint64_t q>
+    Mat<T, m, n> convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method = ConvolveMethod::Periodic);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, n, m> inverse(const Mat<T, m, n>& a);
+    template<typename T, uint64_t m, uint64_t n>
+    T det(const Mat<T, m, n>& a);
+
+    /*
+    
+    TODO: Normaliser le nom des sections (constructors, operators...)
+    TODO: Vérifier l'API pour les matrices...
+
+    */
+}
+
+#include <SciPP/MatT.hpp>
