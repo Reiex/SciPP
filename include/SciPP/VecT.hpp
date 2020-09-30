@@ -59,7 +59,7 @@ namespace scp
     }
     
 
-    // Intern operators
+    // Internal operators
 
     template<typename T, uint64_t n>
     Vec<T, n>& Vec<T, n>::operator+=(const Vec<T, n>& v)
@@ -107,7 +107,7 @@ namespace scp
     }
     
 
-    // Specific functions
+    // Specific methods
 
     template<typename T, uint64_t n>
     uint64_t Vec<T, n>::size() const
@@ -116,7 +116,7 @@ namespace scp
     }
 
 
-    // Extern operators
+    // External operators
 
     template<typename T, uint64_t n>
     Vec<T, n> operator+(const Vec<T, n>& u, const Vec<T, n>& v)
@@ -148,6 +148,7 @@ namespace scp
         return std::move(u);
     }
     
+
     template<typename T, uint64_t n>
     Vec<T, n> operator-(const Vec<T, n>& u, const Vec<T, n>& v)
     {
@@ -178,6 +179,7 @@ namespace scp
         return std::move(u);
     }
     
+
     template<typename T, uint64_t n>
     Vec<T, n> operator*(const Vec<T, n>& u, const Vec<T, n>& v)
     {
@@ -208,6 +210,7 @@ namespace scp
         return std::move(u);
     }
     
+
     template<typename T, uint64_t n>
     Vec<T, n> operator/(const Vec<T, n>& u, const Vec<T, n>& v)
     {
@@ -231,6 +234,7 @@ namespace scp
         return std::move(u);
     }
     
+
     template<typename T, uint64_t n>
     Vec<T, n> operator%(const Vec<T, n>& u, const Vec<T, n>& v)
     {
@@ -254,6 +258,7 @@ namespace scp
         return std::move(u);
     }
 
+
     template<typename T, uint64_t n>
     Vec<T, n> operator-(const Vec<T, n>& v)
     {
@@ -265,12 +270,6 @@ namespace scp
     }
 
     template<typename T, uint64_t n>
-    Vec<T, n> operator+(const Vec<T, n>& v)
-    {
-        return v;
-    }
-
-    template<typename T, uint64_t n>
     Vec<T, n>&& operator-(Vec<T, n>&& v)
     {
         for (uint64_t i(0); i < n; i++)
@@ -279,11 +278,19 @@ namespace scp
         return std::move(v);
     }
 
+
+    template<typename T, uint64_t n>
+    Vec<T, n> operator+(const Vec<T, n>& v)
+    {
+        return v;
+    }
+
     template<typename T, uint64_t n>
     Vec<T, n>&& operator+(Vec<T, n>&& v)
     {
         return std::move(v);
     }
+
 
     // Comparators
     

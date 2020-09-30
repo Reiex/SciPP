@@ -30,6 +30,11 @@ namespace scp
             Vec(int64_t value);                 ///< Init all the components of the vector with T(value).
             Vec(const T& value);                ///< Init all the components of the vector with value.
             Vec(const std::vector<T>& values);  ///< Init the vec with the values. Values must be the size of the vector.
+            Vec(const Vec<T, n>& v) = default;
+            Vec(Vec<T, n>&& v) = default;
+
+            Vec<T, n>& operator=(const Vec<T, n>& v) = default;
+            Vec<T, n>& operator=(Vec<T, n>&& v) = default;
 
             T& operator[](uint64_t i);
             const T& operator[](uint64_t i) const;
@@ -47,7 +52,7 @@ namespace scp
             T _values[n];
     };
 
-    // Operators
+    // External operators
 
     template<typename T, uint64_t n>
     Vec<T, n> operator+(const Vec<T, n>& u, const Vec<T, n>& v);
@@ -93,9 +98,10 @@ namespace scp
     template<typename T, uint64_t n>
     Vec<T, n> operator-(const Vec<T, n>& v);
     template<typename T, uint64_t n>
-    Vec<T, n> operator+(const Vec<T, n>& v);
-    template<typename T, uint64_t n>
     Vec<T, n>&& operator-(Vec<T, n>&& v);
+    
+    template<typename T, uint64_t n>
+    Vec<T, n> operator+(const Vec<T, n>& v);
     template<typename T, uint64_t n>
     Vec<T, n>&& operator+(Vec<T, n>&& v);
 

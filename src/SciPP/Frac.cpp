@@ -63,7 +63,7 @@ namespace scp
 	}
 
 
-	// Specific functions
+	// Specific methods
 
 	std::string Rational::decimals(int64_t n)
 	{

@@ -21,8 +21,13 @@ namespace scp
     {
         public:
 
-            Int();              ///< Default constructor. Init the integer to 0.
-            Int(int64_t x);     ///< Init the integer to x.
+            Int();                        ///< Default constructor. Init the integer to 0.
+            Int(int64_t x);               ///< Init the integer to x.
+            Int(const Int& x) = default;
+            Int(Int&& x) = default;
+
+            Int& operator=(const Int& x) = default;
+            Int& operator=(Int&& x) = default;
 
             Int& operator+=(const Int& x);
             Int& operator-=(const Int& x);
@@ -67,7 +72,7 @@ namespace scp
     };
 
 
-    // Operators
+    // External operators
 
     Int operator+(const Int& x, const Int& y);
     Int&& operator+(Int&& x, const Int& y);
@@ -94,6 +99,7 @@ namespace scp
 
     Int operator-(const Int& x);
     Int&& operator-(Int&& x);
+    
     Int operator+(const Int& x);
     Int&& operator+(Int&& x);
 

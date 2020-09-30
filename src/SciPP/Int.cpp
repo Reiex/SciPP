@@ -32,7 +32,7 @@ namespace scp
     }
 
 
-    // Intern operators
+    // Internal operators
 
     Int& Int::operator+=(const Int& x)
     {
@@ -359,7 +359,7 @@ namespace scp
 
 
     // Specific methods
-
+    
     std::string Int::toString() const
     {
         std::stringstream stream;
@@ -398,7 +398,8 @@ namespace scp
         return _sign;
     }
 
-    // Extern operators
+
+    // External operators
 
     Int operator+(const Int& x, const Int& y)
     {
@@ -531,6 +532,7 @@ namespace scp
         x.setSign(!x.getSign());
         return std::move(x);
     }
+
 
     Int operator+(const Int& x)
     {

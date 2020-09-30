@@ -39,7 +39,7 @@ namespace scp
     }
 
 
-    // Intern operators
+    // Internal operators
 
     template<typename T>
     Frac<T>& Frac<T>::operator+=(const Frac<T>& a)
@@ -86,7 +86,7 @@ namespace scp
     }
 
 
-    // Specific functions
+    // Specific methods
 
     template<typename T>
     const T& Frac<T>::num() const
@@ -99,6 +99,9 @@ namespace scp
     {
         return _q;
     }
+
+
+    // Private members
 
     template<typename T>
     void Frac<T>::simplify()
@@ -120,7 +123,8 @@ namespace scp
         _q /= x;
     }
 
-    // Extern operators
+
+    // External operators
 
     template<typename T>
     Frac<T> operator+(const Frac<T>& a, const Frac<T>& b)
@@ -246,16 +250,17 @@ namespace scp
     }
 
     template<typename T>
-    Frac<T> operator+(const Frac<T>& a)
-    {
-        return a;
-    }
-
-    template<typename T>
     Frac<T>&& operator-(Frac<T>&& a)
     {
         a._p = -a._p;
         return std::move(a);
+    }
+
+
+    template<typename T>
+    Frac<T> operator+(const Frac<T>& a)
+    {
+        return a;
     }
 
     template<typename T>

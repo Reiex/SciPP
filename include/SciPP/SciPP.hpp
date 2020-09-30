@@ -5,3 +5,4 @@
 #include <SciPP/Frac.hpp>
 #include <SciPP/Vec.hpp>
 #include <SciPP/Polynomial.hpp>
+#include <SciPP/Mat.hpp>

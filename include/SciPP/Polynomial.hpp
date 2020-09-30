@@ -25,10 +25,15 @@ namespace scp
 
             static const Polynomial X;
 
-            Polynomial();                              ///< Default constructor. Init the polynomial to [T(0)].
-            Polynomial(int64_t x);                     ///< Init the polynomial to [T(x)].
-            Polynomial(const T& x);                    ///< Init the polynomial to [x].
-            Polynomial(const std::vector<T>& values);  ///< Init the polynomial with the values. The index is the exponent.
+            Polynomial();                                  ///< Default constructor. Init the polynomial to [T(0)].
+            Polynomial(int64_t x);                         ///< Init the polynomial to [T(x)].
+            Polynomial(const T& x);                        ///< Init the polynomial to [x].
+            Polynomial(const std::vector<T>& values);      ///< Init the polynomial with the values. The index is the exponent.
+            Polynomial(const Polynomial<T>& p) = default;
+            Polynomial(Polynomial<T>&& p) = default;
+
+            Polynomial<T>& operator=(const Polynomial<T>& p) = default;
+            Polynomial<T>& operator=(Polynomial<T>&& p) = default;
 
             T operator[](uint64_t i);               ///< Get the coefficient in front of X^i.
             const T& operator[](uint64_t i) const;  ///< Get the coefficient in front of X^i.
@@ -113,9 +118,10 @@ namespace scp
     template<typename T>
     Polynomial<T> operator-(const Polynomial<T>& p);
     template<typename T>
-    Polynomial<T> operator+(const Polynomial<T>& p);
-    template<typename T>
     Polynomial<T>&& operator-(Polynomial<T>&& p);
+    
+    template<typename T>
+    Polynomial<T> operator+(const Polynomial<T>& p);
     template<typename T>
     Polynomial<T>&& operator+(Polynomial<T>&& p);
 

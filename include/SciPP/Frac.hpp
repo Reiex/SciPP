@@ -28,10 +28,15 @@ namespace scp
     {
         public:
         
-            Frac();                        ///< Default constructor. Init the fraction to T(0)/T(1).
-            Frac(int64_t x);               ///< Init the fraction to T(x)/T(1).
-            Frac(const T& x);              ///< Init the fraction to x/T(1).
-            Frac(const T& p, const T& q);  ///< Init the fraction p/q.
+            Frac();                            ///< Default constructor. Init the fraction to T(0)/T(1).
+            Frac(int64_t x);                   ///< Init the fraction to T(x)/T(1).
+            Frac(const T& x);                  ///< Init the fraction to x/T(1).
+            Frac(const T& p, const T& q);      ///< Init the fraction p/q.
+            Frac(const Frac<T>& a) = default;
+            Frac(Frac<T>&& a) = default;
+
+            Frac<T>& operator=(const Frac<T>& a) = default;
+            Frac<T>& operator=(Frac<T>&& a) = default;
 
             Frac<T>& operator+=(const Frac<T>& a);
             Frac<T>& operator-=(const Frac<T>& a);
@@ -43,7 +48,7 @@ namespace scp
 
         private:
 
-            void simplify();
+            void simplify();  ///< Reduces the fraction by dividing by gcd(_p, _q) and allowing only _p to be negative.
 
             T _p;
             T _q;
@@ -55,7 +60,7 @@ namespace scp
     };
 
 
-    // Operators
+    // External operators
 
     template<typename T>
     Frac<T> operator+(const Frac<T>& a, const Frac<T>& b);
@@ -94,9 +99,10 @@ namespace scp
     template<typename T>
     Frac<T> operator-(const Frac<T>& a);
     template<typename T>
-    Frac<T> operator+(const Frac<T>& a);
-    template<typename T>
     Frac<T>&& operator-(Frac<T>&& a);
+    
+    template<typename T>
+    Frac<T> operator+(const Frac<T>& a);
     template<typename T>
     Frac<T>&& operator+(Frac<T>&& a);
 
@@ -140,8 +146,6 @@ namespace scp
     std::istream& operator>>(std::istream& stream, Frac<T>& a);
 
 
-    // Rational
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \class Rational
     /// \brief Class for rational numbers manipulation.
@@ -162,6 +166,8 @@ namespace scp
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             std::string decimals(int64_t n);
     };
+
+    // Display
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Rationnel

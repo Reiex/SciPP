@@ -4,6 +4,8 @@
 
 namespace scp
 {
+    // Static attributes
+
     template<typename T>
     const Polynomial<T> Polynomial<T>::X({T(0), T(1)});
 
@@ -57,7 +59,7 @@ namespace scp
     }
     
 
-    // Intern operators
+    // Internal operators
 
     template<typename T>
     Polynomial<T>& Polynomial<T>::operator+=(const Polynomial<T>& p)
@@ -161,7 +163,7 @@ namespace scp
     }
     
 
-    // Specific functions
+    // Call operators
 
     template<typename T>
     T Polynomial<T>::operator()(const T& x) const
@@ -172,6 +174,9 @@ namespace scp
         
         return y;
     }
+
+
+    // Specific methods
 
     template<typename T>
     uint64_t Polynomial<T>::degree() const
@@ -201,6 +206,9 @@ namespace scp
         return Polynomial<T>(coeffs);
     }
 
+
+    // Private members
+
     template<typename T>
     void Polynomial<T>::reduce() const
     {
@@ -218,7 +226,7 @@ namespace scp
     }
 
 
-    // Extern operators
+    // External operators
 
     template<typename T>
     Polynomial<T> operator+(const Polynomial<T>& p, const Polynomial<T>& q)
@@ -372,18 +380,19 @@ namespace scp
     }
 
     template<typename T>
-    Polynomial<T> operator+(const Polynomial<T>& p)
-    {
-        return p;
-    }
-
-    template<typename T>
     Polynomial<T>&& operator-(Polynomial<T>&& p)
     {
         for (uint64_t i(0); i <= p.degree(); i++)
             p[i] = -p[i];
         
         return std::move(p);
+    }
+
+
+    template<typename T>
+    Polynomial<T> operator+(const Polynomial<T>& p)
+    {
+        return p;
     }
 
     template<typename T>
