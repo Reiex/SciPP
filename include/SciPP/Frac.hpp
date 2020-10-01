@@ -5,7 +5,7 @@
 /// \brief Functions and classes for fractions manipulation.
 /// \author Reiex
 /// 
-/// For a more detailed description, see class Int.
+/// For a more detailed description, see class Frac and class Rational.
 /// 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@ namespace scp
 {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \class Frac
-    /// \brief Class for fractions manipulation.
+    /// \brief Class for fractions manipulations.
     /// 
     /// The class Frac is not only intended to be used with integers but can represent any algebraic fraction.
     /// For example, with T=Polynomial, the class represents a rational fraction.
