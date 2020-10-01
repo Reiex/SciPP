@@ -26,11 +26,11 @@ namespace scp
             static const uint64_t M = m;  ///< Number of lines of the matrix.
             static const uint64_t N = n;  ///< Number of columns of the matrix.
 
-            Mat();                                           ///< Default constructor. Init the matrix to 0.
-            Mat(int64_t x);                                  ///< Init the matrix to `x * identity`.
-            Mat(const T& x);                                 ///< Init the matrix to `x * identity`.
-            Mat(const std::vector<T>& diag);                 ///< Init the matrix with its diagonal values. `diag` must be of size `std::min(m, n)`.
-            Mat(const std::vector<std::vector<T>>& values);  ///< Init the matrix directly. `values` must be of size `m` and each element of values must be of size `n`.
+            Mat();                                               ///< Default constructor. Init the matrix to 0.
+            Mat(int64_t x);                                      ///< Init the matrix to `x * identity`.
+            Mat(const T& x);                                     ///< Init the matrix to `x * identity`.
+            Mat(const std::vector<T>& diag);                     ///< Init the matrix with its diagonal values. `diag` must be of size `std::min(m, n)`.
+            Mat(const std::array<std::array<T, n>, m>& values);  ///< Init the matrix directly.
             Mat(const Mat<T, m, n>& a) = default;
             Mat(Mat<T, m, n>&& a) = default;
 

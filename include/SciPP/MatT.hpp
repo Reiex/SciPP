@@ -51,14 +51,8 @@ namespace scp
     }
     
     template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat(const std::vector<std::vector<T>>& values)
+    Mat<T, m, n>::Mat(const std::array<std::array<T, n>, m>& values)
     {
-        if (values.size() == 0)
-            throw std::runtime_error(scippError("Cannot initialize Mat<" + std::to_string(m) + ", " + std::to_string(n) + "> with an empty vector"));
-
-        if (values.size() != m || values[0].size() != n)
-            throw std::runtime_error(scippError("Cannot initialize Mat<" + std::to_string(m) + ", " + std::to_string(n) + "> with " + std::to_string(values.size()) + "x" + std::to_string(values[0].size()) + " values"));
-
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] = values[i][j];

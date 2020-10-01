@@ -28,11 +28,8 @@ namespace scp
     }
 
     template<typename T, uint64_t n>
-    Vec<T, n>::Vec(const std::vector<T>& values)
+    Vec<T, n>::Vec(const std::array<T, n>& values)
     {
-        if (values.size() != n)
-            throw std::runtime_error(scippError("Cannot initialize Vec of size " + std::to_string(n) + " with " + std::to_string(values.size()) + " elements."));
-
         for (uint64_t i(0); i < n; i++)
             _values[i] = values[i];
     }

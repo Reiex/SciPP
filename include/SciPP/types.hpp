@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
@@ -14,6 +15,8 @@ namespace scp
 
     class Int;
 
+    template<typename T> class Quaternion;
+
     template<typename T> class Frac;
     class Rational;
 
@@ -22,8 +25,4 @@ namespace scp
     template<typename T> class Polynomial;
 
     template<typename T, uint64_t m, uint64_t n> class Mat;
-
-    // Pour continuer
-
-    template<typename T> class Quaternion;
 }

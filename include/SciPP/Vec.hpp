@@ -26,10 +26,10 @@ namespace scp
     {
         public:
 
-            Vec();                              ///< Default constructor. Init all the components of the vector with T(0).
-            Vec(int64_t value);                 ///< Init all the components of the vector with T(value).
-            Vec(const T& value);                ///< Init all the components of the vector with value.
-            Vec(const std::vector<T>& values);  ///< Init the vec with the values. Values must be the size of the vector.
+            Vec();                                ///< Default constructor. Init all the components of the vector with T(0).
+            Vec(int64_t value);                   ///< Init all the components of the vector with T(value).
+            Vec(const T& value);                  ///< Init all the components of the vector with value.
+            Vec(const std::array<T, n>& values);  ///< Init the vec with the values.
             Vec(const Vec<T, n>& v) = default;
             Vec(Vec<T, n>&& v) = default;
 
