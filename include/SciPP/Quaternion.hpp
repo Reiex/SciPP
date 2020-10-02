@@ -1,18 +1,32 @@
 #pragma once
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file Quaternion.hpp
+/// \brief Functions and classes for quaternions manipulations.
+/// \author Reiex
+/// 
+/// For a more detailed description, see class Quaternion.
+/// 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <SciPP/types.hpp>
 
 namespace scp
 {
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \class Quaternion
+    /// \brief Class for quaternions manipulations
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
     class Quaternion
     {
         public:
 
-            Quaternion();
-            Quaternion(int64_t x);
-            Quaternion(const T& x);
-            Quaternion(const T& a, const T& b, const T& c, const T& d);
+            Quaternion();                                                                    ///< Default constructor. Init the quaternion to 0.
+            Quaternion(int64_t x);                                                           ///< Init the quaternion to the real `T(x)`.
+            Quaternion(const T& x);                                                          ///< Init the quaternion to the real `x`.
+            Quaternion(const T& aValue, const T& bValue, const T& cValue, const T& dValue);  ///< Init the quaternion to `a + bi + cj + dk`.
+            Quaternion(const std::array<T, 4> values);                                       ///< Init the quaternion with the 4 values `{a, b, c, d}` to `a + bi + cj + dk`.
             Quaternion(const Quaternion<T>& q) = default;
             Quaternion(Quaternion<T>&& q) = default;
 
@@ -24,18 +38,13 @@ namespace scp
             Quaternion<T>& operator*=(const Quaternion<T>& q);
             Quaternion<T>& operator/=(const T& x);
 
-            const T& real() const;
-            void real(const T& a);
-            std::array<T, 3> imag() const;
-            void imag(const T& b, const T& c, const T& d);
-
-        private:
-
-            T _a;
-            T _b;
-            T _c;
-            T _d;
+            T a;
+            T b;
+            T c;
+            T d;
     };
+
+    // External operators
 
     template<typename T>
     Quaternion<T> operator+(const Quaternion<T>& p, const Quaternion<T>& q);
@@ -77,30 +86,35 @@ namespace scp
     template<typename T>
     Quaternion<T>&& operator+(Quaternion<T>&& q);
 
+    // Comparators
+
     template<typename T>
     bool operator==(const Quaternion<T>& p, const Quaternion<T>& q);
     template<typename T>
     bool operator!=(const Quaternion<T>& p, const Quaternion<T>& q);
 
+    // Display
+
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Quaternion<T>& q);
 
+    // Specific functions
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Returns the inverse of a quaternion.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
     Quaternion<T> inverse(const Quaternion<T>& q);
-}
-
-namespace std
-{
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Returns the square of the euclidian norm of a quaternion.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
-    T real(const scp::Quaternion<T>& q);
+    T normSq(const Quaternion<T>& q);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Returns the euclidian norm of a quaternion.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
-    array<T, 3> imag(const scp::Quaternion<T>& q);
-    template<typename T>
-    T abs(const scp::Quaternion<T>& q);
-    template<typename T>
-    T norm(const scp::Quaternion<T>& q);
-    template<typename T>
-    scp::Quaternion<T> conj(const scp::Quaternion<T>& q);
+    T norm(const Quaternion<T>& q);
 }
 
 #include <SciPP/QuaternionT.hpp>
