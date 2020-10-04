@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <complex>
 #include <cstdint>
 #include <iostream>
 #include <sstream>

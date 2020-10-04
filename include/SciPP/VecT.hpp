@@ -313,15 +313,15 @@ namespace scp
     template<typename T, uint64_t n>
     std::ostream& operator<<(std::ostream& stream, const Vec<T, n>& v)
     {
-		stream << "<";
-		for (uint64_t i(0); i < n; i++)
-			if (i == n - 1)
-				stream << v[i];
-			else
-				stream << v[i] << ", ";
-		stream << ">";
+        stream << "<";
+        for (uint64_t i(0); i < n; i++)
+            if (i == n - 1)
+                stream << v[i];
+            else
+                stream << v[i] << ", ";
+        stream << ">";
 
-		return stream;
+        return stream;
     }
 
 
@@ -343,4 +343,67 @@ namespace scp
         return Vec<T, 3>({u[1]*v[2] - u[2]*v[1], u[2]*v[0] - u[0]*v[2], u[0]*v[1] - u[1]*v[0]});
     }
 
+    template<typename T, uint64_t n>
+    Vec<std::complex<T>, n> dft(const Vec<std::complex<T>, n>& f)
+    {
+        Vec<std::complex<T>, n> fh;
+
+        for (uint64_t k(0); k < n; k++)
+            for (uint64_t i(0); i < n; i++)
+                fh[k] += f[i] * std::exp(std::complex<T>(0, -2 * pi * k * i / n));
+
+        return fh;
+    }
+    
+    template<typename T, uint64_t n>
+    Vec<std::complex<T>, n> idft(const Vec<std::complex<T>, n>& fh)
+    {
+        Vec<std::complex<T>, n> f;
+
+        for (uint64_t i(0); i < n; i++)
+            f[i] = std::conj(fh[i]);
+
+        f = dft(f);
+
+        for (uint64_t i(0); i < n; i++)
+            f[i] = std::conj(f[i]);
+
+        return f / std::complex<T>(n);
+    }
+
+    namespace
+    {
+        template<typename T>
+        T dctBase(uint64_t n, uint64_t k, uint64_t i)
+        {
+            if (k == 0)
+                return std::cos(pi * (i + 0.5L) * k / n) / std::sqrt(n);
+            else
+                return std::sqrt(2.0 / n) * std::cos(pi * (i + 0.5) * k / n);
+        }
+    }
+    
+    template<typename T, uint64_t n>
+    Vec<T, n> dct(const Vec<T, n>& f)
+    {
+		Vec<T, n> fh;
+
+		for (uint64_t k(0); k < n; k++)
+			for (uint64_t i(0); i < n; i++)
+				fh[k] += f[i] * dctBase<T>(n, k, i);
+
+		return fh;
+    }
+    
+    template<typename T, uint64_t n>
+    Vec<T, n> idct(const Vec<T, n>& fh)
+    {
+        Vec<T, n> f;
+
+        for (uint64_t k(0); k < n; k++)
+            for (uint64_t i(0); i < n; i++)
+                f[k] += fh[i] * dctBase<T>(n, i, k);
+
+        return f;
+    }
 }

@@ -39,6 +39,7 @@ namespace scp
 
             Mat<T, m, n>& operator+=(const Mat<T, m, n>& a);
             Mat<T, m, n>& operator-=(const Mat<T, m, n>& a);
+            Mat<T, m, n>& operator/=(const T& x);
 
             Vec<T, n>& operator[](uint64_t i);
             const Vec<T, n>& operator[](uint64_t i) const;
@@ -70,6 +71,11 @@ namespace scp
 
     template<typename T, uint64_t m, uint64_t n, uint64_t p>
     Mat<T, m, p> operator*(const Mat<T, m, n>& a, const Mat<T, n, p>& b);
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> operator/(const Mat<T, m, n>& a, const T& x);
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator/(Mat<T, m, n>&& a, const T& x);
 
     template<typename T, uint64_t m, uint64_t n>
     Mat<T, m, n> operator-(const Mat<T, m, n>& a);
@@ -144,6 +150,32 @@ namespace scp
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T, uint64_t n>
     T det(const Mat<T, n, n>& a);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Mat
+    /// \brief Discrete Fourier Transform of a matrix.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<std::complex<T>, m, n> dft(const Mat<std::complex<T>, m, n>& f);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Mat
+    /// \brief Inverse Discrete Fourier Transform of a matrix.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<std::complex<T>, m, n> idft(const Mat<std::complex<T>, m, n>& fh);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Mat
+    /// \brief Discrete Cosine Transform of a matrix. (Type II corrected)
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> dct(const Mat<T, m, n>& f);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Mat
+    /// \brief Inverse Discrete Cosine Transform of a matrix. (Type II corrected)
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> idct(const Mat<T, m, n>& fh);
 }
 
 #include <SciPP/MatT.hpp>

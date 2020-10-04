@@ -67,6 +67,8 @@ namespace scp
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] += a._values[i][j];
+        
+        return *this;
     }
     
     template<typename T, uint64_t m, uint64_t n>
@@ -75,6 +77,18 @@ namespace scp
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] -= a._values[i][j];
+        
+        return *this;
+    }
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>& Mat<T, m, n>::operator/=(const T& x)
+    {
+        for (uint64_t i(0); i < m; i++)
+            for (uint64_t j(0); j < n; j++)
+                _values[i][j] /= x;
+        
+        return *this;
     }
 
 
@@ -180,6 +194,23 @@ namespace scp
         return c;
     }
     
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> operator/(const Mat<T, m, n>& a, const T& x)
+    {
+        Mat<T, m, n> b(a);
+        b /= x;
+
+        return b;
+    }
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n>&& operator/(Mat<T, m, n>&& a, const T& x)
+    {
+        a /= x;
+        return std::move(a);
+    }
+
 
     template<typename T, uint64_t m, uint64_t n>
     Mat<T, m, n> operator-(const Mat<T, m, n>& a)
@@ -411,5 +442,85 @@ namespace scp
             prod *= b[i][i];
 
         return prod;
+    }
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<std::complex<T>, m, n> dft(const Mat<std::complex<T>, m, n>& f)
+    {
+        Mat<std::complex<T>, m, m> wM;
+        Mat<std::complex<T>, n, n> wN;
+
+        for (uint64_t i(0); i < m; i++)
+            for (uint64_t j(0); j < m; j++)
+                wM[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / m));
+
+        for (uint64_t i(0); i < n; i++)
+            for (uint64_t j(0); j < n; j++)
+                wN[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / n));
+
+        return wM * f * wN;
+    }
+
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<std::complex<T>, m, n> idft(const Mat<std::complex<T>, m, n>& fh)
+    {
+        Mat<std::complex<T>, m, n> f;
+
+        for (uint64_t i(0); i < n; i++)
+            for (uint64_t j(0); j < n; j++)
+                f[i][j] = std::conj(fh[i][j]);
+
+        f = dft(f);
+
+        for (uint64_t i(0); i < n; i++)
+            for (uint64_t j(0); j < n; j++)
+                f[i][j] = std::conj(f[i][j]);
+
+        return f / std::complex<T>(m * n, 0);
+    }
+
+    namespace
+    {
+        template<typename T>
+        T dct2DBase(uint64_t M, uint64_t N, uint64_t p, uint64_t q, uint64_t m, uint64_t n)
+        {
+            T r(2 * std::cos(pi * p * (m + 0.5) / M) * std::cos(pi * q * (n + 0.5) / N) / std::sqrt(M*N));
+
+            if (p == 0)
+                r /= std::sqrt(2.0L);
+
+            if (q == 0)
+                r /= std::sqrt(2.0L);
+
+            return r;
+        }
+    }
+    
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> dct(const Mat<T, m, n>& f)
+    {
+        Mat<T, m, n> fh;
+
+        for (uint64_t i(0); i < n; i++)
+            for (uint64_t j(0); j < n; j++)
+                for (uint64_t k(0); k < n; k++)
+                    for (uint64_t l(0); l < n; l++)
+                        fh[i][j] += f[k][l] * dct2DBase<T>(m, n, i, j, k, l);
+
+        return fh;
+    }
+    
+    template<typename T, uint64_t m, uint64_t n>
+    Mat<T, m, n> idct(const Mat<T, m, n>& fh)
+    {
+        Mat<T, m, n> f;
+
+        for (uint64_t i(0); i < n; i++)
+            for (uint64_t j(0); j < n; j++)
+                for (uint64_t k(0); k < n; k++)
+                    for (uint64_t l(0); l < n; l++)
+                        f[i][j] += fh[k][l] * dct2DBase<T>(m, n, k, l, i, j);
+
+        return f;
     }
 }
