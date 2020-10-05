@@ -125,7 +125,7 @@ namespace scp
     /// \relates Int
     /// \brief Input stream operator for class Int
     /// 
-    /// The evaluated regular expression is: `[0-9]+.`
+    /// The evaluated regular expression is: `-?[0-9]+.`
     /// The operator does not consume the last character
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

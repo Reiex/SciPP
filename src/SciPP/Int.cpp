@@ -648,9 +648,18 @@ namespace scp
         char c;
 
         stream.get(c);
+        bool neg(false);
+        if (c == 45)
+        {
+            neg = true;
+            stream.get(c);
+        }
+
         if (c < 48 || c > 57)
         {
             stream.putback(c);
+            if (neg)
+                stream.putback('-');
             stream.setstate(std::ios::failbit);
             return stream;
         }
@@ -672,12 +681,14 @@ namespace scp
                 y = 10 * y + Int((int)c - 48);
                 break;
             default:
-                x = y;
+                x = neg ? -y: y;
                 stream.putback(c);
                 return stream;
             }
             stream.get(c);
         }
+        
+        x = neg ? -y: y;
         return stream;
     }
 

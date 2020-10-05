@@ -584,138 +584,6 @@ namespace
         return "";
     }
 
-    std::string testToInt(Test& test)
-    {
-        test.addSubTest("x > 0", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(161803398874989);
-            if (x.toInt() != 161803398874989)
-                error += "Expected result: 161803398874989. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("x < 0", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-161803398874989);
-            if (x.toInt() != -161803398874989)
-                error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("x = 0", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(0);
-            if (x.toInt() != 0)
-                error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("x = INT64_MAX", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MAX);
-            if (x.toInt() != INT64_MAX)
-                error += "Expected result: " + std::to_string(INT64_MAX) + ". Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("x = INT64_MIN", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MIN);
-            if (x.toInt() != INT64_MIN)
-                error += "Expected result: " + std::to_string(INT64_MIN) + ". Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("x = INT64_MAX + 1", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MAX);
-            x += 1;
-            try
-            {
-                x.toInt();
-                error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-            }
-            catch (std::runtime_error& e)
-            {
-            }
-
-            return error;
-        });
-
-        test.addSubTest("x = INT64_MIN - 1", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MIN);
-            x -= 1;
-            try
-            {
-                x.toInt();
-                error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-            }
-            catch (std::runtime_error& e)
-            {
-            }
-
-            return error;
-        });
-
-        test.addSubTest("x > INT64_MAX", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MAX);
-            x = (x + 2) * (x + 5) * (x + 12);
-            try
-            {
-                x.toInt();
-                error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-            }
-            catch (std::runtime_error& e)
-            {
-            }
-
-            return error;
-        });
-
-        test.addSubTest("x < INT64_MIN", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(INT64_MIN);
-            x = (x + 2) * (x + 5) * (x + 12);
-            try
-            {
-                x.toInt();
-                error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-            }
-            catch (std::runtime_error& e)
-            {
-            }
-
-            return error;
-        });
-
-        return "";
-    }
-
     std::string testComparators(Test& test)
     {
         test.addSubTest("operator==(const Int& x, const Int& y)", [](Test& test)->std::string
@@ -1223,16 +1091,310 @@ namespace
         return "";
     }
 
+    std::string testSpecificMethods(Test& test)
+    {
+        test.addSubTest("Int::toInt()", [](Test& test)->std::string
+        {
+            test.addSubTest("x > 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(161803398874989);
+                if (x.toInt() != 161803398874989)
+                    error += "Expected result: 161803398874989. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x < 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(-161803398874989);
+                if (x.toInt() != -161803398874989)
+                    error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x = 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(0);
+                if (x.toInt() != 0)
+                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x = INT64_MAX", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MAX);
+                if (x.toInt() != INT64_MAX)
+                    error += "Expected result: " + std::to_string(INT64_MAX) + ". Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x = INT64_MIN", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MIN);
+                if (x.toInt() != INT64_MIN)
+                    error += "Expected result: " + std::to_string(INT64_MIN) + ". Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x = INT64_MAX + 1", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MAX);
+                x += 1;
+                try
+                {
+                    x.toInt();
+                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
+                }
+                catch (std::runtime_error& e)
+                {
+                }
+
+                return error;
+            });
+
+            test.addSubTest("x = INT64_MIN - 1", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MIN);
+                x -= 1;
+                try
+                {
+                    x.toInt();
+                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
+                }
+                catch (std::runtime_error& e)
+                {
+                }
+
+                return error;
+            });
+
+            test.addSubTest("x > INT64_MAX", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MAX);
+                x = (x + 2) * (x + 5) * (x + 12);
+                try
+                {
+                    x.toInt();
+                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
+                }
+                catch (std::runtime_error& e)
+                {
+                }
+
+                return error;
+            });
+
+            test.addSubTest("x < INT64_MIN", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(INT64_MIN);
+                x = (x + 2) * (x + 5) * (x + 12);
+                try
+                {
+                    x.toInt();
+                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
+                }
+                catch (std::runtime_error& e)
+                {
+                }
+
+                return error;
+            });
+
+            return "";
+        });
+
+        return "";
+    }
+
+    std::string testSpecificFunctions(Test& test)
+    {
+        test.addSubTest("Int binom(const Int& n, const Int& p)", [](Test& test)->std::string
+        {
+            test.addSubTest("n > p > 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(50, 42));
+                if (x.toInt() != 536878650)
+                    error += "Expected result: 536878650. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("n > p = 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(50, 0));
+                if (x.toInt() != 1)
+                    error += "Expected result: 1. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("n = p = 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(0, 0));
+                if (x.toInt() != 1)
+                    error += "Expected result: 1. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("p > n > 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(50, 100));
+                if (x.toInt() != 0)
+                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("n > 0, p < 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(50, -10));
+                if (x.toInt() != 0)
+                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("n < 0, p < 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(binom(-50, -10));
+                if (x.toInt() != 0)
+                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
+                
+                return error;
+            });
+
+            return "";
+        });
+
+        return "";
+    }
+
     std::string testStream(Test& test)
     {
         test.addSubTest("operator<<(std::ostream& stream, const Int& x)", [](Test& test)->std::string
         {
-            return "Test needs to be implemented.";
+            test.addSubTest("x > 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(161803398874989);
+                std::stringstream stream;
+                stream << x;
+                if (stream.str() != "161803398874989")
+                    error += "Expected result: 161803398874989. Returned result: " + stream.str() + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x < 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(-161803398874989);
+                std::stringstream stream;
+                stream << x;
+                if (stream.str() != "-161803398874989")
+                    error += "Expected result: -161803398874989. Returned result: " + stream.str() + ".\n";
+                
+                return error;
+            });
+            
+            test.addSubTest("x = 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x(0);
+                std::stringstream stream;
+                stream << x;
+                if (stream.str() != "0")
+                    error += "Expected result: 0. Returned result: " + stream.str() + ".\n";
+                
+                return error;
+            });
+
+            return "";
         });
 
         test.addSubTest("operator>>(std::ostream& stream, const Int& x)", [](Test& test)->std::string
         {
-            return "Test needs to be implemented.";
+            test.addSubTest("x > 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x;
+                std::stringstream stream;
+                stream << "161803398874989";
+                stream >> x;
+                if (x.toInt() != 161803398874989)
+                    error += "Expected result: 161803398874989. Returned result: " + std::to_string(x.toInt()) + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x < 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x;
+                std::stringstream stream;
+                stream << "-161803398874989";
+                stream >> x;
+                if (x.toInt() != -161803398874989)
+                    error += "Expected result: -161803398874989. Returned result: " + std::to_string(x.toInt()) + ".\n";
+                
+                return error;
+            });
+
+            test.addSubTest("x = 0", [](Test& test)->std::string
+            {
+                std::string error;
+
+                Int x;
+                std::stringstream stream;
+                stream << "0";
+                stream >> x;
+                if (x.toInt() != 0)
+                    error += "Expected result: 0. Returned result: " + std::to_string(x.toInt()) + ".\n";
+                
+                return error;
+            });
+
+            return "";
         });
 
         return "";
@@ -1274,11 +1436,12 @@ std::string mainInt(Test& test)
     test.addSubTest("Modulo operators", &testModulo);
     test.addSubTest("Unary operators", &testUnary);
 
-    test.addSubTest("Int::toInt()", &testToInt);
-
     test.addSubTest("Comparators", &testComparators);
 
     test.addSubTest("Stream operators", &testStream);
+
+    test.addSubTest("Specific methods", &testSpecificMethods);
+    test.addSubTest("Specific functions", &testSpecificFunctions);
 
     test.addSubTest("Bonus tests", &bonusTests);
 
