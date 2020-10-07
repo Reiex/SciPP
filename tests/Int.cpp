@@ -1,5 +1,6 @@
 #include "main.h"
 
+/*
 namespace
 {
     std::string testConstructor(Test& test)
@@ -1446,4 +1447,12 @@ std::string mainInt(Test& test)
     test.addSubTest("Bonus tests", &bonusTests);
 
     return "";
+}
+*/
+
+TEST(ClassInt, Constructors)
+{
+    printSection("Wololo");
+
+    EXPECT_EQ(0, 0);
 }

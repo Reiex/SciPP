@@ -25,7 +25,6 @@ LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/misc.o \
 			   $(OBJ_LIBRARY_DIR)/Int.o \
 			   $(OBJ_LIBRARY_DIR)/Frac.o
 TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
-			 $(OBJ_TESTS_DIR)/Test.o \
 			 $(OBJ_TESTS_DIR)/Int.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o
 

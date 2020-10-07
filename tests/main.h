@@ -2,12 +2,12 @@
 
 #include <string>
 #include <sstream>
-#include <limits.h>
 #include <iostream>
+
+#include <gtest/gtest.h>
+
 #include <SciPP/SciPP.hpp>
-#include "Test.h"
 
 using namespace scp;
 
-
-std::string mainInt(Test& test);
+void printSection(const std::string& name);

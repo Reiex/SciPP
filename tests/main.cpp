@@ -1,19 +1,12 @@
 #include "main.h"
 
-int main()
+void printSection(const std::string& name)
 {
-    Test mainTest("TESTS OF THE LIBRARY SCIPP", [](Test& test)->std::string {
-        test.addSubTest("INTEGERS", &mainInt);
-        return "";
-    });
+    std::cout << "\e[0;32m[ SECTION  ]\e[0m " << name << std::endl;
+}
 
-    mainTest(0, 3);
-
-    std::cout << std::endl;
-
-    #ifdef SCP_TEST_PAUSE
-    system("pause");
-    #endif
-
-    return 0;
+int main(int argc, char **argv)
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
