@@ -1,44 +1,49 @@
 ###############################################################################
-# VARIABLES D'ENVIRONNEMENT                                                   #
+# ENVIRONMENT VARIABLES                                                       #
 ###############################################################################
 
 
-# Arborescence des sources
-
+# Source directories
 SRC_LIBRARY_DIR = src/SciPP
 SRC_TESTS_DIR = tests
 SRC_EXAMPLES_DIR = examples
 
-# Arborescence des includes
+# Include directory
 INCLUDE_DIR = include
 
-# Arborescence des .obj générés
+# .obj directories
 OBJ_DIR = obj
 OBJ_LIBRARY_DIR = $(OBJ_DIR)/SciPP
 OBJ_TESTS_DIR = $(OBJ_DIR)/tests
 OBJ_EXAMPLES_DIR = $(OBJ_DIR)/examples
 
-# Arborescence des fichiers compilés
+# Compiled library directory
 LIB_DIR = lib
 
-# Fichiers compilés
-LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/misc.o $(OBJ_LIBRARY_DIR)/Int.o $(OBJ_LIBRARY_DIR)/Frac.o
-TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o $(OBJ_TESTS_DIR)/Test.o $(OBJ_TESTS_DIR)/Int.o
+# .obj lists
+LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/misc.o \
+			   $(OBJ_LIBRARY_DIR)/Int.o \
+			   $(OBJ_LIBRARY_DIR)/Frac.o
+TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
+			 $(OBJ_TESTS_DIR)/Test.o \
+			 $(OBJ_TESTS_DIR)/Int.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o
 
 
-# Compilateur utilisé
+# Compiler
 CC = g++
-# Parametres du compilateur
+# Compiler options
 CFLAGS = -I$(INCLUDE_DIR)
-# Parametres du linker
+# Linker options
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
-# Librairies liées
-LDLIBS = -lSciPP -lsfml-graphics -lsfml-window -lsfml-system
+# Libraries linked
+LIBRARY_LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
+TESTS_LDLIBS = -lSciPP $(LIBRARY_LDLIBS) -lgtest -lpthread
+EXAMPLES_LDLIBS = -lSciPP $(LIBRARY_LDLIBS)
 
 
 ###############################################################################
-# REGLES GENERALES                                                            #
+# GENERAL TARGETS                                                             #
 ###############################################################################
 
 
@@ -57,17 +62,17 @@ clean:
 
 
 ###############################################################################
-# REGLES DE COMPILATIONS DE GROUPES                                           #
+# GROUP TARGETS                                                               #
 ###############################################################################
 
 
 SciPP: $(LIB_DIR)
 
 examples: $(LIB_DIR) $(EXAMPLES_OBJS)
-	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(LDFLAGS) $(LDLIBS)
+	$(CC) $(EXAMPLES_OBJS) -o SciPPExamples $(LDFLAGS) $(EXAMPLES_LDLIBS)
 
 tests: $(LIB_DIR) $(TESTS_OBJS)
-	$(CC) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(LDLIBS)
+	$(CC) $(TESTS_OBJS) -o SciPPTests $(LDFLAGS) $(TESTS_LDLIBS)
 
 folders:
 	-rm -rf $(LIB_DIR) $(OBJ_DIR)
@@ -76,7 +81,7 @@ folders:
 
 
 ###############################################################################
-# COMPILATION DE LA BIBLIOTHEQUE CONSTRUITE                                   #
+# LIBRARY BUILDING TARGETS                                                    #
 ###############################################################################
 
 
