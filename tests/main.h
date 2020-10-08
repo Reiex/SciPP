@@ -10,4 +10,4 @@
 
 using namespace scp;
 
-void printSection(const std::string& name);
+void printSection(const std::string& testName, const std::string& sectionName);

@@ -1,8 +1,8 @@
 #include "main.h"
 
-void printSection(const std::string& name)
+void printSection(const std::string& testName, const std::string& sectionName)
 {
-    std::cout << "\e[0;32m[ SECTION  ]\e[0m " << name << std::endl;
+    std::cout << "\e[0;33m[ SECTION  ]\e[0m " << testName << ": " << sectionName << std::endl;
 }
 
 int main(int argc, char **argv)

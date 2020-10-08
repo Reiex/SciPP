@@ -1452,7 +1452,73 @@ std::string mainInt(Test& test)
 
 TEST(ClassInt, Constructors)
 {
-    printSection("Wololo");
+    std::string testName("ClassInt.Constructors");
 
+    printSection(testName, "Wololo");
     EXPECT_EQ(0, 0);
+}
+
+TEST(ClassInt, AssignmentOperators)
+{
+
+}
+
+TEST(ClassInt, Destructor)
+{
+
+}
+
+TEST(ClassInt, AdditionOperators)
+{
+
+}
+
+TEST(ClassInt, SubstractionOperators)
+{
+
+}
+
+TEST(ClassInt, MultiplicationOperators)
+{
+
+}
+
+TEST(ClassInt, DivisionOperators)
+{
+    
+}
+
+TEST(ClassInt, ModuloOperators)
+{
+    
+}
+
+TEST(ClassInt, UnaryOperators)
+{
+    
+}
+
+TEST(ClassInt, Comparators)
+{
+    
+}
+
+TEST(ClassInt, StreamOperators)
+{
+    
+}
+
+TEST(ClassInt, SpecificMethods)
+{
+    
+}
+
+TEST(ClassInt, SpecificFunctions)
+{
+    
+}
+
+TEST(ClassInt, BonusTests)
+{
+    
 }
