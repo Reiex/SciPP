@@ -1,1524 +1,811 @@
 #include "main.h"
 
-/*
-namespace
-{
-    std::string testConstructor(Test& test)
-    {
-        test.addSubTest("Int::Int()", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x;
-            if (x.toString() != "0")
-                error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Int::Int(int64_t x)", [](Test& test)->std::string
-        {
-            test.addSubTest("x = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0);
-                if (x.toString() != "0")
-                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989);
-                if (x.toString() != "161803398874989")
-                    error += "Expected result: 161803398874989. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989);
-                if (x.toString() != "-161803398874989")
-                    error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("Int::Int(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926535), y(x);
-            if (y.toString() != "31415926535")
-                error += "Expected result: 31415926535. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Int::Int(Int&& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926535), y(std::move(x));
-            if (y.toString() != "31415926535")
-                error += "Expected result: 31415926535. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        return "";
-    }
-
-    std::string testAssignment(Test& test)
-    {
-        test.addSubTest("Int::operator=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-161803398874989), y;
-            y = x;
-            if (y.toString() != "-161803398874989")
-                error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Int::operator=(Int&& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-161803398874989), y;
-            y = std::move(x);
-            if (y.toString() != "-161803398874989")
-                error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Bonus tests", [](Test& test)->std::string
-        {
-            test.addSubTest("Chained copy assignement", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y, z, t;
-                t = z = y = x;
-                if (x.toString() != "-161803398874989")
-                    error += "#1 - Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-                if (y.toString() != "-161803398874989")
-                    error += "#2 - Expected result: -161803398874989. Returned result: " + y.toString() + ".\n";
-                if (z.toString() != "-161803398874989")
-                    error += "#3 - Expected result: -161803398874989. Returned result: " + z.toString() + ".\n";
-                if (t.toString() != "-161803398874989")
-                    error += "#4 - Expected result: -161803398874989. Returned result: " + t.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Chained copy and move assignement", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y, z, t;
-                t = std::move(z = y = x);
-                if (x.toString() != "-161803398874989")
-                    error += "#1 - Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-                if (y.toString() != "-161803398874989")
-                    error += "#2 - Expected result: -161803398874989. Returned result: " + y.toString() + ".\n";
-                if (t.toString() != "-161803398874989")
-                    error += "#3 - Expected result: -161803398874989. Returned result: " + t.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Assignment by an int64_t directly", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x;
-                x = -161803398874989;
-                if (x.toString() != "-161803398874989")
-                    error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testDestructor(Test& test)
-    {
-        test.addSubTest("Destructor on a simple integer", [](Test& test)->std::string
-        {
-            Int* x(new Int(161803398874989));
-            delete x;
-            return "";
-        });
-
-        test.addSubTest("Destructor on an integer created by copy", [](Test& test)->std::string
-        {
-            Int* x(new Int(161803398874989)), *y(new Int(*x));
-            delete x;
-            delete y;
-            return "";
-        });
-
-        test.addSubTest("Destructor on an integer created by move constructor", [](Test& test)->std::string
-        {
-            Int* x(new Int(161803398874989)), *y(new Int(std::move(*x)));
-            delete x;
-            delete y;
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testAddition(Test& test)
-    {
-        test.addSubTest("Int::operator+=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-16180339887);
-            x += y;
-            if (x.toString() != "15235586649")
-                error += "Expected result: 15235586649. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-16180339887), z;
-            z = x + y;
-            if (z.toString() != "15235586649")
-                error += "Expected result: 15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(Int&& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-16180339887), z;
-            z = std::move(x) + y;
-            if (z.toString() != "15235586649")
-                error += "Expected result: 15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(const Int& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-16180339887), z;
-            z = x + std::move(y);
-            if (z.toString() != "15235586649")
-                error += "Expected result: 15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(Int&& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-16180339887), z;
-            z = std::move(x) + std::move(y);
-            if (z.toString() != "15235586649")
-                error += "Expected result: 15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        return "";
-    }
-
-    std::string testSubstraction(Test& test)
-    {
-        test.addSubTest("Int::operator-=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-31415926536), y(-16180339887);
-            x -= y;
-            if (x.toString() != "-15235586649")
-                error += "Expected result: -15235586649. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator-(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-31415926536), y(-16180339887), z;
-            z = x - y;
-            if (z.toString() != "-15235586649")
-                error += "Expected result: -15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator-(Int&& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-31415926536), y(-16180339887), z;
-            z = std::move(x) - y;
-            if (z.toString() != "-15235586649")
-                error += "Expected result: -15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator-(const Int& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-31415926536), y(-16180339887), z;
-            z = x - std::move(y);
-            if (z.toString() != "-15235586649")
-                error += "Expected result: -15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-        
-        test.addSubTest("operator-(Int&& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(-31415926536), y(-16180339887), z;
-            z = std::move(x) - std::move(y);
-            if (z.toString() != "-15235586649")
-                error += "Expected result: -15235586649. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        return "";
-    }
-
-    std::string testMultiplication(Test& test)
-    {
-        test.addSubTest("Int::operator*=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31416), y(-1618);
-            x *= y;
-            if (x.toString() != "-50831088")
-                error += "Expected result: -50831088. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator*(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31416), y(-1618), z;
-            z = x * y;
-            if (z.toString() != "-50831088")
-                error += "Expected result: -50831088. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator*(Int&& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31416), y(-1618), z;
-            z = std::move(x) * y;
-            if (z.toString() != "-50831088")
-                error += "Expected result: -50831088. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator*(const Int& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31416), y(-1618), z;
-            z = x * std::move(y);
-            if (z.toString() != "-50831088")
-                error += "Expected result: -50831088. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator*(Int&& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31416), y(-1618), z;
-            z = std::move(x) * std::move(y);
-            if (z.toString() != "-50831088")
-                error += "Expected result: -50831088. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        return "";
-    }
-
-    std::string testDivision(Test& test)
-    {
-        test.addSubTest("Int::operator/=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618);
-            x /= y;
-            if (x.toString() != "-19416518")
-                error += "Expected result: -19416518. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator/(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = x / y;
-            if (z.toString() != "-19416518")
-                error += "Expected result: -19416518. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator/(Int&& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = std::move(x) / y;
-            if (z.toString() != "-19416518")
-                error += "Expected result: -19416518. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator/(Int&& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = std::move(x) / std::move(y);
-            if (z.toString() != "-19416518")
-                error += "Expected result: -19416518. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Bonus tests", [](Test& test)->std::string
-        {
-            test.addSubTest("Division by 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                try
-                {
-                    Int x(31415926536);
-                    x /= 0;
-                    error += "The division by 0 worked. Obtained value: " + x.toString() + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testModulo(Test& test)
-    {
-        test.addSubTest("Int::operator%=(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618);
-            x %= y;
-            if (x.toString() != "412")
-                error += "Expected result: 412. Returned result: " + x.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator%(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = x % y;
-            if (z.toString() != "412")
-                error += "Expected result: 412. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator%(Int&& x, const Int& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = std::move(x) % y;
-            if (z.toString() != "412")
-                error += "Expected result: 412. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator%(Int&& x, Int&& y)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(31415926536), y(-1618), z;
-            z = std::move(x) % std::move(y);
-            if (z.toString() != "412")
-                error += "Expected result: 412. Returned result: " + z.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("Bonus tests", [](Test& test)->std::string
-        {
-            test.addSubTest("Modulo by zero", [](Test& test)->std::string
-            {
-                std::string error;
-
-                try
-                {
-                    Int x(31415926536);
-                    x %= 0;
-                    error += "The modulo by 0 worked. Obtained value: " + x.toString() + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-        
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testUnary(Test& test)
-    {
-        test.addSubTest("operator-(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(161803398874989), y;
-            y = -x;
-            if (y.toString() != "-161803398874989")
-                error += "Expected result: -161803398874989. Returned result: " + y.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(const Int& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(161803398874989), y;
-            y = +x;
-            if (y.toString() != "161803398874989")
-                error += "Expected result: 161803398874989. Returned result: " + y.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator-(Int&& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(161803398874989), y;
-            y = -std::move(x);
-            if (y.toString() != "-161803398874989")
-                error += "Expected result: -161803398874989. Returned result: " + y.toString() + ".\n";
-            
-            return error;
-        });
-
-        test.addSubTest("operator+(Int&& x)", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(161803398874989), y;
-            y = +std::move(x);
-            if (y.toString() != "161803398874989")
-                error += "Expected result: 161803398874989. Returned result: " + y.toString() + ".\n";
-            
-            return error;
-        });
-
-        return "";
-    }
-
-    std::string testComparators(Test& test)
-    {
-        test.addSubTest("operator==(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (!(x == y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
-                y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
-                if (!(x == y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Different integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(-31415926);
-                if (x == y)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = 161803398874989;
-                y = -161803398874989;
-                if (x == y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                x = ((uint64_t) UINT32_MAX) + 1;
-                y = 0;
-                if (x == y)
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (!(x == y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (!(x == y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (!(x == y))
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator!=(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (x != y)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
-                y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
-                if (x != y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Different integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(-31415926);
-                if (!(x != y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = 161803398874989;
-                y = -161803398874989;
-                if (!(x != y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                x = ((uint64_t) UINT32_MAX) + 1;
-                y = 0;
-                if (!(x != y))
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (x != y)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (x != y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (x != y)
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator>(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Different integers, same signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(31415926536);
-                if (!(x > y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (y > x)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Different integers, different signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(31415926536);
-                if (!(y > x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Positive equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (y > x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Negative equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(-161803398874989);
-                if (y > x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (y > x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (y > x)
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#4 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (y > x)
-                    error += "#5 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x > y)
-                    error += "#6 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator<(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Different integers, same signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(31415926536);
-                if (x < y)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(y < x))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Different integers, different signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(31415926536);
-                if (y < x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x < y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Positive equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (y < x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x < y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Negative equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(-161803398874989);
-                if (y < x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x < y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (y < x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x < y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (y < x)
-                    error += "#3 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x < y)
-                    error += "#4 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (y < x)
-                    error += "#5 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x < y)
-                    error += "#6 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator>=(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Different integers, same signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(31415926536);
-                if (!(x >= y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (y >= x)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Different integers, different signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(31415926536);
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (x >= y)
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Positive equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x >= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Negative equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(-161803398874989);
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x >= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x >= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x >= y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (!(y >= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x >= y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator<=(const Int& x, const Int& y)", [](Test& test)->std::string
-        {
-            test.addSubTest("Different integers, same signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(31415926536);
-                if (x <= y)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(y <= x))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Different integers, different signs", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(31415926536);
-                if (y <= x)
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            test.addSubTest("Positive equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989), y(161803398874989);
-                if (!(y <= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Negative equal integers", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989), y(-161803398874989);
-                if (!(y <= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("Comparisons to 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0), y(-x);
-                if (!(y <= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#2 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                y = x - x;
-                x -= x;
-                if (!(y <= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                x = -161803398874989;
-                x -= x;
-                y = 0;
-                if (!(y <= x))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                if (!(x <= y))
-                    error += "#1 - Unexpected result. x: " + x.toString() + ", y: " + y.toString() + ".\n";
-
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testSpecificMethods(Test& test)
-    {
-        test.addSubTest("Int::toInt()", [](Test& test)->std::string
-        {
-            test.addSubTest("x > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989);
-                if (x.toInt() != 161803398874989)
-                    error += "Expected result: 161803398874989. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989);
-                if (x.toInt() != -161803398874989)
-                    error += "Expected result: -161803398874989. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0);
-                if (x.toInt() != 0)
-                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x = INT64_MAX", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MAX);
-                if (x.toInt() != INT64_MAX)
-                    error += "Expected result: " + std::to_string(INT64_MAX) + ". Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x = INT64_MIN", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MIN);
-                if (x.toInt() != INT64_MIN)
-                    error += "Expected result: " + std::to_string(INT64_MIN) + ". Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x = INT64_MAX + 1", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MAX);
-                x += 1;
-                try
-                {
-                    x.toInt();
-                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-
-            test.addSubTest("x = INT64_MIN - 1", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MIN);
-                x -= 1;
-                try
-                {
-                    x.toInt();
-                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-
-            test.addSubTest("x > INT64_MAX", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MAX);
-                x = (x + 2) * (x + 5) * (x + 12);
-                try
-                {
-                    x.toInt();
-                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-
-            test.addSubTest("x < INT64_MIN", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(INT64_MIN);
-                x = (x + 2) * (x + 5) * (x + 12);
-                try
-                {
-                    x.toInt();
-                    error += "The Int has been converted into int64_t. Obtained value: " + std::to_string(x.toInt()) + ".";
-                }
-                catch (std::runtime_error& e)
-                {
-                }
-
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testSpecificFunctions(Test& test)
-    {
-        test.addSubTest("Int binom(const Int& n, const Int& p)", [](Test& test)->std::string
-        {
-            test.addSubTest("n > p > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(50, 42));
-                if (x.toInt() != 536878650)
-                    error += "Expected result: 536878650. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("n > p = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(50, 0));
-                if (x.toInt() != 1)
-                    error += "Expected result: 1. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("n = p = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(0, 0));
-                if (x.toInt() != 1)
-                    error += "Expected result: 1. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("p > n > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(50, 100));
-                if (x.toInt() != 0)
-                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("n > 0, p < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(50, -10));
-                if (x.toInt() != 0)
-                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("n < 0, p < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(binom(-50, -10));
-                if (x.toInt() != 0)
-                    error += "Expected result: 0. Returned result: " + x.toString() + ".\n";
-                
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string testStream(Test& test)
-    {
-        test.addSubTest("operator<<(std::ostream& stream, const Int& x)", [](Test& test)->std::string
-        {
-            test.addSubTest("x > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(161803398874989);
-                std::stringstream stream;
-                stream << x;
-                if (stream.str() != "161803398874989")
-                    error += "Expected result: 161803398874989. Returned result: " + stream.str() + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(-161803398874989);
-                std::stringstream stream;
-                stream << x;
-                if (stream.str() != "-161803398874989")
-                    error += "Expected result: -161803398874989. Returned result: " + stream.str() + ".\n";
-                
-                return error;
-            });
-            
-            test.addSubTest("x = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x(0);
-                std::stringstream stream;
-                stream << x;
-                if (stream.str() != "0")
-                    error += "Expected result: 0. Returned result: " + stream.str() + ".\n";
-                
-                return error;
-            });
-
-            return "";
-        });
-
-        test.addSubTest("operator>>(std::ostream& stream, const Int& x)", [](Test& test)->std::string
-        {
-            test.addSubTest("x > 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x;
-                std::stringstream stream;
-                stream << "161803398874989";
-                stream >> x;
-                if (x.toInt() != 161803398874989)
-                    error += "Expected result: 161803398874989. Returned result: " + std::to_string(x.toInt()) + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x < 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x;
-                std::stringstream stream;
-                stream << "-161803398874989";
-                stream >> x;
-                if (x.toInt() != -161803398874989)
-                    error += "Expected result: -161803398874989. Returned result: " + std::to_string(x.toInt()) + ".\n";
-                
-                return error;
-            });
-
-            test.addSubTest("x = 0", [](Test& test)->std::string
-            {
-                std::string error;
-
-                Int x;
-                std::stringstream stream;
-                stream << "0";
-                stream >> x;
-                if (x.toInt() != 0)
-                    error += "Expected result: 0. Returned result: " + std::to_string(x.toInt()) + ".\n";
-                
-                return error;
-            });
-
-            return "";
-        });
-
-        return "";
-    }
-
-    std::string bonusTests(Test& test)
-    {
-        test.addSubTest("Factorial round-trip", [](Test& test)->std::string
-        {
-            std::string error;
-
-            Int x(1);
-            for (int i(1); i < 100; i++)
-                x *= i;
-
-            for (int i(99); i > 0; i--)
-                x /= i;
-
-            if (x != 1)
-                error += "Expected result: 1. Returned result: " + x.toString() + ".\n";
-
-            return error;
-        });
-
-        return "";
-    }
-}
-
-std::string mainInt(Test& test)
-{
-    test.addSubTest("Constructors", &testConstructor);
-    test.addSubTest("Assignment operators", &testAssignment);
-    test.addSubTest("Destructor", &testDestructor);
-
-    test.addSubTest("Addition operators", &testAddition);
-    test.addSubTest("Substraction operators", &testSubstraction);
-    test.addSubTest("Multiplication operators", &testMultiplication);
-    test.addSubTest("Division operators", &testDivision);
-    test.addSubTest("Modulo operators", &testModulo);
-    test.addSubTest("Unary operators", &testUnary);
-
-    test.addSubTest("Comparators", &testComparators);
-
-    test.addSubTest("Stream operators", &testStream);
-
-    test.addSubTest("Specific methods", &testSpecificMethods);
-    test.addSubTest("Specific functions", &testSpecificFunctions);
-
-    test.addSubTest("Bonus tests", &bonusTests);
-
-    return "";
-}
-*/
 
 TEST(ClassInt, Constructors)
 {
     std::string testName("ClassInt.Constructors");
 
-    printSection(testName, "Wololo");
-    EXPECT_EQ(0, 0);
+    {
+        printSection(testName, "Int::Int()");
+
+        Int x;
+        EXPECT_EQ(x.toInt(), 0);
+    }
+    
+    {
+        printSection(testName, "Int::Int(int64_t x)");
+
+        Int x(0);
+        EXPECT_EQ(x.toInt(), 0);
+
+        Int y(161803398874989);
+        EXPECT_EQ(y.toInt(), 161803398874989);
+
+        Int z(-161803398874989);
+        EXPECT_EQ(z.toInt(), -161803398874989);
+    }
+    
+    {
+        printSection(testName, "Int::Int(const Int& x)");
+
+        Int x(31415926535), y(x);
+        EXPECT_EQ(x.toInt(), 31415926535);
+        EXPECT_EQ(y.toInt(), 31415926535);
+    }
+    
+    {
+        printSection(testName, "Int::Int(Int&& x)");
+
+        Int x(31415926535), y(std::move(x));
+        EXPECT_EQ(y.toInt(), 31415926535);
+    }
 }
 
 TEST(ClassInt, AssignmentOperators)
 {
+    std::string testName("ClassInt.AssignmentOperators");
 
+    {
+        printSection(testName, "Int::operator=(const Int& x)");
+
+        Int x(-161803398874989), y;
+        y = x;
+        EXPECT_EQ(x.toInt(), -161803398874989);
+        EXPECT_EQ(y.toInt(), -161803398874989);
+    }
+
+    {
+        printSection(testName, "Int::operator=(Int&& x)");
+
+        Int x(-161803398874989), y;
+        y = std::move(x);
+        EXPECT_EQ(y.toInt(), -161803398874989);
+    }
+
+    {
+        printSection(testName, "Bonus tests");
+
+        {
+            Int x(-161803398874989), y, z, t;
+            t = z = y = x;
+            EXPECT_EQ(x.toInt(), -161803398874989);
+            EXPECT_EQ(y.toInt(), -161803398874989);
+            EXPECT_EQ(z.toInt(), -161803398874989);
+            EXPECT_EQ(t.toInt(), -161803398874989);
+        }
+
+        {
+            Int x(-161803398874989), y, z, t;
+            t = std::move(z = y = x);
+            EXPECT_EQ(x.toInt(), -161803398874989);
+            EXPECT_EQ(y.toInt(), -161803398874989);
+            EXPECT_EQ(t.toInt(), -161803398874989);
+        }
+
+        {
+            Int x;
+            x = -161803398874989;
+            EXPECT_EQ(x.toInt(), -161803398874989);
+        }
+    }
 }
 
 TEST(ClassInt, Destructor)
 {
+    std::string testName("ClassInt.Destructor");
 
+    {
+        printSection(testName, "Destructor on a simple integer");
+
+        Int* x(new Int(161803398874989));
+        EXPECT_NO_THROW(delete x);
+    }
+
+    {
+        printSection(testName, "Destructor on an integer created by copy");
+
+        Int* x(new Int(161803398874989)), *y(new Int(*x));
+        EXPECT_NO_THROW(delete x);
+        EXPECT_NO_THROW(delete y);
+    }
+
+    {
+        printSection(testName, "Destructor on an integer created by move constructor");
+
+        Int* x(new Int(161803398874989)), *y(new Int(std::move(*x)));
+        EXPECT_NO_THROW(delete x);
+        EXPECT_NO_THROW(delete y);
+    }
 }
 
 TEST(ClassInt, AdditionOperators)
 {
+    std::string testName("ClassInt.AdditionOperators");
 
+    {
+        printSection(testName, "Int::operator+=(const Int& x)");
+
+        Int x(31415926536), y(-16180339887);
+        x += y;
+        EXPECT_EQ(x.toInt(), 15235586649);
+    }
+
+    {
+        printSection(testName, "operator+(const Int& x, const Int& y)");
+
+        Int x(31415926536), y(-16180339887), z;
+        z = x + y;
+        EXPECT_EQ(z.toInt(), 15235586649);
+    }
+
+    {
+        printSection(testName, "operator+(Int&& x, const Int& y)");
+
+        Int x(31415926536), y(-16180339887), z;
+        z = std::move(x) + y;
+        EXPECT_EQ(z.toInt(), 15235586649);
+    }
+
+    {
+        printSection(testName, "operator+(const Int& x, Int&& y)");
+
+        Int x(31415926536), y(-16180339887), z;
+        z = x + std::move(y);
+        EXPECT_EQ(z.toInt(), 15235586649);
+    }
+
+    {
+        printSection(testName, "operator+(Int&& x, Int&& y)");
+
+        Int x(31415926536), y(-16180339887), z;
+        z = std::move(x) + std::move(y);
+        EXPECT_EQ(z.toInt(), 15235586649);
+    }
 }
 
 TEST(ClassInt, SubstractionOperators)
 {
+    std::string testName("ClassInt.SubstractionOperators");
 
+    {
+        printSection(testName, "Int::operator-=(const Int& x)");
+
+        Int x(-31415926536), y(-16180339887);
+        x -= y;
+        EXPECT_EQ(x.toInt(), -15235586649);
+    }
+
+    {
+        printSection(testName, "operator-(const Int& x, const Int& y)");
+
+        Int x(-31415926536), y(-16180339887), z;
+        z = x - y;
+        EXPECT_EQ(z.toInt(), -15235586649);
+    }
+
+    {
+        printSection(testName, "operator-(Int&& x, const Int& y)");
+
+        Int x(-31415926536), y(-16180339887), z;
+        z = std::move(x) - y;
+        EXPECT_EQ(z.toInt(), -15235586649);
+    }
+
+    {
+        printSection(testName, "operator-(const Int& x, Int&& y)");
+
+        Int x(-31415926536), y(-16180339887), z;
+        z = x - std::move(y);
+        EXPECT_EQ(z.toInt(), -15235586649);
+    }
+
+    {
+        printSection(testName, "operator-(Int&& x, Int&& y)");
+
+        Int x(-31415926536), y(-16180339887), z;
+        z = std::move(x) - std::move(y);
+        EXPECT_EQ(z.toInt(), -15235586649);
+    }
 }
 
 TEST(ClassInt, MultiplicationOperators)
 {
+    std::string testName("ClassInt.MultiplicationOperators");
 
+    {
+        printSection(testName, "Int::operator*=(const Int& x)");
+
+        Int x(31416), y(-1618);
+        x *= y;
+        EXPECT_EQ(x.toInt(), -50831088);
+    }
+
+    {
+        printSection(testName, "operator*(const Int& x, const Int& y)");
+
+        Int x(31416), y(-1618), z;
+        z = x * y;
+        EXPECT_EQ(z.toInt(), -50831088);
+    }
+
+    {
+        printSection(testName, "operator*(Int&& x, const Int& y)");
+
+        Int x(31416), y(-1618), z;
+        z = std::move(x) * y;
+        EXPECT_EQ(z.toInt(), -50831088);
+    }
+
+    {
+        printSection(testName, "operator*(const Int& x, Int&& y)");
+
+        Int x(31416), y(-1618), z;
+        z = x * std::move(y);
+        EXPECT_EQ(z.toInt(), -50831088);
+    }
+
+    {
+        printSection(testName, "operator*(Int&& x, Int&& y)");
+
+        Int x(31416), y(-1618), z;
+        z = std::move(x) * std::move(y);
+        EXPECT_EQ(z.toInt(), -50831088);
+    }
 }
 
 TEST(ClassInt, DivisionOperators)
 {
-    
+    std::string testName("ClassInt.DivisionOperators");
+
+    {
+        printSection(testName, "Int::operator/=(const Int& x)");
+
+        Int x(31415926536), y(-1618);
+        x /= y;
+        EXPECT_EQ(x.toInt(), -19416518);
+    }
+
+    {
+        printSection(testName, "operator/(const Int& x, const Int& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = x / y;
+        EXPECT_EQ(z.toInt(), -19416518);
+    }
+
+    {
+        printSection(testName, "operator/(Int&& x, const Int& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = std::move(x) / y;
+        EXPECT_EQ(z.toInt(), -19416518);
+    }
+
+    {
+        printSection(testName, "operator/(Int&& x, Int&& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = std::move(x) / std::move(y);
+        EXPECT_EQ(z.toInt(), -19416518);
+    }
 }
 
 TEST(ClassInt, ModuloOperators)
 {
-    
+    std::string testName("ClassInt.ModuloOperators");
+
+    {
+        printSection(testName, "Int::operator%=(const Int& x)");
+
+        Int x(31415926536), y(-1618);
+        x %= y;
+        EXPECT_EQ(x.toInt(), 412);
+    }
+
+    {
+        printSection(testName, "operator%(const Int& x, const Int& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = x % y;
+        EXPECT_EQ(z.toInt(), 412);
+    }
+
+    {
+        printSection(testName, "operator%(Int&& x, const Int& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = std::move(x) % y;
+        EXPECT_EQ(z.toInt(), 412);
+    }
+
+    {
+        printSection(testName, "operator%(Int&& x, Int&& y)");
+
+        Int x(31415926536), y(-1618), z;
+        z = std::move(x) % std::move(y);
+        EXPECT_EQ(z.toInt(), 412);
+    }
 }
 
 TEST(ClassInt, UnaryOperators)
 {
-    
+    std::string testName("ClassInt.UnaryOperators");
+
+    {
+        printSection(testName, "operator-(const Int& x)");
+
+        Int x(161803398874989), y;
+        y = -x;
+        EXPECT_EQ(x.toInt(), 161803398874989);
+        EXPECT_EQ(y.toInt(), -161803398874989);
+    }
+
+    {
+        printSection(testName, "operator+(const Int& x)");
+
+        Int x(161803398874989), y;
+        y = +x;
+        EXPECT_EQ(x.toInt(), 161803398874989);
+        EXPECT_EQ(y.toInt(), 161803398874989);
+    }
+
+    {
+        printSection(testName, "operator-(Int&& x)");
+
+        Int x(161803398874989), y;
+        y = -std::move(x);
+        EXPECT_EQ(y.toInt(), -161803398874989);
+    }
+
+    {
+        printSection(testName, "operator+(Int&& x)");
+
+        Int x(161803398874989), y;
+        y = +std::move(x);
+        EXPECT_EQ(y.toInt(), 161803398874989);
+    }
 }
 
 TEST(ClassInt, Comparators)
 {
-    
+    std::string testName("ClassInt.Comparators");
+
+    {
+        printSection(testName, "operator==(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x == y, true);
+        
+            x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
+            y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
+            EXPECT_EQ(x == y, true);
+        }
+
+        {
+            Int x(161803398874989), y(-31415926);
+            EXPECT_EQ(x == y, false);
+
+            x = 161803398874989;
+            y = -161803398874989;
+            EXPECT_EQ(x == y, false);
+        
+            x = ((uint64_t) UINT32_MAX) + 1;
+            y = 0;
+            EXPECT_EQ(x == y, false);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x == y, true);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x == y, true);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x == y, true);
+        }
+    }
+
+    {
+        printSection(testName, "operator!=(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x != y, false);
+        
+            x = (x + 3 % 50) * (x + 10) * (x - 12) * x / 7;
+            y = (y + 3 % 50) * (y + 10) * (y - 12) * y / 7;
+            EXPECT_EQ(x != y, false);
+        }
+
+        {
+            Int x(161803398874989), y(-31415926);
+            EXPECT_EQ(x != y, true);
+
+            x = 161803398874989;
+            y = -161803398874989;
+            EXPECT_EQ(x != y, true);
+        
+            x = ((uint64_t) UINT32_MAX) + 1;
+            y = 0;
+            EXPECT_EQ(x != y, true);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x != y, false);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x != y, false);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x != y, false);
+        }
+    }
+
+    {
+        printSection(testName, "operator>(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(31415926536);
+            EXPECT_EQ(x > y, true);
+            EXPECT_EQ(y > x, false);
+        }
+
+        {
+            Int x(-161803398874989), y(31415926536);
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, true);
+        }
+
+        {
+           Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, false);
+        }
+
+        {
+           Int x(-161803398874989), y(-161803398874989);
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, false);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, false);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, false);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x > y, false);
+            EXPECT_EQ(y > x, false);
+        }
+    }
+
+    {
+        printSection(testName, "operator<(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(31415926536);
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, true);
+        }
+
+        {
+            Int x(-161803398874989), y(31415926536);
+            EXPECT_EQ(x < y, true);
+            EXPECT_EQ(y < x, false);
+        }
+
+        {
+           Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, false);
+        }
+
+        {
+           Int x(-161803398874989), y(-161803398874989);
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, false);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, false);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, false);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x < y, false);
+            EXPECT_EQ(y < x, false);
+        }
+    }
+
+    {
+        printSection(testName, "operator>=(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(31415926536);
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, false);
+        }
+
+        {
+            Int x(-161803398874989), y(31415926536);
+            EXPECT_EQ(x >= y, false);
+            EXPECT_EQ(y >= x, true);
+        }
+
+        {
+           Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, true);
+        }
+
+        {
+           Int x(-161803398874989), y(-161803398874989);
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, true);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, true);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, true);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x >= y, true);
+            EXPECT_EQ(y >= x, true);
+        }
+    }
+
+    {
+        printSection(testName, "operator<=(const Int& x, const Int& y)");
+
+        {
+            Int x(161803398874989), y(31415926536);
+            EXPECT_EQ(x <= y, false);
+            EXPECT_EQ(y <= x, true);
+        }
+
+        {
+            Int x(-161803398874989), y(31415926536);
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, false);
+        }
+
+        {
+           Int x(161803398874989), y(161803398874989);
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, true);
+        }
+
+        {
+           Int x(-161803398874989), y(-161803398874989);
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, true);
+        }
+
+        {
+            Int x(0), y(-x);
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, true);
+
+            x = -161803398874989;
+            y = x - x;
+            x -= x;
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, true);
+
+            x = -161803398874989;
+            x -= x;
+            y = 0;
+            EXPECT_EQ(x <= y, true);
+            EXPECT_EQ(y <= x, true);
+        }
+    }
 }
 
 TEST(ClassInt, StreamOperators)
 {
-    
+    std::string testName("ClassInt.StreamOperators");
+
+    {
+        printSection(testName, "operator<<(std::ostream& stream, const Int& x)");
+
+        {
+            Int x(161803398874989);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "161803398874989");
+        }
+
+        {
+            Int x(-161803398874989);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "-161803398874989");
+        }
+
+        {
+            Int x(0);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "0");
+        }
+    }
+
+    {
+        printSection(testName, "operator>>(std::ostream& stream, const Int& x)");
+
+        {
+            Int x;
+            std::stringstream stream;
+            stream << "161803398874989";
+            stream >> x;
+            EXPECT_EQ(x.toInt(), 161803398874989);
+        }
+
+        {
+            Int x;
+            std::stringstream stream;
+            stream << "-161803398874989";
+            stream >> x;
+            EXPECT_EQ(x.toInt(), -161803398874989);
+        }
+
+        {
+            Int x(1618);
+            std::stringstream stream;
+            stream << "0";
+            stream >> x;
+            EXPECT_EQ(x.toInt(), 0);
+        }
+    }
 }
 
 TEST(ClassInt, SpecificMethods)
 {
-    
+    std::string testName("ClassInt.SpecificMethods");
+
+    {
+        printSection(testName, "Int::toString()");
+
+        Int x(161803398874989);
+        EXPECT_EQ(x.toString(), "161803398874989");
+
+        Int y(-161803398874989);
+        EXPECT_EQ(y.toString(), "-161803398874989");
+
+        Int z(0);
+        EXPECT_EQ(z.toString(), "0");
+    }
+
+    {
+        printSection(testName, "Int::toInt()");
+
+        Int a(161803398874989);
+        EXPECT_EQ(a.toInt(), 161803398874989);
+
+        Int b(-161803398874989);
+        EXPECT_EQ(b.toInt(), -161803398874989);
+
+        Int c(0);
+        EXPECT_EQ(c.toInt(), 0);
+
+        Int d(INT64_MAX);
+        EXPECT_EQ(d.toInt(), INT64_MAX);
+
+        Int e(INT64_MIN);
+        EXPECT_EQ(e.toInt(), INT64_MIN);
+
+        Int f(INT64_MAX);
+        f += 1;
+        EXPECT_THROW(f.toInt(), std::runtime_error);
+
+        Int g(INT64_MIN);
+        g -= 1;
+        EXPECT_THROW(g.toInt(), std::runtime_error);
+
+        Int h(INT64_MAX);
+        h = (h + 2) * (h + 5) * (h + 12);
+        EXPECT_THROW(h.toInt(), std::runtime_error);
+
+        Int i(INT64_MIN);
+        i = (i - 2) * (i - 5) * (i - 12);
+        EXPECT_THROW(i.toInt(), std::runtime_error);
+    }
+
+    {
+        printSection(testName, "Int::setSign(bool sign)");
+
+        Int x(161803398874989);
+        EXPECT_EQ(x.toInt(), 161803398874989);
+
+        x.setSign(false);
+        EXPECT_EQ(x.toInt(), -161803398874989);
+
+        Int y(0);
+        EXPECT_EQ(y.toString(), "0");
+
+        y.setSign(false);
+        EXPECT_EQ(y.toString(), "0");
+    }
+
+    {
+        printSection(testName, "Int::getSign()");
+
+        Int x(161803398874989);
+        EXPECT_EQ(x.getSign(), true);
+
+        Int y(-161803398874989);
+        EXPECT_EQ(y.getSign(), false);
+
+        Int z(0);
+        EXPECT_EQ(z.getSign(), true);
+    }
 }
 
 TEST(ClassInt, SpecificFunctions)
 {
-    
+    std::string testName("ClassInt.SpecificFunctions");
+
+    {
+        printSection(testName, "Int binom(const Int& n, const Int& p)");
+
+        EXPECT_EQ(binom(50, 42).toInt(), 536878650);
+        EXPECT_EQ(binom(50, 0).toInt(), 1);
+        EXPECT_EQ(binom(0, 0).toInt(), 1);
+        EXPECT_EQ(binom(50, 100).toInt(), 0);
+        EXPECT_EQ(binom(50, -10).toInt(), 0);
+        EXPECT_EQ(binom(-50, -10).toInt(), 0);
+    }
 }
 
 TEST(ClassInt, BonusTests)
 {
-    
+    std::string testName("ClassInt.BonusTests");
+
+    {
+        printSection(testName, "Factorial round-trip");
+        
+        Int x(1);
+        for (int i(1); i < 100; i++)
+            x *= i;
+        for (int i(99); i > 2; i--)
+            x /= i;
+
+        EXPECT_EQ(x, 2);
+    }
 }

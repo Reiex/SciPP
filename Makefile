@@ -32,7 +32,9 @@ EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o
 # Compiler
 CC = g++
 # Compiler options
-CFLAGS = -I$(INCLUDE_DIR)
+LIBRARY_CFLAGS = -I$(INCLUDE_DIR) -fpic
+TESTS_CFLAGS = -I$(INCLUDE_DIR) -g
+EXAMPLES_CFLAGS = -I$(INCLUDE_DIR)
 # Linker options
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
 # Libraries linked
@@ -89,7 +91,7 @@ $(LIB_DIR): $(LIBRARY_OBJS)
 	$(CC) -shared -o $(LIB_DIR)/libSciPP.so $(LIBRARY_OBJS)
 
 $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
-	$(CC) $(CFLAGS) -fpic -c $< -o $@
+	$(CC) $(LIBRARY_CFLAGS) -c $< -o $@
 
 
 ###############################################################################
@@ -98,7 +100,7 @@ $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 
 
 $(OBJ_TESTS_DIR)/%.o: $(SRC_TESTS_DIR)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(TESTS_CFLAGS) -c $< -o $@
 
 $(OBJ_EXAMPLES_DIR)/%.o: $(SRC_EXAMPLES_DIR)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(EXAMPLES_CFLAGS) -c $< -o $@
