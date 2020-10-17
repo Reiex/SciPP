@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SciPP/types.hpp>
+#include <SciPP/Mat.hpp>
 
 namespace scp
 {
@@ -8,45 +9,103 @@ namespace scp
     {
         public:
 
-        private:
+            void plot(const std::vector<float>& x, const std::vector<float>& y, ChartDataSet::VisualizationMethod visualizationMethod = ChartDataSet::VisualizationMethod::Line2D, uint64_t chart = 0);
+            void plot(const std::vector<std::array<float, 2>>& pos, const std::vector<float>& z, ChartDataSet::VisualizationMethod visualizationMethod = ChartDataSet::VisualizationMethod::Line2D, uint64_t chart = 0);
 
-            std::string _title;
+            void show();
+
+            std::vector<Chart>& getCharts();
+
+        private:
 
             std::vector<Chart> _charts;
     };
 
-    class Chart
+    class FigureObject
     {
         public:
+
+            virtual void draw();
+
+        protected:
+
+            uint64_t _xFigure;
+            uint64_t _yFigure;
+            uint64_t _wFigure;
+            uint64_t _hFigure;
+            bool _visible;
+            bool _autoPosition;
+    };
+
+    class Chart: public FigureObject
+    {
+        public:
+
+            Chart();
+
+            void addDataSet(const ChartDataSet& dataSet);
+
+            // Comment appliquer un axe à un dataset ?
+
+            void setTitle(std::string title);
+            void setBoundaries(uint64_t x, uint64_t y, uint64_t w, uint64_t h);
 
         private:
 
-            std::string _title;
+            ChartText _title;
 
-            std::vector<ChartDataSet> _data;
+            FigureObject _chartWorldBoundaries;
 
-            std::array<Axis, 3> _axes;
+            Mat<float, 4, 4> _view;
+            Mat<float, 4, 4> _proj;
 
-            bool _autoPosition;
-            std::array<uint64_t, 4> _coord;
+            std::vector<std::unique_ptr<ChartDataSet>> _data;
+            std::vector<ChartAxis> _axes;
+            std::vector<std::vector<uint64_t>> _dataToAxes;
     };
 
-    class Axis
+    class ChartText: public FigureObject
+    {
+        private:
+
+            std::string _text;
+    };
+
+    class ChartWorldObject
+    {
+        private:
+        
+            float _xWorld;
+            float _yWorld;
+            float _zWorld;
+            float _wWorld;
+            float _hWorld;
+            float _dWorld;
+    };
+
+    class ChartAxis: public ChartWorldObject
     {
         public:
+
+            virtual void draw();
 
         private:
         
-            double _min;
-            double _max;
+            float _min;
+            float _max;
+            uint8_t _graduations;
     };
 
-    class ChartDataSet
+    class ChartDataSet: public ChartWorldObject
     {
         public:
 
-            enum class Visualization
+            enum class VisualizationMethod
             {
+                // {Dimension of the value}:{Dimension of the position of the value}
+                
+                Undefined,
+
                 // 1:1
                 Points2D,
                 Line2D,
@@ -57,7 +116,7 @@ namespace scp
                 Patch,
                 Heatmap,
                 Isoline,
-
+    
                 // 2:2
                 Vec2D2D,
 
@@ -70,19 +129,22 @@ namespace scp
                 Cloud,
 
                 // 3:3
-                Colors3D,
+                ColoredPoints3D,
                 Vec3D3D
             };
 
         private:
 
-            uint64_t _valueDim;
             uint64_t _positionDim;
+            uint64_t _valueDim;
 
-            std::vector<uint64_t> _counts;
+            std::vector<float> _positions;
+            std::vector<float> _values;
 
-            std::vector<double> _data;
+            VisualizationMethod _type;
+    };
 
-            Visualization _type;
+    class DataSetPoints2D: public ChartDataSet
+    {
     };
 }
