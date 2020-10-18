@@ -28,7 +28,6 @@ namespace scp
         class Figure;
         class FigureObject;
         class Chart;
-        class ChartText;
         class ChartWorldObject;
         class ChartDataSet;
         enum class VisualizationMethod;

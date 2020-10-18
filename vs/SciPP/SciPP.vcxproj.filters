@@ -19,6 +19,12 @@
     <Filter Include="Header Files\plot\dataset">
       <UniqueIdentifier>{f4750272-c2b5-45d1-9168-48e676af286d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\plot">
+      <UniqueIdentifier>{8dd8103a-dfd9-47bc-8b9a-a60b63646b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\plot\dataset">
+      <UniqueIdentifier>{35a5f3d8-e3d8-47d6-891b-7f787b3b3483}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\SciPP\Frac.hpp">
@@ -72,9 +78,6 @@
     <ClInclude Include="..\..\include\SciPP\plot\ChartDataSet.hpp">
       <Filter>Header Files\plot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\plot\ChartText.hpp">
-      <Filter>Header Files\plot</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\SciPP\plot\ChartWorldObject.hpp">
       <Filter>Header Files\plot</Filter>
     </ClInclude>
@@ -97,6 +100,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\SciPP\misc.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SciPP\plot\Figure.cpp">
+      <Filter>Source Files\plot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SciPP\plot\Chart.cpp">
+      <Filter>Source Files\plot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SciPP\plot\FigureObject.cpp">
+      <Filter>Source Files\plot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SciPP\plot\dataset\Points2D.cpp">
+      <Filter>Source Files\plot\dataset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
