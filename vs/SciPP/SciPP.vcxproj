@@ -18,6 +18,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\SciPP\Frac.hpp" />
+    <ClInclude Include="..\..\include\SciPP\FracT.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Int.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Mat.hpp" />
+    <ClInclude Include="..\..\include\SciPP\MatT.hpp" />
+    <ClInclude Include="..\..\include\SciPP\misc.hpp" />
+    <ClInclude Include="..\..\include\SciPP\miscT.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\Chart.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\ChartDataSet.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\ChartText.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\ChartWorldObject.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\dataset\Points2D.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\Figure.hpp" />
+    <ClInclude Include="..\..\include\SciPP\plot\FigureObject.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Polynomial.hpp" />
+    <ClInclude Include="..\..\include\SciPP\PolynomialT.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Quaternion.hpp" />
+    <ClInclude Include="..\..\include\SciPP\QuaternionT.hpp" />
+    <ClInclude Include="..\..\include\SciPP\SciPP.hpp" />
+    <ClInclude Include="..\..\include\SciPP\types.hpp" />
+    <ClInclude Include="..\..\include\SciPP\Vec.hpp" />
+    <ClInclude Include="..\..\include\SciPP\VecT.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\SciPP\Frac.cpp" />
+    <ClCompile Include="..\..\src\SciPP\Int.cpp" />
+    <ClCompile Include="..\..\src\SciPP\misc.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{7DF651C6-E3F7-4709-A7E0-667781156237}</ProjectGuid>
@@ -154,26 +183,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\SciPP\Frac.cpp" />
-    <ClCompile Include="..\..\src\SciPP\Int.cpp" />
-    <ClCompile Include="..\..\src\SciPP\Interpreteur.cpp" />
-    <ClCompile Include="..\..\src\SciPP\Matrice.cpp" />
-    <ClCompile Include="..\..\src\SciPP\Plot.cpp" />
-    <ClCompile Include="..\..\src\SciPP\Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\SciPP\Frac.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Int.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Interpreteur.hpp" />
-    <ClInclude Include="..\..\include\SciPP\List.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Matrice.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Plot.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Polynome.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Random.hpp" />
-    <ClInclude Include="..\..\include\SciPP\SciPP.hpp" />
-    <ClInclude Include="..\..\include\SciPP\Vect.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

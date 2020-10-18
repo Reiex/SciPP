@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.hpp"
 
 void printSection(const std::string& testName, const std::string& sectionName)
 {

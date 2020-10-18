@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programmation\Cpp\SFML\include;D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,13 +151,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\examples\jeuxArithmetiques.h" />
-    <ClInclude Include="..\..\examples\simuPhysique.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\examples\examples.cpp" />
-    <ClCompile Include="..\..\examples\jeuxArithmetiques.cpp" />
-    <ClCompile Include="..\..\examples\simuPhysique.cpp" />
+    <ClCompile Include="..\..\examples\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

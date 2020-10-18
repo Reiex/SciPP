@@ -1,9 +1,9 @@
 #include <SciPP/SciPP.hpp>
-#include <math.h>
 
-#include <sstream>
 
 int main()
 {
+    system("pause");
+
     return 0;
 }

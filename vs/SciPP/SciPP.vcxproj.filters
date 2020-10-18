@@ -13,6 +13,80 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\plot">
+      <UniqueIdentifier>{dd7ccd98-7388-4576-b505-f97d80574535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\plot\dataset">
+      <UniqueIdentifier>{f4750272-c2b5-45d1-9168-48e676af286d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\SciPP\Frac.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\FracT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\Int.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\Mat.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\MatT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\misc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\miscT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\Polynomial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\PolynomialT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\Quaternion.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\QuaternionT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\SciPP.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\Vec.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\VecT.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\Chart.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\ChartDataSet.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\ChartText.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\ChartWorldObject.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\Figure.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\FigureObject.hpp">
+      <Filter>Header Files\plot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SciPP\plot\dataset\Points2D.hpp">
+      <Filter>Header Files\plot\dataset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\SciPP\Frac.cpp">
@@ -21,49 +95,8 @@
     <ClCompile Include="..\..\src\SciPP\Int.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SciPP\Interpreteur.cpp">
+    <ClCompile Include="..\..\src\SciPP\misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SciPP\Matrice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SciPP\Plot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SciPP\Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\SciPP\Frac.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Int.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\List.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Matrice.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Polynome.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Vect.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\SciPP.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Plot.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Random.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SciPP\Interpreteur.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
