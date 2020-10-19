@@ -1,9 +1,8 @@
 /.vs/
 /.vscode/
-/vs/SciPP/Release
-/vs/SciPPTests/Release
-/vs/SciPPExamples/Release
+/vs/SciPP/Release/
+/vs/SciPPTests/Release/
+/vs/SciPPExamples/Release/
 /doc/html/
 /obj/
-/SciPPExamples
-/SciPPTests
+/build/
