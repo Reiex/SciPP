@@ -26,12 +26,6 @@
     <ClInclude Include="..\..\include\SciPP\MatT.hpp" />
     <ClInclude Include="..\..\include\SciPP\misc.hpp" />
     <ClInclude Include="..\..\include\SciPP\miscT.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\Chart.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\ChartDataSet.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\ChartWorldObject.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\dataset\Points2D.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\Figure.hpp" />
-    <ClInclude Include="..\..\include\SciPP\plot\FigureObject.hpp" />
     <ClInclude Include="..\..\include\SciPP\Polynomial.hpp" />
     <ClInclude Include="..\..\include\SciPP\PolynomialT.hpp" />
     <ClInclude Include="..\..\include\SciPP\Quaternion.hpp" />
@@ -45,10 +39,6 @@
     <ClCompile Include="..\..\src\SciPP\Frac.cpp" />
     <ClCompile Include="..\..\src\SciPP\Int.cpp" />
     <ClCompile Include="..\..\src\SciPP\misc.cpp" />
-    <ClCompile Include="..\..\src\SciPP\plot\Chart.cpp" />
-    <ClCompile Include="..\..\src\SciPP\plot\dataset\Points2D.cpp" />
-    <ClCompile Include="..\..\src\SciPP\plot\Figure.cpp" />
-    <ClCompile Include="..\..\src\SciPP\plot\FigureObject.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
