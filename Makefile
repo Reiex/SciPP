@@ -26,11 +26,7 @@ BUILD_DIR = build
 # .obj lists
 LIBRARY_OBJS = $(OBJ_LIBRARY_DIR)/misc.o \
 			   $(OBJ_LIBRARY_DIR)/Int.o \
-			   $(OBJ_LIBRARY_DIR)/Frac.o \
-			   $(OBJ_LIBRARY_DIR)/plot/Figure.o \
-			   $(OBJ_LIBRARY_DIR)/plot/FigureObject.o \
-			   $(OBJ_LIBRARY_DIR)/plot/Chart.o \
-			   $(OBJ_LIBRARY_DIR)/plot/dataset/Points2D.o
+			   $(OBJ_LIBRARY_DIR)/Frac.o
 TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
 			 $(OBJ_TESTS_DIR)/misc.o \
 			 $(OBJ_TESTS_DIR)/Int.o \
@@ -91,7 +87,7 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 folders:
 	-rm -rf $(LIB_DIR) $(OBJ_DIR) $(BUILD_DIR)
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)
-	mkdir $(OBJ_LIBRARY_DIR) $(OBJ_LIBRARY_DIR)/plot $(OBJ_LIBRARY_DIR)/plot/dataset
+	mkdir $(OBJ_LIBRARY_DIR)
 	mkdir $(LIB_DIR) $(BUILD_DIR)
 
 
