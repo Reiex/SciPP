@@ -288,6 +288,15 @@ TEST(ClassInt, DivisionOperators)
         z = std::move(x) / std::move(y);
         EXPECT_EQ(z.toInt(), -19416518);
     }
+
+    {
+        printSection(testName, "Bonus tests");
+
+        Int x(-55);
+        x /= 63;
+        EXPECT_EQ(x.toInt(), 0);
+        EXPECT_EQ(x.getSign(), true);
+    }
 }
 
 TEST(ClassInt, ModuloOperators)

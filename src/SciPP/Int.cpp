@@ -345,7 +345,7 @@ namespace scp
             }
         }
 
-        _sign = (_sign == x._sign);
+        _sign = (_sign == x._sign || (newValues.size() == 1 && newValues[0] == 0));
         _values = newValues;
 
         return *this;

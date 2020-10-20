@@ -55,7 +55,7 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator-=(const Frac<T>& a)
     {
-        _p = _p * a._q - a._p*_q;
+        _p = _p*a._q - a._p*_q;
         _q *= a._q;
 
         simplify();
@@ -146,7 +146,7 @@ namespace scp
     Frac<T>&& operator+(const Frac<T>& a, Frac<T>&& b)
     {
         b += a;
-        return std::move(a);
+        return std::move(b);
     }
     
     template<typename T>
@@ -239,7 +239,7 @@ namespace scp
     Frac<T>&& operator/(Frac<T>&& a, Frac<T>&& b)
     {
         a /= b;
-        return std::move(b);
+        return std::move(a);
     }
     
 
