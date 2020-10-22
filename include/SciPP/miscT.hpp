@@ -7,6 +7,9 @@ namespace scp
     template<typename TBase, typename TPow>
     TBase expoSq(TBase const& x, TPow n)
     {
+        if (n < 0)
+            throw std::runtime_error("Cannot call expoSq with n < 0.");
+
         if (n == 0)
             return 1;
 
