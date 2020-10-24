@@ -213,16 +213,16 @@ namespace scp
     template<typename T>
     Quaternion<T> operator-(const Quaternion<T>& q)
     {
-        std::array<T, 3> imag(q.imag());
-        return Quaternion<T>(-q.real(), -imag[0], -imag[1], -imag[2]);
+        return Quaternion<T>(-q.a, -q.b, -q.c, -q.d);
     }
 
     template<typename T>
     Quaternion<T>&& operator-(Quaternion<T>&& q)
     {
-        q.real(-q.real());
-        std::array<T, 3> imag(q.imag());
-        q.imag(-imag[0], -imag[1], -imag[2]);
+        q.a = -q.a;
+        q.b = -q.b;
+        q.c = -q.c;
+        q.d = -q.d;
 
         return std::move(q);
     }
@@ -273,6 +273,10 @@ namespace scp
     Quaternion<T> inverse(const Quaternion<T>& q)
     {
         T l(normSq(q));
+
+        if (l == T(0))
+            throw std::runtime_error("Cannot inverse Quaternion<T>(T(0)).");
+
         return {q.a/l, -q.b/l, -q.c/l, -q.d/l};
     }
 

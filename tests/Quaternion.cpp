@@ -92,80 +92,100 @@ TEST(ClassQuaternion, Constructors)
 
 TEST(ClassQuaternion, AssignmentOperators)
 {
-    std::string testName("ClassFrac.AssignmentOperators");
+    std::string testName("ClassQuaternion.AssignmentOperators");
 
     {
-        printSection(testName, "Frac<T>::operator=(const Frac<T>& x)");
+        printSection(testName, "Quaternion<T>::operator=(const Quaternion<T>& x)");
 
-        Frac<Int> x(3, 7), y;
+        Quaternion<float> x(-1.618, 3.1416, -1.414, 2.718), y;
         y = x;
-        EXPECT_EQ(x.num(), 3);
-        EXPECT_EQ(x.denom(), 7);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(x.a, -1.618);
+        EXPECT_FLOAT_EQ(x.b, 3.1416);
+        EXPECT_FLOAT_EQ(x.c, -1.414);
+        EXPECT_FLOAT_EQ(x.d, 2.718);
+        EXPECT_FLOAT_EQ(y.a, -1.618);
+        EXPECT_FLOAT_EQ(y.b, 3.1416);
+        EXPECT_FLOAT_EQ(y.c, -1.414);
+        EXPECT_FLOAT_EQ(y.d, 2.718);
     }
 
     {
-        printSection(testName, "Frac<T>::operator=(Frac<T>&& x)");
+        printSection(testName, "Quaternion<T>::operator=(Quaternion<T>&& x)");
 
-        Frac<Int> x(3, 7), y;
+        Quaternion<float> x(-1.618, 3.1416, -1.414, 2.718), y;
         y = std::move(x);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y.a, -1.618);
+        EXPECT_FLOAT_EQ(y.b, 3.1416);
+        EXPECT_FLOAT_EQ(y.c, -1.414);
+        EXPECT_FLOAT_EQ(y.d, 2.718);
     }
 
     {
         printSection(testName, "Bonus tests");
 
         {
-            Frac<Int> x(3, 7), y, z, t;
+            Quaternion<float> x(-1.618, 3.1416, -1.414, 2.718), y, z, t;
             t = z = y = x;
-            EXPECT_EQ(x.num(), 3);
-            EXPECT_EQ(x.denom(), 7);
-            EXPECT_EQ(y.num(), 3);
-            EXPECT_EQ(y.denom(), 7);
-            EXPECT_EQ(z.num(), 3);
-            EXPECT_EQ(z.denom(), 7);
-            EXPECT_EQ(t.num(), 3);
-            EXPECT_EQ(t.denom(), 7);
+            EXPECT_FLOAT_EQ(x.a, -1.618);
+            EXPECT_FLOAT_EQ(x.b, 3.1416);
+            EXPECT_FLOAT_EQ(x.c, -1.414);
+            EXPECT_FLOAT_EQ(x.d, 2.718);
+            EXPECT_FLOAT_EQ(y.a, -1.618);
+            EXPECT_FLOAT_EQ(y.b, 3.1416);
+            EXPECT_FLOAT_EQ(y.c, -1.414);
+            EXPECT_FLOAT_EQ(y.d, 2.718);
+            EXPECT_FLOAT_EQ(z.a, -1.618);
+            EXPECT_FLOAT_EQ(z.b, 3.1416);
+            EXPECT_FLOAT_EQ(z.c, -1.414);
+            EXPECT_FLOAT_EQ(z.d, 2.718);
+            EXPECT_FLOAT_EQ(t.a, -1.618);
+            EXPECT_FLOAT_EQ(t.b, 3.1416);
+            EXPECT_FLOAT_EQ(t.c, -1.414);
+            EXPECT_FLOAT_EQ(t.d, 2.718);
         }
 
         {
-            Frac<Int> x(3, 7), y, z, t;
+            Quaternion<float> x(-1.618, 3.1416, -1.414, 2.718), y, z, t;
             t = std::move(z = y = x);
-            EXPECT_EQ(x.num(), 3);
-            EXPECT_EQ(x.denom(), 7);
-            EXPECT_EQ(y.num(), 3);
-            EXPECT_EQ(y.denom(), 7);
-            EXPECT_EQ(t.num(), 3);
-            EXPECT_EQ(t.denom(), 7);
+            EXPECT_FLOAT_EQ(x.a, -1.618);
+            EXPECT_FLOAT_EQ(x.b, 3.1416);
+            EXPECT_FLOAT_EQ(x.c, -1.414);
+            EXPECT_FLOAT_EQ(x.d, 2.718);
+            EXPECT_FLOAT_EQ(y.a, -1.618);
+            EXPECT_FLOAT_EQ(y.b, 3.1416);
+            EXPECT_FLOAT_EQ(y.c, -1.414);
+            EXPECT_FLOAT_EQ(y.d, 2.718);
+            EXPECT_FLOAT_EQ(t.a, -1.618);
+            EXPECT_FLOAT_EQ(t.b, 3.1416);
+            EXPECT_FLOAT_EQ(t.c, -1.414);
+            EXPECT_FLOAT_EQ(t.d, 2.718);
         }
     }
 }
 
 TEST(ClassQuaternion, Destructor)
 {
-    std::string testName("ClassFrac.Destructor");
+    std::string testName("ClassQuaternion.Destructor");
 
     {
-        printSection(testName, "Destructor on a simple fraction");
+        printSection(testName, "Destructor on a simple quaternion");
 
-        Frac<Int>* x(new Frac<Int>(3, 7));
+        Quaternion<float>* x(new Quaternion<float>(-1.618, 3.1416, -1.414, 2.718));
         EXPECT_NO_THROW(delete x);
     }
 
     {
-        printSection(testName, "Destructor on an fraction created by copy");
+        printSection(testName, "Destructor on an quaternion created by copy");
 
-        Frac<Int>* x(new Frac<Int>(3, 7)), *y(new Frac<Int>(*x));
+        Quaternion<float>* x(new Quaternion<float>(-1.618, 3.1416, -1.414, 2.718)), *y(new Quaternion<float>(*x));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
 
     {
-        printSection(testName, "Destructor on an fraction created by move constructor");
+        printSection(testName, "Destructor on an quaternion created by move constructor");
 
-        Frac<Int>* x(new Frac<Int>(161803398874989)), *y(new Frac<Int>(std::move(*x)));
+        Quaternion<float>* x(new Quaternion<float>(-1.618, 3.1416, -1.414, 2.718)), *y(new Quaternion<float>(std::move(*x)));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
@@ -173,491 +193,368 @@ TEST(ClassQuaternion, Destructor)
 
 TEST(ClassQuaternion, AdditionOperators)
 {
-    std::string testName("ClassFrac.AdditionOperators");
+    std::string testName("ClassQuaternion.AdditionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator+=(const Frac<T>& x)");
+        printSection(testName, "Quaternion<T>::operator+=(const Quaternion<T>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8);
         x += y;
-        EXPECT_EQ(x.num(), -1);
-        EXPECT_EQ(x.denom(), 63);
+        EXPECT_FLOAT_EQ(x.a, -1.1);
+        EXPECT_FLOAT_EQ(x.b, 1.9);
+        EXPECT_FLOAT_EQ(x.c, -0.8);
+        EXPECT_FLOAT_EQ(x.d, 0.9);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator+(const Quaternion<T>& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x + y;
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -1.1);
+        EXPECT_FLOAT_EQ(z.b, 1.9);
+        EXPECT_FLOAT_EQ(z.c, -0.8);
+        EXPECT_FLOAT_EQ(z.d, 0.9);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator+(Quaternion<T>&& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) + y;
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -1.1);
+        EXPECT_FLOAT_EQ(z.b, 1.9);
+        EXPECT_FLOAT_EQ(z.c, -0.8);
+        EXPECT_FLOAT_EQ(z.d, 0.9);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator+(const Quaternion<T>& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x + std::move(y);
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -1.1);
+        EXPECT_FLOAT_EQ(z.b, 1.9);
+        EXPECT_FLOAT_EQ(z.c, -0.8);
+        EXPECT_FLOAT_EQ(z.d, 0.9);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator+(Quaternion<T>&& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) + std::move(y);
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -1.1);
+        EXPECT_FLOAT_EQ(z.b, 1.9);
+        EXPECT_FLOAT_EQ(z.c, -0.8);
+        EXPECT_FLOAT_EQ(z.d, 0.9);
     }
 }
 
 TEST(ClassQuaternion, SubstractionOperators)
 {
-    std::string testName("ClassFrac.SubstractionOperators");
+    std::string testName("ClassQuaternion.SubstractionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator-=(const Frac<T>& x)");
+        printSection(testName, "Quaternion<T>::operator-=(const Quaternion<T>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8);
         x -= y;
-        EXPECT_EQ(x.num(), 55);
-        EXPECT_EQ(x.denom(), 63);
+        EXPECT_FLOAT_EQ(x.a, -2.1);
+        EXPECT_FLOAT_EQ(x.b, 4.3);
+        EXPECT_FLOAT_EQ(x.c, -2.0);
+        EXPECT_FLOAT_EQ(x.d, 4.5);
     }
 
     {
-        printSection(testName, "operator-(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator-(const Quaternion<T>& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x - y;
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -2.1);
+        EXPECT_FLOAT_EQ(z.b, 4.3);
+        EXPECT_FLOAT_EQ(z.c, -2.0);
+        EXPECT_FLOAT_EQ(z.d, 4.5);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator-(Quaternion<T>&& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) - y;
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -2.1);
+        EXPECT_FLOAT_EQ(z.b, 4.3);
+        EXPECT_FLOAT_EQ(z.c, -2.0);
+        EXPECT_FLOAT_EQ(z.d, 4.5);
     }
 
     {
-        printSection(testName, "operator-(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator-(const Quaternion<T>& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x - std::move(y);
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -2.1);
+        EXPECT_FLOAT_EQ(z.b, 4.3);
+        EXPECT_FLOAT_EQ(z.c, -2.0);
+        EXPECT_FLOAT_EQ(z.d, 4.5);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator-(Quaternion<T>&& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) - std::move(y);
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z.a, -2.1);
+        EXPECT_FLOAT_EQ(z.b, 4.3);
+        EXPECT_FLOAT_EQ(z.c, -2.0);
+        EXPECT_FLOAT_EQ(z.d, 4.5);
     }
 }
 
 TEST(ClassQuaternion, MultiplicationOperators)
 {
-    std::string testName("ClassFrac.MultiplicationOperators");
+    std::string testName("ClassQuaternion.MultiplicationOperators");
 
     {
-        printSection(testName, "Frac<T>::operator*=(const Frac<T>& x)");
+        printSection(testName, "Quaternion<T>::operator*=(const Quaternion<T>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8);
         x *= y;
-        EXPECT_EQ(x.num(), -4);
-        EXPECT_EQ(x.denom(), 21);
+        EXPECT_NEAR(x.a, 8.62, 1e-6);
+        EXPECT_NEAR(x.b, 4.37, 1e-6);
+        EXPECT_NEAR(x.c, 0.68, 1e-6);
+        EXPECT_NEAR(x.d, 4.41, 1e-6);
     }
 
     {
-        printSection(testName, "operator*(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator*(const Quaternion<T>& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x * y;
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_NEAR(z.a, 8.62, 1e-6);
+        EXPECT_NEAR(z.b, 4.37, 1e-6);
+        EXPECT_NEAR(z.c, 0.68, 1e-6);
+        EXPECT_NEAR(z.d, 4.41, 1e-6);
     }
 
     {
-        printSection(testName, "operator*(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator*(Quaternion<T>&& x, const Quaternion<T>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) * y;
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_NEAR(z.a, 8.62, 1e-6);
+        EXPECT_NEAR(z.b, 4.37, 1e-6);
+        EXPECT_NEAR(z.c, 0.68, 1e-6);
+        EXPECT_NEAR(z.d, 4.41, 1e-6);
     }
 
     {
-        printSection(testName, "operator*(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator*(const Quaternion<T>& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = x * std::move(y);
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_NEAR(z.a, 8.62, 1e-6);
+        EXPECT_NEAR(z.b, 4.37, 1e-6);
+        EXPECT_NEAR(z.c, 0.68, 1e-6);
+        EXPECT_NEAR(z.d, 4.41, 1e-6);
     }
 
     {
-        printSection(testName, "operator*(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator*(Quaternion<T>&& x, Quaternion<T>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(0.5, -1.2, 0.6, -1.8), z;
         z = std::move(x) * std::move(y);
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_NEAR(z.a, 8.62, 1e-6);
+        EXPECT_NEAR(z.b, 4.37, 1e-6);
+        EXPECT_NEAR(z.c, 0.68, 1e-6);
+        EXPECT_NEAR(z.d, 4.41, 1e-6);
     }
 }
 
 TEST(ClassQuaternion, DivisionOperators)
 {
-    std::string testName("ClassFrac.DivisionOperators");
+    std::string testName("ClassQuaternion.DivisionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator/=(const Frac<T>& x)");
+        printSection(testName, "Quaternion<T>::operator/=(const T& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
-        x /= y;
-        EXPECT_EQ(x.num(), -27);
-        EXPECT_EQ(x.denom(), 28);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7);
+        x /= 2.f;
+        EXPECT_FLOAT_EQ(x.a, -0.8);
+        EXPECT_FLOAT_EQ(x.b, 1.55);
+        EXPECT_FLOAT_EQ(x.c, -0.7);
+        EXPECT_FLOAT_EQ(x.d, 1.35);
     }
 
     {
-        printSection(testName, "operator/(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator/(const Quaternion<T>& x, const T& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
-        z = x / y;
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
+        y = x / 2.f;
+        EXPECT_FLOAT_EQ(y.a, -0.8);
+        EXPECT_FLOAT_EQ(y.b, 1.55);
+        EXPECT_FLOAT_EQ(y.c, -0.7);
+        EXPECT_FLOAT_EQ(y.d, 1.35);
     }
 
     {
-        printSection(testName, "operator/(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator/(Quaternion<T>&& x, const T& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
-        z = std::move(x) / y;
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
-    }
-
-    {
-        printSection(testName, "operator/(Frac<T>&& x, Frac<T>&& y)");
-
-        Frac<Int> x(3, 7), y(-4, 9), z;
-        z = std::move(x) / std::move(y);
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
+        y = std::move(x) / 2.f;
+        EXPECT_FLOAT_EQ(y.a, -0.8);
+        EXPECT_FLOAT_EQ(y.b, 1.55);
+        EXPECT_FLOAT_EQ(y.c, -0.7);
+        EXPECT_FLOAT_EQ(y.d, 1.35);
     }
 }
 
 TEST(ClassQuaternion, UnaryOperators)
 {
-    std::string testName("ClassFrac.UnaryOperators");
+    std::string testName("ClassQuaternion.UnaryOperators");
 
     {
-        printSection(testName, "operator-(const Frac<T>& x)");
+        printSection(testName, "operator-(const Quaternion<T>& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
         y = -x;
-        EXPECT_EQ(x.num(), -3);
-        EXPECT_EQ(x.denom(), 7);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y.a, 1.6);
+        EXPECT_FLOAT_EQ(y.b, -3.1);
+        EXPECT_FLOAT_EQ(y.c, 1.4);
+        EXPECT_FLOAT_EQ(y.d, -2.7);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x)");
+        printSection(testName, "operator+(const Quaternion<T>& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
         y = +x;
-        EXPECT_EQ(x.num(), -3);
-        EXPECT_EQ(x.denom(), 7);
-        EXPECT_EQ(y.num(), -3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y.a, -1.6);
+        EXPECT_FLOAT_EQ(y.b, 3.1);
+        EXPECT_FLOAT_EQ(y.c, -1.4);
+        EXPECT_FLOAT_EQ(y.d, 2.7);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x)");
+        printSection(testName, "operator-(Quaternion<T>&& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
         y = -std::move(x);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y.a, 1.6);
+        EXPECT_FLOAT_EQ(y.b, -3.1);
+        EXPECT_FLOAT_EQ(y.c, 1.4);
+        EXPECT_FLOAT_EQ(y.d, -2.7);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x)");
+        printSection(testName, "operator+(Quaternion<T>&& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
         y = +std::move(x);
-        EXPECT_EQ(y.num(), -3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y.a, -1.6);
+        EXPECT_FLOAT_EQ(y.b, 3.1);
+        EXPECT_FLOAT_EQ(y.c, -1.4);
+        EXPECT_FLOAT_EQ(y.d, 2.7);
     }
 }
 
 TEST(ClassQuaternion, Comparators)
 {
-    std::string testName("ClassFrac.Comparators");
+    std::string testName("ClassQuaternion.Comparators");
 
     {
-        printSection(testName, "operator==(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator==(const Quaternion<T>& x, const Quaternion<T>& y)");
 
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x == y, true);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(-1.6, 3.1, -1.4, 2.7);
+        EXPECT_EQ(x == y, true);
 
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(6, 14);
-            EXPECT_EQ(x == y, true);
-
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x == y, true);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(-4, 9);
-            EXPECT_EQ(x == y, false);
-
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
-            EXPECT_EQ(x == y, false);
-        }
+        x = Quaternion<float>(-1.6, 3.1, -1.4, 2.7);
+        y = Quaternion<float>(-1.6, 3.1, -1.4, 2.2);
+        EXPECT_EQ(x == y, false);
     }
 
     {
-        printSection(testName, "operator!=(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator!=(const Quaternion<T>& x, const Quaternion<T>& y)");
 
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x != y, false);
+        Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y(-1.6, 3.1, -1.4, 2.7);
+        EXPECT_EQ(x != y, false);
 
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x != y, false);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(-4, 9);
-            EXPECT_EQ(x != y, true);
-
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
-            EXPECT_EQ(x != y, true);
-        }
-    }
-
-    {
-        printSection(testName, "operator>(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x > y, true);
-            EXPECT_EQ(y > x, false);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, false);
-        }
-    }
-
-    {
-        printSection(testName, "operator<(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x < y, true);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x < y, true);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, true);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, false);
-        }
-    }
-
-    {
-        printSection(testName, "operator>=(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x >= y, false);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x >= y, false);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, false);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, true);
-        }
-    }
-
-    {
-        printSection(testName, "operator<=(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x <= y, false);
-            EXPECT_EQ(y <= x, true);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, true);
-        }
+        x = Quaternion<float>(-1.6, 3.1, -1.4, 2.7);
+        y = Quaternion<float>(-1.6, 3.1, -1.4, 2.2);
+        EXPECT_EQ(x != y, true);
     }
 }
 
 TEST(ClassQuaternion, StreamOperators)
 {
-    std::string testName("ClassFrac.StreamOperators");
+    std::string testName("ClassQuaternion.StreamOperators");
 
     {
-        printSection(testName, "operator<<(std::ostream& stream, const Frac<T>& x)");
+        printSection(testName, "operator<<(std::ostream& stream, const Quaternion<T>& x)");
 
         {
-            Frac<Int> x(1618, 3141);
+            Quaternion<float> x(-1.6, 3.1, -1.4, 2.7);
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(1618/3141)");
+            EXPECT_EQ(stream.str(), "(-1.6,3.1,-1.4,2.7)");
         }
 
         {
-            Frac<Int> x(-1618);
+            Quaternion<float> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(-1618/1)");
-        }
-
-        {
-            Frac<Int> x(0);
-            std::stringstream stream;
-            stream << x;
-            EXPECT_EQ(stream.str(), "(0/1)");
-        }
-    }
-
-    {
-        printSection(testName, "operator>>(std::ostream& stream, const Frac<T>& x)");
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(1618/3141)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 1618);
-            EXPECT_EQ(x.denom(), 3141);
-        }
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(-1618/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), -1618);
-            EXPECT_EQ(x.denom(), 1);
-        }
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(0/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 0);
-            EXPECT_EQ(x.denom(), 1);
+            EXPECT_EQ(stream.str(), "(0,0,0,0)");
         }
     }
 }
 
-TEST(ClassQuaternion, BonusTests)
+TEST(ClassQuaternion, SpecificFunctions)
 {
-    std::string testName("ClassFrac.BonusTests");
+    std::string testName("ClassQuaternion.SpecificFunctions");
+
+    {
+        printSection(testName, "inverse(const Quaternion<T>& q)");
+        
+        {
+            Quaternion<float> x(-1.6, 3.1, -1.4, 2.7), y;
+            y = x * inverse(x);
+            EXPECT_NEAR(y.a, 1.0, 1e-6);
+            EXPECT_NEAR(y.b, 0.0, 1e-6);
+            EXPECT_NEAR(y.c, 0.0, 1e-6);
+            EXPECT_NEAR(y.d, 0.0, 1e-6);
+        }
+        
+        {
+            Quaternion<float> x;
+            EXPECT_THROW(inverse(x), std::runtime_error);
+        }
+    }
+
+    {
+        printSection(testName, "normSq(const Quaternion<T>& q)");
+        
+        {
+            Quaternion<float> x(-1.6, 3.1, -1.4, 2.7);
+            EXPECT_NEAR(normSq(x), 21.42, 1e-6);
+        }
+        
+        {
+            Quaternion<float> x;
+            EXPECT_FLOAT_EQ(normSq(x), 0.0);
+        }
+    }
+
+    {
+        printSection(testName, "norm(const Quaternion<T>& q)");
+        
+        {
+            Quaternion<float> x(-1.6, 3.1, -1.4, 2.7);
+            EXPECT_NEAR(norm(x), 4.6282, 1e-4);
+        }
+        
+        {
+            Quaternion<float> x;
+            EXPECT_FLOAT_EQ(norm(x), 0.0);
+        }
+    }
 }
