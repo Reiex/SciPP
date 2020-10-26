@@ -185,7 +185,7 @@ TEST(ClassFrac, Destructor)
     }
 
     {
-        printSection(testName, "Destructor on an fraction created by copy");
+        printSection(testName, "Destructor on a fraction created by copy");
 
         Frac<Int>* x(new Frac<Int>(3, 7)), *y(new Frac<Int>(*x));
         EXPECT_NO_THROW(delete x);
@@ -193,7 +193,7 @@ TEST(ClassFrac, Destructor)
     }
 
     {
-        printSection(testName, "Destructor on an fraction created by move constructor");
+        printSection(testName, "Destructor on a fraction created by move constructor");
 
         Frac<Int>* x(new Frac<Int>(161803398874989)), *y(new Frac<Int>(std::move(*x)));
         EXPECT_NO_THROW(delete x);
@@ -694,6 +694,13 @@ TEST(ClassFrac, BonusTests)
     {
         printSection(testName, "Decimals of neper constant");
 
-        EXPECT_EQ(true, false);
+        Rational p(1, 1), s(1, 1);
+        for (int i(1); i < 15; i++)
+        {
+            p /= i;
+            s += p;
+        }
+        
+        EXPECT_EQ(s.decimals(9), "2.718281828");
     }
 }

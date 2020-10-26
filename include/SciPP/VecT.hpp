@@ -10,7 +10,7 @@ namespace scp
     Vec<T, n>::Vec()
     {
         for (uint64_t i(0); i < n; i++)
-            _values[i] = 0;
+            _values[i] = int64_t(0);
     }
 
     template<typename T, uint64_t n>

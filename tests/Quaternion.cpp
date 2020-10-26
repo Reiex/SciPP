@@ -175,7 +175,7 @@ TEST(ClassQuaternion, Destructor)
     }
 
     {
-        printSection(testName, "Destructor on an quaternion created by copy");
+        printSection(testName, "Destructor on a quaternion created by copy");
 
         Quaternion<float>* x(new Quaternion<float>(-1.618, 3.1416, -1.414, 2.718)), *y(new Quaternion<float>(*x));
         EXPECT_NO_THROW(delete x);
@@ -183,7 +183,7 @@ TEST(ClassQuaternion, Destructor)
     }
 
     {
-        printSection(testName, "Destructor on an quaternion created by move constructor");
+        printSection(testName, "Destructor on a quaternion created by move constructor");
 
         Quaternion<float>* x(new Quaternion<float>(-1.618, 3.1416, -1.414, 2.718)), *y(new Quaternion<float>(std::move(*x)));
         EXPECT_NO_THROW(delete x);
