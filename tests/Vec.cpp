@@ -179,425 +179,357 @@ TEST(ClassVec, Destructor)
 
 TEST(ClassVec, AdditionOperators)
 {
-    std::string testName("ClassFrac.AdditionOperators");
+    std::string testName("ClassVec.AdditionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator+=(const Frac<T>& x)");
+        printSection(testName, "Vec<T, n>::operator+=(const Vec<T, n>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
         x += y;
-        EXPECT_EQ(x.num(), -1);
-        EXPECT_EQ(x.denom(), 63);
+        EXPECT_FLOAT_EQ(x[0], 2.195);
+        EXPECT_FLOAT_EQ(x[1], 9.81);
+        EXPECT_FLOAT_EQ(x[2], 4.132);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator+(const Vec<T, n>& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x + y;
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 2.195);
+        EXPECT_FLOAT_EQ(z[1], 9.81);
+        EXPECT_FLOAT_EQ(z[2], 4.132);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator+(Vec<T, n>&& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) + y;
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 2.195);
+        EXPECT_FLOAT_EQ(z[1], 9.81);
+        EXPECT_FLOAT_EQ(z[2], 4.132);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator+(const Vec<T, n>& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x + std::move(y);
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 2.195);
+        EXPECT_FLOAT_EQ(z[1], 9.81);
+        EXPECT_FLOAT_EQ(z[2], 4.132);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator+(Vec<T, n>&& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) + std::move(y);
-        EXPECT_EQ(z.num(), -1);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 2.195);
+        EXPECT_FLOAT_EQ(z[1], 9.81);
+        EXPECT_FLOAT_EQ(z[2], 4.132);
     }
 }
 
 TEST(ClassVec, SubstractionOperators)
 {
-    std::string testName("ClassFrac.SubstractionOperators");
+    std::string testName("ClassVec.SubstractionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator-=(const Frac<T>& x)");
+        printSection(testName, "Vec<T, n>::operator-=(const Vec<T, n>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
         x -= y;
-        EXPECT_EQ(x.num(), 55);
-        EXPECT_EQ(x.denom(), 63);
+        EXPECT_FLOAT_EQ(x[0], 1.041);
+        EXPECT_FLOAT_EQ(x[1], -3.53);
+        EXPECT_FLOAT_EQ(x[2], -1.304);
     }
 
     {
-        printSection(testName, "operator-(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator-(const Vec<T, n>& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x - y;
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 1.041);
+        EXPECT_FLOAT_EQ(z[1], -3.53);
+        EXPECT_FLOAT_EQ(z[2], -1.304);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator-(Vec<T, n>&& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) - y;
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 1.041);
+        EXPECT_FLOAT_EQ(z[1], -3.53);
+        EXPECT_FLOAT_EQ(z[2], -1.304);
     }
 
     {
-        printSection(testName, "operator-(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator-(const Vec<T, n>& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x - std::move(y);
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 1.041);
+        EXPECT_FLOAT_EQ(z[1], -3.53);
+        EXPECT_FLOAT_EQ(z[2], -1.304);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator-(Vec<T, n>&& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) - std::move(y);
-        EXPECT_EQ(z.num(), 55);
-        EXPECT_EQ(z.denom(), 63);
+        EXPECT_FLOAT_EQ(z[0], 1.041);
+        EXPECT_FLOAT_EQ(z[1], -3.53);
+        EXPECT_FLOAT_EQ(z[2], -1.304);
     }
 }
 
 TEST(ClassVec, MultiplicationOperators)
 {
-    std::string testName("ClassFrac.MultiplicationOperators");
+    std::string testName("ClassVec.MultiplicationOperators");
 
     {
-        printSection(testName, "Frac<T>::operator*=(const Frac<T>& x)");
+        printSection(testName, "Vec<T, n>::operator*=(const Vec<T, n>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
         x *= y;
-        EXPECT_EQ(x.num(), -4);
-        EXPECT_EQ(x.denom(), 21);
+        EXPECT_FLOAT_EQ(x[0], 0.933586);
+        EXPECT_FLOAT_EQ(x[1], 20.9438);
+        EXPECT_FLOAT_EQ(x[2], 3.843252);
     }
 
     {
-        printSection(testName, "operator*(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator*(const Vec<T, n>& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x * y;
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_FLOAT_EQ(z[0], 0.933586);
+        EXPECT_FLOAT_EQ(z[1], 20.9438);
+        EXPECT_FLOAT_EQ(z[2], 3.843252);
     }
 
     {
-        printSection(testName, "operator*(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator*(Vec<T, n>&& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) * y;
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_FLOAT_EQ(z[0], 0.933586);
+        EXPECT_FLOAT_EQ(z[1], 20.9438);
+        EXPECT_FLOAT_EQ(z[2], 3.843252);
     }
 
     {
-        printSection(testName, "operator*(const Frac<T>& x, Frac<T>&& y)");
+        printSection(testName, "operator*(const Vec<T, n>& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x * std::move(y);
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_FLOAT_EQ(z[0], 0.933586);
+        EXPECT_FLOAT_EQ(z[1], 20.9438);
+        EXPECT_FLOAT_EQ(z[2], 3.843252);
     }
 
     {
-        printSection(testName, "operator*(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator*(Vec<T, n>&& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) * std::move(y);
-        EXPECT_EQ(z.num(), -4);
-        EXPECT_EQ(z.denom(), 21);
+        EXPECT_FLOAT_EQ(z[0], 0.933586);
+        EXPECT_FLOAT_EQ(z[1], 20.9438);
+        EXPECT_FLOAT_EQ(z[2], 3.843252);
     }
 }
 
 TEST(ClassVec, DivisionOperators)
 {
-    std::string testName("ClassFrac.DivisionOperators");
+    std::string testName("ClassVec.DivisionOperators");
 
     {
-        printSection(testName, "Frac<T>::operator/=(const Frac<T>& x)");
+        printSection(testName, "Vec<T, n>::operator/=(const Vec<T, n>& x)");
 
-        Frac<Int> x(3, 7), y(-4, 9);
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
         x /= y;
-        EXPECT_EQ(x.num(), -27);
-        EXPECT_EQ(x.denom(), 28);
+        EXPECT_NEAR(x[0], 2.8042, 1e-4);
+        EXPECT_NEAR(x[1], 0.4708, 1e-4);
+        EXPECT_NEAR(x[2], 0.5202, 1e-4);
     }
 
     {
-        printSection(testName, "operator/(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator/(const Vec<T, n>& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = x / y;
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
+        EXPECT_NEAR(z[0], 2.8042, 1e-4);
+        EXPECT_NEAR(z[1], 0.4708, 1e-4);
+        EXPECT_NEAR(z[2], 0.5202, 1e-4);
     }
 
     {
-        printSection(testName, "operator/(Frac<T>&& x, const Frac<T>& y)");
+        printSection(testName, "operator/(Vec<T, n>&& x, const Vec<T, n>& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) / y;
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
+        EXPECT_NEAR(z[0], 2.8042, 1e-4);
+        EXPECT_NEAR(z[1], 0.4708, 1e-4);
+        EXPECT_NEAR(z[2], 0.5202, 1e-4);
     }
 
     {
-        printSection(testName, "operator/(Frac<T>&& x, Frac<T>&& y)");
+        printSection(testName, "operator/(Vec<T, n>&& x, Vec<T, n>&& y)");
 
-        Frac<Int> x(3, 7), y(-4, 9), z;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f}), z;
         z = std::move(x) / std::move(y);
-        EXPECT_EQ(z.num(), -27);
-        EXPECT_EQ(z.denom(), 28);
+        EXPECT_NEAR(z[0], 2.8042, 1e-4);
+        EXPECT_NEAR(z[1], 0.4708, 1e-4);
+        EXPECT_NEAR(z[2], 0.5202, 1e-4);
+    }
+}
+
+TEST(ClassVec, ModuloOperators)
+{
+    std::string testName("ClassVec.ModuloOperators");
+
+    {
+        printSection(testName, "Vec<T, n>::operator%=(const Vec<T, n>& x)");
+
+        Vec<uint64_t, 3> x({1618, 314, 1414}), y({58, 67, 27});
+        x %= y;
+        EXPECT_FLOAT_EQ(x[0], 52);
+        EXPECT_FLOAT_EQ(x[1], 46);
+        EXPECT_FLOAT_EQ(x[2], 10);
+    }
+
+    {
+        printSection(testName, "operator%(const Vec<T, n>& x, const Vec<T, n>& y)");
+
+        Vec<uint64_t, 3> x({1618, 314, 1414}), y({58, 67, 27}), z;
+        z = x % y;
+        EXPECT_FLOAT_EQ(z[0], 52);
+        EXPECT_FLOAT_EQ(z[1], 46);
+        EXPECT_FLOAT_EQ(z[2], 10);
+    }
+
+    {
+        printSection(testName, "operator%(Vec<T, n>&& x, const Vec<T, n>& y)");
+
+        Vec<uint64_t, 3> x({1618, 314, 1414}), y({58, 67, 27}), z;
+        z = std::move(x) % y;
+        EXPECT_FLOAT_EQ(z[0], 52);
+        EXPECT_FLOAT_EQ(z[1], 46);
+        EXPECT_FLOAT_EQ(z[2], 10);
+    }
+
+    {
+        printSection(testName, "operator%(Vec<T, n>&& x, Vec<T, n>&& y)");
+
+        Vec<uint64_t, 3> x({1618, 314, 1414}), y({58, 67, 27}), z;
+        z = std::move(x) % std::move(y);
+        EXPECT_FLOAT_EQ(z[0], 52);
+        EXPECT_FLOAT_EQ(z[1], 46);
+        EXPECT_FLOAT_EQ(z[2], 10);
     }
 }
 
 TEST(ClassVec, UnaryOperators)
 {
-    std::string testName("ClassFrac.UnaryOperators");
+    std::string testName("ClassVec.UnaryOperators");
 
     {
-        printSection(testName, "operator-(const Frac<T>& x)");
+        printSection(testName, "operator-(const Vec<T, n>& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y;
         y = -x;
-        EXPECT_EQ(x.num(), -3);
-        EXPECT_EQ(x.denom(), 7);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(x[0], 1.618);
+        EXPECT_FLOAT_EQ(x[1], 3.14);
+        EXPECT_FLOAT_EQ(x[2], 1.414);
+        EXPECT_FLOAT_EQ(y[0], -1.618);
+        EXPECT_FLOAT_EQ(y[1], -3.14);
+        EXPECT_FLOAT_EQ(y[2], -1.414);
     }
 
     {
-        printSection(testName, "operator+(const Frac<T>& x)");
+        printSection(testName, "operator+(const Vec<T, n>& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y;
         y = +x;
-        EXPECT_EQ(x.num(), -3);
-        EXPECT_EQ(x.denom(), 7);
-        EXPECT_EQ(y.num(), -3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(x[0], 1.618);
+        EXPECT_FLOAT_EQ(x[1], 3.14);
+        EXPECT_FLOAT_EQ(x[2], 1.414);
+        EXPECT_FLOAT_EQ(y[0], 1.618);
+        EXPECT_FLOAT_EQ(y[1], 3.14);
+        EXPECT_FLOAT_EQ(y[2], 1.414);
     }
 
     {
-        printSection(testName, "operator-(Frac<T>&& x)");
+        printSection(testName, "operator-(Vec<T, n>&& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y;
         y = -std::move(x);
-        EXPECT_EQ(y.num(), 3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y[0], -1.618);
+        EXPECT_FLOAT_EQ(y[1], -3.14);
+        EXPECT_FLOAT_EQ(y[2], -1.414);
     }
 
     {
-        printSection(testName, "operator+(Frac<T>&& x)");
+        printSection(testName, "operator+(Vec<T, n>&& x)");
 
-        Frac<Int> x(-3, 7), y;
+        Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y;
         y = +std::move(x);
-        EXPECT_EQ(y.num(), -3);
-        EXPECT_EQ(y.denom(), 7);
+        EXPECT_FLOAT_EQ(y[0], 1.618);
+        EXPECT_FLOAT_EQ(y[1], 3.14);
+        EXPECT_FLOAT_EQ(y[2], 1.414);
     }
 }
 
 TEST(ClassVec, Comparators)
 {
-    std::string testName("ClassFrac.Comparators");
+    std::string testName("ClassVec.Comparators");
 
     {
-        printSection(testName, "operator==(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator==(const Vec<T, n>& x, const Vec<T, n>& y)");
 
         {
-            Frac<Int> x(3, 7), y(3, 7);
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({1.618f, 3.14f, 1.414f});
+            EXPECT_EQ(x == x, true);
             EXPECT_EQ(x == y, true);
-
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(6, 14);
-            EXPECT_EQ(x == y, true);
-
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x == y, true);
+            EXPECT_EQ(y == y, true);
         }
 
         {
-            Frac<Int> x(3, 7), y(-4, 9);
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({1.618f, 3.14f, 2.718f});
             EXPECT_EQ(x == y, false);
+            EXPECT_EQ(y == x, false);
+        }
 
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
+        {
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
             EXPECT_EQ(x == y, false);
+            EXPECT_EQ(y == x, false);
         }
     }
 
     {
-        printSection(testName, "operator!=(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator!=(const Vec<T, n>& x, const Vec<T, n>& y)");
 
         {
-            Frac<Int> x(3, 7), y(3, 7);
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({1.618f, 3.14f, 1.414f});
+            EXPECT_EQ(x != x, false);
             EXPECT_EQ(x != y, false);
-
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x != y, false);
+            EXPECT_EQ(y != y, false);
         }
 
         {
-            Frac<Int> x(3, 7), y(-4, 9);
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({1.618f, 3.14f, 2.718f});
             EXPECT_EQ(x != y, true);
+            EXPECT_EQ(y != x, true);
+        }
 
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
+        {
+            Vec<float, 3> x({1.618f, 3.14f, 1.414f}), y({0.577f, 6.67f, 2.718f});
             EXPECT_EQ(x != y, true);
-        }
-    }
-
-    {
-        printSection(testName, "operator>(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x > y, true);
-            EXPECT_EQ(y > x, false);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x > y, false);
-            EXPECT_EQ(y > x, false);
-        }
-    }
-
-    {
-        printSection(testName, "operator<(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x < y, true);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x < y, true);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, true);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x < y, false);
-            EXPECT_EQ(y < x, false);
-        }
-    }
-
-    {
-        printSection(testName, "operator>=(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x >= y, false);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x >= y, false);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, false);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x >= y, true);
-            EXPECT_EQ(y >= x, true);
-        }
-    }
-
-    {
-        printSection(testName, "operator<=(const Frac<T>& x, const Frac<T>& y)");
-
-        {
-            Frac<Int> x(3, 7), y(4, 9);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(4, 9);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, false);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-4, 9);
-            EXPECT_EQ(x <= y, false);
-            EXPECT_EQ(y <= x, true);
-        }
-
-        {
-            Frac<Int> x(3, 7), y(3, 7);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, true);
-        }
-
-        {
-            Frac<Int> x(-3, 7), y(-3, 7);
-            EXPECT_EQ(x <= y, true);
-            EXPECT_EQ(y <= x, true);
+            EXPECT_EQ(y != x, true);
         }
     }
 }
@@ -660,23 +592,5 @@ TEST(ClassVec, StreamOperators)
             EXPECT_EQ(x.num(), 0);
             EXPECT_EQ(x.denom(), 1);
         }
-    }
-}
-
-TEST(ClassVec, BonusTests)
-{
-    std::string testName("ClassFrac.BonusTests");
-
-    {
-        printSection(testName, "Decimals of neper constant");
-
-        Rational p(1, 1), s(1, 1);
-        for (int i(1); i < 15; i++)
-        {
-            p /= i;
-            s += p;
-        }
-        
-        EXPECT_EQ(s.decimals(9), "2.718281828");
     }
 }

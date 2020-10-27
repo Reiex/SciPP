@@ -181,7 +181,7 @@ namespace scp
     Vec<T, n> operator*(const Vec<T, n>& u, const Vec<T, n>& v)
     {
         Vec<T, n> w(u);
-        w -= v;
+        w *= v;
 
         return w;
     }
