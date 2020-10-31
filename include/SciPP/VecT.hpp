@@ -104,15 +104,6 @@ namespace scp
     }
     
 
-    // Specific methods
-
-    template<typename T, uint64_t n>
-    uint64_t Vec<T, n>::size() const
-    {
-        return n;
-    }
-
-
     // External operators
 
     template<typename T, uint64_t n>
@@ -330,7 +321,7 @@ namespace scp
     template<typename T, uint64_t n>
     T dot(const Vec<T, n>& u, const Vec<T, n>& v)
     {
-        T x;
+        T x(0);
         for (uint64_t i(0); i < n; i++)
             x += u[i] * v[i];
         

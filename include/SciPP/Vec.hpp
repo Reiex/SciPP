@@ -45,8 +45,6 @@ namespace scp
             Vec<T, n>& operator/=(const Vec<T, n>& v);
             Vec<T, n>& operator%=(const Vec<T, n>& v);
 
-            uint64_t size() const;  ///< Returns the size of the vector.
-
         private:
 
             T _values[n];

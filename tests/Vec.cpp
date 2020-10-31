@@ -536,61 +536,70 @@ TEST(ClassVec, Comparators)
 
 TEST(ClassVec, StreamOperators)
 {
-    std::string testName("ClassFrac.StreamOperators");
+    std::string testName("ClassVec.StreamOperators");
 
     {
-        printSection(testName, "operator<<(std::ostream& stream, const Frac<T>& x)");
+        printSection(testName, "operator<<(std::ostream& stream, const Vec<T, n>& x)");
 
         {
-            Frac<Int> x(1618, 3141);
+            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(1618/3141)");
+            EXPECT_EQ(stream.str(), "<1.618, 3.14, 1.414>");
         }
 
         {
-            Frac<Int> x(-1618);
+            Vec<float, 3> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(-1618/1)");
+            EXPECT_EQ(stream.str(), "<0, 0, 0>");
         }
 
         {
-            Frac<Int> x(0);
+            Vec<float, 0> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(0/1)");
+            EXPECT_EQ(stream.str(), "<>");
+        }
+    }
+}
+
+TEST(ClassVec, SpecificFunctions)
+{
+    std::string testName("ClassVec.SpecificFunctions");
+
+    {
+        printSection(testName, "dot(const Vec<T, n>& u, const Vec<T, n>& v)");
+
+        {
+            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
+            EXPECT_FLOAT_EQ(dot(x, y), 25.720638);
+        }
+
+        {
+            Vec<float, 4> x({ 1.618f, 3.14f, 1.414f, -6.67f }), y({ 0.577f, 6.67f, 2.718f, 6.28f });
+            EXPECT_FLOAT_EQ(dot(x, y), -16.166962);
+        }
+
+        {
+            Vec<float, 0> x, y;
+            EXPECT_FLOAT_EQ(dot(x, y), 0);
         }
     }
 
     {
-        printSection(testName, "operator>>(std::ostream& stream, const Frac<T>& x)");
+        printSection(testName, "cross(const Vec<T, 3>& u, const Vec<T, 3>& v)");
 
         {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(1618/3141)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 1618);
-            EXPECT_EQ(x.denom(), 3141);
+            Vec<float, 3> x({ 1.f, 2.f, 3.f }), y({ 4.f, 5.f, 6.f }), z({ -3.f, 6.f, -3.f });
+            EXPECT_EQ(cross(x, y), z);
         }
 
         {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(-1618/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), -1618);
-            EXPECT_EQ(x.denom(), 1);
-        }
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(0/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 0);
-            EXPECT_EQ(x.denom(), 1);
+            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z(cross(x, y));
+            EXPECT_FLOAT_EQ(z[0], -0.89686f);
+            EXPECT_FLOAT_EQ(z[1], -3.581846f);
+            EXPECT_FLOAT_EQ(z[2], 8.98028f);
         }
     }
 }
