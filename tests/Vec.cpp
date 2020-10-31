@@ -602,4 +602,81 @@ TEST(ClassVec, SpecificFunctions)
             EXPECT_FLOAT_EQ(z[2], 8.98028f);
         }
     }
+
+    {
+        printSection(testName, "dft(const Vec<std::complex<T>, n>& f)");
+
+        {
+            Vec<std::complex<float>, 4> f({
+                    std::complex<float>(1, 0),
+                    std::complex<float>(0, 1),
+                    std::complex<float>(-1, 0),
+                    std::complex<float>(0, -1)
+                });
+
+            Vec<std::complex<float>, 4> fh({
+                    std::complex<float>(0, 0),
+                    std::complex<float>(4, 0),
+                    std::complex<float>(0, 0),
+                    std::complex<float>(0, 0)
+                });
+
+            Vec<std::complex<float>, 4> diff = fh - dft(f);
+
+            float l = std::norm(dot(diff, diff));
+
+            EXPECT_NEAR(l, 0, 1e-10);
+        }
+
+        {
+            const uint64_t n = 100;
+            Vec<std::complex<float>, n> f;
+            for (uint64_t i(0); i < n; i++)
+            {
+                float x = (2.f * pi * i) / n;
+                f[i] = std::complex<float>(std::cos(x), std::sin(x));
+            }
+
+            Vec<std::complex<float>, n> fh = dft(f);
+            for (uint64_t i(0); i < n; i++)
+            {
+                if (i == 1)
+                    EXPECT_NEAR(fh[i].real(), n, 1e-3);
+                else
+                    EXPECT_NEAR(fh[i].real(), 0, 1e-3);
+                EXPECT_NEAR(fh[i].imag(), 0, 1e-3);
+            }
+        }
+    }
+
+    {
+        printSection(testName, "idft(const Vec<std::complex<T>, n>& fh)");
+
+        const uint64_t n = 100;
+        Vec<std::complex<float>, n> f;
+        for (uint64_t i(0); i < n; i++)
+            f[i] = (float(std::rand()) / RAND_MAX);
+
+        Vec<std::complex<float>, n> g = idft(dft(f));
+        for (uint64_t i(0); i < n; i++)
+        {
+            EXPECT_NEAR(f[i].real(), g[i].real(), 1e-3);
+            EXPECT_NEAR(f[i].imag(), g[i].imag(), 1e-3);
+        }
+    }
+
+    {
+        printSection(testName, "dct(const Vec<T, n>& f) and idct(const Vec<T, n>& fh)");
+
+        const uint64_t n = 100;
+        Vec<float, n> f;
+        for (uint64_t i(0); i < n; i++)
+            f[i] = (float(std::rand()) / RAND_MAX);
+
+        Vec<float, n> g = idct(dct(f));
+        for (uint64_t i(0); i < n; i++)
+        {
+            EXPECT_NEAR(f[i], g[i], 1e-3);
+        }
+    }
 }

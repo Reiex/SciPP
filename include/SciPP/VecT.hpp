@@ -359,7 +359,7 @@ namespace scp
         for (uint64_t i(0); i < n; i++)
             f[i] = std::conj(f[i]);
 
-        return f / std::complex<T>(n);
+        return f / Vec<std::complex<T>, n>(std::complex<T>(n));
     }
 
     namespace
