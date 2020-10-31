@@ -41,7 +41,7 @@ namespace scp
     // Accessors
 
     template<typename T>
-    T Polynomial<T>::operator[](uint64_t i)
+    T& Polynomial<T>::operator[](uint64_t i)
     {
         if (i >= _coeffs.size())
             _coeffs.resize(i + 1, 0);
@@ -213,7 +213,7 @@ namespace scp
     void Polynomial<T>::reduce() const
     {
         uint64_t size = _coeffs.size();
-        while (_coeffs[size - 1] == 0 && size > 0)
+        while (_coeffs[size - 1] == 0 && size > 1)
             size--;
         
         if (size != _coeffs.size())

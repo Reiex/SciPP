@@ -35,7 +35,7 @@ namespace scp
             Polynomial<T>& operator=(const Polynomial<T>& p) = default;
             Polynomial<T>& operator=(Polynomial<T>&& p) = default;
 
-            T operator[](uint64_t i);               ///< Get the coefficient in front of X^i.
+            T& operator[](uint64_t i);               ///< Get the coefficient in front of X^i.
             const T& operator[](uint64_t i) const;  ///< Get the coefficient in front of X^i.
 
             Polynomial<T>& operator+=(const Polynomial<T>& p);
@@ -70,6 +70,11 @@ namespace scp
             void reduce() const;
 
             mutable std::vector<T> _coeffs;
+
+        template<typename U>
+        friend Polynomial<U>&& operator-(Polynomial<U>&& p);
+        template<typename U>
+        friend Polynomial<U>&& operator+(Polynomial<U>&& p);
     };
 
     // Operators
