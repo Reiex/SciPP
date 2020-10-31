@@ -335,6 +335,18 @@ namespace scp
     }
 
     template<typename T, uint64_t n>
+    T normSq(const Vec<T, n> v)
+    {
+        return dot(v, v);
+    }
+
+    template<typename T, uint64_t n>
+    T norm(const Vec<T, n> v)
+    {
+        return std::sqrt(normSq(v));
+    }
+
+    template<typename T, uint64_t n>
     Vec<std::complex<T>, n> dft(const Vec<std::complex<T>, n>& f)
     {
         Vec<std::complex<T>, n> fh;

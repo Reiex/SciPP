@@ -604,6 +604,34 @@ TEST(ClassVec, SpecificFunctions)
     }
 
     {
+        printSection(testName, "normSq(const Vec<T, n>& v)");
+
+        {
+            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
+            EXPECT_FLOAT_EQ(normSq(x), 14.47692);
+        }
+
+        {
+            Vec<float, 0> x;
+            EXPECT_FLOAT_EQ(normSq(x), 0);
+        }
+    }
+
+    {
+        printSection(testName, "norm(const Vec<T, n>& v)");
+
+        {
+            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
+            EXPECT_NEAR(norm(x), 3.805, 1e-3);
+        }
+
+        {
+            Vec<float, 0> x;
+            EXPECT_FLOAT_EQ(norm(x), 0);
+        }
+    }
+
+    {
         printSection(testName, "dft(const Vec<std::complex<T>, n>& f)");
 
         {
@@ -621,9 +649,7 @@ TEST(ClassVec, SpecificFunctions)
                     std::complex<float>(0, 0)
                 });
 
-            Vec<std::complex<float>, 4> diff = fh - dft(f);
-
-            float l = std::norm(dot(diff, diff));
+            float l = std::abs(normSq(fh - dft(f)));
 
             EXPECT_NEAR(l, 0, 1e-10);
         }

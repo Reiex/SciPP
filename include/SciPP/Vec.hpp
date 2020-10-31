@@ -26,6 +26,8 @@ namespace scp
     {
         public:
 
+            static const uint64_t N = n;  ///< Number of elements of the vector.
+
             Vec();                                ///< Default constructor. Init all the components of the vector with T(0).
             Vec(int64_t value);                   ///< Init all the components of the vector with T(value).
             Vec(const T& value);                  ///< Init all the components of the vector with value.
@@ -114,7 +116,7 @@ namespace scp
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
-    /// \brief Output stream operator for class Rational
+    /// \brief Output stream operator for class Vec
     /// 
     /// Writes the vector under the format `<x, x, x, ..., x>` with `x` the elements of the vector.
     ///
@@ -136,6 +138,18 @@ namespace scp
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
     Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Vec
+    /// \brief Returns the square of the euclidian norm of a vector.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t n>
+    T normSq(const Vec<T, n> v);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \relates Vec
+    /// \brief Returns the euclidian norm of a vector.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T, uint64_t n>
+    T norm(const Vec<T, n> v);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
