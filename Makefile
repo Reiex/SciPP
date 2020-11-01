@@ -47,7 +47,7 @@ EXAMPLES_CFLAGS = -I$(INCLUDE_DIR)
 # Linker options
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
 # Libraries linked
-LIBRARY_LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
+LIBRARY_LDLIBS = 
 TESTS_LDLIBS = -lSciPP $(LIBRARY_LDLIBS) -lgtest -lpthread
 EXAMPLES_LDLIBS = -lSciPP $(LIBRARY_LDLIBS)
 
