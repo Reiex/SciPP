@@ -41,8 +41,6 @@ namespace scp
             uint64_t buffer;
             uint64_t size;
 
-            // Determiner la taille de l'Int
-
             if (_values.size() > x._values.size())
             {
                 uint64_t i(_values.size() - 1);
@@ -116,12 +114,8 @@ namespace scp
                 }
             }
 
-            // Allouer un nouvel espace memoire si necessaire
-
             if (size != _values.size())
                 _values.resize(size);
-
-            // Faire la somme elle-meme
 
             buffer = 0;
             for (uint64_t i(0); i < size; i++)

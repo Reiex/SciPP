@@ -375,6 +375,47 @@ TEST(ClassPolynomial, DivisionOperators)
     }
 }
 
+TEST(ClassPolynomial, ModuloOperators)
+{
+    std::string testName("ClassPolynomial.ModuloOperators");
+
+    {
+        printSection(testName, "Polynomial<T>::operator%=(const Polynomial<T>& x)");
+
+        Polynomial<float> x({ 1.618f, -0.577f }), y({ 1.414f, -3.14f });
+        x %= y;
+        EXPECT_EQ(x.degree(), 0);
+        EXPECT_NEAR(x[0], 1.3582, 1e-4);
+    }
+
+    {
+        printSection(testName, "operator%(const Polynomial<T>& x, const Polynomial<T>& y)");
+
+        Polynomial<float> x({ 1.618f, -0.577f }), y({ 1.414f, -3.14f }), z;
+        z = x % y;
+        EXPECT_EQ(z.degree(), 0);
+        EXPECT_NEAR(z[0], 1.3582, 1e-4);
+    }
+
+    {
+        printSection(testName, "operator%(Polynomial<T>&& x, const Polynomial<T>& y)");
+
+        Polynomial<float> x({ 1.618f, -0.577f }), y({ 1.414f, -3.14f }), z;
+        z = std::move(x) % y;
+        EXPECT_EQ(z.degree(), 0);
+        EXPECT_NEAR(z[0], 1.3582, 1e-4);
+    }
+
+    {
+        printSection(testName, "operator%(Polynomial<T>&& x, Polynomial<T>&& y)");
+
+        Polynomial<float> x({ 1.618f, -0.577f }), y({ 1.414f, -3.14f }), z;
+        z = std::move(x) % std::move(y);
+        EXPECT_EQ(z.degree(), 0);
+        EXPECT_NEAR(z[0], 1.3582, 1e-4);
+    }
+}
+
 TEST(ClassPolynomial, UnaryOperators)
 {
     std::string testName("ClassPolynomial.UnaryOperators");
@@ -428,132 +469,105 @@ TEST(ClassPolynomial, UnaryOperators)
 
 TEST(ClassPolynomial, Comparators)
 {
-    std::string testName("ClassFrac.Comparators");
+    std::string testName("ClassPolynomial.Comparators");
 
     {
-        printSection(testName, "operator==(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator==(const Polynomial<T>& x, const Polynomial<T>& y)");
 
         {
-            Frac<Int> x(3, 7), y(3, 7);
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 3.f });
             EXPECT_EQ(x == y, true);
-
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(6, 14);
-            EXPECT_EQ(x == y, true);
-
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x == y, true);
+            EXPECT_EQ(y == x, true);
         }
 
         {
-            Frac<Int> x(3, 7), y(-4, 9);
-            EXPECT_EQ(x == y, false);
+            Polynomial<float> x, y;
+            EXPECT_EQ(x == y, true);
+            EXPECT_EQ(y == x, true);
+        }
 
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
-            EXPECT_EQ(x == y, false);
+        {
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 3.f, 4.f });
+            EXPECT_EQ(y == x, false);
+            EXPECT_EQ(y == x, false);
+        }
+
+        {
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 4.f });
+            EXPECT_EQ(y == x, false);
+            EXPECT_EQ(y == x, false);
         }
     }
 
     {
-        printSection(testName, "operator!=(const Frac<T>& x, const Frac<T>& y)");
+        printSection(testName, "operator!=(const Polynomial<T>& x, const Polynomial<T>& y)");
 
         {
-            Frac<Int> x(3, 7), y(3, 7);
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 3.f });
             EXPECT_EQ(x != y, false);
-
-            x = Frac<Int>(-3, 7);
-            y = Frac<Int>(6, -14);
-            EXPECT_EQ(x != y, false);
+            EXPECT_EQ(y != x, false);
         }
 
         {
-            Frac<Int> x(3, 7), y(-4, 9);
-            EXPECT_EQ(x != y, true);
+            Polynomial<float> x, y;
+            EXPECT_EQ(x != y, false);
+            EXPECT_EQ(y != x, false);
+        }
 
-            x = Frac<Int>(3, 7);
-            y = Frac<Int>(-3, 7);
-            EXPECT_EQ(x != y, true);
+        {
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 3.f, 4.f });
+            EXPECT_EQ(y != x, true);
+            EXPECT_EQ(y != x, true);
+        }
+
+        {
+            Polynomial<float> x({ 1.f, 2.f, 3.f }), y({ 1.f, 2.f, 4.f });
+            EXPECT_EQ(y != x, true);
+            EXPECT_EQ(y != x, true);
         }
     }
 }
 
 TEST(ClassPolynomial, StreamOperators)
 {
-    std::string testName("ClassFrac.StreamOperators");
+    std::string testName("ClassPolynomial.StreamOperators");
 
     {
-        printSection(testName, "operator<<(std::ostream& stream, const Frac<T>& x)");
+        printSection(testName, "operator<<(std::ostream& stream, const Polynomial<T>& x)");
 
         {
-            Frac<Int> x(1618, 3141);
+            Polynomial<float> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(1618/3141)");
+            EXPECT_EQ(stream.str(), "[0]");
         }
 
         {
-            Frac<Int> x(-1618);
+            Polynomial<float> x({ 1.618f, 1.414f, -3.14f});
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(-1618/1)");
+            EXPECT_EQ(stream.str(), "[1.618, 1.414, -3.14]");
         }
 
         {
-            Frac<Int> x(0);
+            Polynomial<float> x({ 1.618f, 0.f, -3.14f });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(0/1)");
-        }
-    }
-
-    {
-        printSection(testName, "operator>>(std::ostream& stream, const Frac<T>& x)");
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(1618/3141)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 1618);
-            EXPECT_EQ(x.denom(), 3141);
-        }
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(-1618/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), -1618);
-            EXPECT_EQ(x.denom(), 1);
-        }
-
-        {
-            Frac<Int> x;
-            std::stringstream stream;
-            stream << "(0/1)";
-            stream >> x;
-            EXPECT_EQ(x.num(), 0);
-            EXPECT_EQ(x.denom(), 1);
+            EXPECT_EQ(stream.str(), "[1.618, 0, -3.14]");
         }
     }
 }
 
 TEST(ClassPolynomial, BonusTests)
 {
-    std::string testName("ClassFrac.BonusTests");
+    std::string testName("ClassPolynomial.BonusTests");
 
     {
-        printSection(testName, "Decimals of neper constant");
+        printSection(testName, "Binomial from polynomial");
 
-        Rational p(1, 1), s(1, 1);
-        for (int i(1); i < 15; i++)
-        {
-            p /= i;
-            s += p;
-        }
-
-        EXPECT_EQ(s.decimals(9), "2.718281828");
+        Polynomial<Int> x({ 1, 1 }), y;
+        y = expoSq(x, 10);
+        y[5];
+        binom(10, 5);
     }
 }
