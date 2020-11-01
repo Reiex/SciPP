@@ -567,7 +567,6 @@ TEST(ClassPolynomial, BonusTests)
 
         Polynomial<Int> x({ 1, 1 }), y;
         y = expoSq(x, 10);
-        y[5];
-        binom(10, 5);
+        EXPECT_EQ(y[5], binom(10, 5));
     }
 }
