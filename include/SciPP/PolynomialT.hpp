@@ -34,6 +34,8 @@ namespace scp
     Polynomial<T>::Polynomial(const std::vector<T>& values) :
         _coeffs(values)
     {
+        if (values.size() == 0)
+            _coeffs = { 0 };
         reduce();
     }
     
@@ -166,9 +168,11 @@ namespace scp
     template<typename T>
     T Polynomial<T>::operator()(const T& x) const
     {
+        reduce();
+
         T y(0);
         for (uint64_t i(_coeffs.size() - 1); i != UINT64_MAX; i--)
-            y = _coeffs[i] + y * X;
+            y = _coeffs[i] + y * x;
         
         return y;
     }
@@ -187,6 +191,8 @@ namespace scp
     template<typename T>
     Polynomial<T> Polynomial<T>::derivative() const
     {
+        reduce();
+
         std::vector<T> coeffs(_coeffs.size() - 1, 0);
         for (uint64_t i(0); i < coeffs.size(); i++)
             coeffs[i] = _coeffs[i+1] * (i+1);
@@ -197,6 +203,8 @@ namespace scp
     template<typename T>
     Polynomial<T> Polynomial<T>::primitive(T const& c) const
     {
+        reduce();
+
         std::vector<T> coeffs(_coeffs.size() + 1, c);
         for (uint64_t i(1); i < coeffs.size(); i++)
             coeffs[i] = _coeffs[i-1] / i;

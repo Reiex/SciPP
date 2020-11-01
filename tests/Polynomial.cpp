@@ -558,6 +558,81 @@ TEST(ClassPolynomial, StreamOperators)
     }
 }
 
+TEST(ClassPolynomial, SpecificMethods)
+{
+    std::string testName("ClassPolynomial.SpecificMethods");
+
+    {
+        printSection(testName, "Polynomial<T>::operator[](uint64_t i)");
+
+        Polynomial<float> x({ 1.618f, 1.414f, -3.14f });
+        EXPECT_FLOAT_EQ(x[0], 1.618f);
+        EXPECT_FLOAT_EQ(x[3], 0.f);
+
+        x[10] = 2.718f;
+        EXPECT_FLOAT_EQ(x[10], 2.718f);
+
+    }
+
+    {
+        printSection(testName, "Polynomial<T>::operator()(const T& x)");
+
+        {
+            Polynomial<float> x({ 1.618f, 1.414f, -3.14f });
+            EXPECT_FLOAT_EQ(x(0), 1.618f);
+            EXPECT_FLOAT_EQ(x(2), -8.114f);
+        }
+
+        {
+            Polynomial<float> x;
+            EXPECT_FLOAT_EQ(x(0), 0.f);
+            EXPECT_FLOAT_EQ(x(2), 0.f);
+        }
+    }
+
+    {
+        printSection(testName, "Polynomial<T>::derivative()");
+
+        {
+            Polynomial<float> x({ 1.618f, 1.414f, -3.14f }), y;
+            y = x.derivative();
+            EXPECT_EQ(y.degree(), 1);
+            EXPECT_FLOAT_EQ(y[0], 1.414f);
+            EXPECT_FLOAT_EQ(y[1], -6.28f);
+        }
+
+        {
+            Polynomial<float> x, y;
+            y = x.derivative();
+            EXPECT_EQ(y.degree(), 0);
+            EXPECT_FLOAT_EQ(y[0], 0.f);
+        }
+    }
+
+    {
+        printSection(testName, "Polynomial<T>::primitive()");
+
+        {
+            Polynomial<float> x({ 1.618f, 1.414f, -3.14f }), y;
+            y = x.primitive();
+            EXPECT_EQ(y.degree(), 3);
+            EXPECT_FLOAT_EQ(y[0], 0.f);
+            EXPECT_FLOAT_EQ(y[3], -3.14/3);
+
+            y = x.primitive(2.718f);
+            EXPECT_EQ(y.degree(), 3);
+            EXPECT_FLOAT_EQ(y[0], 2.718f);
+        }
+
+        {
+            Polynomial<float> x, y;
+            y = x.primitive();
+            EXPECT_EQ(y.degree(), 0);
+            EXPECT_FLOAT_EQ(y[0], 0.f);
+        }
+    }
+}
+
 TEST(ClassPolynomial, BonusTests)
 {
     std::string testName("ClassPolynomial.BonusTests");
