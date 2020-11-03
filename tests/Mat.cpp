@@ -115,83 +115,86 @@ TEST(ClassMat, Constructors)
 
 TEST(ClassMat, AssignmentOperators)
 {
-    std::string testName("ClassVec.AssignmentOperators");
+    std::string testName("ClassMat.AssignmentOperators");
 
     {
-        printSection(testName, "Vec<T, n>::operator=(const Vec<T, n>& x)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
-        y = x;
-        EXPECT_FLOAT_EQ(x[0], 1.618);
-        EXPECT_FLOAT_EQ(x[1], 3.14);
-        EXPECT_FLOAT_EQ(x[2], 1.414);
-        EXPECT_FLOAT_EQ(y[0], 1.618);
-        EXPECT_FLOAT_EQ(y[1], 3.14);
-        EXPECT_FLOAT_EQ(y[2], 1.414);
-    }
-
-    {
-        printSection(testName, "Vec<T, n>::operator=(Vec<T, n>&& x)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
-        y = std::move(x);
-        EXPECT_FLOAT_EQ(y[0], 1.618);
-        EXPECT_FLOAT_EQ(y[1], 3.14);
-        EXPECT_FLOAT_EQ(y[2], 1.414);
-    }
-
-    {
-        printSection(testName, "Bonus tests");
+        printSection(testName, "Mat<T, m, n>::operator=(const Mat<T, m, n>& x)");
 
         {
-            Vec<float, 2> x({ 1.618f, 3.14f }), y, z, t;
-            t = z = y = x;
-            EXPECT_FLOAT_EQ(x[0], 1.618);
-            EXPECT_FLOAT_EQ(x[1], 3.14);
-            EXPECT_FLOAT_EQ(y[0], 1.618);
-            EXPECT_FLOAT_EQ(y[1], 3.14);
-            EXPECT_FLOAT_EQ(z[0], 1.618);
-            EXPECT_FLOAT_EQ(z[1], 3.14);
-            EXPECT_FLOAT_EQ(t[0], 1.618);
-            EXPECT_FLOAT_EQ(t[1], 3.14);
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y;
+            y = x;
+
+            EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
+            EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
+            EXPECT_FLOAT_EQ(x[2][0], 8.8f); EXPECT_FLOAT_EQ(x[2][1], -7.4f);
+
+            EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
+            EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
+            EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
         }
+    }
+
+    {
+        printSection(testName, "Mat<T, m, n>::operator=(Mat<T, m, n>&& x)");
 
         {
-            Vec<float, 2> x({ 1.618f, 3.14f }), y, z, t;
-            t = std::move(z = y = x);
-            EXPECT_FLOAT_EQ(x[0], 1.618);
-            EXPECT_FLOAT_EQ(x[1], 3.14);
-            EXPECT_FLOAT_EQ(y[0], 1.618);
-            EXPECT_FLOAT_EQ(y[1], 3.14);
-            EXPECT_FLOAT_EQ(t[0], 1.618);
-            EXPECT_FLOAT_EQ(t[1], 3.14);
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y;
+            y = std::move(x);
+
+            EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
+            EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
+            EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
         }
     }
 }
 
 TEST(ClassMat, Destructor)
 {
-    std::string testName("ClassVec.Destructor");
+    std::string testName("ClassMat.Destructor");
 
     {
-        printSection(testName, "Destructor on a simple vector");
+        printSection(testName, "Destructor on a simple matrix");
 
-        Vec<float, 3>* x(new Vec<float, 3>({ 1.618f, 3.14f, 1.414f }));
+        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } }));
         EXPECT_NO_THROW(delete x);
     }
 
     {
-        printSection(testName, "Destructor on a vector created by copy");
+        printSection(testName, "Destructor on a matrix created by copy");
 
-        Vec<float, 3>* x(new Vec<float, 3>({ 1.618f, 3.14f, 1.414f })), * y(new Vec<float, 3>(*x));
+        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } }));
+        Mat<float, 3, 2>* y(new Mat<float, 3, 2>(*x));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
 
     {
-        printSection(testName, "Destructor on a vector created by move constructor");
+        printSection(testName, "Destructor on a matrix created by move constructor");
 
-        Vec<float, 3>* x(new Vec<float, 3>({ 1.618f, 3.14f, 1.414f })), * y(new Vec<float, 3>(std::move(*x)));
+        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } }));
+        Mat<float, 3, 2>* y(new Mat<float, 3, 2>(std::move(*x)));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
@@ -199,355 +202,436 @@ TEST(ClassMat, Destructor)
 
 TEST(ClassMat, AdditionOperators)
 {
-    std::string testName("ClassVec.AdditionOperators");
+    std::string testName("ClassMat.AdditionOperators");
 
     {
-        printSection(testName, "Vec<T, n>::operator+=(const Vec<T, n>& x)");
+        printSection(testName, "Mat<T, m, n>::operator+=(const Mat<T, m, n>& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
         x += y;
-        EXPECT_FLOAT_EQ(x[0], 2.195);
-        EXPECT_FLOAT_EQ(x[1], 9.81);
-        EXPECT_FLOAT_EQ(x[2], 4.132);
+
+        EXPECT_FLOAT_EQ(x[0][0], 4.7f);  EXPECT_FLOAT_EQ(x[0][1], 2.3f);
+        EXPECT_FLOAT_EQ(x[1][0], 6.2f);  EXPECT_FLOAT_EQ(x[1][1], -1.7f);
+        EXPECT_FLOAT_EQ(x[2][0], 14.1f); EXPECT_FLOAT_EQ(x[2][1], -1.5f);
     }
 
     {
-        printSection(testName, "operator+(const Vec<T, n>& x, const Vec<T, n>& y)");
+        printSection(testName, "operator+(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = x + y;
-        EXPECT_FLOAT_EQ(z[0], 2.195);
-        EXPECT_FLOAT_EQ(z[1], 9.81);
-        EXPECT_FLOAT_EQ(z[2], 4.132);
+
+        EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
+        EXPECT_FLOAT_EQ(z[1][0], 6.2f);  EXPECT_FLOAT_EQ(z[1][1], -1.7f);
+        EXPECT_FLOAT_EQ(z[2][0], 14.1f); EXPECT_FLOAT_EQ(z[2][1], -1.5f);
     }
 
     {
-        printSection(testName, "operator+(Vec<T, n>&& x, const Vec<T, n>& y)");
+        printSection(testName, "operator+(Mat<T, m, n>&& x, const Mat<T, m, n>& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = std::move(x) + y;
-        EXPECT_FLOAT_EQ(z[0], 2.195);
-        EXPECT_FLOAT_EQ(z[1], 9.81);
-        EXPECT_FLOAT_EQ(z[2], 4.132);
+
+        EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
+        EXPECT_FLOAT_EQ(z[1][0], 6.2f);  EXPECT_FLOAT_EQ(z[1][1], -1.7f);
+        EXPECT_FLOAT_EQ(z[2][0], 14.1f); EXPECT_FLOAT_EQ(z[2][1], -1.5f);
     }
 
     {
-        printSection(testName, "operator+(const Vec<T, n>& x, Vec<T, n>&& y)");
+        printSection(testName, "operator+(const Mat<T, m, n>& x, Mat<T, m, n>&& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = x + std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 2.195);
-        EXPECT_FLOAT_EQ(z[1], 9.81);
-        EXPECT_FLOAT_EQ(z[2], 4.132);
+
+        EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
+        EXPECT_FLOAT_EQ(z[1][0], 6.2f);  EXPECT_FLOAT_EQ(z[1][1], -1.7f);
+        EXPECT_FLOAT_EQ(z[2][0], 14.1f); EXPECT_FLOAT_EQ(z[2][1], -1.5f);
     }
 
     {
-        printSection(testName, "operator+(Vec<T, n>&& x, Vec<T, n>&& y)");
+        printSection(testName, "operator+(Mat<T, m, n>&& x, Mat<T, m, n>&& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = std::move(x) + std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 2.195);
-        EXPECT_FLOAT_EQ(z[1], 9.81);
-        EXPECT_FLOAT_EQ(z[2], 4.132);
+
+        EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
+        EXPECT_FLOAT_EQ(z[1][0], 6.2f);  EXPECT_FLOAT_EQ(z[1][1], -1.7f);
+        EXPECT_FLOAT_EQ(z[2][0], 14.1f); EXPECT_FLOAT_EQ(z[2][1], -1.5f);
     }
 }
 
 TEST(ClassMat, SubstractionOperators)
 {
-    std::string testName("ClassVec.SubstractionOperators");
+    std::string testName("ClassMat.SubstractionOperators");
 
     {
-        printSection(testName, "Vec<T, n>::operator-=(const Vec<T, n>& x)");
+        printSection(testName, "Mat<T, m, n>::operator-=(const Mat<T, m, n>& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
         x -= y;
-        EXPECT_FLOAT_EQ(x[0], 1.041);
-        EXPECT_FLOAT_EQ(x[1], -3.53);
-        EXPECT_FLOAT_EQ(x[2], -1.304);
+
+        EXPECT_FLOAT_EQ(x[0][0], -1.5f); EXPECT_FLOAT_EQ(x[0][1], -5.9f);
+        EXPECT_FLOAT_EQ(x[1][0], -5.6f); EXPECT_FLOAT_EQ(x[1][1], 9.5f);
+        EXPECT_FLOAT_EQ(x[2][0], 3.5f);  EXPECT_FLOAT_EQ(x[2][1], -13.3f);
     }
 
     {
-        printSection(testName, "operator-(const Vec<T, n>& x, const Vec<T, n>& y)");
+        printSection(testName, "operator-(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = x - y;
-        EXPECT_FLOAT_EQ(z[0], 1.041);
-        EXPECT_FLOAT_EQ(z[1], -3.53);
-        EXPECT_FLOAT_EQ(z[2], -1.304);
+
+        EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
+        EXPECT_FLOAT_EQ(z[1][0], -5.6f); EXPECT_FLOAT_EQ(z[1][1], 9.5f);
+        EXPECT_FLOAT_EQ(z[2][0], 3.5f);  EXPECT_FLOAT_EQ(z[2][1], -13.3f);
     }
 
     {
-        printSection(testName, "operator-(Vec<T, n>&& x, const Vec<T, n>& y)");
+        printSection(testName, "operator-(Mat<T, m, n>&& x, const Mat<T, m, n>& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = std::move(x) - y;
-        EXPECT_FLOAT_EQ(z[0], 1.041);
-        EXPECT_FLOAT_EQ(z[1], -3.53);
-        EXPECT_FLOAT_EQ(z[2], -1.304);
+
+        EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
+        EXPECT_FLOAT_EQ(z[1][0], -5.6f); EXPECT_FLOAT_EQ(z[1][1], 9.5f);
+        EXPECT_FLOAT_EQ(z[2][0], 3.5f);  EXPECT_FLOAT_EQ(z[2][1], -13.3f);
     }
 
     {
-        printSection(testName, "operator-(const Vec<T, n>& x, Vec<T, n>&& y)");
+        printSection(testName, "operator-(const Mat<T, m, n>& x, Mat<T, m, n>&& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = x - std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 1.041);
-        EXPECT_FLOAT_EQ(z[1], -3.53);
-        EXPECT_FLOAT_EQ(z[2], -1.304);
+
+        EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
+        EXPECT_FLOAT_EQ(z[1][0], -5.6f); EXPECT_FLOAT_EQ(z[1][1], 9.5f);
+        EXPECT_FLOAT_EQ(z[2][0], 3.5f);  EXPECT_FLOAT_EQ(z[2][1], -13.3f);
     }
 
     {
-        printSection(testName, "operator-(Vec<T, n>&& x, Vec<T, n>&& y)");
+        printSection(testName, "operator-(Mat<T, m, n>&& x, Mat<T, m, n>&& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y({ {
+                {3.1f, 4.1f},
+                {5.9f, -5.6f},
+                {5.3f, 5.9f}
+            } });
+        Mat<float, 3, 2> z;
         z = std::move(x) - std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 1.041);
-        EXPECT_FLOAT_EQ(z[1], -3.53);
-        EXPECT_FLOAT_EQ(z[2], -1.304);
+
+        EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
+        EXPECT_FLOAT_EQ(z[1][0], -5.6f); EXPECT_FLOAT_EQ(z[1][1], 9.5f);
+        EXPECT_FLOAT_EQ(z[2][0], 3.5f);  EXPECT_FLOAT_EQ(z[2][1], -13.3f);
     }
 }
 
 TEST(ClassMat, MultiplicationOperators)
 {
-    std::string testName("ClassVec.MultiplicationOperators");
+    std::string testName("ClassMat.MultiplicationOperators");
 
     {
-        printSection(testName, "Vec<T, n>::operator*=(const Vec<T, n>& x)");
+        printSection(testName, "operator*(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
-        x *= y;
-        EXPECT_FLOAT_EQ(x[0], 0.933586);
-        EXPECT_FLOAT_EQ(x[1], 20.9438);
-        EXPECT_FLOAT_EQ(x[2], 3.843252);
-    }
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 2, 3> y({ {
+                {3.1f, 4.1f, 5.9f},
+                {-5.6f, 5.3f, 5.9f}
+            } });
+        Mat<float, 3, 3> z;
+        Mat<float, 2, 2> t;
 
-    {
-        printSection(testName, "operator*(const Vec<T, n>& x, const Vec<T, n>& y)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
         z = x * y;
-        EXPECT_FLOAT_EQ(z[0], 0.933586);
-        EXPECT_FLOAT_EQ(z[1], 20.9438);
-        EXPECT_FLOAT_EQ(z[2], 3.843252);
-    }
+        t = y * x;
 
-    {
-        printSection(testName, "operator*(Vec<T, n>&& x, const Vec<T, n>& y)");
+        EXPECT_FLOAT_EQ(z[0][0], 15.04f);  EXPECT_FLOAT_EQ(z[0][1], -2.98f); EXPECT_FLOAT_EQ(z[0][2], 1.6f*5.9f - 1.8f*5.9f);
+        EXPECT_FLOAT_EQ(z[1][0], -20.91f); EXPECT_FLOAT_EQ(z[1][1], 21.9f);  EXPECT_FLOAT_EQ(z[1][2], 24.78f);
+        EXPECT_FLOAT_EQ(z[2][0], 68.72f);  EXPECT_FLOAT_EQ(z[2][1], -3.14f); EXPECT_FLOAT_EQ(z[2][2], 8.26f);
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
-        z = std::move(x) * y;
-        EXPECT_FLOAT_EQ(z[0], 0.933586);
-        EXPECT_FLOAT_EQ(z[1], 20.9438);
-        EXPECT_FLOAT_EQ(z[2], 3.843252);
-    }
-
-    {
-        printSection(testName, "operator*(const Vec<T, n>& x, Vec<T, n>&& y)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
-        z = x * std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 0.933586);
-        EXPECT_FLOAT_EQ(z[1], 20.9438);
-        EXPECT_FLOAT_EQ(z[2], 3.843252);
-    }
-
-    {
-        printSection(testName, "operator*(Vec<T, n>&& x, Vec<T, n>&& y)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
-        z = std::move(x) * std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 0.933586);
-        EXPECT_FLOAT_EQ(z[1], 20.9438);
-        EXPECT_FLOAT_EQ(z[2], 3.843252);
+        EXPECT_FLOAT_EQ(t[0][0], 58.11f); EXPECT_FLOAT_EQ(t[0][1], -33.25f);
+        EXPECT_FLOAT_EQ(t[1][0], 44.55f); EXPECT_FLOAT_EQ(t[1][1], -12.91f);
     }
 }
 
 TEST(ClassMat, DivisionOperators)
 {
-    std::string testName("ClassVec.DivisionOperators");
+    std::string testName("ClassMat.DivisionOperators");
 
     {
-        printSection(testName, "Vec<T, n>::operator/=(const Vec<T, n>& x)");
+        printSection(testName, "operator/(const Mat<T, m, n>& x, const T& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
-        x /= y;
-        EXPECT_NEAR(x[0], 2.8042, 1e-4);
-        EXPECT_NEAR(x[1], 0.4708, 1e-4);
-        EXPECT_NEAR(x[2], 0.5202, 1e-4);
-    }
-
-    {
-        printSection(testName, "operator/(const Vec<T, n>& x, const Vec<T, n>& y)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        float y = 3.14;
+        Mat<float, 3, 2> z;
         z = x / y;
-        EXPECT_NEAR(z[0], 2.8042, 1e-4);
-        EXPECT_NEAR(z[1], 0.4708, 1e-4);
-        EXPECT_NEAR(z[2], 0.5202, 1e-4);
+
+        EXPECT_NEAR(z[0][0], 0.5096f, 1e-4); EXPECT_NEAR(z[0][1], -0.5732f, 1e-4);
+        EXPECT_NEAR(z[1][0], 0.0955f, 1e-4); EXPECT_NEAR(z[1][1], 1.2420f, 1e-4);
+        EXPECT_NEAR(z[2][0], 2.8025f, 1e-4); EXPECT_NEAR(z[2][1], -2.3567f, 1e-4);
     }
 
     {
-        printSection(testName, "operator/(Vec<T, n>&& x, const Vec<T, n>& y)");
+        printSection(testName, "operator/(Mat<T, m, n>&& x, const T& y)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        float y = 3.14;
+        Mat<float, 3, 2> z;
         z = std::move(x) / y;
-        EXPECT_NEAR(z[0], 2.8042, 1e-4);
-        EXPECT_NEAR(z[1], 0.4708, 1e-4);
-        EXPECT_NEAR(z[2], 0.5202, 1e-4);
-    }
 
-    {
-        printSection(testName, "operator/(Vec<T, n>&& x, Vec<T, n>&& y)");
-
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z;
-        z = std::move(x) / std::move(y);
-        EXPECT_NEAR(z[0], 2.8042, 1e-4);
-        EXPECT_NEAR(z[1], 0.4708, 1e-4);
-        EXPECT_NEAR(z[2], 0.5202, 1e-4);
-    }
-}
-
-TEST(ClassMat, ModuloOperators)
-{
-    std::string testName("ClassVec.ModuloOperators");
-
-    {
-        printSection(testName, "Vec<T, n>::operator%=(const Vec<T, n>& x)");
-
-        Vec<uint64_t, 3> x({ 1618, 314, 1414 }), y({ 58, 67, 27 });
-        x %= y;
-        EXPECT_FLOAT_EQ(x[0], 52);
-        EXPECT_FLOAT_EQ(x[1], 46);
-        EXPECT_FLOAT_EQ(x[2], 10);
-    }
-
-    {
-        printSection(testName, "operator%(const Vec<T, n>& x, const Vec<T, n>& y)");
-
-        Vec<uint64_t, 3> x({ 1618, 314, 1414 }), y({ 58, 67, 27 }), z;
-        z = x % y;
-        EXPECT_FLOAT_EQ(z[0], 52);
-        EXPECT_FLOAT_EQ(z[1], 46);
-        EXPECT_FLOAT_EQ(z[2], 10);
-    }
-
-    {
-        printSection(testName, "operator%(Vec<T, n>&& x, const Vec<T, n>& y)");
-
-        Vec<uint64_t, 3> x({ 1618, 314, 1414 }), y({ 58, 67, 27 }), z;
-        z = std::move(x) % y;
-        EXPECT_FLOAT_EQ(z[0], 52);
-        EXPECT_FLOAT_EQ(z[1], 46);
-        EXPECT_FLOAT_EQ(z[2], 10);
-    }
-
-    {
-        printSection(testName, "operator%(Vec<T, n>&& x, Vec<T, n>&& y)");
-
-        Vec<uint64_t, 3> x({ 1618, 314, 1414 }), y({ 58, 67, 27 }), z;
-        z = std::move(x) % std::move(y);
-        EXPECT_FLOAT_EQ(z[0], 52);
-        EXPECT_FLOAT_EQ(z[1], 46);
-        EXPECT_FLOAT_EQ(z[2], 10);
+        EXPECT_NEAR(z[0][0], 0.5096f, 1e-4); EXPECT_NEAR(z[0][1], -0.5732f, 1e-4);
+        EXPECT_NEAR(z[1][0], 0.0955f, 1e-4); EXPECT_NEAR(z[1][1], 1.2420f, 1e-4);
+        EXPECT_NEAR(z[2][0], 2.8025f, 1e-4); EXPECT_NEAR(z[2][1], -2.3567f, 1e-4);
     }
 }
 
 TEST(ClassMat, UnaryOperators)
 {
-    std::string testName("ClassVec.UnaryOperators");
+    std::string testName("ClassMat.UnaryOperators");
 
     {
-        printSection(testName, "operator-(const Vec<T, n>& x)");
+        printSection(testName, "operator-(const Mat<T, m, n>& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y;
         y = -x;
-        EXPECT_FLOAT_EQ(x[0], 1.618);
-        EXPECT_FLOAT_EQ(x[1], 3.14);
-        EXPECT_FLOAT_EQ(x[2], 1.414);
-        EXPECT_FLOAT_EQ(y[0], -1.618);
-        EXPECT_FLOAT_EQ(y[1], -3.14);
-        EXPECT_FLOAT_EQ(y[2], -1.414);
+
+        EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
+        EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
+        EXPECT_FLOAT_EQ(x[2][0], 8.8f); EXPECT_FLOAT_EQ(x[2][1], -7.4f);
+
+        EXPECT_FLOAT_EQ(y[0][0], -1.6f); EXPECT_FLOAT_EQ(y[0][1], 1.8f);
+        EXPECT_FLOAT_EQ(y[1][0], -0.3f); EXPECT_FLOAT_EQ(y[1][1], -3.9f);
+        EXPECT_FLOAT_EQ(y[2][0], -8.8f); EXPECT_FLOAT_EQ(y[2][1], 7.4f);
     }
 
     {
-        printSection(testName, "operator+(const Vec<T, n>& x)");
+        printSection(testName, "operator+(const Mat<T, m, n>& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y;
         y = +x;
-        EXPECT_FLOAT_EQ(x[0], 1.618);
-        EXPECT_FLOAT_EQ(x[1], 3.14);
-        EXPECT_FLOAT_EQ(x[2], 1.414);
-        EXPECT_FLOAT_EQ(y[0], 1.618);
-        EXPECT_FLOAT_EQ(y[1], 3.14);
-        EXPECT_FLOAT_EQ(y[2], 1.414);
+
+        EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
+        EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
+        EXPECT_FLOAT_EQ(x[2][0], 8.8f); EXPECT_FLOAT_EQ(x[2][1], -7.4f);
+
+        EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
+        EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
     }
 
     {
-        printSection(testName, "operator-(Vec<T, n>&& x)");
+        printSection(testName, "operator-(Mat<T, m, n>&& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y;
         y = -std::move(x);
-        EXPECT_FLOAT_EQ(y[0], -1.618);
-        EXPECT_FLOAT_EQ(y[1], -3.14);
-        EXPECT_FLOAT_EQ(y[2], -1.414);
+
+        EXPECT_FLOAT_EQ(y[0][0], -1.6f); EXPECT_FLOAT_EQ(y[0][1], 1.8f);
+        EXPECT_FLOAT_EQ(y[1][0], -0.3f); EXPECT_FLOAT_EQ(y[1][1], -3.9f);
+        EXPECT_FLOAT_EQ(y[2][0], -8.8f); EXPECT_FLOAT_EQ(y[2][1], 7.4f);
     }
 
     {
-        printSection(testName, "operator+(Vec<T, n>&& x)");
+        printSection(testName, "operator+(Mat<T, m, n>&& x)");
 
-        Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y;
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 3, 2> y;
         y = +std::move(x);
-        EXPECT_FLOAT_EQ(y[0], 1.618);
-        EXPECT_FLOAT_EQ(y[1], 3.14);
-        EXPECT_FLOAT_EQ(y[2], 1.414);
+
+        EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
+        EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
     }
 }
 
 TEST(ClassMat, Comparators)
 {
-    std::string testName("ClassVec.Comparators");
+    std::string testName("ClassMat.Comparators");
 
     {
-        printSection(testName, "operator==(const Vec<T, n>& x, const Vec<T, n>& y)");
+        printSection(testName, "operator==(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
 
         {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 1.618f, 3.14f, 1.414f });
-            EXPECT_EQ(x == x, true);
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
             EXPECT_EQ(x == y, true);
-            EXPECT_EQ(y == y, true);
+            EXPECT_EQ(y == x, true);
         }
 
         {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 1.618f, 3.14f, 2.718f });
-            EXPECT_EQ(x == y, false);
-            EXPECT_EQ(y == x, false);
-        }
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, 0.4f}
+                } });
             EXPECT_EQ(x == y, false);
             EXPECT_EQ(y == x, false);
         }
     }
 
     {
-        printSection(testName, "operator!=(const Vec<T, n>& x, const Vec<T, n>& y)");
+        printSection(testName, "operator!=(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
 
         {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 1.618f, 3.14f, 1.414f });
-            EXPECT_EQ(x != x, false);
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
             EXPECT_EQ(x != y, false);
-            EXPECT_EQ(y != y, false);
+            EXPECT_EQ(y != x, false);
         }
 
         {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 1.618f, 3.14f, 2.718f });
-            EXPECT_EQ(x != y, true);
-            EXPECT_EQ(y != x, true);
-        }
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
+            Mat<float, 3, 2> y({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, 0.4f}
+                } });
             EXPECT_EQ(x != y, true);
             EXPECT_EQ(y != x, true);
         }
@@ -562,167 +646,32 @@ TEST(ClassMat, StreamOperators)
         printSection(testName, "operator<<(std::ostream& stream, const Vec<T, n>& x)");
 
         {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
+            Mat<float, 3, 2> x({ {
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                } });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<1.618, 3.14, 1.414>");
+            EXPECT_EQ(stream.str(), "(1.6 -1.8\n 0.3 3.9\n 8.8 -7.4)");
         }
 
         {
-            Vec<float, 3> x;
+            Mat<float, 3, 2> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<0, 0, 0>");
+            EXPECT_EQ(stream.str(), "(0 0\n 0 0\n 0 0)");
         }
 
         {
-            Vec<float, 0> x;
+            Mat<float, 0, 0> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<>");
+            EXPECT_EQ(stream.str(), "()");
         }
     }
 }
 
 TEST(ClassMat, SpecificFunctions)
 {
-    std::string testName("ClassVec.SpecificFunctions");
-
-    {
-        printSection(testName, "dot(const Vec<T, n>& u, const Vec<T, n>& v)");
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f });
-            EXPECT_FLOAT_EQ(dot(x, y), 25.720638);
-        }
-
-        {
-            Vec<float, 4> x({ 1.618f, 3.14f, 1.414f, -6.67f }), y({ 0.577f, 6.67f, 2.718f, 6.28f });
-            EXPECT_FLOAT_EQ(dot(x, y), -16.166962);
-        }
-
-        {
-            Vec<float, 0> x, y;
-            EXPECT_FLOAT_EQ(dot(x, y), 0);
-        }
-    }
-
-    {
-        printSection(testName, "cross(const Vec<T, 3>& u, const Vec<T, 3>& v)");
-
-        {
-            Vec<float, 3> x({ 1.f, 2.f, 3.f }), y({ 4.f, 5.f, 6.f }), z({ -3.f, 6.f, -3.f });
-            EXPECT_EQ(cross(x, y), z);
-        }
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f }), y({ 0.577f, 6.67f, 2.718f }), z(cross(x, y));
-            EXPECT_FLOAT_EQ(z[0], -0.89686f);
-            EXPECT_FLOAT_EQ(z[1], -3.581846f);
-            EXPECT_FLOAT_EQ(z[2], 8.98028f);
-        }
-    }
-
-    {
-        printSection(testName, "normSq(const Vec<T, n>& v)");
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
-            EXPECT_FLOAT_EQ(normSq(x), 14.47692);
-        }
-
-        {
-            Vec<float, 0> x;
-            EXPECT_FLOAT_EQ(normSq(x), 0);
-        }
-    }
-
-    {
-        printSection(testName, "norm(const Vec<T, n>& v)");
-
-        {
-            Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
-            EXPECT_NEAR(norm(x), 3.805, 1e-3);
-        }
-
-        {
-            Vec<float, 0> x;
-            EXPECT_FLOAT_EQ(norm(x), 0);
-        }
-    }
-
-    {
-        printSection(testName, "dft(const Vec<std::complex<T>, n>& f)");
-
-        {
-            Vec<std::complex<float>, 4> f({
-                    std::complex<float>(1, 0),
-                    std::complex<float>(0, 1),
-                    std::complex<float>(-1, 0),
-                    std::complex<float>(0, -1)
-                });
-
-            Vec<std::complex<float>, 4> fh({
-                    std::complex<float>(0, 0),
-                    std::complex<float>(4, 0),
-                    std::complex<float>(0, 0),
-                    std::complex<float>(0, 0)
-                });
-
-            float l = std::abs(normSq(fh - dft(f)));
-
-            EXPECT_NEAR(l, 0, 1e-10);
-        }
-
-        {
-            const uint64_t n = 100;
-            Vec<std::complex<float>, n> f;
-            for (uint64_t i(0); i < n; i++)
-            {
-                float x = (2.f * pi * i) / n;
-                f[i] = std::complex<float>(std::cos(x), std::sin(x));
-            }
-
-            Vec<std::complex<float>, n> fh = dft(f);
-            for (uint64_t i(0); i < n; i++)
-            {
-                if (i == 1)
-                    EXPECT_NEAR(fh[i].real(), n, 1e-3);
-                else
-                    EXPECT_NEAR(fh[i].real(), 0, 1e-3);
-                EXPECT_NEAR(fh[i].imag(), 0, 1e-3);
-            }
-        }
-    }
-
-    {
-        printSection(testName, "idft(const Vec<std::complex<T>, n>& fh)");
-
-        const uint64_t n = 100;
-        Vec<std::complex<float>, n> f;
-        for (uint64_t i(0); i < n; i++)
-            f[i] = (float(std::rand()) / RAND_MAX);
-
-        Vec<std::complex<float>, n> g = idft(dft(f));
-        for (uint64_t i(0); i < n; i++)
-        {
-            EXPECT_NEAR(f[i].real(), g[i].real(), 1e-3);
-            EXPECT_NEAR(f[i].imag(), g[i].imag(), 1e-3);
-        }
-    }
-
-    {
-        printSection(testName, "dct(const Vec<T, n>& f) and idct(const Vec<T, n>& fh)");
-
-        const uint64_t n = 100;
-        Vec<float, n> f;
-        for (uint64_t i(0); i < n; i++)
-            f[i] = (float(std::rand()) / RAND_MAX);
-
-        Vec<float, n> g = idct(dct(f));
-        for (uint64_t i(0); i < n; i++)
-        {
-            EXPECT_NEAR(f[i], g[i], 1e-3);
-        }
-    }
 }
