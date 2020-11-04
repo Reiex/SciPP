@@ -674,4 +674,78 @@ TEST(ClassMat, StreamOperators)
 
 TEST(ClassMat, SpecificFunctions)
 {
+    std::string testName("ClassMat.SpecificFunctions");
+
+    {
+        printSection(testName, "convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method)");
+    }
+
+    {
+        printSection(testName, "inverse(const Mat<T, n, n>& a)");
+
+        {
+            Mat<float, 3, 3> x({ {
+                    {1.6f, -1.8f, 3.1f},
+                    {0.3f, 3.9f, -4.1f},
+                    {8.8f, -7.4f, 5.9f}
+                } });
+            Mat<float, 3, 3> y;
+
+            y = x * inverse(x);
+            EXPECT_NEAR(y[0][0], 1, 1e-5); EXPECT_NEAR(y[0][1], 0, 1e-5);  EXPECT_NEAR(y[0][2], 0, 1e-5);
+            EXPECT_NEAR(y[1][0], 0, 1e-5); EXPECT_NEAR(y[1][1], 1, 1e-5);  EXPECT_NEAR(y[1][2], 0, 1e-5);
+            EXPECT_NEAR(y[2][0], 0, 1e-5); EXPECT_NEAR(y[2][1], 0, 1e-5);  EXPECT_NEAR(y[2][2], 1, 1e-5);
+
+            y = inverse(x) * x;
+            EXPECT_NEAR(y[0][0], 1, 1e-5); EXPECT_NEAR(y[0][1], 0, 1e-5);  EXPECT_NEAR(y[0][2], 0, 1e-5);
+            EXPECT_NEAR(y[1][0], 0, 1e-5); EXPECT_NEAR(y[1][1], 1, 1e-5);  EXPECT_NEAR(y[1][2], 0, 1e-5);
+            EXPECT_NEAR(y[2][0], 0, 1e-5); EXPECT_NEAR(y[2][1], 0, 1e-5);  EXPECT_NEAR(y[2][2], 1, 1e-5);
+        }
+
+        {
+            Mat<float, 3, 3> x;
+            EXPECT_THROW(inverse(x), std::runtime_error);
+        }
+    }
+
+    {
+        printSection(testName, "transpose(const Mat<T, m, n>& a)");
+
+        Mat<float, 3, 2> x({ {
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            } });
+        Mat<float, 2, 3> y;
+        y = transpose(x);
+        EXPECT_FLOAT_EQ(y[0][0], 1.6f);  EXPECT_FLOAT_EQ(y[0][1], 0.3f); EXPECT_FLOAT_EQ(y[0][2], 8.8f);
+        EXPECT_FLOAT_EQ(y[1][0], -1.8f); EXPECT_FLOAT_EQ(y[1][1], 3.9f); EXPECT_FLOAT_EQ(y[1][2], -7.4f);
+    }
+
+    {
+        printSection(testName, "det(const Mat<T, n, n>& a)");
+
+        {
+            Mat<float, 3, 3> x({ {
+                    {1.6f,  0.f,  0.f},
+                    {0.3f,  3.9f, 0.f},
+                    {8.8f, -7.4f, 5.9f}
+                } });
+            
+            EXPECT_NEAR(det(x), 36.816f, 1e-5);
+        }
+
+        {
+            Mat<float, 3, 3> x;
+            EXPECT_NEAR(det(x), 0.f, 1e-5);
+        }
+    }
+
+    {
+        printSection(testName, "dft(const Mat<std::complex<T>, m, n>& f) and idft(const Mat<std::complex<T>, m, n>& fh)");
+    }
+
+    {
+        printSection(testName, "dct(const Mat<T, m, n>& f) and idct(const Mat<T, m, n>& fh)");
+    }
 }
