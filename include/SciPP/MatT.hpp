@@ -298,7 +298,10 @@ namespace scp
     Mat<T, m, n> convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method)
     {
         if (p % 2 == 0 || q % 2 == 0)
-            throw std::runtime_error(scippError("Cannot use Mat<" + std::to_string(p) + ", " + std::to_string(q) + "> as a convolution matrix."));
+            throw std::runtime_error(scippError("The convolution matrix number of rows and columns must be odds."));
+
+        if (p > m || q > n)
+            throw std::runtime_error(scippError("The convolution matrix must be smaller than the convolved matrix."));
 
         Mat<T, m, n> c;
 
@@ -310,31 +313,31 @@ namespace scp
                 {
                     for (uint64_t l(0); l < q; l++)
                     {
-                        int64_t ox((int64_t)k - p / 2), oy((int64_t)l - q / 2);
+                        int64_t x = (int64_t)i + (int64_t)k - (int64_t)p/2;
+                        int64_t y = (int64_t)j + (int64_t)l - (int64_t)q/2;
                         T coeff;
                         if (method == ConvolveMethod::Periodic)
                         {
-                            coeff = a[(i + ox) % m][(j + oy) % n];
+                            if (x < 0) x += m;
+                            if (y < 0) y += n;
+                            if (x >= m) x -= m;
+                            if (y >= n) y -= n;
+                            coeff = a[x][y];
                         }
                         else if (method == ConvolveMethod::Continuous)
                         {
-                            if (i + ox > m - 1)
-                                ox = m - 1 - i;
-                            if (i + ox < 0)
-                                ox = -(int)i;
-                            if (j + oy > n - 1)
-                                oy = n - 1 - j;
-                            if (j + oy < 0)
-                                oy = -(int)j;
-
-                            coeff = a[i + ox][j + oy];
+                            if (x < 0) x = 0;
+                            if (y < 0) y = 0;
+                            if (x >= m) x = m-1;
+                            if (y >= n) y = n-1;
+                            coeff = a[x][y];
                         }
                         else if (method == ConvolveMethod::Zero)
                         {
-                            if (i + ox > m - 1 || i + ox < 0 || j + oy > n - 1 || j + oy < 0)
+                            if (x < 0 || x >= m || y < 0 || y >= n)
                                 coeff = 0;
                             else
-                                coeff = a[i + ox][j + oy];
+                                coeff = a[x][y];
                         }
                         c[i][j] += coeff * b[k][l];
                     }
