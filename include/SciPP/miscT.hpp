@@ -11,7 +11,7 @@ namespace scp
             throw std::runtime_error("Cannot call expoSq with n < 0.");
 
         if (n == 0)
-            return 1;
+            return (int64_t) 1;
 
         if (n == 1)
             return x;

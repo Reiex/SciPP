@@ -5,7 +5,7 @@
 
 int main()
 {
-    std::cout << neper(5) << std::endl;
+    std::cout << neper(500) << std::endl;
 
     system("pause");
 

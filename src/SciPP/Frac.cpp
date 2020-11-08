@@ -8,6 +8,14 @@ namespace scp
 	{
 	}
 
+	Rational::Rational(int16_t x) : Rational((int64_t)x)
+	{
+	}
+
+	Rational::Rational(int32_t x) : Rational((int64_t)x)
+	{
+	}
+
 	Rational::Rational(int64_t x) : Frac<Int>(x)
 	{
 	}
@@ -17,6 +25,14 @@ namespace scp
 	}
 
 	Rational::Rational(const Int& p, const Int& q) : Frac<Int>(p, q)
+	{
+	}
+
+	Rational::Rational(float x) : Rational((long double) x)
+	{
+	}
+
+	Rational::Rational(double x) : Rational((long double) x)
 	{
 	}
 

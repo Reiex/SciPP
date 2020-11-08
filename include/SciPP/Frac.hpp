@@ -155,9 +155,13 @@ namespace scp
         public:
 
             Rational();                            ///< Default constructor. Init the rational to 0/1.
+            Rational(int16_t x);                   ///< Init the rational to x/1.
+            Rational(int32_t x);                   ///< Init the rational to x/1.
             Rational(int64_t x);                   ///< Init the rational to x/1.
             Rational(Int const& x);                ///< Init the rational to x/1.
             Rational(Int const& p, Int const& q);  ///< Init the rational to p/q.
+            Rational(float x);                     ///< Init the rational to an approximation of x.
+            Rational(double x);                    ///< Init the rational to an approximation of x.
             Rational(long double x);               ///< Init the rational to an approximation of x.
             Rational(Frac<Int> const& x);          ///< Init the rational to x.
 

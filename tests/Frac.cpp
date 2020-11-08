@@ -687,6 +687,11 @@ TEST(ClassFrac, StreamOperators)
     }
 }
 
+TEST(ClassFrac, Rational)
+{
+    EXPECT_EQ(0, 1);
+}
+
 TEST(ClassFrac, BonusTests)
 {
     std::string testName("ClassFrac.BonusTests");
