@@ -99,7 +99,7 @@ namespace scp
     /// \relates Quaternion
     /// \brief Output stream operator for class Quaternion
     /// 
-    /// Writes the quaternion under the format `(a,b,c,d)`.
+    /// Writes the quaternion under the format `a b c d`.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>

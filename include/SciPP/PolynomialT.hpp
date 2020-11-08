@@ -435,13 +435,11 @@ namespace scp
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Polynomial<T>& p)
     {
-        stream << "[";
         for (uint64_t i(0); i <= p.degree(); i++)
             if (i == p.degree())
                 stream << p[i];
             else
-                stream << p[i] << ", ";
-        stream << "]";
+                stream << p[i] << " ";
 
         return stream;
     }

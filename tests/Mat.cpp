@@ -653,21 +653,21 @@ TEST(ClassMat, StreamOperators)
                 } });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(1.6 -1.8\n 0.3 3.9\n 8.8 -7.4)");
+            EXPECT_EQ(stream.str(), "1.6 -1.8\n0.3 3.9\n8.8 -7.4");
         }
 
         {
             Mat<float, 3, 2> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(0 0\n 0 0\n 0 0)");
+            EXPECT_EQ(stream.str(), "0 0\n0 0\n0 0");
         }
 
         {
             Mat<float, 0, 0> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "()");
+            EXPECT_EQ(stream.str(), "");
         }
     }
 }

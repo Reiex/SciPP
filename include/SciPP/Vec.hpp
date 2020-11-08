@@ -118,7 +118,7 @@ namespace scp
     /// \relates Vec
     /// \brief Output stream operator for class Vec
     /// 
-    /// Writes the vector under the format `<x, x, x, ..., x>` with `x` the elements of the vector.
+    /// Writes the vector under the format `x0 x1 ... xn` with `xi` and `...` the elements of the vector.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T, uint64_t n>

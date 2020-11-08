@@ -273,11 +273,8 @@ namespace scp
     template<typename T, uint64_t m, uint64_t n>
     std::ostream& operator<<(std::ostream& stream, const Mat<T, m, n>& a)
     {
-        stream << "(";
         for (uint64_t i(0); i < m; i++)
         {
-            if (i != 0)
-                stream << " ";
             for (uint64_t j(0); j < n; j++)
                 if (j == n - 1)
                     stream << a[i][j];
@@ -286,7 +283,6 @@ namespace scp
             if (i != m - 1)
                 stream << std::endl;
         }
-        stream << ")";
 
         return stream;
     }

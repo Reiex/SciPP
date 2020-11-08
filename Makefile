@@ -35,7 +35,8 @@ TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
 			 $(OBJ_TESTS_DIR)/Vec.o \
 			 $(OBJ_TESTS_DIR)/Polynomial.o \
 			 $(OBJ_TESTS_DIR)/Mat.o
-EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o
+EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o \
+				$(OBJ_EXAMPLES_DIR)/Constants/Constants.o
 
 
 # Compiler
@@ -86,8 +87,8 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 
 folders:
 	-rm -rf $(LIB_DIR) $(OBJ_DIR) $(BUILD_DIR)
-	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR)
-	mkdir $(OBJ_LIBRARY_DIR)
+	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
+	mkdir $(OBJ_EXAMPLES_DIR)/Constants
 	mkdir $(LIB_DIR) $(BUILD_DIR)
 
 

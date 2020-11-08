@@ -101,9 +101,9 @@ namespace scp
     /// \brief Output stream operator for class Mat
     /// 
     /// Write the matrix into the stream with the format:
-    /// `(x00 ... x0n
-    ///   ... ... ...
-    ///   xm0 ... xmn)`
+    /// `x00 ... x0n
+    ///  ... ... ...
+    ///  xm0 ... xmn`
     ///
     /// With `xij` and `...` the elements of the matrix.
     ///

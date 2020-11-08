@@ -304,13 +304,11 @@ namespace scp
     template<typename T, uint64_t n>
     std::ostream& operator<<(std::ostream& stream, const Vec<T, n>& v)
     {
-        stream << "<";
         for (uint64_t i(0); i < n; i++)
             if (i == n - 1)
                 stream << v[i];
             else
-                stream << v[i] << ", ";
-        stream << ">";
+                stream << v[i] << " ";
 
         return stream;
     }

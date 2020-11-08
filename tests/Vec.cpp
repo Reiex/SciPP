@@ -545,21 +545,21 @@ TEST(ClassVec, StreamOperators)
             Vec<float, 3> x({ 1.618f, 3.14f, 1.414f });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<1.618, 3.14, 1.414>");
+            EXPECT_EQ(stream.str(), "1.618 3.14 1.414");
         }
 
         {
             Vec<float, 3> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<0, 0, 0>");
+            EXPECT_EQ(stream.str(), "0 0 0");
         }
 
         {
             Vec<float, 0> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "<>");
+            EXPECT_EQ(stream.str(), "");
         }
     }
 }

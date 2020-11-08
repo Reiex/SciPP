@@ -261,7 +261,7 @@ namespace scp
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Quaternion<T>& q)
     {
-        stream << "(" << q.a << "," << q.b << "," << q.c << "," << q.d << ")";
+        stream << q.a << " " << q.b << " " << q.c << " " << q.d;
 
         return stream;
     }

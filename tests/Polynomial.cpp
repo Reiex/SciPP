@@ -539,21 +539,21 @@ TEST(ClassPolynomial, StreamOperators)
             Polynomial<float> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "[0]");
+            EXPECT_EQ(stream.str(), "0");
         }
 
         {
             Polynomial<float> x({ 1.618f, 1.414f, -3.14f});
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "[1.618, 1.414, -3.14]");
+            EXPECT_EQ(stream.str(), "1.618 1.414 -3.14");
         }
 
         {
             Polynomial<float> x({ 1.618f, 0.f, -3.14f });
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "[1.618, 0, -3.14]");
+            EXPECT_EQ(stream.str(), "1.618 0 -3.14");
         }
     }
 }

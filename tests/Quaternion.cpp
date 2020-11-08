@@ -496,14 +496,14 @@ TEST(ClassQuaternion, StreamOperators)
             Quaternion<float> x(-1.6, 3.1, -1.4, 2.7);
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(-1.6,3.1,-1.4,2.7)");
+            EXPECT_EQ(stream.str(), "-1.6 3.1 -1.4 2.7");
         }
 
         {
             Quaternion<float> x;
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(0,0,0,0)");
+            EXPECT_EQ(stream.str(), "0 0 0 0");
         }
     }
 }

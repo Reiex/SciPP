@@ -314,7 +314,7 @@ namespace scp
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Frac<T>& a)
     {
-        stream << "(" << a.num() << "/" << a.denom() << ")";
+        stream << a.num() << " " << a.denom();
         return stream;
     }
     
@@ -327,19 +327,11 @@ namespace scp
         T x, y;
         char c;
 
-        stream.get(c);
-        if (c != '(')
-        {
-            if (stream) stream.putback(c);
-            stream.setstate(std::ios::failbit);
-            return stream;
-        }
-
         stream >> x;
         if (!stream) return stream;
 
         stream.get(c);
-        if (c != '/')
+        if (c != ' ')
         {
             if (stream) stream.putback(c);
             stream.setstate(std::ios::failbit);
@@ -347,15 +339,6 @@ namespace scp
         }
 
         stream >> y;
-        if (!stream) return stream;
-
-        stream.get(c);
-        if (c != ')')
-        {
-            if (stream) stream.putback(c);
-            stream.setstate(std::ios::failbit);
-            return stream;
-        }
 
         a = Frac<T>(x, y);
 

@@ -129,7 +129,7 @@ namespace scp
     /// \relates Frac
     /// \brief Output stream operator for class Frac
     /// 
-    /// Write the fraction into the stream with the format: `(Numerator/Denominator)`.
+    /// Write the fraction into the stream with the format: `Numerator Denominator`.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
@@ -138,7 +138,7 @@ namespace scp
     /// \relates Frac
     /// \brief Input stream operator for class Frac
     /// 
-    /// The evaluated regular expression is: `\(T/T\)`
+    /// The evaluated regular expression is: `T T`
     /// Where T is the regular expression accepted by the input stream for T.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

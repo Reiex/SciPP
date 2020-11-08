@@ -143,8 +143,8 @@ namespace scp
     /// \relates Vec
     /// \brief Output stream operator for class Polynomial
     /// 
-    /// Writes the polynomial under the format `[x, x, x, ..., x]` with `x` the coefficients of the polynomial in order
-    /// of exponent crescent.
+    /// Writes the polynomial under the format `x0 x1 ... xn` with `xi` and `...` the coefficients of the polynomial in
+    /// order of crescent exponent.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>

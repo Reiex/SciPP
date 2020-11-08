@@ -637,21 +637,21 @@ TEST(ClassFrac, StreamOperators)
             Frac<Int> x(1618, 3141);
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(1618/3141)");
+            EXPECT_EQ(stream.str(), "1618 3141");
         }
 
         {
             Frac<Int> x(-1618);
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(-1618/1)");
+            EXPECT_EQ(stream.str(), "-1618 1");
         }
 
         {
             Frac<Int> x(0);
             std::stringstream stream;
             stream << x;
-            EXPECT_EQ(stream.str(), "(0/1)");
+            EXPECT_EQ(stream.str(), "0 1");
         }
     }
 
@@ -661,7 +661,7 @@ TEST(ClassFrac, StreamOperators)
         {
             Frac<Int> x;
             std::stringstream stream;
-            stream << "(1618/3141)";
+            stream << "1618 3141";
             stream >> x;
             EXPECT_EQ(x.num(), 1618);
             EXPECT_EQ(x.denom(), 3141);
@@ -670,7 +670,7 @@ TEST(ClassFrac, StreamOperators)
         {
             Frac<Int> x;
             std::stringstream stream;
-            stream << "(-1618/1)";
+            stream << "-1618 1";
             stream >> x;
             EXPECT_EQ(x.num(), -1618);
             EXPECT_EQ(x.denom(), 1);
@@ -679,7 +679,7 @@ TEST(ClassFrac, StreamOperators)
         {
             Frac<Int> x;
             std::stringstream stream;
-            stream << "(0/1)";
+            stream << "0 1";
             stream >> x;
             EXPECT_EQ(x.num(), 0);
             EXPECT_EQ(x.denom(), 1);
