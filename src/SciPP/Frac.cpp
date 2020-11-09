@@ -81,11 +81,16 @@ namespace scp
 
 	// Specific methods
 
-	std::string Rational::decimals(int64_t n)
+	std::string Rational::decimals(uint64_t n) const
 	{
-		std::string chaine;
 		std::stringstream s;
 		Frac<Int> y(num(), denom());
+
+		if (num() < 0)
+		{
+			s << "-";
+			y = -y;
+		}
 
 		s << (y.num() / y.denom());
 
@@ -97,7 +102,9 @@ namespace scp
 		y -= (y.num() / y.denom());
 		y *= expoSq(Frac<Int>(10, 1), n);
 
-		s << (y.num() / y.denom());
+		std::stringstream d;
+		d << (y.num() / y.denom());
+		s << std::string(n - d.str().size(), '0') << d.str();
 
 		return s.str();
 	}
@@ -105,7 +112,7 @@ namespace scp
 
 	// Display
 
-	std::ostream& operator<<(std::ostream& stream, Rational const& x)
+	std::ostream& operator<<(std::ostream& stream, const Rational& x)
 	{
 		if (x.denom() == 1)
 		{
@@ -123,6 +130,12 @@ namespace scp
 		{
 			Int r(x.num());
 
+			if (r < 0 && x.denom() > -r)
+			{
+				r = -r;
+				stream << "-";
+			}
+
 			stream << r / x.denom() << ".";
 			r %= x.denom();
 			r *= 10;
@@ -137,7 +150,7 @@ namespace scp
 			return stream;
 		}
 
-		stream << x.num() << "/" << x.denom();
+		stream << x.num() << " " << x.denom();
 		return stream;
 	}
 }

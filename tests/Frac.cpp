@@ -687,9 +687,207 @@ TEST(ClassFrac, StreamOperators)
     }
 }
 
-TEST(ClassFrac, Rational)
+TEST(ClassFrac, ClassRational)
 {
-    EXPECT_EQ(0, 1);
+    std::string testName("ClassFrac.ClassRational");
+
+    {
+        printSection(testName, "Rational::Rational()");
+
+        Rational x;
+        EXPECT_EQ(x.num(), 0);
+        EXPECT_EQ(x.denom(), 1);
+    }
+
+    {
+        printSection(testName, "Rational::Rational(int16_t x)");
+
+        {
+            Rational x((int16_t) 0);
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int16_t) 1618);
+            EXPECT_EQ(x.num(), 1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int16_t) -1618);
+            EXPECT_EQ(x.num(), -1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(int32_t x)");
+
+        {
+            Rational x((int32_t) 0);
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int32_t) 1618);
+            EXPECT_EQ(x.num(), 1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int32_t) -1618);
+            EXPECT_EQ(x.num(), -1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(int64_t x)");
+
+        {
+            Rational x((int64_t) 0);
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int64_t) 1618);
+            EXPECT_EQ(x.num(), 1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x((int64_t) -1618);
+            EXPECT_EQ(x.num(), -1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(const Int& x)");
+
+        {
+            Rational x(Int(0));
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(Int(1618));
+            EXPECT_EQ(x.num(), 1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(Int(-1618));
+            EXPECT_EQ(x.num(), -1618);
+            EXPECT_EQ(x.denom(), 1);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(const Int& p, const Int& q)");
+
+        {
+            Rational x(0, -129);
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(1618, -2);
+            EXPECT_EQ(x.num(), -809);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(1618, 1617);
+            EXPECT_EQ(x.num(), 1618);
+            EXPECT_EQ(x.denom(), 1617);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(float x)");
+
+        {
+            Rational x(1.618f);
+            long double y = std::stold(x.decimals(7));
+            EXPECT_NEAR(y, 1.618L, 1e-7L);
+        }
+
+        {
+            Rational x(-1e-6f);
+            long double y = std::stold(x.decimals(7));
+            EXPECT_NEAR(y, -1e-6L, 1e-7L);
+        }
+
+        {
+            Rational x(1e16f);
+            long double y = std::stold(x.decimals(0));
+            EXPECT_NEAR(y, 1e16L, 1e9L);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(double x)");
+
+        {
+            Rational x(1.618);
+            long double y = std::stold(x.decimals(15));
+            EXPECT_NEAR(y, 1.618L, 1e-15L);
+        }
+
+        {
+            Rational x(-1e-6);
+            long double y = std::stold(x.decimals(15));
+            EXPECT_NEAR(y, -1e-6L, 1e-15L);
+        }
+
+        {
+            Rational x(1e16);
+            long double y = std::stold(x.decimals(0));
+            EXPECT_NEAR(y, 1e16L, 1);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(long double x)");
+
+        {
+            Rational x(1.618L);
+            long double y = std::stold(x.decimals(25));
+            EXPECT_NEAR(y, 1.618L, 1e-25L);
+        }
+
+        {
+            Rational x(-1e-6L);
+            long double y = std::stold(x.decimals(25));
+            EXPECT_NEAR(y, -1e-6L, 1e-25L);
+        }
+
+        {
+            Rational x(1e16L);
+            long double y = std::stold(x.decimals(10));
+            EXPECT_NEAR(y, 1e16L, 1e-10);
+        }
+    }
+
+    {
+        printSection(testName, "Rational::Rational(const Frac<Int>& x)");
+
+        EXPECT_EQ(0, 1);
+    }
+
+    {
+        printSection(testName, "Rational::decimals(uint64_t n)");
+    }
+
+    {
+        printSection(testName, "operator<<(std::ostream& stream, const Rational& x)");
+    }
 }
 
 TEST(ClassFrac, BonusTests)

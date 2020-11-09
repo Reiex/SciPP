@@ -158,17 +158,17 @@ namespace scp
             Rational(int16_t x);                   ///< Init the rational to x/1.
             Rational(int32_t x);                   ///< Init the rational to x/1.
             Rational(int64_t x);                   ///< Init the rational to x/1.
-            Rational(Int const& x);                ///< Init the rational to x/1.
-            Rational(Int const& p, Int const& q);  ///< Init the rational to p/q.
+            Rational(const Int& x);                ///< Init the rational to x/1.
+            Rational(const Int& p, const Int& q);  ///< Init the rational to p/q.
             Rational(float x);                     ///< Init the rational to an approximation of x.
             Rational(double x);                    ///< Init the rational to an approximation of x.
             Rational(long double x);               ///< Init the rational to an approximation of x.
-            Rational(Frac<Int> const& x);          ///< Init the rational to x.
+            Rational(const Frac<Int>& x);          ///< Init the rational to x.
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             /// \brief Returns a string with the integer part, a comma and the n first decimals of x.
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-            std::string decimals(int64_t n);
+            std::string decimals(uint64_t n) const;
     };
 
     // Display
@@ -181,7 +181,7 @@ namespace scp
     /// is kept.
     /// 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::ostream& operator<<(std::ostream& stream, Rational const& x);
+    std::ostream& operator<<(std::ostream& stream, const Rational& x);
 }
 
 #include <SciPP/FracT.hpp>
