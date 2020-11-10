@@ -86,10 +86,10 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 	$(CC) $(TESTS_OBJS) -o $(BUILD_DIR)/SciPPTests $(LDFLAGS) $(TESTS_LDLIBS)
 
 folders:
-	-rm -rf $(LIB_DIR) $(OBJ_DIR) $(BUILD_DIR)
+	-rm -rf $(LIB_DIR)/libSciPP.so $(OBJ_DIR) $(BUILD_DIR)
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
 	mkdir $(OBJ_EXAMPLES_DIR)/Constants
-	mkdir $(LIB_DIR) $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
 
 
 ###############################################################################
