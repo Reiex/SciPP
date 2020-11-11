@@ -50,7 +50,7 @@ namespace scp
 
                 if (i == x._values.size() - 1)
                 {
-                    buffer = _values[i] + x._values[i];
+                    buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                     while (buffer >= MAX)
                     {
                         if (buffer >= CAPACITY)
@@ -63,7 +63,7 @@ namespace scp
                         if (i < 0)
                             break;
                         else
-                            buffer = _values[i] + x._values[i];
+                            buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace scp
 
                 if (i == _values.size() - 1)
                 {
-                    buffer = _values[i] + x._values[i];
+                    buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                     while (buffer >= MAX)
                     {
                         if (buffer >= CAPACITY)
@@ -89,14 +89,14 @@ namespace scp
                         if (i < 0)
                             break;
                         else
-                            buffer = _values[i] + x._values[i];
+                            buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                     }
                 }
             }
             else
             {
                 uint64_t i(_values.size() - 1);
-                buffer = _values[i] + x._values[i];
+                buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                 size = _values.size();
                 while (buffer >= MAX)
                 {
@@ -110,7 +110,7 @@ namespace scp
                     if (i < 0)
                         break;
                     else
-                        buffer = _values[i] + x._values[i];
+                        buffer = (uint64_t) _values[i] + (uint64_t) x._values[i];
                 }
             }
 
