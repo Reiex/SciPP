@@ -100,12 +100,12 @@ namespace scp
             return *this;
         }
 
-        std::vector<T> newCoeffs(_coeffs.size() + p._coeffs.size() - 1, 0);
+        std::vector<T> coeffs(_coeffs.size() + p._coeffs.size() - 1, 0);
         for (uint64_t i(_coeffs.size() - 1); i != UINT64_MAX; i--)
             for (uint64_t j(p._coeffs.size() - 1); j != UINT64_MAX; j--)
-                newCoeffs[i + j] += _coeffs[i] * p._coeffs[j];
+                coeffs[i + j] += _coeffs[i] * p._coeffs[j];
 
-        _coeffs = newCoeffs;
+        _coeffs = coeffs;
         
         reduce();
 

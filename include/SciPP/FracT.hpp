@@ -44,11 +44,11 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator+=(const Frac<T>& a)
     {
-        T newP = _p * a._q + a._p * _q;
-        T newQ = _q * a._q;
+        T p = _p * a._q + a._p * _q;
+        T q = _q * a._q;
 
-        _p = newP;
-        _q = newQ;
+        _p = p;
+        _q = q;
 
         simplify();
 
@@ -58,11 +58,11 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator-=(const Frac<T>& a)
     {
-        T newP = _p * a._q - a._p * _q;
-        T newQ = _q * a._q;
+        T p = _p * a._q - a._p * _q;
+        T q = _q * a._q;
 
-        _p = newP;
-        _q = newQ;
+        _p = p;
+        _q = q;
 
         simplify();
 
@@ -83,11 +83,11 @@ namespace scp
     template<typename T>
     Frac<T>& Frac<T>::operator/=(const Frac<T>& a)
     {
-        T newP = _p * a._q;
-        T newQ = _q * a._p;
+        T p = _p * a._q;
+        T q = _q * a._p;
 
-        _p = newP;
-        _q = newQ;
+        _p = p;
+        _q = q;
 
         simplify();
 
