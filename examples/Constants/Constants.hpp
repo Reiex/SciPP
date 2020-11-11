@@ -7,3 +7,4 @@
 
 
 std::string neper(uint64_t n);
+std::string goldenRatio(uint64_t n);
