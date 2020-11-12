@@ -36,7 +36,11 @@ TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
 			 $(OBJ_TESTS_DIR)/Polynomial.o \
 			 $(OBJ_TESTS_DIR)/Mat.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o \
-				$(OBJ_EXAMPLES_DIR)/Constants/Constants.o
+				$(OBJ_EXAMPLES_DIR)/Constants/Constants.o \
+				$(OBJ_EXAMPLES_DIR)/ImageProcessing/ImageProcessing.o \
+				$(OBJ_EXAMPLES_DIR)/Misc/Misc.o \
+				$(OBJ_EXAMPLES_DIR)/stb_image/stb_image.o \
+				$(OBJ_EXAMPLES_DIR)/stb_image/stb_image_write.o
 
 
 # Compiler
@@ -68,8 +72,9 @@ docs:
 
 clean:
 	find $(OBJ_DIR) -type f -exec rm -rf \{\} \;
-	find $(LIB_DIR) -type f -exec rm -rf \{\} \;
-	rm -rf SciPPExamples SciPPTests
+	find $(BUILD_DIR) -type f -exec rm -rf \{\} \;
+	-rm $(LIB_DIR)/libSciPP.so
+	-rm -rf *.png
 
 
 ###############################################################################
@@ -87,8 +92,9 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 
 folders:
 	-rm -rf $(LIB_DIR)/libSciPP.so $(OBJ_DIR) $(BUILD_DIR)
+	-rm -rf *.png
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
-	mkdir $(OBJ_EXAMPLES_DIR)/Constants
+	mkdir $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
 	mkdir $(BUILD_DIR)
 
 
