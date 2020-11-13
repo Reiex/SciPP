@@ -6,67 +6,49 @@ TEST(ClassMat, Constructors)
     std::string testName("ClassMat.Constructors");
 
     {
-        printSection(testName, "Mat<T, m, n>::Mat()");
+        printSection(testName, "Mat<T>::Mat(uint64_t row, uint64_t col, int64_t x)");
 
         {
-            Mat<float, 0> x;
+            Mat<float> x(0, 0);
+            Mat<float> y(0, 3);
+            Mat<float> z(3, 0);
         }
 
         {
-            Mat<float, 3, 2> x;
+            Mat<float> x(3, 2);
             EXPECT_FLOAT_EQ(x[0][0], 0.f); EXPECT_FLOAT_EQ(x[0][1], 0.f);
             EXPECT_FLOAT_EQ(x[1][0], 0.f); EXPECT_FLOAT_EQ(x[1][1], 0.f);
             EXPECT_FLOAT_EQ(x[2][0], 0.f); EXPECT_FLOAT_EQ(x[2][1], 0.f);
         }
-    }
-
-    {
-        printSection(testName, "Mat<T, m, n>::Mat(int64_t x)");
 
         {
-            Mat<float, 3, 2> x((int64_t) 1618);
-            EXPECT_FLOAT_EQ(x[0][0], 1618.f); EXPECT_FLOAT_EQ(x[0][1], 0.f);
-            EXPECT_FLOAT_EQ(x[1][0], 0.f);    EXPECT_FLOAT_EQ(x[1][1], 1618.f);
-            EXPECT_FLOAT_EQ(x[2][0], 0.f);    EXPECT_FLOAT_EQ(x[2][1], 0.f);
+            Mat<float> x(3, 2, (int64_t) 1618);
+            EXPECT_FLOAT_EQ(x[0][0], 1618.f); EXPECT_FLOAT_EQ(x[0][1], 1618.f);
+            EXPECT_FLOAT_EQ(x[1][0], 1618.f); EXPECT_FLOAT_EQ(x[1][1], 1618.f);
+            EXPECT_FLOAT_EQ(x[2][0], 1618.f); EXPECT_FLOAT_EQ(x[2][1], 1618.f);
         }
     }
 
     {
-        printSection(testName, "Mat<T, m, n>::Mat(const T& x)");
+        printSection(testName, "Mat<T>::Mat(uint64_t row, uint64_t col, const T& x)");
 
         {
-            Mat<float, 3, 2> x(1.618f);
-            EXPECT_FLOAT_EQ(x[0][0], 1.618f); EXPECT_FLOAT_EQ(x[0][1], 0.f);
-            EXPECT_FLOAT_EQ(x[1][0], 0.f);    EXPECT_FLOAT_EQ(x[1][1], 1.618f);
-            EXPECT_FLOAT_EQ(x[2][0], 0.f);    EXPECT_FLOAT_EQ(x[2][1], 0.f);
+            Mat<float> x(3, 2, 1.618f);
+            EXPECT_FLOAT_EQ(x[0][0], 1.618f); EXPECT_FLOAT_EQ(x[0][1], 1.618f);
+            EXPECT_FLOAT_EQ(x[1][0], 1.618f); EXPECT_FLOAT_EQ(x[1][1], 1.618f);
+            EXPECT_FLOAT_EQ(x[2][0], 1.618f); EXPECT_FLOAT_EQ(x[2][1], 1.618f);
         }
     }
 
     {
-        printSection(testName, "Mat<T, m, n>::Mat(const std::vector<T>& diag)");
+        printSection(testName, "Mat<T>::Mat(const std::vector<std::vector<T>>& values)");
 
         {
-            Mat<float, 3, 2> x(std::vector<float>({ 1.618f, 3.14f }));
-            EXPECT_FLOAT_EQ(x[0][0], 1.618f); EXPECT_FLOAT_EQ(x[0][1], 0.f);
-            EXPECT_FLOAT_EQ(x[1][0], 0.f);    EXPECT_FLOAT_EQ(x[1][1], 3.14f);
-            EXPECT_FLOAT_EQ(x[2][0], 0.f);    EXPECT_FLOAT_EQ(x[2][1], 0.f);
-        }
-
-        {
-            Mat<float, 3, 2> x;
-            EXPECT_THROW(x = std::vector<float>({}) , std::runtime_error);
-        }
-    }
-
-    {
-        printSection(testName, "Mat<T, m, n>::Mat(const std::array<std::array<T, n>, m>& values)");
-
-        {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
+                });
 
             EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
             EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
@@ -75,15 +57,15 @@ TEST(ClassMat, Constructors)
     }
 
     {
-        printSection(testName, "Mat<T, m, n>::Mat(const Mat<T, m, n>& x)");
+        printSection(testName, "Mat<T>::Mat(const Mat<T>& a)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y(x);
+                });
+            Mat<float> y(x);
 
             EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
             EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
@@ -96,20 +78,32 @@ TEST(ClassMat, Constructors)
     }
 
     {
-        printSection(testName, "Mat<T, m, n>::Mat(Mat<T, m, n>&& x)");
+        printSection(testName, "Mat<T>::Mat(Mat<T>&& a)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y(std::move(x));
+                });
+            Mat<float> y(std::move(x));
 
             EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
             EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
             EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
         }
+    }
+
+    {
+        printSection(testName, "Mat<T>::identity(uint64_t size, int64_t x = 1)");
+
+        EXPECT_EQ(0, 1);
+    }
+
+    {
+        printSection(testName, "Mat<T>::identity(uint64_t size, const T& x)");
+
+        EXPECT_EQ(0, 1);
     }
 }
 
@@ -118,15 +112,15 @@ TEST(ClassMat, AssignmentOperators)
     std::string testName("ClassMat.AssignmentOperators");
 
     {
-        printSection(testName, "Mat<T, m, n>::operator=(const Mat<T, m, n>& x)");
+        printSection(testName, "Mat<T>::operator=(const Mat<T>& x)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y;
+                });
+            Mat<float> y(3, 2);
             y = x;
 
             EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
@@ -140,15 +134,15 @@ TEST(ClassMat, AssignmentOperators)
     }
 
     {
-        printSection(testName, "Mat<T, m, n>::operator=(Mat<T, m, n>&& x)");
+        printSection(testName, "Mat<T>::operator=(Mat<T>&& x)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y;
+                });
+            Mat<float> y(3, 2);
             y = std::move(x);
 
             EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
@@ -165,23 +159,23 @@ TEST(ClassMat, Destructor)
     {
         printSection(testName, "Destructor on a simple matrix");
 
-        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+        Mat<float>* x(new Mat<float>({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } }));
+                }));
         EXPECT_NO_THROW(delete x);
     }
 
     {
         printSection(testName, "Destructor on a matrix created by copy");
 
-        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+        Mat<float>* x(new Mat<float>({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } }));
-        Mat<float, 3, 2>* y(new Mat<float, 3, 2>(*x));
+                }));
+        Mat<float>* y(new Mat<float>(*x));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
@@ -189,12 +183,12 @@ TEST(ClassMat, Destructor)
     {
         printSection(testName, "Destructor on a matrix created by move constructor");
 
-        Mat<float, 3, 2>* x(new Mat<float, 3, 2>({ {
+        Mat<float>* x(new Mat<float>({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } }));
-        Mat<float, 3, 2>* y(new Mat<float, 3, 2>(std::move(*x)));
+                }));
+        Mat<float>* y(new Mat<float>(std::move(*x)));
         EXPECT_NO_THROW(delete x);
         EXPECT_NO_THROW(delete y);
     }
@@ -205,18 +199,18 @@ TEST(ClassMat, AdditionOperators)
     std::string testName("ClassMat.AdditionOperators");
 
     {
-        printSection(testName, "Mat<T, m, n>::operator+=(const Mat<T, m, n>& x)");
+        printSection(testName, "Mat<T>::operator+=(const Mat<T>& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
+            });
         x += y;
 
         EXPECT_FLOAT_EQ(x[0][0], 4.7f);  EXPECT_FLOAT_EQ(x[0][1], 2.3f);
@@ -225,19 +219,19 @@ TEST(ClassMat, AdditionOperators)
     }
 
     {
-        printSection(testName, "operator+(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator+(const Mat<T>& x, const Mat<T>& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = x + y;
 
         EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
@@ -246,19 +240,19 @@ TEST(ClassMat, AdditionOperators)
     }
 
     {
-        printSection(testName, "operator+(Mat<T, m, n>&& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator+(Mat<T>&& x, const Mat<T>& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = std::move(x) + y;
 
         EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
@@ -267,19 +261,19 @@ TEST(ClassMat, AdditionOperators)
     }
 
     {
-        printSection(testName, "operator+(const Mat<T, m, n>& x, Mat<T, m, n>&& y)");
+        printSection(testName, "operator+(const Mat<T>& x, Mat<T>&& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = x + std::move(y);
 
         EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
@@ -288,19 +282,19 @@ TEST(ClassMat, AdditionOperators)
     }
 
     {
-        printSection(testName, "operator+(Mat<T, m, n>&& x, Mat<T, m, n>&& y)");
+        printSection(testName, "operator+(Mat<T>&& x, Mat<T>&& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = std::move(x) + std::move(y);
 
         EXPECT_FLOAT_EQ(z[0][0], 4.7f);  EXPECT_FLOAT_EQ(z[0][1], 2.3f);
@@ -314,18 +308,18 @@ TEST(ClassMat, SubstractionOperators)
     std::string testName("ClassMat.SubstractionOperators");
 
     {
-        printSection(testName, "Mat<T, m, n>::operator-=(const Mat<T, m, n>& x)");
+        printSection(testName, "Mat<T>::operator-=(const Mat<T>& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
+            });
         x -= y;
 
         EXPECT_FLOAT_EQ(x[0][0], -1.5f); EXPECT_FLOAT_EQ(x[0][1], -5.9f);
@@ -334,19 +328,19 @@ TEST(ClassMat, SubstractionOperators)
     }
 
     {
-        printSection(testName, "operator-(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator-(const Mat<T>& x, const Mat<T>& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = x - y;
 
         EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
@@ -355,19 +349,19 @@ TEST(ClassMat, SubstractionOperators)
     }
 
     {
-        printSection(testName, "operator-(Mat<T, m, n>&& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator-(Mat<T>&& x, const Mat<T>& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = std::move(x) - y;
 
         EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
@@ -376,19 +370,19 @@ TEST(ClassMat, SubstractionOperators)
     }
 
     {
-        printSection(testName, "operator-(const Mat<T, m, n>& x, Mat<T, m, n>&& y)");
+        printSection(testName, "operator-(const Mat<T>& x, Mat<T>&& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = x - std::move(y);
 
         EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
@@ -397,19 +391,19 @@ TEST(ClassMat, SubstractionOperators)
     }
 
     {
-        printSection(testName, "operator-(Mat<T, m, n>&& x, Mat<T, m, n>&& y)");
+        printSection(testName, "operator-(Mat<T>&& x, Mat<T>&& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f},
                 {5.9f, -5.6f},
                 {5.3f, 5.9f}
-            } });
-        Mat<float, 3, 2> z;
+            });
+        Mat<float> z(3, 2);
         z = std::move(x) - std::move(y);
 
         EXPECT_FLOAT_EQ(z[0][0], -1.5f); EXPECT_FLOAT_EQ(z[0][1], -5.9f);
@@ -423,19 +417,19 @@ TEST(ClassMat, MultiplicationOperators)
     std::string testName("ClassMat.MultiplicationOperators");
 
     {
-        printSection(testName, "operator*(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 2, 3> y({ {
+            });
+        Mat<float> y({
                 {3.1f, 4.1f, 5.9f},
                 {-5.6f, 5.3f, 5.9f}
-            } });
-        Mat<float, 3, 3> z;
-        Mat<float, 2, 2> t;
+            });
+        Mat<float> z(3, 3);
+        Mat<float> t(2, 2);
 
         z = x * y;
         t = y * x;
@@ -454,15 +448,15 @@ TEST(ClassMat, DivisionOperators)
     std::string testName("ClassMat.DivisionOperators");
 
     {
-        printSection(testName, "operator/(const Mat<T, m, n>& x, const T& y)");
+        printSection(testName, "operator/(const Mat<T>& x, const T& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
+            });
         float y = 3.14;
-        Mat<float, 3, 2> z;
+        Mat<float> z(3, 2);
         z = x / y;
 
         EXPECT_NEAR(z[0][0], 0.5096f, 1e-4); EXPECT_NEAR(z[0][1], -0.5732f, 1e-4);
@@ -471,15 +465,15 @@ TEST(ClassMat, DivisionOperators)
     }
 
     {
-        printSection(testName, "operator/(Mat<T, m, n>&& x, const T& y)");
+        printSection(testName, "operator/(Mat<T>&& x, const T& y)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
+            });
         float y = 3.14;
-        Mat<float, 3, 2> z;
+        Mat<float> z(3, 2);
         z = std::move(x) / y;
 
         EXPECT_NEAR(z[0][0], 0.5096f, 1e-4); EXPECT_NEAR(z[0][1], -0.5732f, 1e-4);
@@ -493,14 +487,14 @@ TEST(ClassMat, UnaryOperators)
     std::string testName("ClassMat.UnaryOperators");
 
     {
-        printSection(testName, "operator-(const Mat<T, m, n>& x)");
+        printSection(testName, "operator-(const Mat<T>& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y;
+            });
+        Mat<float> y(3, 2);
         y = -x;
 
         EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
@@ -513,14 +507,14 @@ TEST(ClassMat, UnaryOperators)
     }
 
     {
-        printSection(testName, "operator+(const Mat<T, m, n>& x)");
+        printSection(testName, "operator+(const Mat<T>& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y;
+            });
+        Mat<float> y(3, 2);
         y = +x;
 
         EXPECT_FLOAT_EQ(x[0][0], 1.6f); EXPECT_FLOAT_EQ(x[0][1], -1.8f);
@@ -533,14 +527,14 @@ TEST(ClassMat, UnaryOperators)
     }
 
     {
-        printSection(testName, "operator-(Mat<T, m, n>&& x)");
+        printSection(testName, "operator-(Mat<T>&& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y;
+            });
+        Mat<float> y(3, 2);
         y = -std::move(x);
 
         EXPECT_FLOAT_EQ(y[0][0], -1.6f); EXPECT_FLOAT_EQ(y[0][1], 1.8f);
@@ -549,14 +543,14 @@ TEST(ClassMat, UnaryOperators)
     }
 
     {
-        printSection(testName, "operator+(Mat<T, m, n>&& x)");
+        printSection(testName, "operator+(Mat<T>&& x)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 3, 2> y;
+            });
+        Mat<float> y(3, 2);
         y = +std::move(x);
 
         EXPECT_FLOAT_EQ(y[0][0], 1.6f); EXPECT_FLOAT_EQ(y[0][1], -1.8f);
@@ -570,68 +564,68 @@ TEST(ClassMat, Comparators)
     std::string testName("ClassMat.Comparators");
 
     {
-        printSection(testName, "operator==(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator==(const Mat<T>& x, const Mat<T>& y)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y({ {
+                });
+            Mat<float> y({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
+                });
             EXPECT_EQ(x == y, true);
             EXPECT_EQ(y == x, true);
         }
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y({ {
+                });
+            Mat<float> y({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, 0.4f}
-                } });
+                });
             EXPECT_EQ(x == y, false);
             EXPECT_EQ(y == x, false);
         }
     }
 
     {
-        printSection(testName, "operator!=(const Mat<T, m, n>& x, const Mat<T, m, n>& y)");
+        printSection(testName, "operator!=(const Mat<T>& x, const Mat<T>& y)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y({ {
+                });
+            Mat<float> y({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
+                });
             EXPECT_EQ(x != y, false);
             EXPECT_EQ(y != x, false);
         }
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
-            Mat<float, 3, 2> y({ {
+                });
+            Mat<float> y({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, 0.4f}
-                } });
+                });
             EXPECT_EQ(x != y, true);
             EXPECT_EQ(y != x, true);
         }
@@ -643,28 +637,28 @@ TEST(ClassMat, StreamOperators)
     std::string testName("ClassMat.StreamOperators");
 
     {
-        printSection(testName, "operator<<(std::ostream& stream, const Mat<T, m, n>& x)");
+        printSection(testName, "operator<<(std::ostream& stream, const Mat<T>& x)");
 
         {
-            Mat<float, 3, 2> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, -7.4f}
-                } });
+                });
             std::stringstream stream;
             stream << x;
             EXPECT_EQ(stream.str(), "1.6 -1.8\n0.3 3.9\n8.8 -7.4");
         }
 
         {
-            Mat<float, 3, 2> x;
+            Mat<float> x(3, 2);
             std::stringstream stream;
             stream << x;
             EXPECT_EQ(stream.str(), "0 0\n0 0\n0 0");
         }
 
         {
-            Mat<float, 0, 0> x;
+            Mat<float> x(0, 0);
             std::stringstream stream;
             stream << x;
             EXPECT_EQ(stream.str(), "");
@@ -677,16 +671,16 @@ TEST(ClassMat, SpecificFunctions)
     std::string testName("ClassMat.SpecificFunctions");
 
     {
-        printSection(testName, "convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method)");
+        printSection(testName, "convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)");
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f, 3.1f},
                     {0.3f, 3.9f, -4.1f},
                     {8.8f, -7.4f, 5.9f}
-                } });
-            Mat<float, 3, 1> y(std::array<std::array<float, 1>, 3>{ { {0.f}, {0.f}, {1.f} } });
-            Mat<float, 3, 3> z;
+                });
+            Mat<float> y(std::vector<std::vector<float>>({ {0.f}, {0.f}, {1.f} }));
+            Mat<float> z(3, 3);
 
             z = convolve(x, y);
             EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
@@ -705,13 +699,13 @@ TEST(ClassMat, SpecificFunctions)
         }
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, 1.8f, 3.1f},
                     {0.3f, 3.9f, 4.1f},
                     {8.8f, 7.4f, 5.9f}
-                } });
-            Mat<float, 3, 1> y(std::array<std::array<float, 1>, 3>{ { {0.01f}, {1.f}, {0.0001f} } });
-            Mat<float, 3, 3> z;
+                });
+            Mat<float> y(std::vector<std::vector<float>>({ {0.01f}, {1.f}, {0.0001f} }));
+            Mat<float> z(3, 3);
 
             z = convolve(x, y);
             EXPECT_NEAR(z[0][0], 1.68803f, 1e-5); EXPECT_NEAR(z[0][1], 1.87439f, 1e-5); EXPECT_NEAR(z[0][2], 3.15941f, 1e-5);
@@ -730,26 +724,26 @@ TEST(ClassMat, SpecificFunctions)
         }
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, 1.8f, 3.1f},
                     {0.3f, 3.9f, 4.1f},
                     {8.8f, 7.4f, 5.9f}
-                } });
-            Mat<float, 3, 2> y;
-            Mat<float, 2, 3> z;
+                });
+            Mat<float> y(3, 2);
+            Mat<float> z(2, 3);
 
             EXPECT_THROW(convolve(x, y), std::runtime_error);
             EXPECT_THROW(convolve(x, z), std::runtime_error);
         }
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, 1.8f, 3.1f},
                     {0.3f, 3.9f, 4.1f},
                     {8.8f, 7.4f, 5.9f}
-                } });
-            Mat<float, 5, 1> y;
-            Mat<float, 1, 5> z;
+                });
+            Mat<float> y(5, 1);
+            Mat<float> z(1, 5);
 
             EXPECT_THROW(convolve(x, y), std::runtime_error);
             EXPECT_THROW(convolve(x, z), std::runtime_error);
@@ -757,15 +751,15 @@ TEST(ClassMat, SpecificFunctions)
     }
 
     {
-        printSection(testName, "inverse(const Mat<T, n, n>& a)");
+        printSection(testName, "inverse(const Mat<T>& a)");
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f, 3.1f},
                     {0.3f, 3.9f, -4.1f},
                     {8.8f, -7.4f, 5.9f}
-                } });
-            Mat<float, 3, 3> y;
+                });
+            Mat<float> y(3, 3);
 
             y = x * inverse(x);
             EXPECT_NEAR(y[0][0], 1, 1e-5); EXPECT_NEAR(y[0][1], 0, 1e-5);  EXPECT_NEAR(y[0][2], 0, 1e-5);
@@ -779,49 +773,49 @@ TEST(ClassMat, SpecificFunctions)
         }
 
         {
-            Mat<float, 3, 3> x;
+            Mat<float> x(3, 3);
             EXPECT_THROW(inverse(x), std::runtime_error);
         }
     }
 
     {
-        printSection(testName, "transpose(const Mat<T, m, n>& a)");
+        printSection(testName, "transpose(const Mat<T>& a)");
 
-        Mat<float, 3, 2> x({ {
+        Mat<float> x({
                 {1.6f, -1.8f},
                 {0.3f, 3.9f},
                 {8.8f, -7.4f}
-            } });
-        Mat<float, 2, 3> y;
+            });
+        Mat<float> y(2, 3);
         y = transpose(x);
         EXPECT_FLOAT_EQ(y[0][0], 1.6f);  EXPECT_FLOAT_EQ(y[0][1], 0.3f); EXPECT_FLOAT_EQ(y[0][2], 8.8f);
         EXPECT_FLOAT_EQ(y[1][0], -1.8f); EXPECT_FLOAT_EQ(y[1][1], 3.9f); EXPECT_FLOAT_EQ(y[1][2], -7.4f);
     }
 
     {
-        printSection(testName, "det(const Mat<T, n, n>& a)");
+        printSection(testName, "det(const Mat<T>& a)");
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f,  0.f,  0.f},
                     {0.3f,  3.9f, 0.f},
                     {8.8f, -7.4f, 5.9f}
-                } });
+                });
             
             EXPECT_NEAR(det(x), 36.816f, 1e-5);
         }
 
         {
-            Mat<float, 3, 3> x;
+            Mat<float> x(3, 3);
             EXPECT_NEAR(det(x), 0.f, 1e-5);
         }
     }
 
     {
-        printSection(testName, "dft(const Mat<std::complex<T>, m, n>& f) and idft(const Mat<std::complex<T>, m, n>& fh)");
+        printSection(testName, "dft(const Mat<std::complex<T>>& f) and idft(const Mat<std::complex<T>>& fh)");
 
         {
-            Mat<std::complex<float>, 3, 3> x({ {
+            Mat<std::complex<float>> x({
                     {
                         std::complex<float>{1.6f, 1.8f},
                         std::complex<float>{0.3f, 3.9f},
@@ -837,8 +831,8 @@ TEST(ClassMat, SpecificFunctions)
                         std::complex<float>{2.7f, 2.8f},
                         std::complex<float>{1.8f, 2.8f}
                     }
-                } });
-            Mat<std::complex<float>, 3, 3> y;
+                });
+            Mat<std::complex<float>> y(3, 3);
             y = idft(dft(x));
 
             EXPECT_NEAR(y[0][0].real(), x[0][0].real(), 1e-5);
@@ -868,15 +862,15 @@ TEST(ClassMat, SpecificFunctions)
     }
 
     {
-        printSection(testName, "dct(const Mat<T, m, n>& f) and idct(const Mat<T, m, n>& fh)");
+        printSection(testName, "dct(const Mat<T>& f) and idct(const Mat<T>& fh)");
 
         {
-            Mat<float, 3, 3> x({ {
+            Mat<float> x({
                     {1.6f, -1.8f, 3.1f},
                     {0.3f, 3.9f, 4.1f},
                     {8.8f, -7.4f, 5.9f}
-                } });
-            Mat<float, 3, 3> y;
+                });
+            Mat<float> y(3, 3);
             y = idct(dct(x));
 
             EXPECT_NEAR(y[0][0], x[0][0], 1e-5); EXPECT_NEAR(y[0][1], x[0][1], 1e-5); EXPECT_NEAR(y[0][2], x[0][2], 1e-5);

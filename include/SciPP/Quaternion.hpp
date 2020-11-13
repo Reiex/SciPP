@@ -18,30 +18,28 @@ namespace scp
     /// \brief Class for quaternions manipulations
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
-    class Quaternion
+    struct Quaternion
     {
-        public:
+        Quaternion();                                                                    ///< Default constructor. Init the quaternion to 0.
+        Quaternion(int64_t x);                                                           ///< Init the quaternion to the real `T(x)`.
+        Quaternion(const T& x);                                                          ///< Init the quaternion to the real `x`.
+        Quaternion(const T& aValue, const T& bValue, const T& cValue, const T& dValue);  ///< Init the quaternion to `a + bi + cj + dk`.
+        Quaternion(const std::array<T, 4> values);                                       ///< Init the quaternion with the 4 values `{a, b, c, d}` to `a + bi + cj + dk`.
+        Quaternion(const Quaternion<T>& q) = default;
+        Quaternion(Quaternion<T>&& q) = default;
 
-            Quaternion();                                                                    ///< Default constructor. Init the quaternion to 0.
-            Quaternion(int64_t x);                                                           ///< Init the quaternion to the real `T(x)`.
-            Quaternion(const T& x);                                                          ///< Init the quaternion to the real `x`.
-            Quaternion(const T& aValue, const T& bValue, const T& cValue, const T& dValue);  ///< Init the quaternion to `a + bi + cj + dk`.
-            Quaternion(const std::array<T, 4> values);                                       ///< Init the quaternion with the 4 values `{a, b, c, d}` to `a + bi + cj + dk`.
-            Quaternion(const Quaternion<T>& q) = default;
-            Quaternion(Quaternion<T>&& q) = default;
+        Quaternion<T>& operator=(const Quaternion<T>& q) = default;
+        Quaternion<T>& operator=(Quaternion<T>&& q) = default;
 
-            Quaternion<T>& operator=(const Quaternion<T>& q) = default;
-            Quaternion<T>& operator=(Quaternion<T>&& q) = default;
+        Quaternion<T>& operator+=(const Quaternion<T>& q);
+        Quaternion<T>& operator-=(const Quaternion<T>& q);
+        Quaternion<T>& operator*=(const Quaternion<T>& q);
+        Quaternion<T>& operator/=(const T& x);
 
-            Quaternion<T>& operator+=(const Quaternion<T>& q);
-            Quaternion<T>& operator-=(const Quaternion<T>& q);
-            Quaternion<T>& operator*=(const Quaternion<T>& q);
-            Quaternion<T>& operator/=(const T& x);
-
-            T a;
-            T b;
-            T c;
-            T d;
+        T a;
+        T b;
+        T c;
+        T d;
     };
 
     // External operators

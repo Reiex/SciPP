@@ -18,81 +18,95 @@ namespace scp
     /// \class Mat
     /// \brief Class for matrices manipulations.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n = m>
+    template<typename T>
     class Mat
     {
         public:
 
-            static const uint64_t M = m;  ///< Number of lines of the matrix.
-            static const uint64_t N = n;  ///< Number of columns of the matrix.
+            Mat() = delete;
+            Mat(uint64_t row, uint64_t col, int64_t x = 0);    ///< Init the matrix with `T(x)` everywhere.
+            Mat(uint64_t row, uint64_t col, const T& x);       ///< Init the matrix with `x` everywhere.
+            Mat(const std::vector<std::vector<T>>& values);  ///< Init the matrix directly.
+            Mat(const Mat<T>& a) = default;
+            Mat(Mat<T>&& a) = default;
 
-            Mat();                                               ///< Default constructor. Init the matrix to 0.
-            Mat(int64_t x);                                      ///< Init the matrix to `x * identity`.
-            Mat(const T& x);                                     ///< Init the matrix to `x * identity`.
-            Mat(const std::vector<T>& diag);                     ///< Init the matrix with its diagonal values. `diag` must be of size `std::min(m, n)`.
-            Mat(const std::array<std::array<T, n>, m>& values);  ///< Init the matrix directly.
-            Mat(const Mat<T, m, n>& a) = default;
-            Mat(Mat<T, m, n>&& a) = default;
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// \brief Returns the identity matrix multiplied by `T(x)`.
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            static Mat<T> identity(uint64_t size, int64_t x = 1);
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// \brief Returns the identity matrix multiplied by `x`.
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            static Mat<T> identity(uint64_t size, const T& x);
 
-            Mat<T, m, n>& operator=(const Mat<T, m, n>& a) = default;
-            Mat<T, m, n>& operator=(Mat<T, m, n>&& a) = default;
+            Mat<T>& operator=(const Mat<T>& a);
+            Mat<T>& operator=(Mat<T>&& a);
 
-            Mat<T, m, n>& operator+=(const Mat<T, m, n>& a);
-            Mat<T, m, n>& operator-=(const Mat<T, m, n>& a);
-            Mat<T, m, n>& operator/=(const T& x);
+            Vec<T>& operator[](uint64_t i);
+            const Vec<T>& operator[](uint64_t i) const;
 
-            Vec<T, n>& operator[](uint64_t i);
-            const Vec<T, n>& operator[](uint64_t i) const;
+            Mat<T>& operator+=(const Mat<T>& a);
+            Mat<T>& operator-=(const Mat<T>& a);
+            Mat<T>& operator*=(const T& x);
+            Mat<T>& operator/=(const T& x);
+
+            const uint64_t m;
+            const uint64_t n;
 
         private:
 
-            Vec<T, n> _values[m];
+            std::vector<Vec<T>> _values;
     };
 
     // External operators
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator+(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, const Mat<T, m, n>& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(const Mat<T, m, n>& a, Mat<T, m, n>&& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, Mat<T, m, n>&& b);
+    template<typename T>
+    Mat<T> operator+(const Mat<T>& a, const Mat<T>& b);
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a, const Mat<T>& b);
+    template<typename T>
+    Mat<T>&& operator+(const Mat<T>& a, Mat<T>&& b);
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a, Mat<T>&& b);
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator-(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, const Mat<T, m, n>& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(const Mat<T, m, n>& a, Mat<T, m, n>&& b);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, Mat<T, m, n>&& b);
+    template<typename T>
+    Mat<T> operator-(const Mat<T>& a, const Mat<T>& b);
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a, const Mat<T>& b);
+    template<typename T>
+    Mat<T>&& operator-(const Mat<T>& a, Mat<T>&& b);
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a, Mat<T>&& b);
 
-    template<typename T, uint64_t m, uint64_t n, uint64_t p>
-    Mat<T, m, p> operator*(const Mat<T, m, n>& a, const Mat<T, n, p>& b);
+    template<typename T>
+    Mat<T> operator*(const Mat<T>& a, const Mat<T>& b);
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator/(const Mat<T, m, n>& a, const T& x);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator/(Mat<T, m, n>&& a, const T& x);
+    template<typename T>
+    Mat<T> operator*(const Mat<T>& a, const T& x);
+    template<typename T>
+    Mat<T>&& operator*(Mat<T>&& a, const T& x);
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator-(const Mat<T, m, n>& a);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a);
+    template<typename T>
+    Mat<T> operator/(const Mat<T>& a, const T& x);
+    template<typename T>
+    Mat<T>&& operator/(Mat<T>&& a, const T& x);
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator+(const Mat<T, m, n>& a);
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a);
+    template<typename T>
+    Mat<T> operator-(const Mat<T>& a);
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a);
+
+    template<typename T>
+    Mat<T> operator+(const Mat<T>& a);
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a);
 
     // Comparators
 
-    template<typename T, uint64_t m, uint64_t n>
-    bool operator==(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
-    template<typename T, uint64_t m, uint64_t n>
-    bool operator!=(const Mat<T, m, n>& a, const Mat<T, m, n>& b);
+    template<typename T>
+    bool operator==(const Mat<T>& a, const Mat<T>& b);
+    template<typename T>
+    bool operator!=(const Mat<T>& a, const Mat<T>& b);
 
     // Display
 
@@ -108,8 +122,8 @@ namespace scp
     /// With `xij` and `...` the elements of the matrix.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    std::ostream& operator<<(std::ostream& stream, const Mat<T, m, n>& a);
+    template<typename T>
+    std::ostream& operator<<(std::ostream& stream, const Mat<T>& a);
 
     // Specific functions
 
@@ -130,52 +144,52 @@ namespace scp
     /// \relates ConvolveMethod
     /// \brief Convolution product of a by b. For behaviour at matrix borders, see ConvolveMethod
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n, uint64_t p, uint64_t q>
-    Mat<T, m, n> convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method = ConvolveMethod::Periodic);
+    template<typename T>
+    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method = ConvolveMethod::Periodic);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Compute the inverse of the matrix. If the matrix has no inverse, an error is thrown.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    Mat<T, n, n> inverse(const Mat<T, n, n>& a);
+    template<typename T>
+    Mat<T> inverse(const Mat<T>& a);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Returns the transpose of the matrix.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, n, m> transpose(const Mat<T, m, n>& a);
+    template<typename T>
+    Mat<T> transpose(const Mat<T>& a);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Compute the determinant of the matrix.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    T det(const Mat<T, n, n>& a);
+    template<typename T>
+    T det(const Mat<T>& a);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Discrete Fourier Transform of a matrix.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<std::complex<T>, m, n> dft(const Mat<std::complex<T>, m, n>& f);
+    template<typename T>
+    Mat<std::complex<T>> dft(const Mat<std::complex<T>>& f);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Inverse Discrete Fourier Transform of a matrix.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<std::complex<T>, m, n> idft(const Mat<std::complex<T>, m, n>& fh);
+    template<typename T>
+    Mat<std::complex<T>> idft(const Mat<std::complex<T>>& fh);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Discrete Cosine Transform of a matrix. (Type II corrected)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> dct(const Mat<T, m, n>& f);
+    template<typename T>
+    Mat<T> dct(const Mat<T>& f);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
     /// \brief Inverse Discrete Cosine Transform of a matrix. (Type II corrected)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> idct(const Mat<T, m, n>& fh);
+    template<typename T>
+    Mat<T> idct(const Mat<T>& fh);
 }
 
 #include <SciPP/MatT.hpp>

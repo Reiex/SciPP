@@ -21,96 +21,95 @@ namespace scp
     /// are written aside of the class like dot product, cross product...
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
+    template<typename T>
     class Vec
     {
         public:
 
-            static const uint64_t N = n;  ///< Number of elements of the vector.
+            Vec(uint64_t count, int64_t value = 0);  ///< Init all the components of the vector with T(value).
+            Vec(uint64_t count, const T& value);     ///< Init all the components of the vector with value.
+            Vec(const std::vector<T>& values);      ///< Init the vec with the values.
+            Vec(const Vec<T>& v) = default;
+            Vec(Vec<T>&& v) = default;
 
-            Vec();                                ///< Default constructor. Init all the components of the vector with T(0).
-            Vec(int64_t value);                   ///< Init all the components of the vector with T(value).
-            Vec(const T& value);                  ///< Init all the components of the vector with value.
-            Vec(const std::array<T, n>& values);  ///< Init the vec with the values.
-            Vec(const Vec<T, n>& v) = default;
-            Vec(Vec<T, n>&& v) = default;
-
-            Vec<T, n>& operator=(const Vec<T, n>& v) = default;
-            Vec<T, n>& operator=(Vec<T, n>&& v) = default;
+            Vec<T>& operator=(const Vec<T>& v);
+            Vec<T>& operator=(Vec<T>&& v);
 
             T& operator[](uint64_t i);
             const T& operator[](uint64_t i) const;
             
-            Vec<T, n>& operator+=(const Vec<T, n>& v);
-            Vec<T, n>& operator-=(const Vec<T, n>& v);
-            Vec<T, n>& operator*=(const Vec<T, n>& v);
-            Vec<T, n>& operator/=(const Vec<T, n>& v);
-            Vec<T, n>& operator%=(const Vec<T, n>& v);
+            Vec<T>& operator+=(const Vec<T>& v);
+            Vec<T>& operator-=(const Vec<T>& v);
+            Vec<T>& operator*=(const Vec<T>& v);
+            Vec<T>& operator/=(const Vec<T>& v);
+            Vec<T>& operator%=(const Vec<T>& v);
+
+            const uint64_t n;
 
         private:
 
-            T _values[n];
+            std::vector<T> _values;
     };
 
     // External operators
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator+(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator+(Vec<T, n>&& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator+(const Vec<T, n>& u, Vec<T, n>&& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator+(Vec<T, n>&& u, Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator+(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator+(Vec<T>&& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator+(const Vec<T>& u, Vec<T>&& v);
+    template<typename T>
+    Vec<T>&& operator+(Vec<T>&& u, Vec<T>&& v);
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator-(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator-(Vec<T, n>&& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator-(const Vec<T, n>& u, Vec<T, n>&& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator-(Vec<T, n>&& u, Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator-(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator-(Vec<T>&& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator-(const Vec<T>& u, Vec<T>&& v);
+    template<typename T>
+    Vec<T>&& operator-(Vec<T>&& u, Vec<T>&& v);
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator*(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator*(Vec<T, n>&& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator*(const Vec<T, n>& u, Vec<T, n>&& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator*(Vec<T, n>&& u, Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator*(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator*(Vec<T>&& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator*(const Vec<T>& u, Vec<T>&& v);
+    template<typename T>
+    Vec<T>&& operator*(Vec<T>&& u, Vec<T>&& v);
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator/(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator/(Vec<T, n>&& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator/(Vec<T, n>&& u, Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator/(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator/(Vec<T>&& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator/(Vec<T>&& u, Vec<T>&& v);
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator%(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator%(Vec<T, n>&& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator%(Vec<T, n>&& u, Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator%(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator%(Vec<T>&& u, const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator%(Vec<T>&& u, Vec<T>&& v);
 
-    template<typename T, uint64_t n>
-    Vec<T, n> operator-(const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator-(Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator-(const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator-(Vec<T>&& v);
     
-    template<typename T, uint64_t n>
-    Vec<T, n> operator+(const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    Vec<T, n>&& operator+(Vec<T, n>&& v);
+    template<typename T>
+    Vec<T> operator+(const Vec<T>& v);
+    template<typename T>
+    Vec<T>&& operator+(Vec<T>&& v);
 
     // Comparators
 
-    template<typename T, uint64_t n>
-    bool operator==(const Vec<T, n>& u, const Vec<T, n>& v);
-    template<typename T, uint64_t n>
-    bool operator!=(const Vec<T, n>& u, const Vec<T, n>& v);
+    template<typename T>
+    bool operator==(const Vec<T>& u, const Vec<T>& v);
+    template<typename T>
+    bool operator!=(const Vec<T>& u, const Vec<T>& v);
 
     // Display
 
@@ -121,8 +120,8 @@ namespace scp
     /// Writes the vector under the format `x0 x1 ... xn` with `xi` and `...` the elements of the vector.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    std::ostream& operator<<(std::ostream& stream, const Vec<T, n>& v);
+    template<typename T>
+    std::ostream& operator<<(std::ostream& stream, const Vec<T>& v);
 
     // Specific functions
 
@@ -130,52 +129,52 @@ namespace scp
     /// \relates Vec
     /// \brief Dot product between two vectors
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    T dot(const Vec<T, n>& u, const Vec<T, n>& v);
+    template<typename T>
+    T dot(const Vec<T>& u, const Vec<T>& v);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Cross product between two 3-dimensional vectors
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
-    Vec<T, 3> cross(const Vec<T, 3>& u, const Vec<T, 3>& v);
+    Vec<T> cross(const Vec<T>& u, const Vec<T>& v);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Returns the square of the euclidian norm of a vector.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    T normSq(const Vec<T, n> v);
+    template<typename T>
+    T normSq(const Vec<T> v);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Returns the euclidian norm of a vector.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    T norm(const Vec<T, n> v);
+    template<typename T>
+    T norm(const Vec<T> v);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Discrete Fourier Transform of a vector.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    Vec<std::complex<T>, n> dft(const Vec<std::complex<T>, n>& f);
+    template<typename T>
+    Vec<std::complex<T>> dft(const Vec<std::complex<T>>& f);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Inverse Discrete Fourier Transform of a vector.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    Vec<std::complex<T>, n> idft(const Vec<std::complex<T>, n>& fh);
+    template<typename T>
+    Vec<std::complex<T>> idft(const Vec<std::complex<T>>& fh);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Discrete Cosine Transform of a vector. (Type II corrected)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    Vec<T, n> dct(const Vec<T, n>& f);
+    template<typename T>
+    Vec<T> dct(const Vec<T>& f);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Vec
     /// \brief Inverse Discrete Cosine Transform of a vector. (Type II corrected)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T, uint64_t n>
-    Vec<T, n> idct(const Vec<T, n>& fh);
+    template<typename T>
+    Vec<T> idct(const Vec<T>& fh);
 }
 
 #include <SciPP/VecT.hpp>

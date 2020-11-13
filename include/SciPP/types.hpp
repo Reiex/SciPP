@@ -16,10 +16,10 @@ namespace scp
     std::string scippError(const std::string& error);
 
     class Int;
-    template<typename T> class Quaternion;
+    template<typename T> struct Quaternion;
     template<typename T> class Frac;
     class Rational;
-    template<typename T, uint64_t n> class Vec;
     template<typename T> class Polynomial;
-    template<typename T, uint64_t m, uint64_t n> class Mat; 
+    template<typename T> class Vec;
+    template<typename T> class Mat; 
 }

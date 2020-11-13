@@ -6,64 +6,110 @@ namespace scp
 {
     // Constructors
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat()
+    template<typename T>
+    Mat<T>::Mat(uint64_t row, uint64_t col, int64_t x) :
+        m(row),
+        n(col),
+        _values(m, Vec<T>(n, x))
     {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
-                _values[i][j] = 0;
-    }
-
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat(int64_t x)
-    {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
-                if (i == j)
-                    _values[i][j] = x;
-                else
-                    _values[i][j] = 0;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat(const T& x)
+    template<typename T>
+    Mat<T>::Mat(uint64_t row, uint64_t col, const T& x) :
+        m(row),
+        n(col),
+        _values(m, Vec<T>(n, x))
     {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
-                if (i == j)
-                    _values[i][j] = x;
-                else
-                    _values[i][j] = 0;
-    }
-
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat(const std::vector<T>& diag)
-    {
-        if (diag.size() != std::min(m, n))
-            throw std::runtime_error(scippError("Cannot initialize Mat<" + std::to_string(m) + ", " + std::to_string(n) + "> with " + std::to_string(diag.size()) + " diagonal values"));
-
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
-                if (i == j)
-                    _values[i][j] = diag[i];
-                else
-                    _values[i][j] = 0;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>::Mat(const std::array<std::array<T, n>, m>& values)
+    template<typename T>
+    Mat<T>::Mat(const std::vector<std::vector<T>>& values) :
+        m(values.size()),
+        n(values.size() == 0 ? 0 : values[0].size()),
+        _values(m, Vec<T>(n, (int64_t) 0))
     {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
-                _values[i][j] = values[i][j];
+        for (uint64_t i(0); i < _values.size(); i++)
+            if (values[i].size() != n)
+                throw std::runtime_error(scippError("Invalid vector for value initialization."));
+            else
+                _values[i] = Vec<T>(values[i]);
+    }
+
+    template<typename T>
+    Mat<T> Mat<T>::identity(uint64_t size, int64_t x)
+    {
+        Mat<T> a(size, size);
+        for (uint64_t i(0); i < size; i++)
+            a[i][i] = x;
+
+        return a;
+    }
+
+    template<typename T>
+    Mat<T> Mat<T>::identity(uint64_t size, const T& x)
+    {
+        Mat<T> a(size, size);
+        for (uint64_t i(0); i < size; i++)
+            a[i][i] = x;
+
+        return a;
+    }
+
+
+    // Assignment operators
+
+    template<typename T>
+    Mat<T>& Mat<T>::operator=(const Mat<T>& a)
+    {
+        if (m != a.m || n != a.n)
+            throw std::runtime_error(scippError("Cannot assign a matrix to another matrix of different size."));
+
+        _values = a._values;
+
+        return *this;
+    }
+
+    template<typename T>
+    Mat<T>& Mat<T>::operator=(Mat<T>&& a)
+    {
+        if (m != a.m || n != a.n)
+            throw std::runtime_error(scippError("Cannot assign a matrix to another matrix of different size."));
+
+        _values = a._values;
+
+        return *this;
+    }
+
+
+    // Accessors
+
+    template<typename T>
+    Vec<T>& Mat<T>::operator[](uint64_t i)
+    {
+        if (i >= m)
+            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}."));
+
+        return _values[i];
+    }
+
+    template<typename T>
+    const Vec<T>& Mat<T>::operator[](uint64_t i) const
+    {
+        if (i >= m)
+            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}."));
+
+        return _values[i];
     }
     
 
     // Internal operators
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>& Mat<T, m, n>::operator+=(const Mat<T, m, n>& a)
+    template<typename T>
+    Mat<T>& Mat<T>::operator+=(const Mat<T>& a)
     {
+        if (m != a.m || n != a.n)
+            throw std::runtime_error(scippError("Cannot add Mat of different sizes. Sizes are {" + std::to_string(m) + ", " + std::to_string(n) + "} and {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] += a._values[i][j];
@@ -71,76 +117,68 @@ namespace scp
         return *this;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>& Mat<T, m, n>::operator-=(const Mat<T, m, n>& a)
+    template<typename T>
+    Mat<T>& Mat<T>::operator-=(const Mat<T>& a)
     {
+        if (m != a.m || n != a.n)
+            throw std::runtime_error(scippError("Cannot add Mat of different sizes. Sizes are {" + std::to_string(m) + ", " + std::to_string(n) + "} and {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] -= a._values[i][j];
-        
+
         return *this;
     }
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>& Mat<T, m, n>::operator/=(const T& x)
+    template<typename T>
+    Mat<T>& Mat<T>::operator*=(const T& x)
+    {
+        for (uint64_t i(0); i < m; i++)
+            for (uint64_t j(0); j < n; j++)
+                _values[i][j] *= x;
+
+        return *this;
+    }
+
+    template<typename T>
+    Mat<T>& Mat<T>::operator/=(const T& x)
     {
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
                 _values[i][j] /= x;
-        
+
         return *this;
-    }
-
-
-    // Accessors
-    
-    template<typename T, uint64_t m, uint64_t n>
-    Vec<T, n>& Mat<T, m, n>::operator[](uint64_t i)
-    {
-        if (i >= m)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat<" + std::to_string(m) + ", " + std::to_string(n) + ">."));
-        
-        return _values[i];
-    }
-    
-    template<typename T, uint64_t m, uint64_t n>
-    const Vec<T, n>& Mat<T, m, n>::operator[](uint64_t i) const
-    {
-        if (i >= m)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat<" + std::to_string(m) + ", " + std::to_string(n) + ">."));
-        
-        return _values[i];
     }
 
     // External operators
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator+(const Mat<T, m, n>& a, const Mat<T, m, n>& b)
+    template<typename T>
+    Mat<T> operator+(const Mat<T>& a, const Mat<T>& b)
     {
-        Mat<T, m, n> c(a);
+        Mat<T> c(a);
         c += b;
 
         return c;
     }
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, const Mat<T, m, n>& b)
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a, const Mat<T>& b)
     {
         a += b;
 
         return std::move(a);
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(const Mat<T, m, n>& a, Mat<T, m, n>&& b)
+    template<typename T>
+    Mat<T>&& operator+(const Mat<T>& a, Mat<T>&& b)
     {
         b += a;
 
         return std::move(b);
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a, Mat<T, m, n>&& b)
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a, Mat<T>&& b)
     {
         a += b;
 
@@ -148,33 +186,33 @@ namespace scp
     }
     
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator-(const Mat<T, m, n>& a, const Mat<T, m, n>& b)
+    template<typename T>
+    Mat<T> operator-(const Mat<T>& a, const Mat<T>& b)
     {
-        Mat<T, m, n> c(a);
+        Mat<T> c(a);
         c -= b;
         
         return c;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, const Mat<T, m, n>& b)
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a, const Mat<T>& b)
     {
         a -= b;
 
         return std::move(a);
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(const Mat<T, m, n>& a, Mat<T, m, n>&& b)
+    template<typename T>
+    Mat<T>&& operator-(const Mat<T>& a, Mat<T>&& b)
     {
         b -= a;
 
         return -std::move(b);
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a, Mat<T, m, n>&& b)
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a, Mat<T>&& b)
     {
         a -= b;
 
@@ -182,67 +220,87 @@ namespace scp
     }
     
 
-    template<typename T, uint64_t m, uint64_t n, uint64_t p>
-    Mat<T, m, p> operator*(const Mat<T, m, n>& a, const Mat<T, n, p>& b)
+    template<typename T>
+    Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
     {
-        Mat<T, m, p> c;
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < p; j++)
-                for (uint64_t k(0); k < n; k++)
+        if (a.n != b.m)
+            throw std::runtime_error("Mat sizes not compatible for multiplication. Sizes are {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "} and {" + std::to_string(b.m) + ", " + std::to_string(b.n) + "}.");
+
+        Mat<T> c(a.m, b.n);
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < b.n; j++)
+                for (uint64_t k(0); k < a.n; k++)
                     c[i][j] += a[i][k] * b[k][j];
         
         return c;
     }
     
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator/(const Mat<T, m, n>& a, const T& x)
+    template<typename T>
+    Mat<T> operator*(const Mat<T>& a, const T& x)
     {
-        Mat<T, m, n> b(a);
+        Mat<T> b(a);
+        b *= x;
+
+        return b;
+    }
+
+    template<typename T>
+    Mat<T>&& operator*(Mat<T>&& a, const T& x)
+    {
+        a *= x;
+        return std::move(a);
+    }
+
+
+    template<typename T>
+    Mat<T> operator/(const Mat<T>& a, const T& x)
+    {
+        Mat<T> b(a);
         b /= x;
 
         return b;
     }
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator/(Mat<T, m, n>&& a, const T& x)
+    template<typename T>
+    Mat<T>&& operator/(Mat<T>&& a, const T& x)
     {
         a /= x;
         return std::move(a);
     }
 
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator-(const Mat<T, m, n>& a)
+    template<typename T>
+    Mat<T> operator-(const Mat<T>& a)
     {
-        Mat<T, m, n> c;
+        Mat<T> c(a.m, a.n);
         
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
                 c[i][j] = -a[i][j];
         
         return c;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator-(Mat<T, m, n>&& a)
+    template<typename T>
+    Mat<T>&& operator-(Mat<T>&& a)
     {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
                 a[i][j] = -a[i][j];
         
         return std::move(a);
     }
     
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> operator+(const Mat<T, m, n>& a)
+    template<typename T>
+    Mat<T> operator+(const Mat<T>& a)
     {
         return a;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n>&& operator+(Mat<T, m, n>&& a)
+    template<typename T>
+    Mat<T>&& operator+(Mat<T>&& a)
     {
         return std::move(a);
     }
@@ -250,19 +308,22 @@ namespace scp
 
     // Comparators
 
-    template<typename T, uint64_t m, uint64_t n>
-    bool operator==(const Mat<T, m, n>& a, const Mat<T, m, n>& b)
+    template<typename T>
+    bool operator==(const Mat<T>& a, const Mat<T>& b)
     {
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < n; j++)
+        if (a.m != b.m || a.n != b.n)
+            return false;
+
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
                 if (a[i][j] != b[i][j])
                     return false;
 
         return true;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    bool operator!=(const Mat<T, m, n>& a, const Mat<T, m, n>& b)
+    template<typename T>
+    bool operator!=(const Mat<T>& a, const Mat<T>& b)
     {
         return !(a == b);
     }
@@ -270,17 +331,17 @@ namespace scp
 
     // Display
 
-    template<typename T, uint64_t m, uint64_t n>
-    std::ostream& operator<<(std::ostream& stream, const Mat<T, m, n>& a)
+    template<typename T>
+    std::ostream& operator<<(std::ostream& stream, const Mat<T>& a)
     {
-        for (uint64_t i(0); i < m; i++)
+        for (uint64_t i(0); i < a.m; i++)
         {
-            for (uint64_t j(0); j < n; j++)
-                if (j == n - 1)
+            for (uint64_t j(0); j < a.n; j++)
+                if (j == a.n - 1)
                     stream << a[i][j];
                 else
                     stream << a[i][j] << " ";
-            if (i != m - 1)
+            if (i != a.m - 1)
                 stream << std::endl;
         }
 
@@ -290,16 +351,21 @@ namespace scp
 
     // Specific functions
 
-    template<typename T, uint64_t m, uint64_t n, uint64_t p, uint64_t q>
-    Mat<T, m, n> convolve(const Mat<T, m, n>& a, const Mat<T, p, q>& b, ConvolveMethod method)
+    template<typename T>
+    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)
     {
+        uint64_t m = a.m;
+        uint64_t n = a.n;
+        uint64_t p = b.m;
+        uint64_t q = b.n;
+
         if (p % 2 == 0 || q % 2 == 0)
             throw std::runtime_error(scippError("The convolution matrix number of rows and columns must be odds."));
 
         if (p > m || q > n)
             throw std::runtime_error(scippError("The convolution matrix must be smaller than the convolved matrix."));
 
-        Mat<T, m, n> c;
+        Mat<T> c(m, n);
 
         for (uint64_t i(0); i < m; i++)
         {
@@ -344,21 +410,24 @@ namespace scp
         return c;
     }
     
-    template<typename T, uint64_t n>
-    Mat<T, n, n> inverse(const Mat<T, n, n>& a)
+    template<typename T>
+    Mat<T> inverse(const Mat<T>& a)
     {
-        Mat<T, n, n> b(a), inv((int64_t) 1);
+        if (a.m != a.n)
+            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
 
-        for (uint64_t j(0); j < n; j++)
+        Mat<T> b(a), inv(Mat<T>::identity(a.n));
+
+        for (uint64_t j(0); j < a.n; j++)
         {
             if (b[j][j] == 0)
             {
-                for (uint64_t i(j + 1); i < n; i++)
+                for (uint64_t i(j + 1); i < a.n; i++)
                 {
                     if (b[i][j] != 0)
                     {
-                        inv[i] /= b[i][j];
-                        b[i] /= b[i][j];
+                        inv[i] /= Vec<T>(a.n, b[i][j]);
+                        b[i] /= Vec<T>(a.n, b[i][j]);
                         inv[j] += inv[i];
                         b[j] += b[i];
                         break;
@@ -370,28 +439,28 @@ namespace scp
             }
             else
             {
-                inv[j] /= b[j][j];
-                b[j] /= b[j][j];
+                inv[j] /= Vec<T>(a.n, b[j][j]);
+                b[j] /= Vec<T>(a.n, b[j][j]);
             }
 
-            for (uint64_t i(j + 1); i < n; i++)
+            for (uint64_t i(j + 1); i < a.n; i++)
             {
                 if (b[i][j] != 0)
                 {
-                    inv[i] -= Vec<T, n>(b[i][j]) * inv[j];
-                    b[i] -= Vec<T, n>(b[i][j]) * b[j];
+                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
+                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
                 }
             }
         }
 
-        for (uint64_t j(n - 1); j != UINT64_MAX; j--)
+        for (uint64_t j(a.n - 1); j != UINT64_MAX; j--)
         {
             for (uint64_t i(j - 1); i != UINT64_MAX; i--)
             {
                 if (b[i][j] != 0)
                 {
-                    inv[i] -= Vec<T, n>(b[i][j]) * inv[j];
-                    b[i] -= Vec<T, n>(b[i][j]) * b[j];
+                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
+                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
                 }
             }
         }
@@ -399,27 +468,30 @@ namespace scp
         return inv;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, n, m> transpose(const Mat<T, m, n>& a)
+    template<typename T>
+    Mat<T> transpose(const Mat<T>& a)
     {
-        Mat<T, n, m> b;
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < m; j++)
+        Mat<T> b(a.n, a.m);
+        for (uint64_t i(0); i < a.n; i++)
+            for (uint64_t j(0); j < a.m; j++)
                 b[i][j] = a[j][i];
         
         return b;
     }
 
-    template<typename T, uint64_t n>
-    T det(const Mat<T, n, n>& a)
+    template<typename T>
+    T det(const Mat<T>& a)
     {
-        Mat<T, n, n> b(a);
+        if (a.m != a.n)
+            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
 
-        for (uint64_t j(0); j < n; j++)
+        Mat<T> b(a);
+
+        for (uint64_t j(0); j < a.n; j++)
         {
             if (b[j][j] == 0)
             {
-                for (uint64_t i(j + 1); i < n; i++)
+                for (uint64_t i(j + 1); i < a.n; i++)
                 {
                     if (b[i][j] != 0)
                     {
@@ -432,50 +504,50 @@ namespace scp
                     return 0;
             }
 
-            for (uint64_t i(j + 1); i < n; i++)
-                b[i] -= Vec<T, n>(b[i][j] / b[j][j]) * b[j];
+            for (uint64_t i(j + 1); i < a.n; i++)
+                b[i] -= Vec<T>(a.n, b[i][j] / b[j][j]) * b[j];
         }
 
         T prod(b[0][0]);
-        for (uint64_t i(1); i < n; i++)
+        for (uint64_t i(1); i < a.n; i++)
             prod *= b[i][i];
 
         return prod;
     }
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<std::complex<T>, m, n> dft(const Mat<std::complex<T>, m, n>& f)
+    template<typename T>
+    Mat<std::complex<T>> dft(const Mat<std::complex<T>>& f)
     {
-        Mat<std::complex<T>, m, m> wM;
-        Mat<std::complex<T>, n, n> wN;
+        Mat<std::complex<T>> wM(f.m, f.m);
+        Mat<std::complex<T>> wN(f.n, f.n);
 
-        for (uint64_t i(0); i < m; i++)
-            for (uint64_t j(0); j < m; j++)
-                wM[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / m));
+        for (uint64_t i(0); i < f.m; i++)
+            for (uint64_t j(0); j < f.m; j++)
+                wM[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / f.m));
 
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < n; j++)
-                wN[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / n));
+        for (uint64_t i(0); i < f.n; i++)
+            for (uint64_t j(0); j < f.n; j++)
+                wN[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / f.n));
 
         return wM * f * wN;
     }
 
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<std::complex<T>, m, n> idft(const Mat<std::complex<T>, m, n>& fh)
+    template<typename T>
+    Mat<std::complex<T>> idft(const Mat<std::complex<T>>& fh)
     {
-        Mat<std::complex<T>, m, n> f;
+        Mat<std::complex<T>> f(fh.m, fh.n);
 
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < n; j++)
+        for (uint64_t i(0); i < fh.m; i++)
+            for (uint64_t j(0); j < fh.n; j++)
                 f[i][j] = std::conj(fh[i][j]);
 
         f = dft(f);
 
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < n; j++)
+        for (uint64_t i(0); i < fh.m; i++)
+            for (uint64_t j(0); j < fh.n; j++)
                 f[i][j] = std::conj(f[i][j]);
 
-        return f / std::complex<T>(m * n, 0);
+        return f / std::complex<T>(fh.m * fh.n, 0);
     }
 
     namespace
@@ -495,30 +567,30 @@ namespace scp
         }
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> dct(const Mat<T, m, n>& f)
+    template<typename T>
+    Mat<T> dct(const Mat<T>& f)
     {
-        Mat<T, m, n> fh;
+        Mat<T> fh(f.m, f.n);
 
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < n; j++)
-                for (uint64_t k(0); k < n; k++)
-                    for (uint64_t l(0); l < n; l++)
-                        fh[i][j] += f[k][l] * dct2DBase<T>(m, n, i, j, k, l);
+        for (uint64_t i(0); i < f.m; i++)
+            for (uint64_t j(0); j < f.n; j++)
+                for (uint64_t k(0); k < f.m; k++)
+                    for (uint64_t l(0); l < f.n; l++)
+                        fh[i][j] += f[k][l] * dct2DBase<T>(f.m, f.n, i, j, k, l);
 
         return fh;
     }
     
-    template<typename T, uint64_t m, uint64_t n>
-    Mat<T, m, n> idct(const Mat<T, m, n>& fh)
+    template<typename T>
+    Mat<T> idct(const Mat<T>& fh)
     {
-        Mat<T, m, n> f;
+        Mat<T> f(fh.m, fh.n);
 
-        for (uint64_t i(0); i < n; i++)
-            for (uint64_t j(0); j < n; j++)
-                for (uint64_t k(0); k < n; k++)
-                    for (uint64_t l(0); l < n; l++)
-                        f[i][j] += fh[k][l] * dct2DBase<T>(m, n, k, l, i, j);
+        for (uint64_t i(0); i < fh.m; i++)
+            for (uint64_t j(0); j < fh.n; j++)
+                for (uint64_t k(0); k < fh.m; k++)
+                    for (uint64_t l(0); l < fh.n; l++)
+                        f[i][j] += fh[k][l] * dct2DBase<T>(fh.m, fh.n, k, l, i, j);
 
         return f;
     }
