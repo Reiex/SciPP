@@ -1,8 +1,11 @@
 #include "Misc.hpp"
 
-uint64_t index(uint32_t w, uint32_t h, uint32_t x, uint32_t y)
+namespace
 {
-	return 3*(y*w + x);
+	uint64_t index(uint32_t w, uint32_t h, uint32_t x, uint32_t y)
+	{
+		return 3 * (y * w + x);
+	}
 }
 
 void plotLogisticMap(const std::string& filename, uint32_t w, uint32_t h, float a, float b, uint32_t n)
