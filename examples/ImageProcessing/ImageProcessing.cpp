@@ -53,24 +53,23 @@ void edgesDoG(const std::string& src, const std::string& dst)
 	{
 		for (uint64_t j(0); j < h; j++)
 		{
-			f[i][j] = (float) image[index(w, h, i, j)] / 255.f;
-			f[i][j] += (float) image[index(w, h, i, j)] / 255.f;
-			f[i][j] += (float) image[index(w, h, i, j)] / 255.f;
-			f[i][j] /= 3;
+			f[i][j] = 0.2126f * image[index(w, h, i, j)] / 255.f;
+			f[i][j] += 0.7152f * image[index(w, h, i, j) + 1] / 255.f;
+			f[i][j] += 0.0722f * image[index(w, h, i, j) + 2] / 255.f;
 		}
 	}
 
 	// Apply difference of Gaussian
 
-	float sigma(5.f), deltaSigma(1.f/sigma);
+	float sigma(3.f), deltaSigma(1.f/sigma);
 	float s(std::pow(sigma, 2)), ds(std::pow(sigma + deltaSigma, 2));
-	scp::Mat<float> dog(w, h), dogKernel(51, 51);
-	for (uint64_t i(0); dogKernel.m < 51; i++)
+	scp::Mat<float> dog(w, h), dogKernel(25, 25);
+	for (uint64_t i(0); i < dogKernel.m; i++)
 	{
 		for (uint64_t j(0); j < dogKernel.n; j++)
 		{
-			float x = ((float) j) - 25.f;
-			float y = ((float) i) - 25.f;
+			float x = ((float) j) - 12.f;
+			float y = ((float) i) - 12.f;
 			dogKernel[i][j] = std::exp(-(x*x + y*y)/(2*ds))/ds - std::exp(-(x*x + y*y)/(2*s))/s;
 		}
 	}
@@ -96,12 +95,12 @@ void edgesDoG(const std::string& src, const std::string& dst)
 
 	// Compute edges
 
-	float dogThreshold(0.005f), gradThreshold(0.1f);
+	float dogThreshold(0.02f), gradThreshold(0.1f);
 	for (uint64_t i(0); i < w; i++)
 	{
 		for (uint64_t j(0); j < h; j++)
 		{
-			if (std::abs(dog[i][j]) < 0.005 && (pow(Gx[i][j], 2) + pow(Gy[i][j], 2)) > gradThreshold)
+			if (std::abs(dog[i][j]) < dogThreshold && pow(Gx[i][j], 2) + pow(Gy[i][j], 2) > gradThreshold)
 				f[i][j] = 1.f;
 			else
 				f[i][j] = 0.f;
