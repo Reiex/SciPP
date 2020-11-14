@@ -43,6 +43,8 @@ void plotDft(const std::string& src, const std::string& dst)
 
 void edgesDoG(const std::string& src, const std::string& dst)
 {
+	// Load image
+
 	int w, h;
 	uint8_t* image = stbi_load(src.c_str(), &w, &h, nullptr, 3);
 
@@ -58,29 +60,55 @@ void edgesDoG(const std::string& src, const std::string& dst)
 		}
 	}
 
+	// Apply difference of Gaussian
+
 	float sigma(5.f), deltaSigma(1.f/sigma);
 	float s(std::pow(sigma, 2)), ds(std::pow(sigma + deltaSigma, 2));
-	scp::Mat<float> dog(51, 51);
-	for (uint64_t i(0); i < 51; i++)
+	scp::Mat<float> dog(w, h), dogKernel(51, 51);
+	for (uint64_t i(0); dogKernel.m < 51; i++)
 	{
-		for (uint64_t j(0); j < 51; j++)
+		for (uint64_t j(0); j < dogKernel.n; j++)
 		{
 			float x = ((float) j) - 25.f;
 			float y = ((float) i) - 25.f;
-			dog[i][j] = std::exp(-(x*x + y*y)/(2*ds))/ds - std::exp(-(x*x + y*y)/(2*s))/s;
+			dogKernel[i][j] = std::exp(-(x*x + y*y)/(2*ds))/ds - std::exp(-(x*x + y*y)/(2*s))/s;
 		}
 	}
 
-	f = scp::convolve(f, dog, scp::ConvolveMethod::Continuous);
+	dog = scp::convolve(f, dogKernel, scp::ConvolveMethod::Continuous);
 
-	float threshold(0.005f);
+	// Compute gradient
+
+	scp::Mat<float> Gx(w, h), Gy(w, h);
+	scp::Mat<float> GxKernel({
+			{-1, 0, 1},
+			{-2, 0, 2},
+			{-1, 0, 1}
+		});
+	scp::Mat<float> GyKernel({
+			{-1, -2, -1},
+			{ 0,  0,  0},
+			{ 1,  2,  1}
+		});
+	
+	Gx = scp::convolve(f, GxKernel, scp::ConvolveMethod::Continuous);
+	Gy = scp::convolve(f, GyKernel, scp::ConvolveMethod::Continuous);
+
+	// Compute edges
+
+	float dogThreshold(0.005f), gradThreshold(0.1f);
 	for (uint64_t i(0); i < w; i++)
 	{
 		for (uint64_t j(0); j < h; j++)
 		{
-			f[i][j] = threshold / (f[i][j]*f[i][j] + threshold);
+			if (std::abs(dog[i][j]) < 0.005 && (pow(Gx[i][j], 2) + pow(Gy[i][j], 2)) > gradThreshold)
+				f[i][j] = 1.f;
+			else
+				f[i][j] = 0.f;
 		}
 	}
+
+	// Write image
 
 	for (uint64_t i(0); i < w; i++)
 	{
