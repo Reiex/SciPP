@@ -523,11 +523,11 @@ namespace scp
 
         for (uint64_t i(0); i < f.m; i++)
             for (uint64_t j(0); j < f.m; j++)
-                wM[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / f.m));
+                wM[i][j] = std::exp(std::complex<T>(0, -2 * pi * i * j / f.m));
 
         for (uint64_t i(0); i < f.n; i++)
             for (uint64_t j(0); j < f.n; j++)
-                wN[i][j] = exp(std::complex<T>(0, -2 * pi * i * j / f.n));
+                wN[i][j] = std::exp(std::complex<T>(0, -2 * pi * i * j / f.n));
 
         return wM * f * wN;
     }
@@ -555,7 +555,7 @@ namespace scp
         template<typename T>
         T dct2DBase(uint64_t M, uint64_t N, uint64_t p, uint64_t q, uint64_t m, uint64_t n)
         {
-            T r(2 * std::cos(pi * p * (m + 0.5) / M) * std::cos(pi * q * (n + 0.5) / N) / std::sqrt(M*N));
+            T r(2 * std::cos(pi * p * (m + 0.5) / M) * std::cos(pi * q * (n + 0.5) / N));
 
             if (p == 0)
                 r /= std::sqrt(2.0L);
@@ -570,15 +570,24 @@ namespace scp
     template<typename T>
     Mat<T> dct(const Mat<T>& f)
     {
-        Mat<T> fh(f.m, f.n);
+        Mat<T> wM(f.m, f.m);
+        Mat<T> wN(f.n, f.n);
 
         for (uint64_t i(0); i < f.m; i++)
-            for (uint64_t j(0); j < f.n; j++)
-                for (uint64_t k(0); k < f.m; k++)
-                    for (uint64_t l(0); l < f.n; l++)
-                        fh[i][j] += f[k][l] * dct2DBase<T>(f.m, f.n, i, j, k, l);
+            for (uint64_t j(0); j < f.m; j++)
+                if (i == 0)
+                    wM[i][j] = 1;
+                else
+                    wM[i][j] = std::sqrt(2.f)*cos(pi*i*(j + 0.5)/f.m);
 
-        return fh;
+        for (uint64_t i(0); i < f.n; i++)
+            for (uint64_t j(0); j < f.n; j++)
+                if (j == 0)
+                    wN[i][j] = 1;
+                else
+                    wN[i][j] = std::sqrt(2.f)*cos(pi*j*(i + 0.5)/f.n);
+
+        return wM * f * wN;
     }
     
     template<typename T>
@@ -590,7 +599,7 @@ namespace scp
             for (uint64_t j(0); j < fh.n; j++)
                 for (uint64_t k(0); k < fh.m; k++)
                     for (uint64_t l(0); l < fh.n; l++)
-                        f[i][j] += fh[k][l] * dct2DBase<T>(fh.m, fh.n, k, l, i, j);
+                        f[i][j] += fh[k][l] * dct2DBase<T>(fh.m, fh.n, k, l, i, j) / (fh.m * fh.n);
 
         return f;
     }
