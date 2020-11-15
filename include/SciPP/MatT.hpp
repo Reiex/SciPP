@@ -219,6 +219,16 @@ namespace scp
         return std::move(a);
     }
     
+    namespace
+    {
+        template<typename T>
+        void multiplyThread(Vec<T>& out, const Mat<T>& a, const Mat<T>& b, uint64_t i)
+        {
+            for (uint64_t j(0); j < b.n; j++)
+                for (uint64_t k(0); k < a.n; k++)
+                    out[j] += a[i][k] * b[k][j];
+        }
+    }
 
     template<typename T>
     Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
@@ -226,11 +236,15 @@ namespace scp
         if (a.n != b.m)
             throw std::runtime_error("Mat sizes not compatible for multiplication. Sizes are {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "} and {" + std::to_string(b.m) + ", " + std::to_string(b.n) + "}.");
 
+        std::vector<std::thread> threads(a.m);
+
+
         Mat<T> c(a.m, b.n);
         for (uint64_t i(0); i < a.m; i++)
-            for (uint64_t j(0); j < b.n; j++)
-                for (uint64_t k(0); k < a.n; k++)
-                    c[i][j] += a[i][k] * b[k][j];
+            threads[i] = std::thread(multiplyThread<T>, std::ref(c[i]), std::ref(a), std::ref(b), i);
+
+        for (uint64_t i(0); i < threads.size(); i++)
+            threads[i].join();
         
         return c;
     }

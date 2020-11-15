@@ -12,8 +12,8 @@ int main()
 
     // plotLogisticMap("build/Logistic Map.png", 1920, 1080, 2.8f, 4.f, 10000);
 
-    // plotDft("examples/assets/Lena.png", "build/Lena DFT.png");
-    edgesDoG("examples/assets/Lena.png", "build/Lena Edges DoG.png");
+    plotDft("examples/assets/Lena.png", "build/Lena DFT.png");
+    // edgesDoG("examples/assets/Lena.png", "build/Lena Edges DoG.png");
 
     return 0;
 }
