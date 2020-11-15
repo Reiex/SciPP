@@ -576,14 +576,14 @@ namespace scp
         for (uint64_t i(0); i < f.m; i++)
             for (uint64_t j(0); j < f.m; j++)
                 if (i == 0)
-                    wM[i][j] = 1;
+                    wM[i][j] = 1.L;
                 else
                     wM[i][j] = std::sqrt(2.f)*cos(pi*i*(j + 0.5)/f.m);
 
         for (uint64_t i(0); i < f.n; i++)
             for (uint64_t j(0); j < f.n; j++)
                 if (j == 0)
-                    wN[i][j] = 1;
+                    wN[i][j] = 1.L;
                 else
                     wN[i][j] = std::sqrt(2.f)*cos(pi*j*(i + 0.5)/f.n);
 
@@ -593,14 +593,23 @@ namespace scp
     template<typename T>
     Mat<T> idct(const Mat<T>& fh)
     {
-        Mat<T> f(fh.m, fh.n);
+        Mat<T> wM(fh.m, fh.m);
+        Mat<T> wN(fh.n, fh.n);
 
         for (uint64_t i(0); i < fh.m; i++)
-            for (uint64_t j(0); j < fh.n; j++)
-                for (uint64_t k(0); k < fh.m; k++)
-                    for (uint64_t l(0); l < fh.n; l++)
-                        f[i][j] += fh[k][l] * dct2DBase<T>(fh.m, fh.n, k, l, i, j) / (fh.m * fh.n);
+            for (uint64_t j(0); j < fh.m; j++)
+                if (j == 0)
+                    wM[i][j] = 1.L;
+                else
+                    wM[i][j] = std::sqrt(2.f)*cos(pi*j*(i + 0.5)/fh.m);
 
-        return f;
+        for (uint64_t i(0); i < fh.n; i++)
+            for (uint64_t j(0); j < fh.n; j++)
+                if (i == 0)
+                    wN[i][j] = 1.L / (fh.m*fh.n);
+                else
+                    wN[i][j] = std::sqrt(2.f)*cos(pi*i*(j + 0.5)/fh.n) / (fh.m*fh.n);
+
+        return wM * fh * wN;
     }
 }
