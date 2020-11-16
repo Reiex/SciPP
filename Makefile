@@ -105,7 +105,7 @@ folders:
 
 $(LIB_DIR): $(LIBRARY_OBJS)
 	-rm -rf $(LIB_DIR)/libSciPP.so
-	$(CC) -shared -o $(LIB_DIR)/libSciPP.so $(LIBRARY_OBJS)
+	$(CC) -shared $(LIBRARY_OBJS) -o $(LIB_DIR)/libSciPP.so $(LIBRARY_LDLIBS)
 
 $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 	$(CC) $(LIBRARY_CFLAGS) -c $< -o $@

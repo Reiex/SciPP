@@ -878,15 +878,62 @@ TEST(ClassFrac, ClassRational)
     {
         printSection(testName, "Rational::Rational(const Frac<Int>& x)");
 
-        EXPECT_EQ(0, 1);
+        {
+            Rational x(Frac<Int>(0, 1));
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(Frac<Int>(0, -55));
+            EXPECT_EQ(x.num(), 0);
+            EXPECT_EQ(x.denom(), 1);
+        }
+
+        {
+            Rational x(Frac<Int>(-2, -30));
+            EXPECT_EQ(x.num(), 1);
+            EXPECT_EQ(x.denom(), 15);
+        }
     }
 
     {
         printSection(testName, "Rational::decimals(uint64_t n)");
+
+        {
+            Rational x(1, 7);
+            EXPECT_EQ(x.decimals(6), "0.142857");
+        }
+
+        {
+            Rational x(-729, 17);
+            EXPECT_EQ(x.decimals(7), "-42.8823529");
+        }
     }
 
     {
         printSection(testName, "operator<<(std::ostream& stream, const Rational& x)");
+
+        {
+            Rational x(9, 4);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "2.25");
+        }
+
+        {
+            Rational x(-6, 2);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "-3");
+        }
+
+        {
+            Rational x(1, 7);
+            std::stringstream stream;
+            stream << x;
+            EXPECT_EQ(stream.str(), "1 7");
+        }
     }
 }
 

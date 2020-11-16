@@ -54,6 +54,16 @@ TEST(ClassMat, Constructors)
             EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
             EXPECT_FLOAT_EQ(x[2][0], 8.8f); EXPECT_FLOAT_EQ(x[2][1], -7.4f);
         }
+
+        {
+            Mat<float> x({
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                });
+
+            EXPECT_THROW(Mat<float>({ {1.f, 2.f}, {1.f, 2.f, 3.f} }), std::runtime_error);
+        }
     }
 
     {
@@ -92,18 +102,6 @@ TEST(ClassMat, Constructors)
             EXPECT_FLOAT_EQ(y[1][0], 0.3f); EXPECT_FLOAT_EQ(y[1][1], 3.9f);
             EXPECT_FLOAT_EQ(y[2][0], 8.8f); EXPECT_FLOAT_EQ(y[2][1], -7.4f);
         }
-    }
-
-    {
-        printSection(testName, "Mat<T>::identity(uint64_t size, int64_t x = 1)");
-
-        EXPECT_EQ(0, 1);
-    }
-
-    {
-        printSection(testName, "Mat<T>::identity(uint64_t size, const T& x)");
-
-        EXPECT_EQ(0, 1);
     }
 }
 
@@ -669,6 +667,34 @@ TEST(ClassMat, StreamOperators)
 TEST(ClassMat, SpecificFunctions)
 {
     std::string testName("ClassMat.SpecificFunctions");
+
+    {
+        printSection(testName, "Mat<T>::identity(uint64_t size, int64_t x = 1)");
+
+        {
+            Mat<float> x = scp::Mat<float>::identity(0);
+        }
+
+        {
+            Mat<float> x = scp::Mat<float>::identity(3, (int64_t) 1618);
+
+            EXPECT_FLOAT_EQ(x[0][0], 1618.f); EXPECT_FLOAT_EQ(x[0][1], 0.f);    EXPECT_FLOAT_EQ(x[0][2], 0.f);
+            EXPECT_FLOAT_EQ(x[1][0], 0.f);    EXPECT_FLOAT_EQ(x[1][1], 1618.f); EXPECT_FLOAT_EQ(x[1][2], 0.f);
+            EXPECT_FLOAT_EQ(x[2][0], 0.f);    EXPECT_FLOAT_EQ(x[2][1], 0.f);    EXPECT_FLOAT_EQ(x[2][2], 1618.f);
+        }
+    }
+
+    {
+        printSection(testName, "Mat<T>::identity(uint64_t size, const T& x)");
+
+        {
+            Mat<float> x = scp::Mat<float>::identity(3, 1.618f);
+
+            EXPECT_FLOAT_EQ(x[0][0], 1.618f); EXPECT_FLOAT_EQ(x[0][1], 0.f);    EXPECT_FLOAT_EQ(x[0][2], 0.f);
+            EXPECT_FLOAT_EQ(x[1][0], 0.f);    EXPECT_FLOAT_EQ(x[1][1], 1.618f); EXPECT_FLOAT_EQ(x[1][2], 0.f);
+            EXPECT_FLOAT_EQ(x[2][0], 0.f);    EXPECT_FLOAT_EQ(x[2][1], 0.f);    EXPECT_FLOAT_EQ(x[2][2], 1.618f);
+        }
+    }
 
     {
         printSection(testName, "convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)");

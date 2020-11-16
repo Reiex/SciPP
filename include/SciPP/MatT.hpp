@@ -30,7 +30,7 @@ namespace scp
     {
         for (uint64_t i(0); i < _values.size(); i++)
             if (values[i].size() != n)
-                throw std::runtime_error(scippError("Invalid vector for value initialization."));
+                throw std::runtime_error(scippError("Invalid vectors for value initialization."));
             else
                 _values[i] = Vec<T>(values[i]);
     }
@@ -75,7 +75,7 @@ namespace scp
         if (m != a.m || n != a.n)
             throw std::runtime_error(scippError("Cannot assign a matrix to another matrix of different size."));
 
-        _values = a._values;
+        _values = std::move(a._values);
 
         return *this;
     }

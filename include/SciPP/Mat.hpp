@@ -26,7 +26,7 @@ namespace scp
             Mat() = delete;
             Mat(uint64_t row, uint64_t col, int64_t x = 0);    ///< Init the matrix with `T(x)` everywhere.
             Mat(uint64_t row, uint64_t col, const T& x);       ///< Init the matrix with `x` everywhere.
-            Mat(const std::vector<std::vector<T>>& values);  ///< Init the matrix directly.
+            Mat(const std::vector<std::vector<T>>& values);    ///< Init the matrix directly.
             Mat(const Mat<T>& a) = default;
             Mat(Mat<T>&& a) = default;
 
@@ -50,8 +50,8 @@ namespace scp
             Mat<T>& operator*=(const T& x);
             Mat<T>& operator/=(const T& x);
 
-            const uint64_t m;
-            const uint64_t n;
+            const uint64_t m;  ///< Number of rows of the matrix.
+            const uint64_t n;  ///< Number of columns of the matrix.
 
         private:
 
