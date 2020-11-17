@@ -365,24 +365,16 @@ namespace scp
 
     // Specific functions
 
-    template<typename T>
-    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)
+    namespace
     {
-        uint64_t m = a.m;
-        uint64_t n = a.n;
-        uint64_t p = b.m;
-        uint64_t q = b.n;
-
-        if (p % 2 == 0 || q % 2 == 0)
-            throw std::runtime_error(scippError("The convolution matrix number of rows and columns must be odds."));
-
-        if (p > m || q > n)
-            throw std::runtime_error(scippError("The convolution matrix must be smaller than the convolved matrix."));
-
-        Mat<T> c(m, n);
-
-        for (uint64_t i(0); i < m; i++)
+        template<typename T>
+        void convolveThread(Vec<T>& out, const Mat<T>& a, const Mat<T>& b, uint64_t i, ConvolveMethod method)
         {
+            uint64_t m = a.m;
+            uint64_t n = a.n;
+            uint64_t p = b.m;
+            uint64_t q = b.n;
+
             for (uint64_t j(0); j < n; j++)
             {
                 for (uint64_t k(0); k < p; k++)
@@ -415,11 +407,36 @@ namespace scp
                             else
                                 coeff = a[x][y];
                         }
-                        c[i][j] += coeff * b[k][l];
+                        out[j] += coeff * b[k][l];
                     }
                 }
             }
         }
+    }
+
+    template<typename T>
+    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)
+    {
+        uint64_t m = a.m;
+        uint64_t n = a.n;
+        uint64_t p = b.m;
+        uint64_t q = b.n;
+
+        if (p % 2 == 0 || q % 2 == 0)
+            throw std::runtime_error(scippError("The convolution matrix number of rows and columns must be odds."));
+
+        if (p > m || q > n)
+            throw std::runtime_error(scippError("The convolution matrix must be smaller than the convolved matrix."));
+
+        Mat<T> c(m, n);
+
+        std::vector<std::thread> threads(m);
+
+        for (uint64_t i(0); i < m; i++)
+            threads[i] = std::thread(convolveThread<T>, std::ref(c[i]), std::ref(a), std::ref(b), i, method);
+
+        for (uint64_t i(0); i < threads.size(); i++)
+            threads[i].join();
 
         return c;
     }
@@ -549,19 +566,18 @@ namespace scp
     template<typename T>
     Mat<std::complex<T>> idft(const Mat<std::complex<T>>& fh)
     {
-        Mat<std::complex<T>> f(fh.m, fh.n);
+        Mat<std::complex<T>> wM(fh.m, fh.m);
+        Mat<std::complex<T>> wN(fh.n, fh.n);
 
         for (uint64_t i(0); i < fh.m; i++)
+            for (uint64_t j(0); j < fh.m; j++)
+                wM[i][j] = std::exp(std::complex<T>(0, 2 * pi * i * j / fh.m));
+
+        for (uint64_t i(0); i < fh.n; i++)
             for (uint64_t j(0); j < fh.n; j++)
-                f[i][j] = std::conj(fh[i][j]);
+                wN[i][j] = std::exp(std::complex<T>(0, 2 * pi * i * j / fh.n));
 
-        f = dft(f);
-
-        for (uint64_t i(0); i < fh.m; i++)
-            for (uint64_t j(0); j < fh.n; j++)
-                f[i][j] = std::conj(f[i][j]);
-
-        return f / std::complex<T>(fh.m * fh.n, 0);
+        return wM * fh * wN / std::complex<T>(fh.m * fh.n, 0);
     }
 
     namespace
