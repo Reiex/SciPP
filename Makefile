@@ -37,6 +37,7 @@ TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
 			 $(OBJ_TESTS_DIR)/Mat.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o \
 				$(OBJ_EXAMPLES_DIR)/Constants/Constants.o \
+				$(OBJ_EXAMPLES_DIR)/FluidSimulation/FluidSimulation.o \
 				$(OBJ_EXAMPLES_DIR)/ImageProcessing/ImageProcessing.o \
 				$(OBJ_EXAMPLES_DIR)/Misc/Misc.o \
 				$(OBJ_EXAMPLES_DIR)/stb_image/stb_image.o \

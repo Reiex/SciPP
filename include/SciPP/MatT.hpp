@@ -150,6 +150,7 @@ namespace scp
         return *this;
     }
 
+
     // External operators
 
     template<typename T>
@@ -248,7 +249,22 @@ namespace scp
         
         return c;
     }
-    
+
+
+    template<typename T>
+    Vec<T> operator*(const Mat<T>& a, const Vec<T>& b)
+    {
+        if (a.n != b.n)
+            throw std::runtime_error(scippError("In a matrix-vector multiplication, number of columns of the matrix must be the same as the size of the vector."));
+
+        Vec<T> c(a.m);
+
+        for (uint64_t i(0); i < a.m; i++)
+            c[i] = dot(a[i], b);
+        
+        return c;
+    }
+
 
     template<typename T>
     Mat<T> operator*(const Mat<T>& a, const T& x)

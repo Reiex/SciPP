@@ -82,6 +82,9 @@ namespace scp
     Mat<T> operator*(const Mat<T>& a, const Mat<T>& b);
 
     template<typename T>
+    Vec<T> operator*(const Mat<T>& a, const Vec<T>& b);
+
+    template<typename T>
     Mat<T> operator*(const Mat<T>& a, const T& x);
     template<typename T>
     Mat<T>&& operator*(Mat<T>&& a, const T& x);

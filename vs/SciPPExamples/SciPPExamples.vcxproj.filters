@@ -37,6 +37,12 @@
     <Filter Include="Source Files\ImageProcessing">
       <UniqueIdentifier>{31520787-47fa-4140-a0bf-887b2f0b1d9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FluidSimulation">
+      <UniqueIdentifier>{5ce01126-3949-4d78-948f-021632352d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FluidSimulation">
+      <UniqueIdentifier>{ddfb559d-4bb2-4f80-94c6-c86bdc40de64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\main.cpp">
@@ -57,6 +63,9 @@
     <ClCompile Include="..\..\examples\ImageProcessing\ImageProcessing.cpp">
       <Filter>Source Files\ImageProcessing</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\FluidSimulation\FluidSimulation.cpp">
+      <Filter>Source Files\FluidSimulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Constants\Constants.hpp">
@@ -73,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\ImageProcessing\ImageProcessing.hpp">
       <Filter>Header Files\ImageProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\FluidSimulation\FluidSimulation.hpp">
+      <Filter>Header Files\FluidSimulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

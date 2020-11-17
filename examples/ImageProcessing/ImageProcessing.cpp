@@ -68,8 +68,8 @@ void edgesDoG(const std::string& src, const std::string& dst)
 	{
 		for (uint64_t j(0); j < dogKernel.n; j++)
 		{
-			float x = ((float) j) - 12.f;
-			float y = ((float) i) - 12.f;
+			float x = ((float) j) - dogKernel.n/2;
+			float y = ((float) i) - dogKernel.m/2;
 			dogKernel[i][j] = std::exp(-(x*x + y*y)/(2*ds))/ds - std::exp(-(x*x + y*y)/(2*s))/s;
 		}
 	}
