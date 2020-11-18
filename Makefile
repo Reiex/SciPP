@@ -95,7 +95,7 @@ folders:
 	-rm -rf $(LIB_DIR)/libSciPP.so $(OBJ_DIR) $(BUILD_DIR)
 	-rm -rf *.png
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
-	mkdir $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
+	mkdir $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/FluidSimulation $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
 	mkdir $(BUILD_DIR)
 
 
