@@ -16,7 +16,7 @@ int main()
     // plotDft("examples/assets/Lena.png", "build/Lena DFT.png");
     // edgesDoG("examples/assets/Lena.png", "build/Lena Edges DoG.png");
 
-    simuFluide2D(256, 256);
+    simuFluide2D("build/fluid", 256, 256);
 
     return 0;
 }

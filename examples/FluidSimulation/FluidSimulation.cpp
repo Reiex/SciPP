@@ -2,6 +2,27 @@
 
 namespace
 {
+	uint64_t index(uint32_t w, uint32_t h, uint32_t x, uint32_t y)
+	{
+		return 3 * (y * w + x);
+	}
+
+	void saveMatrix(const std::string& filename, const scp::Mat<double>& M, double Mmin, double Mmax)
+	{
+		std::vector<uint8_t> image(M.m * M.n * 3);
+		for (uint64_t i(0); i < M.m; i++)
+		{
+			for (uint64_t j(0); j < M.n; j++)
+			{
+				image[index(M.m, M.n, i, j)] = std::max(std::min(255 * ((M[i][j] - Mmin) / (Mmax - Mmin)), 255.0), 0.0);
+				image[index(M.m, M.n, i, j) + 1] = image[index(M.m, M.n, i, j)];
+				image[index(M.m, M.n, i, j) + 2] = image[index(M.m, M.n, i, j)];
+			}
+		}
+
+		stbi_write_png(filename.c_str(), M.m, M.n, 3, image.data(), 3 * M.m);
+	}
+
 	void curlSolver1D(scp::Vec<double>& W, const scp::Vec<double>& U, double kappa, double dl, double dt)
 	{
 		scp::Mat<double> M(U.n, U.n), N(U.n, U.n);
@@ -25,23 +46,24 @@ namespace
 	void curlSolver2D(scp::Mat<double>& W, const scp::Mat<double>& Ux, const scp::Mat<double>& Uy, double kappa, double dx, double dy, double dt)
 	{
 		uint64_t Nx(W.n), Ny(W.m);
+		std::vector<std::thread> solvThread(Ny);
 
 		for (uint64_t i(0); i < Ny; i++)
-			curlSolver1D(W[i], Ux[i], kappa, dx, dt);
+			solvThread[i] = std::thread(curlSolver1D, std::ref(W[i]), std::ref(Ux[i]), kappa, dx, dt);
 
-		for (uint64_t j(0); j < Nx; j++)
-		{
-			scp::Vec<double> Wy(Ny), Vy(Ny);
-			for (uint64_t i(0); i < Ny; i++)
-			{
-				Wy[i] = W[i][j];
-				Vy[i] = Uy[i][j];
-			}
-			curlSolver1D(Wy, Vy, kappa, dy, dt);
+		for (uint64_t i(0); i < Ny; i++)
+			solvThread[i].join();
 
-			for (uint64_t i(0); i < Ny; i++)
-				W[i][j] = Wy[i];
-		}
+		scp::Mat<double> Wt(scp::transpose(W));
+		scp::Mat<double> Uyt(scp::transpose(Uy));
+
+		for (uint64_t i(0); i < Ny; i++)
+			solvThread[i] = std::thread(curlSolver1D, std::ref(Wt[i]), std::ref(Uyt[i]), kappa, dy, dt);
+
+		for (uint64_t i(0); i < Ny; i++)
+			solvThread[i].join();
+
+		W = scp::transpose(Wt);
 	}
 
 	double wInit(double x, double y, double delta, double rho)
@@ -124,7 +146,7 @@ namespace
 }
 
 
-void simuFluide2D(uint64_t Nx, uint64_t Ny, double t_simu, double nu, double rho, double delta, double Lx, double Ly)
+void simuFluide2D(const std::string& name, uint64_t Nx, uint64_t Ny, double t_simu, double nu, double rho, double delta, double Lx, double Ly)
 {
 	double kappa(nu / rho), dx(Lx / Nx), dy(Ly / Ny);
 	scp::Mat<double> Ux(Ny, Nx), Uy(Ny, Nx), W(Ny, Nx);
@@ -134,8 +156,10 @@ void simuFluide2D(uint64_t Nx, uint64_t Ny, double t_simu, double nu, double rho
 			W[i][j] = wInit(j / Nx, i / Ny, delta, rho);
 
 	double t(0), dtx, dty, dt;
-	double iterations(0);
+	uint64_t iterations(0);
 
+	double Mmin(-75), Mmax(75);
+	std::thread saveThread(saveMatrix, name + "00000.png", std::ref(W), Mmin, Mmax);
 	while (t < t_simu)
 	{
 		iterations++;
@@ -147,8 +171,13 @@ void simuFluide2D(uint64_t Nx, uint64_t Ny, double t_simu, double nu, double rho
 		dty = computeDt(Uy, dy);
 		dt = dtx < dty ? dtx : dty;
 
+		saveThread.join();
 		curlSolver2D(W, Ux, Uy, kappa, dx, dy, dt);
+		std::string remplissage(4 - ((iterations > 9) + (iterations > 99) + (iterations > 999) + (iterations > 9999)) , '0');
+		saveThread = std::thread(saveMatrix, name + remplissage + std::to_string(iterations) + ".png", std::ref(W), Mmin, Mmax);
 
 		t += dt;
 	}
+
+	saveThread.join();
 }
