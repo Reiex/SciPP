@@ -37,3 +37,29 @@ void plotLogisticMap(const std::string& filename, uint32_t w, uint32_t h, float 
 
 	stbi_write_png(filename.c_str(), w, h, 3, image.data(), 3*w);
 }
+
+void eratosthenesSieve(uint64_t n)
+{
+	std::vector<uint64_t> primes;
+	primes.push_back(2);
+	std::cout << 2 << " ";
+
+	for (uint64_t i(3); i < n; i += 2)
+	{
+		uint64_t j(0);
+		bool primePossible(true);
+		while (primes[j]*primes[j] <= i && primePossible)
+		{
+			primePossible = ((i % primes[j]) != 0);
+			j++;
+		}
+
+		if (primePossible)
+		{
+			primes.push_back(i);
+			std::cout << i << " ";
+		}
+	}
+
+	std::cout << std::endl;
+}

@@ -169,7 +169,7 @@ void simuFluide2D(const std::string& name, uint64_t Nx, uint64_t Ny, double t_si
 
 		dtx = computeDt(Ux, dx);
 		dty = computeDt(Uy, dy);
-		dt = dtx < dty ? dtx : dty;
+		dt = std::min(dtx, dty);
 
 		saveThread.join();
 		curlSolver2D(W, Ux, Uy, kappa, dx, dy, dt);
