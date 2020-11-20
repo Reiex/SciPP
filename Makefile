@@ -2,6 +2,7 @@
 # ENVIRONMENT VARIABLES                                                       #
 ###############################################################################
 
+AUTHOR = Reiex
 
 # Source directories
 SRC_LIBRARY_DIR = src/SciPP
