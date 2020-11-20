@@ -12,12 +12,12 @@ int main()
     // std::cout << "Golden Ratio: phi = " << goldenRatio(50) << std::endl;
 
     // plotLogisticMap("build/Logistic Map.png", 1920, 1080, 2.8f, 4.f, 10000);
-    // eratosthenesSieve(100000);
+    // eratosthenesSieve(100);
 
     // plotDft("examples/assets/Lena.png", "build/Lena DFT.png");
     // edgesDoG("examples/assets/Lena.png", "build/Lena Edges DoG.png");
 
-    // simuFluide2D("build/fluid", 256, 256);
+    simuFluide2D("build/fluid", 384, 384);
 
     return 0;
 }
