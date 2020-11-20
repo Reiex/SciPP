@@ -265,6 +265,21 @@ namespace scp
         return c;
     }
 
+    template<typename T>
+    Vec<T> operator*(const Vec<T>& a, const Mat<T>& b)
+    {
+        if (a.n != b.m)
+            throw std::runtime_error(scippError("In a matrix-vector multiplication, number of columns of the matrix must be the same as the size of the vector."));
+
+        Vec<T> c(b.n);
+
+        for (uint64_t i(0); i < b.n; i++)
+            for (uint64_t j(0); j < b.m; j++)
+                c[i] += b[j][i]*a[j];
+
+        return c;
+    }
+
 
     template<typename T>
     Mat<T> operator*(const Mat<T>& a, const T& x)

@@ -417,6 +417,7 @@ TEST(ClassMat, MultiplicationOperators)
     EXPECT_EQ(0, 1);
     // Multiplication mat-const
     // Multiplication mat-vec
+    // Multiplication vec-mat
 
     {
         printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");
