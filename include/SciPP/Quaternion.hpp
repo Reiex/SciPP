@@ -36,6 +36,8 @@ namespace scp
         Quaternion<T>& operator*=(const Quaternion<T>& q);
         Quaternion<T>& operator/=(const T& x);
 
+        ~Quaternion() = default;
+
         T a;
         T b;
         T c;

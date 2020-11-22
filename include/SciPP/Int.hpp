@@ -55,6 +55,8 @@ namespace scp
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             bool getSign() const;
 
+            ~Int() = default;
+
         private:
 
             std::vector<uint32_t> _values;

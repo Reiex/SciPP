@@ -46,6 +46,8 @@ namespace scp
             const T& num() const;    ///< Returns the numerator of the fraction.
             const T& denom() const;  ///< Returns the denominator of the fraction.
 
+            ~Frac() = default;
+
         private:
 
             void simplify();  ///< Reduces the fraction by dividing by gcd(_p, _q) and allowing only _p to be negative.

@@ -26,6 +26,7 @@ namespace scp
     {
         public:
 
+            Vec() = delete;
             Vec(uint64_t count, int64_t value = 0);  ///< Init all the components of the vector with T(value).
             Vec(uint64_t count, const T& value);     ///< Init all the components of the vector with value.
             Vec(const std::vector<T>& values);       ///< Init the vec with the values.
@@ -45,6 +46,8 @@ namespace scp
             Vec<T>& operator%=(const Vec<T>& v);
 
             const uint64_t n;  ///< Size of the vector.
+
+            ~Vec() = default;
 
         private:
 

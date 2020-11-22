@@ -53,6 +53,8 @@ namespace scp
             const uint64_t m;  ///< Number of rows of the matrix.
             const uint64_t n;  ///< Number of columns of the matrix.
 
+            ~Mat() = default;
+
         private:
 
             std::vector<Vec<T>> _values;

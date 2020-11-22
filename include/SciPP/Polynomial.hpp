@@ -65,6 +65,8 @@ namespace scp
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             Polynomial<T> primitive(T const& c = 0) const;
 
+            ~Polynomial() = default;
+
         private:
 
             void reduce() const;
