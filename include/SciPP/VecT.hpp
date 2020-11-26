@@ -390,6 +390,8 @@ namespace scp
     template<typename T>
     Vec<T> convolve(const Vec<T>& a, const Vec<T>& b, ConvolveMethod method)
     {
+        assert(b.n % 2 == 1);
+
         Vec<T> c(a.n);
 
         for (uint64_t i(0); i < a.n; i++)
@@ -417,7 +419,7 @@ namespace scp
                     else
                         coeff = a[k];
                 }
-                c[j] += coeff * b[k];
+                c[i] += coeff * b[j];
             }
         }
 
