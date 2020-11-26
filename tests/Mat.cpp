@@ -420,7 +420,8 @@ TEST(ClassMat, MultiplicationOperators)
     // Multiplication vec-mat
     // Multiplication hadamard
     // Mais de toute façon faut encore refaire tout les tests matrices
-    // Et changer tout les throw en assert
+    // Changer tout les throw en assert
+    // Tests convolve Vec
 
     {
         printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");

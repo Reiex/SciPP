@@ -155,19 +155,10 @@ namespace scp
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// \relates Mat
-    /// \enum ConvolveMethod
-    /// \brief Enumeration of the different conventions for behaviour of convolution at matrix borders.
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    enum class ConvolveMethod
-    {
-        Periodic,    ///< When going beyond the matrix border, the matrix is repeated.
-        Continuous,  ///< When going beyond the matrix border, the value at the border is kept.
-        Zero         ///< When going beyond the matrix border, the value kept is 0.
-    };
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// \relates Mat
-    /// \relates ConvolveMethod
     /// \brief Convolution product of `a` by `b`. For behaviour at matrix borders, see ConvolveMethod
+    /// 
+    /// The convolution matrix (`b`) is centered. It means the the coefficient `b[b.m/2 + 1][b.n/2 + 1]` is the one
+    /// that applies on `a[0][0]` to compute the result in (0, 0).
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T>
     Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method = ConvolveMethod::Periodic);
