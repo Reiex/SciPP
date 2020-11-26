@@ -394,14 +394,14 @@ namespace scp
 
         for (uint64_t i(0); i < a.n; i++)
         {
-            for (uint64_t j(0); j < b.n)
+            for (uint64_t j(0); j < b.n; j++)
             {
                 int64_t k = (int64_t)i + (int64_t)j - (int64_t)b.n / 2;
                 T coeff;
                 if (method == ConvolveMethod::Periodic)
                 {
                     if (k < 0) k += a.n;
-                    if (k >= m) k -= a.n;
+                    if (k >= a.n) k -= a.n;
                     coeff = a[k];
                 }
                 else if (method == ConvolveMethod::Continuous)
