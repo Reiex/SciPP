@@ -396,6 +396,112 @@ namespace scp
 
     // Specific functions
 
+    template<typename T>
+    Mat<T> inverse(const Mat<T>& a)
+    {
+        if (a.m != a.n)
+            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+
+        Mat<T> b(a), inv(Mat<T>::identity(a.n));
+
+        for (uint64_t j(0); j < a.n; j++)
+        {
+            if (b[j][j] == 0)
+            {
+                for (uint64_t i(j + 1); i < a.n; i++)
+                {
+                    if (b[i][j] != 0)
+                    {
+                        inv[i] /= Vec<T>(a.n, b[i][j]);
+                        b[i] /= Vec<T>(a.n, b[i][j]);
+                        inv[j] += inv[i];
+                        b[j] += b[i];
+                        break;
+                    }
+                }
+
+                if (b[j][j] == 0)
+                    throw std::runtime_error(scippError("The matrix cannot be inverted."));
+            }
+            else
+            {
+                inv[j] /= Vec<T>(a.n, b[j][j]);
+                b[j] /= Vec<T>(a.n, b[j][j]);
+            }
+
+            for (uint64_t i(j + 1); i < a.n; i++)
+            {
+                if (b[i][j] != 0)
+                {
+                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
+                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
+                }
+            }
+        }
+
+        for (uint64_t j(a.n - 1); j != UINT64_MAX; j--)
+        {
+            for (uint64_t i(j - 1); i != UINT64_MAX; i--)
+            {
+                if (b[i][j] != 0)
+                {
+                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
+                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
+                }
+            }
+        }
+
+        return inv;
+    }
+
+    template<typename T>
+    Mat<T> transpose(const Mat<T>& a)
+    {
+        Mat<T> b(a.n, a.m);
+        for (uint64_t i(0); i < a.n; i++)
+            for (uint64_t j(0); j < a.m; j++)
+                b[i][j] = a[j][i];
+
+        return b;
+    }
+
+    template<typename T>
+    T det(const Mat<T>& a)
+    {
+        if (a.m != a.n)
+            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+
+        Mat<T> b(a);
+
+        for (uint64_t j(0); j < a.n; j++)
+        {
+            if (b[j][j] == 0)
+            {
+                for (uint64_t i(j + 1); i < a.n; i++)
+                {
+                    if (b[i][j] != 0)
+                    {
+                        b[j] += b[i];
+                        break;
+                    }
+                }
+
+                if (b[j][j] == 0)
+                    return 0;
+            }
+
+            for (uint64_t i(j + 1); i < a.n; i++)
+                b[i] -= Vec<T>(a.n, b[i][j] / b[j][j]) * b[j];
+        }
+
+        T prod(b[0][0]);
+        for (uint64_t i(1); i < a.n; i++)
+            prod *= b[i][i];
+
+        return prod;
+    }
+
+
     namespace
     {
         template<typename T>
@@ -473,109 +579,19 @@ namespace scp
     }
     
     template<typename T>
-    Mat<T> inverse(const Mat<T>& a)
+    Mat<T> hadamardProduct(const Mat<T>& a, const Mat<T>& b)
     {
-        if (a.m != a.n)
-            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+        assert(a.m == b.m && a.n == b.n);
 
-        Mat<T> b(a), inv(Mat<T>::identity(a.n));
+        Mat<T> c(a);
 
-        for (uint64_t j(0); j < a.n; j++)
-        {
-            if (b[j][j] == 0)
-            {
-                for (uint64_t i(j + 1); i < a.n; i++)
-                {
-                    if (b[i][j] != 0)
-                    {
-                        inv[i] /= Vec<T>(a.n, b[i][j]);
-                        b[i] /= Vec<T>(a.n, b[i][j]);
-                        inv[j] += inv[i];
-                        b[j] += b[i];
-                        break;
-                    }
-                }
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
+                c[i][j] *= b[i][j];
 
-                if (b[j][j] == 0)
-                    throw std::runtime_error(scippError("The matrix cannot be inverted."));
-            }
-            else
-            {
-                inv[j] /= Vec<T>(a.n, b[j][j]);
-                b[j] /= Vec<T>(a.n, b[j][j]);
-            }
-
-            for (uint64_t i(j + 1); i < a.n; i++)
-            {
-                if (b[i][j] != 0)
-                {
-                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
-                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
-                }
-            }
-        }
-
-        for (uint64_t j(a.n - 1); j != UINT64_MAX; j--)
-        {
-            for (uint64_t i(j - 1); i != UINT64_MAX; i--)
-            {
-                if (b[i][j] != 0)
-                {
-                    inv[i] -= Vec<T>(a.n, b[i][j]) * inv[j];
-                    b[i] -= Vec<T>(a.n, b[i][j]) * b[j];
-                }
-            }
-        }
-
-        return inv;
-    }
-    
-    template<typename T>
-    Mat<T> transpose(const Mat<T>& a)
-    {
-        Mat<T> b(a.n, a.m);
-        for (uint64_t i(0); i < a.n; i++)
-            for (uint64_t j(0); j < a.m; j++)
-                b[i][j] = a[j][i];
-        
-        return b;
+        return c;
     }
 
-    template<typename T>
-    T det(const Mat<T>& a)
-    {
-        if (a.m != a.n)
-            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
-
-        Mat<T> b(a);
-
-        for (uint64_t j(0); j < a.n; j++)
-        {
-            if (b[j][j] == 0)
-            {
-                for (uint64_t i(j + 1); i < a.n; i++)
-                {
-                    if (b[i][j] != 0)
-                    {
-                        b[j] += b[i];
-                        break;
-                    }
-                }
-
-                if (b[j][j] == 0)
-                    return 0;
-            }
-
-            for (uint64_t i(j + 1); i < a.n; i++)
-                b[i] -= Vec<T>(a.n, b[i][j] / b[j][j]) * b[j];
-        }
-
-        T prod(b[0][0]);
-        for (uint64_t i(1); i < a.n; i++)
-            prod *= b[i][i];
-
-        return prod;
-    }
 
     template<typename T>
     Mat<std::complex<T>> dft(const Mat<std::complex<T>>& f)
@@ -610,6 +626,7 @@ namespace scp
 
         return wM * fh * wN / std::complex<T>(fh.m * fh.n, 0);
     }
+
 
     namespace
     {

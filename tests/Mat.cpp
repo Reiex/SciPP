@@ -418,7 +418,9 @@ TEST(ClassMat, MultiplicationOperators)
     // Multiplication mat-const
     // Multiplication mat-vec
     // Multiplication vec-mat
+    // Multiplication hadamard
     // Mais de toute façon faut encore refaire tout les tests matrices
+    // Et changer tout les throw en assert
 
     {
         printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");
