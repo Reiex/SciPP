@@ -54,16 +54,6 @@ TEST(ClassMat, Constructors)
             EXPECT_FLOAT_EQ(x[1][0], 0.3f); EXPECT_FLOAT_EQ(x[1][1], 3.9f);
             EXPECT_FLOAT_EQ(x[2][0], 8.8f); EXPECT_FLOAT_EQ(x[2][1], -7.4f);
         }
-
-        {
-            Mat<float> x({
-                    {1.6f, -1.8f},
-                    {0.3f, 3.9f},
-                    {8.8f, -7.4f}
-                });
-
-            EXPECT_THROW(Mat<float>({ {1.f, 2.f}, {1.f, 2.f, 3.f} }), std::runtime_error);
-        }
     }
 
     {
@@ -420,7 +410,6 @@ TEST(ClassMat, MultiplicationOperators)
     // Multiplication vec-mat
     // Multiplication hadamard
     // Mais de toute façon faut encore refaire tout les tests matrices
-    // Changer tout les throw en assert
     // Tests convolve Vec
     // minElement, maxElement
 
@@ -757,32 +746,6 @@ TEST(ClassMat, SpecificFunctions)
             EXPECT_NEAR(z[0][0], 1.60003f, 1e-5); EXPECT_NEAR(z[0][1], 1.80039f, 1e-5); EXPECT_NEAR(z[0][2], 3.10041f, 1e-5);
             EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
             EXPECT_NEAR(z[2][0], 8.80300f, 1e-5); EXPECT_NEAR(z[2][1], 7.43900f, 1e-5); EXPECT_NEAR(z[2][2], 5.94100f, 1e-5);
-        }
-
-        {
-            Mat<float> x({
-                    {1.6f, 1.8f, 3.1f},
-                    {0.3f, 3.9f, 4.1f},
-                    {8.8f, 7.4f, 5.9f}
-                });
-            Mat<float> y(3, 2);
-            Mat<float> z(2, 3);
-
-            EXPECT_THROW(convolve(x, y), std::runtime_error);
-            EXPECT_THROW(convolve(x, z), std::runtime_error);
-        }
-
-        {
-            Mat<float> x({
-                    {1.6f, 1.8f, 3.1f},
-                    {0.3f, 3.9f, 4.1f},
-                    {8.8f, 7.4f, 5.9f}
-                });
-            Mat<float> y(5, 1);
-            Mat<float> z(1, 5);
-
-            EXPECT_THROW(convolve(x, y), std::runtime_error);
-            EXPECT_THROW(convolve(x, z), std::runtime_error);
         }
     }
 
