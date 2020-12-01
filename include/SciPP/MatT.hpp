@@ -397,10 +397,38 @@ namespace scp
     // Specific functions
 
     template<typename T>
+    T minElement(const Mat<T>& a)
+    {
+        assert(a.m > 0 && a.n > 0);
+
+        T* min = &a[0][0];
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
+                if (a[i][j] < *min)
+                    min = &a[i][j];
+        
+        return *min;
+    }
+
+    template<typename T>
+    T maxElement(const Mat<T>& a)
+    {
+        assert(a.m > 0 && a.n > 0);
+
+        T* max = &a[0][0];
+        for (uint64_t i(0); i < a.m; i++)
+            for (uint64_t j(0); j < a.n; j++)
+                if (a[i][j] > *max)
+                    max = &a[i][j];
+
+        return *max;
+    }
+
+
+    template<typename T>
     Mat<T> inverse(const Mat<T>& a)
     {
-        if (a.m != a.n)
-            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+        assert(a.m == a.n);
 
         Mat<T> b(a), inv(Mat<T>::identity(a.n));
 
@@ -468,8 +496,7 @@ namespace scp
     template<typename T>
     T det(const Mat<T>& a)
     {
-        if (a.m != a.n)
-            throw std::runtime_error(scippError("Only square matrix can be inverted. Matrix size: {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+        assert(a.m == a.n);
 
         Mat<T> b(a);
 
@@ -559,11 +586,8 @@ namespace scp
         uint64_t p = b.m;
         uint64_t q = b.n;
 
-        if (p % 2 == 0 || q % 2 == 0)
-            throw std::runtime_error(scippError("The convolution matrix number of rows and columns must be odds."));
-
-        if (p > m || q > n)
-            throw std::runtime_error(scippError("The convolution matrix must be smaller than the convolved matrix."));
+        assert(p % 2 == 1 && q % 2 == 1);
+        assert(p <= m && q <= n);
 
         Mat<T> c(m, n);
 

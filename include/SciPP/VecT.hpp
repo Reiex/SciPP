@@ -351,6 +351,33 @@ namespace scp
 
 
     // Specific functions
+
+    template<typename T>
+    T minElement(const Vec<T>& a)
+    {
+        assert(a.n > 0);
+
+        T* min = &a[0];
+        for (uint64_t i(0); i < a.n; i++)
+                if (a[i] < *min)
+                    min = &a[i];
+
+        return *min;
+    }
+
+    template<typename T>
+    T maxElement(const Vec<T>& a)
+    {
+        assert(a.n > 0);
+
+        T* max = &a[0];
+        for (uint64_t i(0); i < a.n; i++)
+                if (a[i] > * max)
+                    max = &a[i];
+
+        return *max;
+    }
+
     
     template<typename T>
     T dot(const Vec<T>& u, const Vec<T>& v)

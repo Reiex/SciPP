@@ -422,6 +422,7 @@ TEST(ClassMat, MultiplicationOperators)
     // Mais de toute façon faut encore refaire tout les tests matrices
     // Changer tout les throw en assert
     // Tests convolve Vec
+    // minElement, maxElement
 
     {
         printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");
