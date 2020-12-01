@@ -116,7 +116,7 @@ namespace scp
     Polynomial<T>& Polynomial<T>::operator/=(const Polynomial<T>& p)
     {
         if (p == Polynomial<T>(T(0)))
-            throw std::runtime_error(scippError("Cannot divide Polynomial by 0."));
+            throw std::runtime_error("Cannot divide Polynomial by 0.");
         
         if (p.degree() > degree())
         {
@@ -144,7 +144,7 @@ namespace scp
     Polynomial<T>& Polynomial<T>::operator%=(const Polynomial<T>& p)
     {
         if (p == Polynomial<T>(T(0)))
-            throw std::runtime_error(scippError("Cannot divide Polynomial by 0."));
+            throw std::runtime_error("Cannot divide Polynomial by 0.");
         
         if (p.degree() > degree())
             return *this;

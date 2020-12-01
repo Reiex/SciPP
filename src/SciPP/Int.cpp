@@ -265,7 +265,7 @@ namespace scp
     Int& Int::operator/=(const Int& x)
     {
         if (x == 0)
-            throw std::runtime_error(scippError("Division of Int by 0."));
+            throw std::runtime_error("Division of Int by 0.");
 
         uint64_t tailleBits((_values.size() - 1) * 32 + getNbBits(_values[_values.size() - 1]));
         uint64_t xTailleBits((x._values.size() - 1) * 32 + getNbBits(x._values[x._values.size() - 1]));
@@ -365,7 +365,7 @@ namespace scp
     int64_t Int::toInt() const
     {
         if (*this > INT64_MAX || *this < INT64_MIN)
-            throw std::runtime_error("Int to big to be converted to int64_t.");
+            throw std::runtime_error("Int too big to be converted to int64_t.");
 
         int64_t x(0);
 

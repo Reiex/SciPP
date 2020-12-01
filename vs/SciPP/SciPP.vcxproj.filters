@@ -68,8 +68,5 @@
     <ClCompile Include="..\..\src\SciPP\Int.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SciPP\misc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

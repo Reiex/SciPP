@@ -33,22 +33,16 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot assign a vector to another vector of different size."));
-
+        assert(n == v.n);
         _values = v._values;
-
         return *this;
     }
 
     template<typename T>
     Vec<T>& Vec<T>::operator=(Vec<T>&& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot assign a vector to another vector of different size."));
-
+        assert(n == v.n);
         _values = std::move(v._values);
-
         return *this;
     }
 
@@ -59,7 +53,7 @@ namespace scp
     T& Vec<T>::operator[](uint64_t i)
     {
         if (i >= n)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Vec of size " + std::to_string(n) + "."));
+            throw std::out_of_range("Cannot access index " + std::to_string(i) + " of Vec of size " + std::to_string(n) + ".");
         
         return _values[i];
     }
@@ -68,7 +62,7 @@ namespace scp
     const T& Vec<T>::operator[](uint64_t i) const
     {
         if (i >= n)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Vec of size " + std::to_string(n) + "."));
+            throw std::out_of_range("Cannot access index " + std::to_string(i) + " of Vec of size " + std::to_string(n) + ".");
         
         return _values[i];
     }
@@ -79,9 +73,7 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator+=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot add Vec of different sizes. Sizes are " + std::to_string(n) + " and " + std::to_string(v.n) + "."));
-
+        assert(n == v.n);
         for (uint64_t i(0); i < n; i++)
             _values[i] += v._values[i];
         
@@ -91,9 +83,7 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator-=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot substract Vec of different sizes. Sizes are " + std::to_string(n) + " and " + std::to_string(v.n) + "."));
-
+        assert(n == v.n);
         for (uint64_t i(0); i < n; i++)
             _values[i] -= v._values[i];
         
@@ -103,9 +93,7 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator*=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot mutiply Vec of different sizes. Sizes are " + std::to_string(n) + " and " + std::to_string(v.n) + "."));
-
+        assert(n == v.n);
         for (uint64_t i(0); i < n; i++)
             _values[i] *= v._values[i];
         
@@ -115,9 +103,7 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator/=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot divide Vec of different sizes. Sizes are " + std::to_string(n) + " and " + std::to_string(v.n) + "."));
-
+        assert(n == v.n);
         for (uint64_t i(0); i < n; i++)
             _values[i] /= v._values[i];
         
@@ -127,9 +113,7 @@ namespace scp
     template<typename T>
     Vec<T>& Vec<T>::operator%=(const Vec<T>& v)
     {
-        if (n != v.n)
-            throw std::runtime_error(scippError("Cannot modulo Vec of different sizes. Sizes are " + std::to_string(n) + " and " + std::to_string(v.n) + "."));
-        
+        assert(n == v.n);
         for (uint64_t i(0); i < n; i++)
             _values[i] %= v._values[i];
         
@@ -382,9 +366,7 @@ namespace scp
     template<typename T>
     T dot(const Vec<T>& u, const Vec<T>& v)
     {
-        if (u.n != v.n)
-            throw std::runtime_error(scippError("Cannot dot product Vec of different sizes. Sizes are " + std::to_string(u.n) + " and " + std::to_string(v.n) + "."));
-
+        assert(u.n == v.n);
         T x(0);
         for (uint64_t i(0); i < u.n; i++)
             x += u[i] * v[i];
@@ -395,9 +377,7 @@ namespace scp
     template<typename T>
     Vec<T> cross(const Vec<T>& u, const Vec<T>& v)
     {
-        if (u.n != 3 || v.n != 3)
-            throw std::runtime_error(scippError("Cannot cross product Vec of sizes different than 3. Sizes are " + std::to_string(u.n) + " and " + std::to_string(v.n) + "."));
-
+        assert(u.n == 3 && v.n == 3);
         return Vec<T>({u[1]*v[2] - u[2]*v[1], u[2]*v[0] - u[0]*v[2], u[0]*v[1] - u[1]*v[0]});
     }
 

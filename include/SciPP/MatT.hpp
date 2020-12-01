@@ -29,10 +29,10 @@ namespace scp
         _values(m, Vec<T>(n, (int64_t) 0))
     {
         for (uint64_t i(0); i < _values.size(); i++)
-            if (values[i].size() != n)
-                throw std::runtime_error(scippError("Invalid vectors for value initialization."));
-            else
-                _values[i] = Vec<T>(values[i]);
+        {
+            assert(values[i].size() == n);
+            _values[i] = Vec<T>(values[i]);
+        }
     }
 
     template<typename T>
@@ -61,22 +61,16 @@ namespace scp
     template<typename T>
     Mat<T>& Mat<T>::operator=(const Mat<T>& a)
     {
-        if (m != a.m || n != a.n)
-            throw std::runtime_error(scippError("Cannot assign a matrix to another matrix of different size."));
-
+        assert(m == a.m && n == a.n);
         _values = a._values;
-
         return *this;
     }
 
     template<typename T>
     Mat<T>& Mat<T>::operator=(Mat<T>&& a)
     {
-        if (m != a.m || n != a.n)
-            throw std::runtime_error(scippError("Cannot assign a matrix to another matrix of different size."));
-
+        assert(m == a.m && n == a.n);
         _values = std::move(a._values);
-
         return *this;
     }
 
@@ -87,7 +81,7 @@ namespace scp
     Vec<T>& Mat<T>::operator[](uint64_t i)
     {
         if (i >= m)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}."));
+            throw std::out_of_range("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}.");
 
         return _values[i];
     }
@@ -96,7 +90,7 @@ namespace scp
     const Vec<T>& Mat<T>::operator[](uint64_t i) const
     {
         if (i >= m)
-            throw std::runtime_error(scippError("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}."));
+            throw std::out_of_range("Cannot access index " + std::to_string(i) + " of Mat of size {" + std::to_string(m) + ", " + std::to_string(n) + "}.");
 
         return _values[i];
     }
@@ -107,8 +101,7 @@ namespace scp
     template<typename T>
     Mat<T>& Mat<T>::operator+=(const Mat<T>& a)
     {
-        if (m != a.m || n != a.n)
-            throw std::runtime_error(scippError("Cannot add Mat of different sizes. Sizes are {" + std::to_string(m) + ", " + std::to_string(n) + "} and {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+        assert(m == a.m && n == a.n);
 
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
@@ -120,8 +113,7 @@ namespace scp
     template<typename T>
     Mat<T>& Mat<T>::operator-=(const Mat<T>& a)
     {
-        if (m != a.m || n != a.n)
-            throw std::runtime_error(scippError("Cannot add Mat of different sizes. Sizes are {" + std::to_string(m) + ", " + std::to_string(n) + "} and {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "}."));
+        assert(m == a.m && n == a.n);
 
         for (uint64_t i(0); i < m; i++)
             for (uint64_t j(0); j < n; j++)
@@ -234,11 +226,9 @@ namespace scp
     template<typename T>
     Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
     {
-        if (a.n != b.m)
-            throw std::runtime_error("Mat sizes not compatible for multiplication. Sizes are {" + std::to_string(a.m) + ", " + std::to_string(a.n) + "} and {" + std::to_string(b.m) + ", " + std::to_string(b.n) + "}.");
+        assert(a.n == b.m);
 
         std::vector<std::thread> threads(a.m);
-
 
         Mat<T> c(a.m, b.n);
         for (uint64_t i(0); i < a.m; i++)
@@ -254,8 +244,7 @@ namespace scp
     template<typename T>
     Vec<T> operator*(const Mat<T>& a, const Vec<T>& b)
     {
-        if (a.n != b.n)
-            throw std::runtime_error(scippError("In a matrix-vector multiplication, number of columns of the matrix must be the same as the size of the vector."));
+        assert(a.n == b.n);
 
         Vec<T> c(a.m);
 
@@ -268,8 +257,7 @@ namespace scp
     template<typename T>
     Vec<T> operator*(const Vec<T>& a, const Mat<T>& b)
     {
-        if (a.n != b.m)
-            throw std::runtime_error(scippError("In a matrix-vector multiplication, number of columns of the matrix must be the same as the size of the vector."));
+        assert(a.n == b.m);
 
         Vec<T> c(b.n);
 
@@ -449,7 +437,7 @@ namespace scp
                 }
 
                 if (b[j][j] == 0)
-                    throw std::runtime_error(scippError("The matrix cannot be inverted."));
+                    throw std::runtime_error("The matrix cannot be inverted.");
             }
             else
             {

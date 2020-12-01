@@ -33,7 +33,7 @@ namespace scp
         _q(q)
     {
         if (q == 0)
-            throw std::runtime_error(scippError("You cannot init a Frac with the denominator at 0."));
+            throw std::runtime_error("Cannot init a Frac with the denominator equal to 0.");
 
         simplify();
     }

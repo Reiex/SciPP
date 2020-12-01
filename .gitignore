@@ -3,6 +3,9 @@
 /vs/SciPP/Release/
 /vs/SciPPExamples/Release/
 /vs/SciPPTests/Release/
+/vs/SciPP/Debug/
+/vs/SciPPExamples/Debug/
+/vs/SciPPTests/Debug/
 /doc/html/
 /obj/
 /build/
