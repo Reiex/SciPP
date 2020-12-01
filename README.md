@@ -43,7 +43,7 @@ Any project you run will compile SciPP, but if you want to test it, just select 
 
 ---
 
-Once it is compiled, nothing specials need to be done, the SciPP headers are in the folder `include` and you got the compiled library in `lib`.
+Once it is compiled, you just need to link SciPP with your project as you would do with any other library, the SciPP headers are in the folder `include` and you can get the compiled library in `lib`.
 
 
 ## Using SciPP
