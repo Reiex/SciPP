@@ -389,7 +389,7 @@ namespace scp
     {
         assert(a.m > 0 && a.n > 0);
 
-        T* min = &a[0][0];
+        const T* min = &a[0][0];
         for (uint64_t i(0); i < a.m; i++)
             for (uint64_t j(0); j < a.n; j++)
                 if (a[i][j] < *min)
@@ -403,7 +403,7 @@ namespace scp
     {
         assert(a.m > 0 && a.n > 0);
 
-        T* max = &a[0][0];
+        const T* max = &a[0][0];
         for (uint64_t i(0); i < a.m; i++)
             for (uint64_t j(0); j < a.n; j++)
                 if (a[i][j] > *max)
