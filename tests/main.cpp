@@ -26,6 +26,5 @@ TODO:
 
         - Produit et division Vec-T
         - Operator++ Int
-        - Supprimer parallelisme (Mat convolve et Mat-Mat product)
 
 */

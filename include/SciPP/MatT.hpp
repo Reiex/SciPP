@@ -212,30 +212,17 @@ namespace scp
         return std::move(a);
     }
     
-    namespace
-    {
-        template<typename T>
-        void multiplyThread(Vec<T>& out, const Mat<T>& a, const Mat<T>& b, uint64_t i)
-        {
-            for (uint64_t j(0); j < b.n; j++)
-                for (uint64_t k(0); k < a.n; k++)
-                    out[j] += a[i][k] * b[k][j];
-        }
-    }
 
     template<typename T>
     Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
     {
         assert(a.n == b.m);
 
-        std::vector<std::thread> threads(a.m);
-
         Mat<T> c(a.m, b.n);
         for (uint64_t i(0); i < a.m; i++)
-            threads[i] = std::thread(multiplyThread<T>, std::ref(c[i]), std::ref(a), std::ref(b), i);
-
-        for (uint64_t i(0); i < threads.size(); i++)
-            threads[i].join();
+            for (uint64_t j(0); j < b.n; j++)
+                for (uint64_t k(0); k < a.n; k++)
+                    c[i][j] += a[i][k]*b[k][j];
         
         return c;
     }
@@ -533,24 +520,28 @@ namespace scp
     }
 
 
-    namespace
+    template<typename T>
+    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)
     {
-        template<typename T>
-        void convolveThread(Vec<T>& out, const Mat<T>& a, const Mat<T>& b, uint64_t i, ConvolveMethod method)
-        {
-            uint64_t m = a.m;
-            uint64_t n = a.n;
-            uint64_t p = b.m;
-            uint64_t q = b.n;
+        uint64_t m = a.m;
+        uint64_t n = a.n;
+        uint64_t p = b.m;
+        uint64_t q = b.n;
 
+        assert(p % 2 == 1 && q % 2 == 1);
+        assert(p <= m && q <= n);
+
+        Mat<T> c(m, n);
+        for (uint64_t i(0); i < m; i++)
+        {
             for (uint64_t j(0); j < n; j++)
             {
                 for (uint64_t k(0); k < p; k++)
                 {
                     for (uint64_t l(0); l < q; l++)
                     {
-                        int64_t x = (int64_t)i + (int64_t)k - (int64_t)p/2;
-                        int64_t y = (int64_t)j + (int64_t)l - (int64_t)q/2;
+                        int64_t x = (int64_t)i + (int64_t)k - (int64_t)p / 2;
+                        int64_t y = (int64_t)j + (int64_t)l - (int64_t)q / 2;
                         T coeff;
                         if (method == ConvolveMethod::Periodic)
                         {
@@ -564,8 +555,8 @@ namespace scp
                         {
                             if (x < 0) x = 0;
                             if (y < 0) y = 0;
-                            if (x >= m) x = m-1;
-                            if (y >= n) y = n-1;
+                            if (x >= m) x = m - 1;
+                            if (y >= n) y = n - 1;
                             coeff = a[x][y];
                         }
                         else if (method == ConvolveMethod::Zero)
@@ -575,33 +566,11 @@ namespace scp
                             else
                                 coeff = a[x][y];
                         }
-                        out[j] += coeff * b[k][l];
+                        c[i][j] += coeff * b[k][l];
                     }
                 }
             }
         }
-    }
-
-    template<typename T>
-    Mat<T> convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)
-    {
-        uint64_t m = a.m;
-        uint64_t n = a.n;
-        uint64_t p = b.m;
-        uint64_t q = b.n;
-
-        assert(p % 2 == 1 && q % 2 == 1);
-        assert(p <= m && q <= n);
-
-        Mat<T> c(m, n);
-
-        std::vector<std::thread> threads(m);
-
-        for (uint64_t i(0); i < m; i++)
-            threads[i] = std::thread(convolveThread<T>, std::ref(c[i]), std::ref(a), std::ref(b), i, method);
-
-        for (uint64_t i(0); i < threads.size(); i++)
-            threads[i].join();
 
         return c;
     }
