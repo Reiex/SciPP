@@ -7,10 +7,15 @@ SciPP (pronounced "cpp") is a little C++ scientific library I coded to help me d
 This library, a bit messy, implements all kind of tools usually needed to do applied mathematics or computer sciences, but that are not in the standard library.
 These tools are, for example: Big Integers, Matrices, Vectors, Fourier Transforms, Quaternions...
 
+---
+
+The philosophy of this library is to be simple yet efficient. For this, I fixed certain rules:
+- No dependency (maybe side libraries iff they are header only, but nothing to link with)
+- No multi-threading
+- No GPU use
+
 
 ## Including SciPP in your projects
-
-For the moment, SciPP does not depend on any other library, but in a near future, a plot module may be added and might require some additional dependencies.
 
 The git repository contains a Makefile and a Visual Studio Solution to help you include SciPP in your own projects. First, start by cloning the repository.
 

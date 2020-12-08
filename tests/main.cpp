@@ -11,3 +11,21 @@ int main(int argc, char **argv)
     int exit_code = RUN_ALL_TESTS();
     return exit_code;
 }
+
+/*
+
+TODO:
+
+    Tests:
+
+        - Séparer tests IDCT et DCT classe Vec
+        - Séparer tests IDFT et DFT classe Mat
+        - Séparer tests IDCT et DCT classe Mat
+
+    SciPP:
+
+        - Produit et division Vec-T
+        - Operator++ Int
+        - Supprimer parallelisme (Mat convolve et Mat-Mat product)
+
+*/

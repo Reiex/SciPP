@@ -285,6 +285,22 @@ namespace scp
         return std::move(a);
     }
 
+    template<typename T>
+    Mat<T> operator*(const T& x, const Mat<T>& a)
+    {
+        Mat<T> b(a);
+        b *= x;
+
+        return b;
+    }
+
+    template<typename T>
+    Mat<T>&& operator*(const T& x, Mat<T>&& a)
+    {
+        a *= x;
+        return std::move(a);
+    }
+
 
     template<typename T>
     Mat<T> operator/(const Mat<T>& a, const T& x)

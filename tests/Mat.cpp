@@ -404,14 +404,21 @@ TEST(ClassMat, MultiplicationOperators)
 {
     std::string testName("ClassMat.MultiplicationOperators");
 
-    EXPECT_EQ(0, 1);
-    // Multiplication mat-const
-    // Multiplication mat-vec
-    // Multiplication vec-mat
-    // Multiplication hadamard
-    // Mais de toute façon faut encore refaire tout les tests matrices
-    // Tests convolve Vec
-    // minElement, maxElement
+    {
+        printSection(testName, "Mat<T>::operator*=(const T& x)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+
+        x *= 3.14f;
+
+        EXPECT_FLOAT_EQ(x[0][0], 5.024f); EXPECT_FLOAT_EQ(x[0][1], -5.652f);
+        EXPECT_FLOAT_EQ(x[1][0], 0.942f); EXPECT_FLOAT_EQ(x[1][1], 12.246f);
+        EXPECT_FLOAT_EQ(x[2][0], 27.632f); EXPECT_FLOAT_EQ(x[2][1], -23.236f);
+    }
 
     {
         printSection(testName, "operator*(const Mat<T>& x, const Mat<T>& y)");
@@ -438,11 +445,124 @@ TEST(ClassMat, MultiplicationOperators)
         EXPECT_FLOAT_EQ(t[0][0], 58.11f); EXPECT_FLOAT_EQ(t[0][1], -33.25f);
         EXPECT_FLOAT_EQ(t[1][0], 44.55f); EXPECT_FLOAT_EQ(t[1][1], -12.91f);
     }
+
+    {
+        printSection(testName, "operator*(const Mat<T>& x, const Vec<T>& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Vec<float> y(std::vector<float>{ 3.14f, 0.52f });
+        Vec<float> z(3);
+
+        z = x * y;
+        EXPECT_FLOAT_EQ(z[0], 4.088f);
+        EXPECT_FLOAT_EQ(z[1], 2.97f);
+        EXPECT_FLOAT_EQ(z[2], 23.784f);
+    }
+
+    {
+        printSection(testName, "operator*(const Vec<T>& x, const Mat<T>& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Vec<float> y(std::vector<float>{ 3.14f, 0.52f, 1.61f });
+        Vec<float> z(2);
+
+        z = y * x;
+        EXPECT_FLOAT_EQ(z[0], 19.348f);
+        EXPECT_FLOAT_EQ(z[1], -15.538f);
+    }
+
+    {
+        printSection(testName, "operator*(const Mat<T>& x, const T& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Mat<float> y(3, 2);
+
+        y = x * 3.14f;
+        EXPECT_FLOAT_EQ(y[0][0], 5.024f); EXPECT_FLOAT_EQ(y[0][1], -5.652f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.942f); EXPECT_FLOAT_EQ(y[1][1], 12.246f);
+        EXPECT_FLOAT_EQ(y[2][0], 27.632f); EXPECT_FLOAT_EQ(y[2][1], -23.236f);
+    }
+
+    {
+        printSection(testName, "operator*(Mat<T>&& x, const T& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Mat<float> y(3, 2);
+
+        y = std::move(x) * 3.14f;
+        EXPECT_FLOAT_EQ(y[0][0], 5.024f); EXPECT_FLOAT_EQ(y[0][1], -5.652f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.942f); EXPECT_FLOAT_EQ(y[1][1], 12.246f);
+        EXPECT_FLOAT_EQ(y[2][0], 27.632f); EXPECT_FLOAT_EQ(y[2][1], -23.236f);
+    }
+
+    {
+        printSection(testName, "operator*(const T& x, const Mat<T>& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Mat<float> y(3, 2);
+
+        y = 3.14f * x;
+        EXPECT_FLOAT_EQ(y[0][0], 5.024f); EXPECT_FLOAT_EQ(y[0][1], -5.652f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.942f); EXPECT_FLOAT_EQ(y[1][1], 12.246f);
+        EXPECT_FLOAT_EQ(y[2][0], 27.632f); EXPECT_FLOAT_EQ(y[2][1], -23.236f);
+    }
+
+    {
+        printSection(testName, "operator*(const T& x, Mat<T>&& y)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        Mat<float> y(3, 2);
+
+        y = 3.14f * std::move(x);
+        EXPECT_FLOAT_EQ(y[0][0], 5.024f); EXPECT_FLOAT_EQ(y[0][1], -5.652f);
+        EXPECT_FLOAT_EQ(y[1][0], 0.942f); EXPECT_FLOAT_EQ(y[1][1], 12.246f);
+        EXPECT_FLOAT_EQ(y[2][0], 27.632f); EXPECT_FLOAT_EQ(y[2][1], -23.236f);
+    }
 }
 
 TEST(ClassMat, DivisionOperators)
 {
     std::string testName("ClassMat.DivisionOperators");
+
+    {
+        printSection(testName, "Mat<T>::operator/=(const T& x)");
+
+        Mat<float> x({
+                {1.6f, -1.8f},
+                {0.3f, 3.9f},
+                {8.8f, -7.4f}
+            });
+        float y = 3.14;
+        x /= y;
+
+        EXPECT_NEAR(x[0][0], 0.5096f, 1e-4); EXPECT_NEAR(x[0][1], -0.5732f, 1e-4);
+        EXPECT_NEAR(x[1][0], 0.0955f, 1e-4); EXPECT_NEAR(x[1][1], 1.2420f, 1e-4);
+        EXPECT_NEAR(x[2][0], 2.8025f, 1e-4); EXPECT_NEAR(x[2][1], -2.3567f, 1e-4);
+    }
 
     {
         printSection(testName, "operator/(const Mat<T>& x, const T& y)");
@@ -586,6 +706,20 @@ TEST(ClassMat, Comparators)
                 });
             Mat<float> y({
                     {1.6f, -1.8f},
+                    {0.3f, 3.9f}
+                });
+            EXPECT_EQ(x == y, false);
+            EXPECT_EQ(y == x, false);
+        }
+
+        {
+            Mat<float> x({
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                });
+            Mat<float> y({
+                    {1.6f, -1.8f},
                     {0.3f, 3.9f},
                     {8.8f, 0.4f}
                 });
@@ -610,6 +744,20 @@ TEST(ClassMat, Comparators)
                 });
             EXPECT_EQ(x != y, false);
             EXPECT_EQ(y != x, false);
+        }
+
+        {
+            Mat<float> x({
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f},
+                    {8.8f, -7.4f}
+                });
+            Mat<float> y({
+                    {1.6f, -1.8f},
+                    {0.3f, 3.9f}
+                });
+            EXPECT_EQ(x != y, true);
+            EXPECT_EQ(y != x, true);
         }
 
         {
@@ -696,57 +844,27 @@ TEST(ClassMat, SpecificFunctions)
     }
 
     {
-        printSection(testName, "convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)");
+        printSection(testName, "minElement(const Mat<T>& a)");
 
-        {
-            Mat<float> x({
+        Mat<float> x({
                     {1.6f, -1.8f, 3.1f},
                     {0.3f, 3.9f, -4.1f},
                     {8.8f, -7.4f, 5.9f}
-                });
-            Mat<float> y(std::vector<std::vector<float>>({ {0.f}, {0.f}, {1.f} }));
-            Mat<float> z(3, 3);
+            });
 
-            z = convolve(x, y);
-            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
-            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
-            EXPECT_NEAR(z[2][0], 1.6f, 1e-10); EXPECT_NEAR(z[2][1], -1.8f, 1e-10); EXPECT_NEAR(z[2][2], 3.1f, 1e-10);
+        EXPECT_EQ(minElement(x), -7.4f);
+    }
 
-            z = convolve(x, y, ConvolveMethod::Continuous);
-            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
-            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
-            EXPECT_NEAR(z[2][0], 8.8f, 1e-10); EXPECT_NEAR(z[2][1], -7.4f, 1e-10); EXPECT_NEAR(z[2][2], 5.9f, 1e-10);
+    {
+        printSection(testName, "maxElement(const Mat<T>& a)");
 
-            z = convolve(x, y, ConvolveMethod::Zero);
-            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
-            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
-            EXPECT_NEAR(z[2][0], 0.f, 1e-10);  EXPECT_NEAR(z[2][1], 0.f, 1e-10);   EXPECT_NEAR(z[2][2], 0.f, 1e-10);
-        }
+        Mat<float> x({
+                    {1.6f, -1.8f, 3.1f},
+                    {0.3f, 3.9f, -4.1f},
+                    {8.8f, -7.4f, 5.9f}
+            });
 
-        {
-            Mat<float> x({
-                    {1.6f, 1.8f, 3.1f},
-                    {0.3f, 3.9f, 4.1f},
-                    {8.8f, 7.4f, 5.9f}
-                });
-            Mat<float> y(std::vector<std::vector<float>>({ {0.01f}, {1.f}, {0.0001f} }));
-            Mat<float> z(3, 3);
-
-            z = convolve(x, y);
-            EXPECT_NEAR(z[0][0], 1.68803f, 1e-5); EXPECT_NEAR(z[0][1], 1.87439f, 1e-5); EXPECT_NEAR(z[0][2], 3.15941f, 1e-5);
-            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
-            EXPECT_NEAR(z[2][0], 8.80316f, 1e-5); EXPECT_NEAR(z[2][1], 7.43918f, 1e-5); EXPECT_NEAR(z[2][2], 5.94131f, 1e-5);
-
-            z = convolve(x, y,  ConvolveMethod::Continuous);
-            EXPECT_NEAR(z[0][0], 1.61603f, 1e-5); EXPECT_NEAR(z[0][1], 1.81839f, 1e-5); EXPECT_NEAR(z[0][2], 3.13141f, 1e-5);
-            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
-            EXPECT_NEAR(z[2][0], 8.80388f, 1e-5); EXPECT_NEAR(z[2][1], 7.43974f, 1e-5); EXPECT_NEAR(z[2][2], 5.94159f, 1e-5);
-
-            z = convolve(x, y,  ConvolveMethod::Zero);
-            EXPECT_NEAR(z[0][0], 1.60003f, 1e-5); EXPECT_NEAR(z[0][1], 1.80039f, 1e-5); EXPECT_NEAR(z[0][2], 3.10041f, 1e-5);
-            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
-            EXPECT_NEAR(z[2][0], 8.80300f, 1e-5); EXPECT_NEAR(z[2][1], 7.43900f, 1e-5); EXPECT_NEAR(z[2][2], 5.94100f, 1e-5);
-        }
+        EXPECT_EQ(maxElement(x), 8.8f);
     }
 
     {
@@ -808,6 +926,82 @@ TEST(ClassMat, SpecificFunctions)
             Mat<float> x(3, 3);
             EXPECT_NEAR(det(x), 0.f, 1e-5);
         }
+    }
+
+    {
+        printSection(testName, "convolve(const Mat<T>& a, const Mat<T>& b, ConvolveMethod method)");
+
+        {
+            Mat<float> x({
+                    {1.6f, -1.8f, 3.1f},
+                    {0.3f, 3.9f, -4.1f},
+                    {8.8f, -7.4f, 5.9f}
+                });
+            Mat<float> y(std::vector<std::vector<float>>({ {0.f}, {0.f}, {1.f} }));
+            Mat<float> z(3, 3);
+
+            z = convolve(x, y);
+            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
+            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
+            EXPECT_NEAR(z[2][0], 1.6f, 1e-10); EXPECT_NEAR(z[2][1], -1.8f, 1e-10); EXPECT_NEAR(z[2][2], 3.1f, 1e-10);
+
+            z = convolve(x, y, ConvolveMethod::Continuous);
+            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
+            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
+            EXPECT_NEAR(z[2][0], 8.8f, 1e-10); EXPECT_NEAR(z[2][1], -7.4f, 1e-10); EXPECT_NEAR(z[2][2], 5.9f, 1e-10);
+
+            z = convolve(x, y, ConvolveMethod::Zero);
+            EXPECT_NEAR(z[0][0], 0.3f, 1e-10); EXPECT_NEAR(z[0][1], 3.9f, 1e-10);  EXPECT_NEAR(z[0][2], -4.1f, 1e-10);
+            EXPECT_NEAR(z[1][0], 8.8f, 1e-10); EXPECT_NEAR(z[1][1], -7.4f, 1e-10); EXPECT_NEAR(z[1][2], 5.9f, 1e-10);
+            EXPECT_NEAR(z[2][0], 0.f, 1e-10);  EXPECT_NEAR(z[2][1], 0.f, 1e-10);   EXPECT_NEAR(z[2][2], 0.f, 1e-10);
+        }
+
+        {
+            Mat<float> x({
+                    {1.6f, 1.8f, 3.1f},
+                    {0.3f, 3.9f, 4.1f},
+                    {8.8f, 7.4f, 5.9f}
+                });
+            Mat<float> y(std::vector<std::vector<float>>({ {0.01f}, {1.f}, {0.0001f} }));
+            Mat<float> z(3, 3);
+
+            z = convolve(x, y);
+            EXPECT_NEAR(z[0][0], 1.68803f, 1e-5); EXPECT_NEAR(z[0][1], 1.87439f, 1e-5); EXPECT_NEAR(z[0][2], 3.15941f, 1e-5);
+            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
+            EXPECT_NEAR(z[2][0], 8.80316f, 1e-5); EXPECT_NEAR(z[2][1], 7.43918f, 1e-5); EXPECT_NEAR(z[2][2], 5.94131f, 1e-5);
+
+            z = convolve(x, y,  ConvolveMethod::Continuous);
+            EXPECT_NEAR(z[0][0], 1.61603f, 1e-5); EXPECT_NEAR(z[0][1], 1.81839f, 1e-5); EXPECT_NEAR(z[0][2], 3.13141f, 1e-5);
+            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
+            EXPECT_NEAR(z[2][0], 8.80388f, 1e-5); EXPECT_NEAR(z[2][1], 7.43974f, 1e-5); EXPECT_NEAR(z[2][2], 5.94159f, 1e-5);
+
+            z = convolve(x, y,  ConvolveMethod::Zero);
+            EXPECT_NEAR(z[0][0], 1.60003f, 1e-5); EXPECT_NEAR(z[0][1], 1.80039f, 1e-5); EXPECT_NEAR(z[0][2], 3.10041f, 1e-5);
+            EXPECT_NEAR(z[1][0], 0.31688f, 1e-5); EXPECT_NEAR(z[1][1], 3.91874f, 1e-5); EXPECT_NEAR(z[1][2], 4.13159f, 1e-5);
+            EXPECT_NEAR(z[2][0], 8.80300f, 1e-5); EXPECT_NEAR(z[2][1], 7.43900f, 1e-5); EXPECT_NEAR(z[2][2], 5.94100f, 1e-5);
+        }
+    }
+
+    {
+        printSection(testName, "hadamardProduct(const Mat<T>& a, const Mat<T>& b)");
+        
+        Mat<float> x({
+                {1.6f, 1.8f, 3.1f},
+                {0.3f, 3.9f, 4.1f},
+                {8.8f, 7.4f, 5.9f}
+            });
+        Mat<float> y({
+                {1.4f, 1.4f, 2.1f},
+                {3.5f, 6.2f, 3.7f},
+                {2.7f, 1.8f, 2.8f}
+            });
+        Mat<float> z(3, 3);
+
+        z = hadamardProduct(x, y);
+
+        EXPECT_FLOAT_EQ(z[0][0], 2.24f); EXPECT_FLOAT_EQ(z[0][1], 2.52f); EXPECT_FLOAT_EQ(z[0][2], 6.51f);
+        EXPECT_FLOAT_EQ(z[1][0], 1.05f); EXPECT_FLOAT_EQ(z[1][1], 24.18f); EXPECT_FLOAT_EQ(z[1][2], 15.17f);
+        EXPECT_FLOAT_EQ(z[2][0], 23.76f); EXPECT_FLOAT_EQ(z[2][1], 13.32f); EXPECT_FLOAT_EQ(z[2][2], 16.52f);
     }
 
     {

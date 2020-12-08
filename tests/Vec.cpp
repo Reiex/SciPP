@@ -138,11 +138,6 @@ TEST(ClassVec, AssignmentOperators)
             EXPECT_FLOAT_EQ(y[1], 3.14);
             EXPECT_FLOAT_EQ(y[2], 1.414);
         }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(2);
-            EXPECT_THROW(y = x, std::runtime_error);
-        }
     }
 
     {
@@ -154,11 +149,6 @@ TEST(ClassVec, AssignmentOperators)
             EXPECT_FLOAT_EQ(y[0], 1.618);
             EXPECT_FLOAT_EQ(y[1], 3.14);
             EXPECT_FLOAT_EQ(y[2], 1.414);
-        }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(2);
-            EXPECT_THROW(y = x, std::runtime_error);
         }
     }
 
@@ -233,11 +223,6 @@ TEST(ClassVec, AdditionOperators)
             EXPECT_FLOAT_EQ(x[1], 9.81);
             EXPECT_FLOAT_EQ(x[2], 4.132);
         }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(std::vector<float>{0.577f, 6.67f});
-            EXPECT_THROW(y += x, std::runtime_error);
-        }
     }
 
     {
@@ -294,11 +279,6 @@ TEST(ClassVec, SubstractionOperators)
             EXPECT_FLOAT_EQ(x[0], 1.041);
             EXPECT_FLOAT_EQ(x[1], -3.53);
             EXPECT_FLOAT_EQ(x[2], -1.304);
-        }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(std::vector<float>{0.577f, 6.67f});
-            EXPECT_THROW(y -= x, std::runtime_error);
         }
     }
 
@@ -357,11 +337,6 @@ TEST(ClassVec, MultiplicationOperators)
             EXPECT_FLOAT_EQ(x[1], 20.9438);
             EXPECT_FLOAT_EQ(x[2], 3.843252);
         }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(std::vector<float>{0.577f, 6.67f});
-            EXPECT_THROW(y *= x, std::runtime_error);
-        }
     }
 
     {
@@ -419,11 +394,6 @@ TEST(ClassVec, DivisionOperators)
             EXPECT_NEAR(x[1], 0.4708, 1e-4);
             EXPECT_NEAR(x[2], 0.5202, 1e-4);
         }
-
-        {
-            Vec<float> x({1.618f, 3.14f, 1.414f}), y(std::vector<float>{0.577f, 6.67f});
-            EXPECT_THROW(y /= x, std::runtime_error);
-        }
     }
 
     {
@@ -470,11 +440,6 @@ TEST(ClassVec, ModuloOperators)
             EXPECT_FLOAT_EQ(x[0], 52);
             EXPECT_FLOAT_EQ(x[1], 46);
             EXPECT_FLOAT_EQ(x[2], 10);
-        }
-
-        {
-            Vec<uint64_t> x({1618, 314, 1414}), y(std::vector<uint64_t>{58, 67});
-            EXPECT_THROW(x %= y, std::runtime_error);
         }
     }
 
@@ -658,6 +623,20 @@ TEST(ClassVec, SpecificFunctions)
     std::string testName("ClassVec.SpecificFunctions");
 
     {
+        printSection(testName, "minElement(const Vec<T>& a)");
+
+        Vec<float> x({ 1.6f, -1.8f, 0.3f, -3.9f, 8.8f, -7.4f });
+        EXPECT_FLOAT_EQ(minElement(x), -7.4f);
+    }
+
+    {
+        printSection(testName, "maxElement(const Vec<T>& a)");
+
+        Vec<float> x({ 1.6f, -1.8f, 0.3f, -3.9f, 8.8f, -7.4f });
+        EXPECT_FLOAT_EQ(maxElement(x), 8.8f);
+    }
+
+    {
         printSection(testName, "dot(const Vec<T>& u, const Vec<T>& v)");
 
         {
@@ -674,11 +653,6 @@ TEST(ClassVec, SpecificFunctions)
             Vec<float> x(0), y(0);
             EXPECT_FLOAT_EQ(dot(x, y), 0);
         }
-
-        {
-            Vec<float> x({ 1.618f, 3.14f, 1.414f }), y(std::vector<float>{ 6.67f, 2.718f });
-            EXPECT_THROW(dot(x, y), std::runtime_error);
-        }
     }
 
     {
@@ -694,16 +668,6 @@ TEST(ClassVec, SpecificFunctions)
             EXPECT_FLOAT_EQ(z[0], -0.89686f);
             EXPECT_FLOAT_EQ(z[1], -3.581846f);
             EXPECT_FLOAT_EQ(z[2], 8.98028f);
-        }
-
-        {
-            Vec<float> x({ 1.618f, 3.14f, 1.414f }), y(std::vector<float>{ 6.67f, 2.718f });
-            EXPECT_THROW(cross(x, y), std::runtime_error);
-        }
-
-        {
-            Vec<float> x(std::vector<float>{ 3.14f, 1.414f }), y(std::vector<float>{ 1.618f, 6.67f });
-            EXPECT_THROW(cross(x, y), std::runtime_error);
         }
     }
 
@@ -732,6 +696,32 @@ TEST(ClassVec, SpecificFunctions)
         {
             Vec<float> x(0);
             EXPECT_FLOAT_EQ(norm(x), 0);
+        }
+    }
+
+    {
+        printSection(testName, "convolve(const Vec<T>& a, const Vec<T>& b, ConvolveMethod method)");
+
+        {
+            Vec<float> x({ 1.6f, 1.8f, 0.3f, 3.9f }), y({ 1.f, 0.01f, 0.0001f }), z(4);
+
+            z = convolve(x, y);
+            EXPECT_NEAR(z[0], 3.91618f, 1e-5);
+            EXPECT_NEAR(z[1], 1.61803f, 1e-5);
+            EXPECT_NEAR(z[2], 1.80339f, 1e-5);
+            EXPECT_NEAR(z[3], 0.33916f, 1e-5);
+
+            z = convolve(x, y, ConvolveMethod::Continuous);
+            EXPECT_NEAR(z[0], 1.61618f, 1e-5);
+            EXPECT_NEAR(z[1], 1.61803f, 1e-5);
+            EXPECT_NEAR(z[2], 1.80339f, 1e-5);
+            EXPECT_NEAR(z[3], 0.33939f, 1e-5);
+
+            z = convolve(x, y, ConvolveMethod::Zero);
+            EXPECT_NEAR(z[0], 0.01618f, 1e-5);
+            EXPECT_NEAR(z[1], 1.61803f, 1e-5);
+            EXPECT_NEAR(z[2], 1.80339f, 1e-5);
+            EXPECT_NEAR(z[3], 0.33900f, 1e-5);
         }
     }
 
