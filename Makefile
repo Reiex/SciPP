@@ -53,9 +53,9 @@ EXAMPLES_CFLAGS = -I$(INCLUDE_DIR)
 # Linker options
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
 # Libraries linked
-LIBRARY_LDLIBS = -lpthread
-TESTS_LDLIBS = -lSciPP $(LIBRARY_LDLIBS) -lgtest -lpthread
-EXAMPLES_LDLIBS = -lSciPP $(LIBRARY_LDLIBS) -lpthread
+LIBRARY_LDLIBS = 
+TESTS_LDLIBS = -lSciPP -lgtest
+EXAMPLES_LDLIBS = -lSciPP -lpthread
 
 
 ###############################################################################
@@ -75,7 +75,6 @@ clean:
 	find $(OBJ_DIR) -type f -exec rm -rf \{\} \;
 	find $(BUILD_DIR) -type f -exec rm -rf \{\} \;
 	-rm $(LIB_DIR)/libSciPP.so
-	-rm -rf *.png
 
 
 ###############################################################################
@@ -93,7 +92,6 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 
 folders:
 	-rm -rf $(LIB_DIR)/libSciPP.so $(OBJ_DIR) $(BUILD_DIR)
-	-rm -rf *.png
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
 	mkdir $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/FluidSimulation $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
 	mkdir $(BUILD_DIR)
@@ -106,7 +104,7 @@ folders:
 
 $(LIB_DIR): $(LIBRARY_OBJS)
 	-rm -rf $(LIB_DIR)/libSciPP.so
-	$(CC) -shared $(LIBRARY_OBJS) -o $(LIB_DIR)/libSciPP.so $(LIBRARY_LDLIBS)
+	$(CC) -shared $(LIBRARY_OBJS) -o $(LIB_DIR)/libSciPP.so $(LDFLAGS) $(LIBRARY_LDLIBS)
 
 $(OBJ_LIBRARY_DIR)/%.o: $(SRC_LIBRARY_DIR)/%.cpp
 	$(CC) $(LIBRARY_CFLAGS) -c $< -o $@
