@@ -54,7 +54,7 @@ EXAMPLES_CFLAGS = -I$(INCLUDE_DIR)
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
 # Libraries linked
 LIBRARY_LDLIBS = 
-TESTS_LDLIBS = -lSciPP -lgtest
+TESTS_LDLIBS = -lSciPP -lgtest -lpthread
 EXAMPLES_LDLIBS = -lSciPP -lpthread
 
 
