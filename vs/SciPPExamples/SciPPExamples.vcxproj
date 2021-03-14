@@ -98,6 +98,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +118,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +136,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +154,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programmation\Projets\SciPP\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -168,6 +176,7 @@
     <ClCompile Include="..\..\examples\ImageProcessing\ImageProcessing.cpp" />
     <ClCompile Include="..\..\examples\main.cpp" />
     <ClCompile Include="..\..\examples\Misc\Misc.cpp" />
+    <ClCompile Include="..\..\examples\SimAnim\SimAnim.cpp" />
     <ClCompile Include="..\..\examples\stb_image\stb_image.cpp" />
     <ClCompile Include="..\..\examples\stb_image\stb_image_write.cpp" />
   </ItemGroup>
@@ -176,6 +185,7 @@
     <ClInclude Include="..\..\examples\FluidSimulation\FluidSimulation.hpp" />
     <ClInclude Include="..\..\examples\ImageProcessing\ImageProcessing.hpp" />
     <ClInclude Include="..\..\examples\Misc\Misc.hpp" />
+    <ClInclude Include="..\..\examples\SimAnim\SimAnim.hpp" />
     <ClInclude Include="..\..\examples\stb_image\stb_image.h" />
     <ClInclude Include="..\..\examples\stb_image\stb_image_write.h" />
   </ItemGroup>

@@ -43,6 +43,12 @@
     <Filter Include="Header Files\FluidSimulation">
       <UniqueIdentifier>{ddfb559d-4bb2-4f80-94c6-c86bdc40de64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SimAnim">
+      <UniqueIdentifier>{3c3cb48b-52ab-4071-98f9-a9da33dd242c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SimAnim">
+      <UniqueIdentifier>{951047f2-6b33-46ed-acc5-b6ba0f26d2d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\main.cpp">
@@ -66,6 +72,9 @@
     <ClCompile Include="..\..\examples\FluidSimulation\FluidSimulation.cpp">
       <Filter>Source Files\FluidSimulation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\SimAnim\SimAnim.cpp">
+      <Filter>Source Files\SimAnim</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Constants\Constants.hpp">
@@ -85,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\FluidSimulation\FluidSimulation.hpp">
       <Filter>Header Files\FluidSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\SimAnim\SimAnim.hpp">
+      <Filter>Header Files\SimAnim</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,6 +36,7 @@ TESTS_OBJS = $(OBJ_TESTS_DIR)/main.o \
 			 $(OBJ_TESTS_DIR)/Polynomial.o \
 			 $(OBJ_TESTS_DIR)/Mat.o
 EXAMPLES_OBJS = $(OBJ_EXAMPLES_DIR)/main.o \
+				$(OBJ_EXAMPLES_DIR)/SimAnim/SimAnim.o \
 				$(OBJ_EXAMPLES_DIR)/Constants/Constants.o \
 				$(OBJ_EXAMPLES_DIR)/FluidSimulation/FluidSimulation.o \
 				$(OBJ_EXAMPLES_DIR)/ImageProcessing/ImageProcessing.o \
@@ -49,13 +50,13 @@ CC = g++
 # Compiler options
 LIBRARY_CFLAGS = -I$(INCLUDE_DIR) -fpic
 TESTS_CFLAGS = -I$(INCLUDE_DIR) -g
-EXAMPLES_CFLAGS = -I$(INCLUDE_DIR)
+EXAMPLES_CFLAGS = -I$(INCLUDE_DIR) -fopenmp -std=c++17
 # Linker options
 LDFLAGS = -L$(LIB_DIR) -Wl,-rpath=$(LIB_DIR)
 # Libraries linked
 LIBRARY_LDLIBS = 
 TESTS_LDLIBS = -lSciPP -lgtest -lpthread
-EXAMPLES_LDLIBS = -lSciPP -lpthread
+EXAMPLES_LDLIBS = -lSciPP -lpthread -lomp -lstdc++fs
 
 
 ###############################################################################
@@ -93,7 +94,7 @@ tests: $(LIB_DIR) $(TESTS_OBJS)
 folders:
 	-rm -rf $(LIB_DIR)/libSciPP.so $(OBJ_DIR) $(BUILD_DIR)
 	mkdir $(OBJ_DIR) $(OBJ_TESTS_DIR) $(OBJ_EXAMPLES_DIR) $(OBJ_LIBRARY_DIR)
-	mkdir $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/FluidSimulation $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
+	mkdir $(OBJ_EXAMPLES_DIR)/SimAnim $(OBJ_EXAMPLES_DIR)/Constants $(OBJ_EXAMPLES_DIR)/FluidSimulation $(OBJ_EXAMPLES_DIR)/ImageProcessing $(OBJ_EXAMPLES_DIR)/Misc $(OBJ_EXAMPLES_DIR)/stb_image
 	mkdir $(BUILD_DIR)
 
 
