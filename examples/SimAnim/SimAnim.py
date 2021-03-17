@@ -3,6 +3,7 @@
 import sys
 import os
 import shutil
+import numpy as np
 from math import log10
 from PIL import Image
 
@@ -15,6 +16,8 @@ Usage: [python3 SimAnim.py | ./SimAnim.py] [-f framerate] [-t begin:end] [-l len
 
 
 def create_animation(input_dir, framerate, t_range, length):
+
+    print("Reading timetable...")
 
     anim_dir = os.path.join(input_dir, "anim")
     tmp_dir = os.path.join(anim_dir, "tmp")
@@ -37,11 +40,28 @@ def create_animation(input_dir, framerate, t_range, length):
         image_indices.append(i)
         t += step
 
+    print("Computing min and max...")
+
     digit_count = int(log10(image_count)) + 1
+    input_paths = list()
+    output_paths = list()
+    min_value, max_value = float("inf"), float("-inf")
     for i, index in enumerate(image_indices):
-        output_path = os.path.join(tmp_dir, "0"*(digit_count - len(str(i))) + str(i) + ".png")
-        input_path = os.path.join(input_dir, "frame" + str(index) + ".txt")
-        create_image(input_path, output_path)
+        if i % (image_count//100 + 1) == 0:
+            print(int(100*i/image_count), "%")
+        input_paths.append(os.path.join(input_dir, "frame" + str(index) + ".txt"))
+        output_paths.append(os.path.join(tmp_dir, "0"*(digit_count - len(str(i))) + str(i) + ".png"))
+        with open(input_paths[-1], "r") as file:
+            mat = [[float(x) for x in line.split(" ")] for line in file.read().split("\n")[:-1]]
+        min_value = min(min_value, np.amin(mat))
+        max_value = max(max_value, np.amax(mat))
+
+    print("Rendering frames...")
+
+    for i in range(image_count):
+        if i % (image_count//100 + 1) == 0:
+            print(int(100*i/image_count), "%")
+        create_image(input_paths[i], output_paths[i], min_value, max_value)
 
     command = "ffmpeg -r " + str(framerate)
     command += " -i " + os.path.join(tmp_dir, "%0" + str(digit_count) + "d.png")
@@ -49,16 +69,15 @@ def create_animation(input_dir, framerate, t_range, length):
     os.system(command)
 
 
-def create_image(input_filename, output_filename):
+def create_image(input_filename, output_filename, min_value, max_value):
 
     with open(input_filename, "r") as file:
         mat = [[float(x) for x in line.split(" ")] for line in file.read().split("\n")[:-1]]
 
-    min_x, max_x = -75, 75
     img = Image.new("RGB", (len(mat[0]), len(mat)))
     for l, line in enumerate(mat):
         for r, x in enumerate(line):
-            x = int(max(min((x - min_x)/(max_x - min_x), 1), 0)*255)
+            x = int(max(min((x - min_value)/(max_value - min_value), 1), 0)*255)
             img.putpixel((l, r), (x, x, x))
 
     img.save(output_filename)
@@ -114,6 +133,8 @@ def main(args):
     if input_dir == str():
         print("Missing input and output directories.")
         print_brief_usage(1)
+
+    print("Initialization...")
 
     anim_dir = os.path.join(input_dir, "anim")
     tmp_dir = os.path.join(anim_dir, "tmp")
