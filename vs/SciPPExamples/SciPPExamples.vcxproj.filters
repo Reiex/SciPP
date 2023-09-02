@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Constants">
+      <UniqueIdentifier>{408d2f7d-2f86-470c-a38b-e8f5b1d17888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Constants">
+      <UniqueIdentifier>{674db033-ecb6-4d3a-805e-e8d88fac62d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stb_image">
+      <UniqueIdentifier>{d469a158-a69d-4e1e-8bff-8517ea804f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\stb_image">
+      <UniqueIdentifier>{60a69e85-a2e3-4732-85e2-01532a3918df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{05f09389-3fdc-4e50-af98-d5ac358d2b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Misc">
+      <UniqueIdentifier>{ac2955c1-4db8-4168-812e-f0f9c444d238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImageProcessing">
+      <UniqueIdentifier>{5036274c-c046-4e35-af42-cdc82019c748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImageProcessing">
+      <UniqueIdentifier>{31520787-47fa-4140-a0bf-887b2f0b1d9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FluidSimulation">
+      <UniqueIdentifier>{5ce01126-3949-4d78-948f-021632352d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FluidSimulation">
+      <UniqueIdentifier>{ddfb559d-4bb2-4f80-94c6-c86bdc40de64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SimAnim">
+      <UniqueIdentifier>{3c3cb48b-52ab-4071-98f9-a9da33dd242c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SimAnim">
+      <UniqueIdentifier>{951047f2-6b33-46ed-acc5-b6ba0f26d2d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MoleDyn">
+      <UniqueIdentifier>{b9c0b28a-364f-40e7-9c09-2e8da81e669b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MoleDyn">
+      <UniqueIdentifier>{364fafff-0e56-4633-8da0-796652b3b12a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\examples\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Constants\Constants.cpp">
+      <Filter>Source Files\Constants</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\stb_image\stb_image.cpp">
+      <Filter>Source Files\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Misc\Misc.cpp">
+      <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\stb_image\stb_image_write.cpp">
+      <Filter>Source Files\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\ImageProcessing\ImageProcessing.cpp">
+      <Filter>Source Files\ImageProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\FluidSimulation\FluidSimulation.cpp">
+      <Filter>Source Files\FluidSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\SimAnim\SimAnim.cpp">
+      <Filter>Source Files\SimAnim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\MoleDyn\MoleDyn.cpp">
+      <Filter>Source Files\MoleDyn</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\examples\Constants\Constants.hpp">
+      <Filter>Header Files\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\stb_image\stb_image.h">
+      <Filter>Header Files\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\Misc\Misc.hpp">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\stb_image\stb_image_write.h">
+      <Filter>Header Files\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\ImageProcessing\ImageProcessing.hpp">
+      <Filter>Header Files\ImageProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\FluidSimulation\FluidSimulation.hpp">
+      <Filter>Header Files\FluidSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\SimAnim\SimAnim.hpp">
+      <Filter>Header Files\SimAnim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\MoleDyn\MoleDyn.hpp">
+      <Filter>Header Files\MoleDyn</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

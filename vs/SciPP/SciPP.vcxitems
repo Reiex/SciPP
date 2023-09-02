@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{14236440-5345-4adb-ad07-a4cdcbc497fb}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\BigInt.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Core.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\CoreDecl.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\CoreTypes.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Frac.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Graph.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Mat.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\misc.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Quat.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Rational.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\BigInt.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Frac.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Graph.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Mat.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\misc.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Quat.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Rational.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\SpTensor.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\SpTensor.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\Tensor.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\TensorBase.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\Tensor.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\TensorBase.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Vec.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\SciPP.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\SciPPDecl.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\SciPPTypes.hpp" />
+  </ItemGroup>
+</Project>
