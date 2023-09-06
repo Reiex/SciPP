@@ -1260,7 +1260,8 @@ namespace scp
 		}
 		else
 		{
-			std::vector<bool> visited(_length, false);
+			bool* visited = new bool[_length];
+			std::fill_n(visited, _length, false);
 			visited[0] = true;
 			visited[_length - 1] = true;
 
@@ -1294,6 +1295,8 @@ namespace scp
 			}
 
 			std::swap(_sizes[0], _sizes[1]);
+
+			delete[] visited;
 		}
 	}
 
