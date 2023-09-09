@@ -1,5 +1,5 @@
 #include "MoleDyn.hpp"
-#include "../SimAnim/SimAnim.hpp"
+#include "SimAnim.hpp"
 
 
 namespace

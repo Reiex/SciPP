@@ -232,65 +232,65 @@ namespace scp
 		return _edgeMap;
 	}
 
-	template<typename TNode, typename TEdge>
-	template<CTensor<TEdge> TTensor>
-	void Graph<TNode, TEdge>::setFromAdjacencyMatrix(const TTensor& matrix, const std::vector<TNode>& nodeValues)
-	{
-		assert(matrix.getOrder() == 2);
-		assert(matrix.getSize(0) == matrix.getSize(1));
-		assert(matrix.getSize(0) == nodeValues.size());
-
-		clear();
-
-		const uint64_t m = matrix.getSize(0);
-		const uint64_t n = matrix.getElementCount();
-
-		std::vector<uint64_t> nodes(m);
-		for (uint64_t i = 0; i < m; ++i)
-		{
-			nodes[i] = addNode(nodeValues[i]);
-		}
-
-		for (uint64_t i = 0; i < n; ++i)
-		{
-			const TEdge& value = matrix.get(i);
-			if (value != _zeroEdge)
-			{
-				addEdge(nodes[i / m], nodes[i % m], value);
-			}
-		}
-	}
-
-	template<typename TNode, typename TEdge>
-	template<CTensor<TEdge> TTensor>
-	void Graph<TNode, TEdge>::getAdjacencyMatrix(TTensor& matrix, std::vector<TNode>& nodeValues) const
-	{
-		assert(matrix.getSize(0) == _nodes.size());
-		assert(matrix.getSize(1) == _nodes.size());
-
-		matrix.fill(_zeroEdge);
-		nodeValues.resize(_nodes.size());
-
-		std::unordered_map<uint64_t, uint64_t> nodeIndices;
-
-		uint64_t i = 0;
-		for (const std::pair<uint64_t, TNode>& node : _nodes)
-		{
-			nodeIndices[node.first] = i;
-			nodeValues[i] = node.second;
-			++i;
-		}
-
-		for (const std::pair<uint64_t, std::tuple<uint64_t, uint64_t, TEdge>>& edge : _edges)
-		{
-			uint64_t nodeIndexFrom = nodeIndices[std::get<0>(edge.second)];
-			uint64_t nodeIndexTo = nodeIndices[std::get<1>(edge.second)];
-
-			assert(matrix.get({ nodeIndexFrom, nodeIndexTo }) == 0);
-
-			matrix.set({ nodeIndexFrom, nodeIndexTo }, std::get<2>(edge.second));
-		}
-	}
+	// template<typename TNode, typename TEdge>
+	// template<CTensor<TEdge> Tensor<TValue>>
+	// void Graph<TNode, TEdge>::setFromAdjacencyMatrix(const Tensor<TValue>& matrix, const std::vector<TNode>& nodeValues)
+	// {
+	// 	assert(matrix.getOrder() == 2);
+	// 	assert(matrix.getSize(0) == matrix.getSize(1));
+	// 	assert(matrix.getSize(0) == nodeValues.size());
+	// 
+	// 	clear();
+	// 
+	// 	const uint64_t m = matrix.getSize(0);
+	// 	const uint64_t n = matrix.getElementCount();
+	// 
+	// 	std::vector<uint64_t> nodes(m);
+	// 	for (uint64_t i = 0; i < m; ++i)
+	// 	{
+	// 		nodes[i] = addNode(nodeValues[i]);
+	// 	}
+	// 
+	// 	for (uint64_t i = 0; i < n; ++i)
+	// 	{
+	// 		const TEdge& value = matrix.get(i);
+	// 		if (value != _zeroEdge)
+	// 		{
+	// 			addEdge(nodes[i / m], nodes[i % m], value);
+	// 		}
+	// 	}
+	// }
+	// 
+	// template<typename TNode, typename TEdge>
+	// template<CTensor<TEdge> Tensor<TValue>>
+	// void Graph<TNode, TEdge>::getAdjacencyMatrix(Tensor<TValue>& matrix, std::vector<TNode>& nodeValues) const
+	// {
+	// 	assert(matrix.getSize(0) == _nodes.size());
+	// 	assert(matrix.getSize(1) == _nodes.size());
+	// 
+	// 	matrix.fill(_zeroEdge);
+	// 	nodeValues.resize(_nodes.size());
+	// 
+	// 	std::unordered_map<uint64_t, uint64_t> nodeIndices;
+	// 
+	// 	uint64_t i = 0;
+	// 	for (const std::pair<uint64_t, TNode>& node : _nodes)
+	// 	{
+	// 		nodeIndices[node.first] = i;
+	// 		nodeValues[i] = node.second;
+	// 		++i;
+	// 	}
+	// 
+	// 	for (const std::pair<uint64_t, std::tuple<uint64_t, uint64_t, TEdge>>& edge : _edges)
+	// 	{
+	// 		uint64_t nodeIndexFrom = nodeIndices[std::get<0>(edge.second)];
+	// 		uint64_t nodeIndexTo = nodeIndices[std::get<1>(edge.second)];
+	// 
+	// 		assert(matrix.get({ nodeIndexFrom, nodeIndexTo }) == 0);
+	// 
+	// 		matrix.set({ nodeIndexFrom, nodeIndexTo }, std::get<2>(edge.second));
+	// 	}
+	// }
 
 	template<typename TNode, typename TEdge>
 	void Graph<TNode, TEdge>::dijkstra(PathfindingResult& result, uint64_t nodeIdFrom, uint64_t nodeIdTo) const

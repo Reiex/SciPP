@@ -13,7 +13,7 @@ namespace scp
 {
 	constexpr TensorShapeIterator::TensorShapeIterator(const TensorShape* shape, bool end) :
 		_shape(shape),
-		_pos{ nullptr, 0 }
+		_pos{ 0, nullptr }
 	{
 		assert(_shape);
 
@@ -29,7 +29,7 @@ namespace scp
 
 	constexpr TensorShapeIterator::TensorShapeIterator(const TensorShapeIterator& iterator) :
 		_shape(iterator._shape),
-		_pos{ nullptr, iterator._pos.index }
+		_pos{ iterator._pos.index, nullptr }
 	{
 		_pos.indices = new uint64_t[_shape->order];
 		std::copy_n(iterator._pos.indices, _shape->order, _pos.indices);
@@ -37,7 +37,7 @@ namespace scp
 
 	constexpr TensorShapeIterator::TensorShapeIterator(TensorShapeIterator&& iterator) :
 		_shape(iterator._shape),
-		_pos{ iterator._pos.indices, iterator._pos.index }
+		_pos{ iterator._pos.index, iterator._pos.indices }
 	{
 		iterator._pos.indices = nullptr;
 	}
@@ -62,8 +62,8 @@ namespace scp
 		delete[] _pos.indices;
 
 		_shape = iterator._shape;
-		_pos.indices = iterator._pos.indices;
 		_pos.index = iterator._pos.index;
+		_pos.indices = iterator._pos.indices;
 
 		iterator._pos.indices = nullptr;
 
@@ -82,14 +82,14 @@ namespace scp
 
 	constexpr TensorShapeIterator& TensorShapeIterator::operator++()
 	{
+		++_pos.index;
+
 		uint64_t i = _shape->order - 1;
 		for (; _pos.indices[i] == _shape->sizes[i] - 1 && i != 0; --i)
 		{
 			_pos.indices[i] = 0;
 		}
 		++_pos.indices[i];
-
-		++_pos.index;
 
 		return *this;
 	}
@@ -160,159 +160,5 @@ namespace scp
 	constexpr TensorShapeIterator TensorShape::end() const
 	{
 		return TensorShapeIterator(this, true);
-	}
-
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator+(const TTensor& a, const TTensor& b)
-	{
-		TTensor c(a);
-		c += b;
-		return c;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator+(TTensor&& a, const TTensor& b)
-	{
-		a += b;
-		return std::forward<TTensor>(a);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator+(const TTensor& a, TTensor&& b)
-	{
-		b += a;
-		return std::forward<TTensor>(b);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator+(TTensor&& a, TTensor&& b)
-	{
-		a += b;
-		return std::forward<TTensor>(a);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator-(const TTensor& a, const TTensor& b)
-	{
-		TTensor c(a);
-		c -= b;
-		return c;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator-(TTensor&& a, const TTensor& b)
-	{
-		a -= b;
-		return std::forward<TTensor>(a);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator-(const TTensor& a, TTensor&& b)
-	{
-		b -= a;
-		return -std::forward<TTensor>(b);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator-(TTensor&& a, TTensor&& b)
-	{
-		a -= b;
-		return std::forward<TTensor>(a);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator*(const TTensor& tensor, const typename TTensor::ValueType& value)
-	{
-		TTensor result(tensor);
-		result *= value;
-		return result;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator*(TTensor&& tensor, const typename TTensor::ValueType& value)
-	{
-		tensor *= value;
-		return std::forward<TTensor>(tensor);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator*(const typename TTensor::ValueType& value, const TTensor& tensor)
-	{
-		TTensor result(tensor);
-		result *= value;
-		return result;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator*(const typename TTensor::ValueType& value, TTensor&& tensor)
-	{
-		tensor *= value;
-		return std::forward<TTensor>(tensor);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator/(const TTensor& tensor, const typename TTensor::ValueType& value)
-	{
-		TTensor result(tensor);
-		result /= value;
-		return result;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator/(TTensor&& tensor, const typename TTensor::ValueType& value)
-	{
-		tensor /= value;
-		return std::forward<TTensor>(tensor);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator-(const TTensor& tensor)
-	{
-		TTensor result(tensor);
-		result.negate();
-		return result;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator-(TTensor&& tensor)
-	{
-		tensor.negate();
-		return std::forward<TTensor>(tensor);
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor operator+(const TTensor& tensor)
-	{
-		return tensor;
-	}
-	
-	template<CUntypedTensor TTensor>
-	constexpr TTensor&& operator+(TTensor&& tensor)
-	{
-		return std::forward<TTensor>(tensor);
-	}
-
-	template<CUntypedMatrix TMatrix>
-	TMatrix operator*(const TMatrix& a, const TMatrix& b)
-	{
-		TMatrix c(a.getSize(0), b.getSize(1));
-		c.matrixProduct(a, b);
-		return c;
-	}
-
-	template<CUntypedVector TVector, CUntypedMatrix TMatrix>
-	TVector operator*(const TVector& vector, const TMatrix& matrix)
-	{
-		TVector result(matrix.getSize(1));
-		result.rightMatrixProduct(vector, matrix);
-		return result;
-	}
-
-	template<CUntypedMatrix TMatrix, CUntypedVector TVector>
-	TVector operator*(const TMatrix& matrix, const TVector& vector)
-	{
-		TVector result(matrix.getSize(0));
-		result.leftMatrixProduct(matrix, vector);
-		return result;
 	}
 }

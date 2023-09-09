@@ -174,25 +174,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\Constants\Constants.cpp" />
-    <ClCompile Include="..\..\examples\FluidSimulation\FluidSimulation.cpp" />
-    <ClCompile Include="..\..\examples\ImageProcessing\ImageProcessing.cpp" />
+    <ClCompile Include="..\..\examples\Constants.cpp" />
+    <ClCompile Include="..\..\examples\FluidSimulation.cpp" />
     <ClCompile Include="..\..\examples\main.cpp" />
-    <ClCompile Include="..\..\examples\Misc\Misc.cpp" />
-    <ClCompile Include="..\..\examples\MoleDyn\MoleDyn.cpp" />
-    <ClCompile Include="..\..\examples\SimAnim\SimAnim.cpp" />
-    <ClCompile Include="..\..\examples\stb_image\stb_image.cpp" />
-    <ClCompile Include="..\..\examples\stb_image\stb_image_write.cpp" />
+    <ClCompile Include="..\..\examples\MoleDyn.cpp" />
+    <ClCompile Include="..\..\examples\SimAnim.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\examples\Constants\Constants.hpp" />
-    <ClInclude Include="..\..\examples\FluidSimulation\FluidSimulation.hpp" />
-    <ClInclude Include="..\..\examples\ImageProcessing\ImageProcessing.hpp" />
-    <ClInclude Include="..\..\examples\Misc\Misc.hpp" />
-    <ClInclude Include="..\..\examples\MoleDyn\MoleDyn.hpp" />
-    <ClInclude Include="..\..\examples\SimAnim\SimAnim.hpp" />
-    <ClInclude Include="..\..\examples\stb_image\stb_image.h" />
-    <ClInclude Include="..\..\examples\stb_image\stb_image_write.h" />
+    <ClInclude Include="..\..\examples\Constants.hpp" />
+    <ClInclude Include="..\..\examples\FluidSimulation.hpp" />
+    <ClInclude Include="..\..\examples\MoleDyn.hpp" />
+    <ClInclude Include="..\..\examples\SimAnim.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

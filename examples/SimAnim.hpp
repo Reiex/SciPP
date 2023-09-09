@@ -5,8 +5,6 @@
 #include <cstdlib>
 #include <filesystem>
 
-#include <SciPP/Core/Tensor/Tensor.hpp>
-
 namespace fs = std::filesystem;
 
 namespace simanim

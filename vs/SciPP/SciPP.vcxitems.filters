@@ -7,12 +7,6 @@
     <Filter Include="Core\templates">
       <UniqueIdentifier>{77ae850c-1499-4ac3-bcc9-2e0664830e5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Tensor">
-      <UniqueIdentifier>{ec50e85a-007d-49d1-bd2c-c25eaf4ba3ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Tensor\templates">
-      <UniqueIdentifier>{fab73ea3-a236-4de5-8c09-f8957226ee15}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\SciPP.hpp" />
@@ -72,23 +66,35 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Rational.hpp">
       <Filter>Core\templates</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\SpTensor.hpp">
-      <Filter>Core\Tensor</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\SpTensor.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\Tensor.hpp">
-      <Filter>Core\Tensor</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\TensorBase.hpp">
-      <Filter>Core\Tensor</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\TensorUtils.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\SpTensor.hpp">
-      <Filter>Core\Tensor\templates</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\SpTensor.hpp">
+      <Filter>Core\templates</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\Tensor.hpp">
-      <Filter>Core\Tensor\templates</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Tensor.hpp">
+      <Filter>Core\templates</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Tensor\templates\TensorBase.hpp">
-      <Filter>Core\Tensor\templates</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\TensorUtils.hpp">
+      <Filter>Core\templates</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Matrix.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\Vector.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Matrix.hpp">
+      <Filter>Core\templates</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\include\SciPP\Core\templates\Vector.hpp">
+      <Filter>Core\templates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

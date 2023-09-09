@@ -10,7 +10,6 @@
 
 #include <SciPP/Core/CoreDecl.hpp>
 
-
 #include <SciPP/Core/templates/misc.hpp>
 
 #include <SciPP/Core/templates/Mat.hpp>
@@ -20,10 +19,10 @@
 #include <SciPP/Core/templates/Rational.hpp>
 #include <SciPP/Core/templates/Quat.hpp>
 
-
-#include <SciPP/Core/Tensor/templates/TensorBase.hpp>
-#include <SciPP/Core/Tensor/templates/Tensor.hpp>
-#include <SciPP/Core/Tensor/templates/SpTensor.hpp>
-
+#include <SciPP/Core/templates/TensorUtils.hpp>
+#include <SciPP/Core/templates/Tensor.hpp>
+#include <SciPP/Core/templates/Matrix.hpp>
+#include <SciPP/Core/templates/Vector.hpp>
+#include <SciPP/Core/templates/SpTensor.hpp>
 
 #include <SciPP/Core/templates/Graph.hpp>

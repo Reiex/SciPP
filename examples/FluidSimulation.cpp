@@ -1,5 +1,5 @@
 #include "FluidSimulation.hpp"
-#include "../SimAnim/SimAnim.hpp"
+#include "SimAnim.hpp"
 
 
 namespace 
@@ -64,14 +64,14 @@ namespace
 		double c;
 
 		{
-			scp::Vector<double> WCopy(Nx);
+			scp::Vector<double> WCopy(Nx), WCopyCopy(Nx);
 			for (i = 0; i < Ny; i++)
 			{
 				for (uint64_t k = 0; k < Nx; ++k)
 				{
 					c = Ux[{i, k}] * dtUsed / dx;
-					WCopy[k] = (1.0 - c * c) * W[{i, k}] + (c / 2) * (c - 1) * W[{i, (k + 1) % Nx}];
-					c = Ux[{i, (Nx + k - 1) % Nx}] * dtUsed / dx;
+					WCopy[k] = (1.0 - c * c) * W[{i, k}] + (c / 2) * (c - 1) * W[{ i, (k + 1) % Nx }];
+					c = Ux[{ i, (Nx + k - 1) % Nx }] * dtUsed / dx;
 					WCopy[k] += (c / 2) * (1 + c) * W[{i, (Nx + k - 1) % Nx}];
 				}
 
@@ -84,7 +84,7 @@ namespace
 		}
 
 		{
-			scp::Vector<double> WCopy(Ny);
+			scp::Vector<double> WCopy(Ny), WCopyCopy(Ny);
 			for (i = 0; i < Nx; i++)
 			{
 				for (uint64_t k = 0; k < Ny; ++k)
@@ -113,7 +113,7 @@ namespace
 		const uint64_t N = Nx * Ny;
 
 		scp::Matrix<std::complex<double>> WHat(Ny, Nx);
-		WHat.copy(W.getData());
+		std::copy(W.cbegin(), W.cend(), WHat.begin());
 		WHat.fft();
 
 		scp::Vector<std::complex<double>> kx(Nx), ky(Ny);
@@ -203,8 +203,8 @@ void simuFluide2D(const std::string& name, uint64_t Nx, uint64_t Ny, double tSim
 
 		velocityFromCurl(W, Ux, Uy, Lx, Ly);
 
-		dtx = dx / std::abs(Ux.maxElement([](double x, double y) { return std::abs(x) < std::abs(y); }));
-		dty = dy / std::abs(Uy.maxElement([](double x, double y) { return std::abs(x) < std::abs(y); }));
+		dtx = dx / std::abs(*std::max_element(Ux.begin(), Ux.end(), [](double x, double y) { return std::abs(x) < std::abs(y); }));
+		dty = dy / std::abs(*std::max_element(Uy.begin(), Uy.end(), [](double x, double y) { return std::abs(x) < std::abs(y); }));
 		dt = std::min(dtx, dty);
 
 		saveThread.join();

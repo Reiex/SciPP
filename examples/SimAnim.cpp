@@ -39,7 +39,7 @@ namespace simanim
 		std::vector<double> data(frame.getSize(0) * frame.getSize(1));
 		for (uint64_t i(0); i < frame.getSize(0); i++)
 			for (uint64_t j(0); j < frame.getSize(1); j++)
-				data[i*frame.getSize(1) + j] = frame[{i, j}];
+				data[i * frame.getSize(1) + j] = frame[{i, j}];
 		frameFile.write((char*) data.data(), data.size()*8);
 		frameFile.close();
 	}
