@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,6 +107,9 @@ namespace scp
 			constexpr Tensor();
 
 			constexpr void _ndCooleyTukey(TValue* beg, uint64_t order, const TValue* const* bases);
+
+			static constexpr TValue _zero = 0;
+			static constexpr TValue _one = 1;
 			
 			TensorShape _shape;
 			uint64_t _length;

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,13 +16,13 @@ namespace scp
 		template<typename TValue, typename TScalar>
 		constexpr TValue lerp(const Tensor<TValue>& tensor, const uint64_t& order, const uint64_t* sizes, uint64_t* indices, const TScalar* coeffs, uint64_t n)
 		{
+			constexpr TScalar zero = 0;
+			constexpr TScalar one = 1;
+
 			if (n == order)
 			{
 				return tensor.get(indices);
 			}
-
-			static constexpr TScalar zero = 0;
-			static constexpr TScalar one = 1;
 
 			const TScalar& t = coeffs[n];
 			uint64_t& index = indices[n];
@@ -52,13 +52,13 @@ namespace scp
 		template<typename TValue, typename TScalar>
 		constexpr TValue cerp(const Tensor<TValue>& tensor, const uint64_t& order, const uint64_t* sizes, uint64_t* indices, const TScalar* coeffs, uint64_t n)
 		{
+			constexpr TScalar zero = 0;
+			constexpr TScalar one = 1;
+
 			if (n == order)
 			{
 				return tensor.get(indices);
 			}
-
-			static constexpr TScalar zero = 0;
-			static constexpr TScalar one = 1;
 
 			const TScalar& t = coeffs[n];
 			uint64_t& index = indices[n];
@@ -390,8 +390,6 @@ namespace scp
 		{
 			*values *= *tensorValues;
 		}
-
-		return *this;
 	}
 
 	template<typename TValue>
@@ -676,13 +674,11 @@ namespace scp
 	{
 		if constexpr (BBehaviour == BorderBehaviour::Zero)
 		{
-			static constexpr TValue zero = 0;
-
 			for (uint64_t i = 0; i < _shape.order; ++i)
 			{
 				if (indices[i] < 0 || indices[i] >= _shape.sizes[i])
 				{
-					return zero;
+					return _zero;
 				}
 			}
 

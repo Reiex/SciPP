@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace scp
 
 		private:
 
-			static constexpr TBuffer _baseBitSize = sizeof(TBase) * CHAR_BIT;
+			static constexpr TBuffer _baseBitSize = sizeof(TBase) * 8;
 			static constexpr TBuffer _baseEnd = TBuffer(1) << _baseBitSize;
 			static constexpr TBuffer _baseMax = _baseEnd - 1;
 			static constexpr TBuffer _bufferLowFilter = _baseMax;
@@ -71,8 +71,8 @@ namespace scp
 			std::vector<TBase> _values;
 			bool _positive;
 
-			template<typename TBase, typename TBuffer> friend constexpr std::ostream& operator<<(std::ostream& stream, const BigInt<TBase, TBuffer>& x);
-			template<typename TBase, typename TBuffer> friend constexpr std::istream& operator>>(std::istream& stream, BigInt<TBase, TBuffer>& x);
+		template<typename T, typename U> friend constexpr std::ostream& operator<<(std::ostream& stream, const BigInt<T, U>& x);
+		template<typename T, typename U> friend constexpr std::istream& operator>>(std::istream& stream, BigInt<T, U>& x);
 	};
 
 	template<typename TBase, typename TBuffer>

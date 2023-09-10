@@ -20,7 +20,7 @@ scp::Rational<> neper(uint64_t n)
 
 scp::Rational<> squareRoot(uint64_t x, uint64_t n)
 {
-	uint64_t y = 1;
+	int64_t y = 1;
 	while (y*y < x)
 	{
 		++y;

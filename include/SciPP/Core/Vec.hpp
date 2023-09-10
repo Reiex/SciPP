@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,30 +31,30 @@ SCP_VEC_SPECIAL_FUNC(vecName, vecSize, eltType)
 
 // Vec constructors
 
-#define SCP_VEC2_CONSTRUCTORS(vecName, vecSize, eltType)																											\
-eltType x, y;																																						\
-constexpr vecName##2() = default; 																																	\
-constexpr vecName##2(eltType value) : x(value), y(value) {} 																										\
-constexpr vecName##2(eltType xValue, eltType yValue) : x(xValue), y(yValue) {}																						\
+#define SCP_VEC2_CONSTRUCTORS(vecName, vecSize, eltType)																				\
+eltType x, y;																															\
+constexpr vecName##2() = default; 																										\
+constexpr vecName##2(eltType value) : x(value), y(value) {} 																			\
+constexpr vecName##2(eltType xValue, eltType yValue) : x(xValue), y(yValue) {}															\
 
-#define SCP_VEC3_CONSTRUCTORS(vecName, vecSize, eltType)																											\
-eltType x, y, z;																																					\
-constexpr vecName##3() = default;																																	\
-constexpr vecName##3(eltType value) : x(value), y(value), z(value) {}																								\
-constexpr vecName##3(eltType xValue, eltType yValue, eltType zValue) : x(xValue), y(yValue), z(zValue) {}															\
-constexpr vecName##3(const vecName##2& v, eltType zValue) : x(v.x), y(v.y), z(zValue) {}																			\
+#define SCP_VEC3_CONSTRUCTORS(vecName, vecSize, eltType)																				\
+eltType x, y, z;																														\
+constexpr vecName##3() = default;																										\
+constexpr vecName##3(eltType value) : x(value), y(value), z(value) {}																	\
+constexpr vecName##3(eltType xValue, eltType yValue, eltType zValue) : x(xValue), y(yValue), z(zValue) {}								\
+constexpr vecName##3(const vecName##2& v, eltType zValue) : x(v.x), y(v.y), z(zValue) {}												\
 constexpr vecName##3(eltType xValue, const vecName##2& v) : x(xValue), y(v.x), z(v.y) {}
 
-#define SCP_VEC4_CONSTRUCTORS(vecName, vecSize, eltType)																											\
-eltType x, y, z, w;																																					\
-constexpr vecName##4() = default;																																	\
-constexpr vecName##4(eltType value) : x(value), y(value), z(value), w(value) {}																						\
-constexpr vecName##4(eltType xValue, eltType yValue, eltType zValue, eltType wValue) : x(xValue), y(yValue), z(zValue), w(wValue) {}								\
-constexpr vecName##4(const vecName##2& v, eltType zValue, eltType wValue) : x(v.x), y(v.y), z(zValue), w(wValue) {}													\
-constexpr vecName##4(eltType xValue, const vecName##2& v, eltType wValue) : x(xValue), y(v.x), z(v.y), w(wValue) {}													\
-constexpr vecName##4(eltType xValue, eltType yValue, const vecName##2& v) : x(xValue), y(yValue), z(v.x), w(v.y) {}													\
-constexpr vecName##4(const vecName##2& u, const vecName##2& v) : x(u.x), y(u.y), z(v.x), w(v.y) {}																	\
-constexpr vecName##4(const vecName##3& v, eltType wValue) : x(v.x), y(v.y), z(v.z), w(wValue) {}																	\
+#define SCP_VEC4_CONSTRUCTORS(vecName, vecSize, eltType)																				\
+eltType x, y, z, w;																														\
+constexpr vecName##4() = default;																										\
+constexpr vecName##4(eltType value) : x(value), y(value), z(value), w(value) {}															\
+constexpr vecName##4(eltType xValue, eltType yValue, eltType zValue, eltType wValue) : x(xValue), y(yValue), z(zValue), w(wValue) {}	\
+constexpr vecName##4(const vecName##2& v, eltType zValue, eltType wValue) : x(v.x), y(v.y), z(zValue), w(wValue) {}						\
+constexpr vecName##4(eltType xValue, const vecName##2& v, eltType wValue) : x(xValue), y(v.x), z(v.y), w(wValue) {}						\
+constexpr vecName##4(eltType xValue, eltType yValue, const vecName##2& v) : x(xValue), y(yValue), z(v.x), w(v.y) {}						\
+constexpr vecName##4(const vecName##2& u, const vecName##2& v) : x(u.x), y(u.y), z(v.x), w(v.y) {}										\
+constexpr vecName##4(const vecName##3& v, eltType wValue) : x(v.x), y(v.y), z(v.z), w(wValue) {}										\
 constexpr vecName##4(eltType xValue, const vecName##3& v) : x(xValue), y(v.x), z(v.y), w(v.z) {}
 
 
@@ -227,73 +227,73 @@ SCP_VEC_EXTERNAL_OP_BITWISE(vecName, vecSize, eltType)
 SCP_VEC##vecSize##_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)
 
 
-#define SCP_VEC_EXTERNAL_OP_U_ARITH(vecName, vecSize, eltType)																				\
-constexpr vecName##vecSize operator+(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w += v; }	\
-constexpr vecName##vecSize operator-(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w -= v; }	\
-constexpr vecName##vecSize operator*(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w *= v; }	\
-constexpr vecName##vecSize operator/(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w /= v; }	\
+#define SCP_VEC_EXTERNAL_OP_U_ARITH(vecName, vecSize, eltType)																			\
+constexpr vecName##vecSize operator+(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w += v; }	\
+constexpr vecName##vecSize operator-(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w -= v; }	\
+constexpr vecName##vecSize operator*(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w *= v; }	\
+constexpr vecName##vecSize operator/(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w /= v; }	\
+																																		\
+constexpr vecName##vecSize operator+(const vecName##vecSize & u, eltType x) { vecName##vecSize v(u); return v += x; }					\
+constexpr vecName##vecSize operator-(const vecName##vecSize & u, eltType x) { vecName##vecSize v(u); return v -= x; }					\
+constexpr vecName##vecSize operator*(const vecName##vecSize & u, eltType x) { vecName##vecSize v(u); return v *= x; }					\
+constexpr vecName##vecSize operator/(const vecName##vecSize & u, eltType x) { vecName##vecSize v(u); return v /= x; }					\
+																																		\
+constexpr vecName##vecSize operator+(eltType x, const vecName##vecSize & u) { vecName##vecSize v(u); return v += x; }					\
+constexpr vecName##vecSize operator-(eltType x, const vecName##vecSize & u) { vecName##vecSize v(x); return v -= u; }					\
+constexpr vecName##vecSize operator*(eltType x, const vecName##vecSize & u) { vecName##vecSize v(u); return v *= x; }					\
+constexpr vecName##vecSize operator/(eltType x, const vecName##vecSize & u) { vecName##vecSize v(x); return v /= u; }
+
+
+#define SCP_VEC2_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)										\
+constexpr vecName##2 operator+(const vecName##2 & u) { return u; }									\
+constexpr vecName##2 operator-(const vecName##2 & u) { return vecName##2 (-u.x, -u.y); }
+
+#define SCP_VEC3_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)										\
+constexpr vecName##3 operator+(const vecName##3 & u) { return u; }									\
+constexpr vecName##3 operator-(const vecName##3 & u) { return vecName##3 (-u.x, -u.y, -u.z); }
+
+#define SCP_VEC4_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)										\
+constexpr vecName##4 operator+(const vecName##4 & u) { return u; }									\
+constexpr vecName##4 operator-(const vecName##4 & u) { return vecName##4 (-u.x, -u.y, -u.z, -u.w); }
+
+
+#define SCP_VEC_EXTERNAL_OP_BITWISE(vecName, vecSize, eltType)																				\
+constexpr vecName##vecSize operator|(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w |= v; }		\
+constexpr vecName##vecSize operator&(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w &= v; }		\
+constexpr vecName##vecSize operator^(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w ^= v; }		\
+constexpr vecName##vecSize operator>>(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w >>= v; }	\
+constexpr vecName##vecSize operator<<(const vecName##vecSize & u, const vecName##vecSize & v) { vecName##vecSize w(u); return w <<= v; }
+
+
+#define SCP_VEC2_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																				\
+constexpr vecName##2 operator||(const vecName##2 & u, const vecName##2 & v) { return { u.x || v.x, u.y || v.y }; }							\
+constexpr vecName##2 operator&&(const vecName##2 & u, const vecName##2 & v) { return { u.x && v.x, u.y && v.y }; }							\
 																																			\
-constexpr vecName##vecSize operator+(const vecName##vecSize##& u, eltType x) { vecName##vecSize v(u); return v += x; }						\
-constexpr vecName##vecSize operator-(const vecName##vecSize##& u, eltType x) { vecName##vecSize v(u); return v -= x; }						\
-constexpr vecName##vecSize operator*(const vecName##vecSize##& u, eltType x) { vecName##vecSize v(u); return v *= x; }						\
-constexpr vecName##vecSize operator/(const vecName##vecSize##& u, eltType x) { vecName##vecSize v(u); return v /= x; }						\
+constexpr vecName##2 operator||(const vecName##2 & u, eltType x) { return { u.x || x, u.y || x }; }											\
+constexpr vecName##2 operator&&(const vecName##2 & u, eltType x) { return { u.x && x, u.y && x }; }											\
 																																			\
-constexpr vecName##vecSize operator+(eltType x, const vecName##vecSize##& u) { vecName##vecSize v(u); return v += x; }						\
-constexpr vecName##vecSize operator-(eltType x, const vecName##vecSize##& u) { vecName##vecSize v(x); return v -= u; }						\
-constexpr vecName##vecSize operator*(eltType x, const vecName##vecSize##& u) { vecName##vecSize v(u); return v *= x; }						\
-constexpr vecName##vecSize operator/(eltType x, const vecName##vecSize##& u) { vecName##vecSize v(x); return v /= u; }
+constexpr vecName##2 operator||(eltType x, const vecName##2 & u) { return { x || u.x, x || u.y }; }											\
+constexpr vecName##2 operator&&(eltType x, const vecName##2 & u) { return { x && u.x, x && u.y }; }
 
+#define SCP_VEC3_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																				\
+constexpr vecName##3 operator||(const vecName##3 & u, const vecName##3 & v) { return { u.x || v.x, u.y || v.y, u.z || v.z }; }				\
+constexpr vecName##3 operator&&(const vecName##3 & u, const vecName##3 & v) { return { u.x && v.x, u.y && v.y, u.z && v.z }; }				\
+																																			\
+constexpr vecName##3 operator||(const vecName##3 & u, eltType x) { return { u.x || x, u.y || x, u.z || x }; }								\
+constexpr vecName##3 operator&&(const vecName##3 & u, eltType x) { return { u.x && x, u.y && x, u.z && x }; }								\
+																																			\
+constexpr vecName##3 operator||(eltType x, const vecName##3 & u) { return { x || u.x, x || u.y, x || u.z }; }								\
+constexpr vecName##3 operator&&(eltType x, const vecName##3 & u) { return { x && u.x, x && u.y, x && u.z }; }
 
-#define SCP_VEC2_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)									\
-constexpr vecName##2 operator+(const vecName##2##& u) { return u; }								\
-constexpr vecName##2 operator-(const vecName##2##& u) { return { -u.x, -u.y }; }
-
-#define SCP_VEC3_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)									\
-constexpr vecName##3 operator+(const vecName##3##& u) { return u; }								\
-constexpr vecName##3 operator-(const vecName##3##& u) { return { -u.x, -u.y, -u.z }; }
-
-#define SCP_VEC4_EXTERNAL_OP_S_ARITH(vecName, vecSize, eltType)									\
-constexpr vecName##4 operator+(const vecName##4##& u) { return u; }								\
-constexpr vecName##4 operator-(const vecName##4##& u) { return { -u.x, -u.y, -u.z, -u.w }; }
-
-
-#define SCP_VEC_EXTERNAL_OP_BITWISE(vecName, vecSize, eltType)																					\
-constexpr vecName##vecSize operator|(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w |= v; }		\
-constexpr vecName##vecSize operator&(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w &= v; }		\
-constexpr vecName##vecSize operator^(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w ^= v; }		\
-constexpr vecName##vecSize operator>>(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w >>= v; }		\
-constexpr vecName##vecSize operator<<(const vecName##vecSize##& u, const vecName##vecSize##& v) { vecName##vecSize w(u); return w <<= v; }
-
-
-#define SCP_VEC2_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																					\
-constexpr vecName##2 operator||(const vecName##2##& u, const vecName##2##& v) { return { u.x || v.x, u.y || v.y }; }							\
-constexpr vecName##2 operator&&(const vecName##2##& u, const vecName##2##& v) { return { u.x && v.x, u.y && v.y }; }							\
-																																				\
-constexpr vecName##2 operator||(const vecName##2##& u, eltType x) { return { u.x || x, u.y || x }; }											\
-constexpr vecName##2 operator&&(const vecName##2##& u, eltType x) { return { u.x && x, u.y && x }; }											\
-																																				\
-constexpr vecName##2 operator||(eltType x, const vecName##2##& u) { return { x || u.x, x || u.y }; }											\
-constexpr vecName##2 operator&&(eltType x, const vecName##2##& u) { return { x && u.x, x && u.y }; }
-
-#define SCP_VEC3_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																					\
-constexpr vecName##3 operator||(const vecName##3##& u, const vecName##3##& v) { return { u.x || v.x, u.y || v.y, u.z || v.z }; }				\
-constexpr vecName##3 operator&&(const vecName##3##& u, const vecName##3##& v) { return { u.x && v.x, u.y && v.y, u.z && v.z }; }				\
-																																				\
-constexpr vecName##3 operator||(const vecName##3##& u, eltType x) { return { u.x || x, u.y || x, u.z || x }; }									\
-constexpr vecName##3 operator&&(const vecName##3##& u, eltType x) { return { u.x && x, u.y && x, u.z && x }; }									\
-																																				\
-constexpr vecName##3 operator||(eltType x, const vecName##3##& u) { return { x || u.x, x || u.y, x || u.z }; }									\
-constexpr vecName##3 operator&&(eltType x, const vecName##3##& u) { return { x && u.x, x && u.y, x && u.z }; }
-
-#define SCP_VEC4_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																					\
-constexpr vecName##4 operator||(const vecName##4##& u, const vecName##4##& v) { return { u.x || v.x, u.y || v.y, u.z || v.z, u.w || v.w }; }	\
-constexpr vecName##4 operator&&(const vecName##4##& u, const vecName##4##& v) { return { u.x && v.x, u.y && v.y, u.z && v.z, u.w && v.w }; }	\
-																																				\
-constexpr vecName##4 operator||(const vecName##4##& u, eltType x) { return { u.x || x, u.y || x, u.z || x, u.w || x }; }						\
-constexpr vecName##4 operator&&(const vecName##4##& u, eltType x) { return { u.x && x, u.y && x, u.z && x, u.w && x }; }						\
-																																				\
-constexpr vecName##4 operator||(eltType x, const vecName##4##& u) { return { x || u.x, x || u.y, x || u.z, x || u.w }; }						\
-constexpr vecName##4 operator&&(eltType x, const vecName##4##& u) { return { x && u.x, x && u.y, x && u.z, x && u.w }; }
+#define SCP_VEC4_EXTERNAL_OP_LOGIC(vecName, vecSize, eltType)																				\
+constexpr vecName##4 operator||(const vecName##4 & u, const vecName##4 & v) { return { u.x || v.x, u.y || v.y, u.z || v.z, u.w || v.w }; }	\
+constexpr vecName##4 operator&&(const vecName##4 & u, const vecName##4 & v) { return { u.x && v.x, u.y && v.y, u.z && v.z, u.w && v.w }; }	\
+																																			\
+constexpr vecName##4 operator||(const vecName##4 & u, eltType x) { return { u.x || x, u.y || x, u.z || x, u.w || x }; }						\
+constexpr vecName##4 operator&&(const vecName##4 & u, eltType x) { return { u.x && x, u.y && x, u.z && x, u.w && x }; }						\
+																																			\
+constexpr vecName##4 operator||(eltType x, const vecName##4 & u) { return { x || u.x, x || u.y, x || u.z, x || u.w }; }						\
+constexpr vecName##4 operator&&(eltType x, const vecName##4 & u) { return { x && u.x, x && u.y, x && u.z, x && u.w }; }
 
 
 // Vec special functions
@@ -326,12 +326,12 @@ inline vecName##vecSize inversesqrt(const vecName##vecSize& u) { return eltType(
 inline vecName##vecSize fract(const vecName##vecSize& u) { return u - floor(u); }																								\
 inline vecName##vecSize mod(const vecName##vecSize& u, const vecName##vecSize& v) { return u - v * floor(u / v); }																\
 inline vecName##vecSize mod(const vecName##vecSize& u, eltType x) { return u - x * floor(u / x); }																				\
-inline eltType length(const vecName##vecSize##& u) { return std::sqrt(dot(u, u)); }																								\
-inline eltType distance(const vecName##vecSize##& u, const vecName##vecSize##& v) { return length(v - u); }																		\
-inline vecName##vecSize normalize(const vecName##vecSize##& u) { return u / length(u); }																						\
-constexpr vecName##vecSize faceforward(const vecName##vecSize##& n, const vecName##vecSize##& i, const vecName##vecSize##& nRef) { return dot(nRef, i) < eltType(0) ? n : -n; }	\
-constexpr vecName##vecSize reflect(const vecName##vecSize##& i, const vecName##vecSize##& n) { return i - eltType(2) * dot(n, i) * n; }											\
-inline vecName##vecSize refract(const vecName##vecSize##& i, const vecName##vecSize##& n, eltType eta)																			\
+inline eltType length(const vecName##vecSize & u) { return std::sqrt(dot(u, u)); }																								\
+inline eltType distance(const vecName##vecSize & u, const vecName##vecSize & v) { return length(v - u); }																		\
+inline vecName##vecSize normalize(const vecName##vecSize & u) { return u / length(u); }																							\
+constexpr vecName##vecSize faceforward(const vecName##vecSize & n, const vecName##vecSize & i, const vecName##vecSize & nRef) { return dot(nRef, i) < eltType(0) ? n : -n; }	\
+constexpr vecName##vecSize reflect(const vecName##vecSize & i, const vecName##vecSize & n) { return i - eltType(2) * dot(n, i) * n; }											\
+inline vecName##vecSize refract(const vecName##vecSize & i, const vecName##vecSize & n, eltType eta)																			\
 {																																												\
 	const eltType d = dot(n, i);																																				\
 	const eltType k = eltType(1) - eta * eta * (eltType(1) - d * d);																											\

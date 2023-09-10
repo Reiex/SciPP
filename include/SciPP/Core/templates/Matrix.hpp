@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,9 +166,6 @@ namespace scp
 	{
 		assert(_shape.sizes[0] == _shape.sizes[1]);
 
-		static constexpr TValue _zero = 0;
-		static constexpr TValue _one = 1;
-
 		const uint64_t size = _shape.sizes[0];
 		Matrix<TValue> copy(*this);
 
@@ -268,9 +265,6 @@ namespace scp
 	constexpr TValue Matrix<TValue>::determinant() const
 	{
 		assert(_shape.sizes[0] == _shape.sizes[1]);
-
-		static constexpr TValue _zero = 0;
-		static constexpr TValue _one = 1;
 
 		TValue det = _one;
 

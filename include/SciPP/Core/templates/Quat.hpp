@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \file
-//! \author Reiex
+//! \author Marius Pélégrin
 //! \copyright The MIT License (MIT)
 //! \date 2019-2023
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11,12 +11,6 @@
 
 namespace scp
 {
-	template<typename TValue>
-	const TValue Quat<TValue>::_zero(0);
-
-	template<typename TValue>
-	const TValue Quat<TValue>::_one(1);
-
 	template<typename TValue>
 	constexpr Quat<TValue>::Quat(const TValue& value) :
 		w(value),
