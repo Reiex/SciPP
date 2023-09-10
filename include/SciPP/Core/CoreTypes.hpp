@@ -72,7 +72,7 @@ namespace scp
 	struct TensorShape;
 	enum class BorderBehaviour;
 	enum class InterpolationMethod;
-	enum class CollapseMethod;
+	// TODO: enum class CollapseMethod;
 
 	template<typename TValue> class Tensor;
 	template<typename TValue> class Matrix;

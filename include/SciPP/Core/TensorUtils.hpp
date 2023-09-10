@@ -25,13 +25,13 @@ namespace scp
 		Cubic
 	};
 
-	enum class CollapseMethod
-	{
-		Nearest,
-		Mean,
-		// TODO: Median
-		// TODO: Mode
-	};
+	// enum class CollapseMethod
+	// {
+	// 	Nearest,
+	// 	Mean,
+	// 	// TODO: Median
+	// 	// TODO: Mode
+	// };
 
 	struct TensorPosition
 	{

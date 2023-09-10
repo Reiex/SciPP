@@ -68,7 +68,7 @@ namespace scp
 		template<typename TValue, uint8_t Row, uint8_t Col, typename TRow, typename TCol>
 		constexpr TCol operator*(const Mat<TValue, Row, Col, TRow, TCol>& mat, const TCol& vec);
 
-		// TODO: unary minus, transpose
+		// TODO: unary minus, move operations
 	}
 
 	template<typename TValue, uint8_t Row, uint8_t Col, typename TRow, typename TCol>

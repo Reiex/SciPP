@@ -535,14 +535,14 @@ namespace scp
 	}
 
 	template<typename TValue>
-	template<typename TScalar, InterpolationMethod MagMethod, CollapseMethod MinMethod>
+	template<typename TScalar, InterpolationMethod IMethod>
 	constexpr void Tensor<TValue>::resize(const Tensor<TValue>& tensor)
 	{
 		assert(_shape.order == tensor._shape.order);
 		
 		uint64_t* indices = reinterpret_cast<uint64_t*>(alloca(_shape.order * sizeof(uint64_t)));
 		TScalar* coeffs = reinterpret_cast<TScalar*>(alloca(_shape.order * sizeof(TScalar)));
-
+	
 		TScalar* sizesRatio = reinterpret_cast<TScalar*>(alloca(_shape.order * sizeof(TScalar)));
 		for (uint64_t i = 0; i < _shape.order; ++i)
 		{
@@ -558,15 +558,15 @@ namespace scp
 				coeffs[i] -= indices[i];
 			}
 		
-			if constexpr (MagMethod == InterpolationMethod::Nearest)
+			if constexpr (IMethod == InterpolationMethod::Nearest)
 			{
 				_values[pos.index] = tensor.get(indices);
 			}
-			else if constexpr (MagMethod == InterpolationMethod::Linear)
+			else if constexpr (IMethod == InterpolationMethod::Linear)
 			{
 				_values[pos.index] = _scp::lerp<TValue>(tensor, tensor._shape.order, tensor._shape.sizes, indices, coeffs, 0);
 			}
-			else if constexpr (MagMethod == InterpolationMethod::Cubic)
+			else if constexpr (IMethod == InterpolationMethod::Cubic)
 			{
 				_values[pos.index] = _scp::cerp<TValue>(tensor, tensor._shape.order, tensor._shape.sizes, indices, coeffs, 0);
 			}

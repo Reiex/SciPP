@@ -50,7 +50,8 @@ namespace scp
 
 			template<BorderBehaviour BBehaviour> constexpr void convolution(const Tensor<TValue>& kernel);
 
-			template<typename TScalar, InterpolationMethod MagMethod, CollapseMethod MinMethod> constexpr void resize(const Tensor<TValue>& tensor);
+			// TODO: template<typename TScalar, InterpolationMethod MagMethod, CollapseMethod MinMethod> constexpr void resize(const Tensor<TValue>& tensor);
+			template<typename TScalar, InterpolationMethod IMethod> constexpr void resize(const Tensor<TValue>& tensor);
 			constexpr void contract(const Tensor<TValue>& tensor, uint64_t i, uint64_t j);
 
 			// Other standard operators
