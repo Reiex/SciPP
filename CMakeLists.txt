@@ -11,6 +11,7 @@ project(SciPP)
 
 set(CMAKE_CXX_STANDARD 23)
 
+
 add_executable(
     scipp-examples
     ${CMAKE_CURRENT_LIST_DIR}/examples/main.cpp
@@ -20,4 +21,7 @@ add_executable(
     ${CMAKE_CURRENT_LIST_DIR}/examples/SimAnim.cpp
 )
 
-target_include_directories(scipp-examples PUBLIC include)
+target_include_directories(
+    scipp-examples
+    PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include
+)
