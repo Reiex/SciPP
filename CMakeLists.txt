@@ -11,23 +11,13 @@ project(SciPP)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(
-    SCIPP_EXAMPLES_HEADERS
-    examples/Constants.hpp
-    examples/FluidSimulation.hpp
-    examples/MoleDyn.hpp
-    examples/SimAnim.hpp
+add_executable(
+    scipp-examples
+    ${CMAKE_CURRENT_LIST_DIR}/examples/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/examples/Constants.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/examples/FluidSimulation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/examples/MoleDyn.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/examples/SimAnim.cpp
 )
 
-set(
-    SCIPP_EXAMPLES_SOURCES
-    examples/main.cpp
-    examples/Constants.cpp
-    examples/FluidSimulation.cpp
-    examples/MoleDyn.cpp
-    examples/SimAnim.cpp
-)
-
-add_executable(SciPPExamples ${SCIPP_EXAMPLES_HEADERS} ${SCIPP_EXAMPLES_SOURCES})
-
-target_include_directories(SciPPExamples PUBLIC include)
+target_include_directories(scipp-examples PUBLIC include)

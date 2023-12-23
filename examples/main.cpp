@@ -26,7 +26,7 @@ int main()
 	// std::cout << "Neper constant: e = " << neper(200).decimals(200) << std::endl;
 	// std::cout << "Sqrt(2): " << squareRoot(2, 500).decimals(500) << std::endl;
 	// std::cout << "Phi: " << ((1 + squareRoot(5, 500)) / 2).decimals(500) << std::endl;
-	
+
 	// simuFluide2D("build/fluid/", 512, 512);
 	// lennardJones2D("build/moledyn/", 200);
 
