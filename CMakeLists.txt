@@ -19,7 +19,7 @@ option(SCIPP_LIBRARY_ONLY "Build only the library")
 
 # SciPP examples
 
-if(NOT DEFINED SCIPP_LIBRARY_ONLY)
+if(NOT SCIPP_LIBRARY_ONLY)
 
     add_executable(
         scipp-examples
