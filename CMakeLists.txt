@@ -15,11 +15,11 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-option(SCIPP_LIBRARY_ONLY "Build only the library")
-
 # SciPP examples
 
-if(NOT SCIPP_LIBRARY_ONLY)
+option(SCIPP_ADD_EXAMPLES "Add target scipp-examples" ON)
+
+if(SCIPP_ADD_EXAMPLES)
 
     add_executable(
         scipp-examples
