@@ -2,7 +2,7 @@
 ##! \file
 ##! \author Pélégrin Marius
 ##! \copyright The MIT License (MIT)
-##! \date 2019-2023
+##! \date 2019-2024
 #######################################################################################################################
 
 # Global project definitions
@@ -54,9 +54,9 @@ add_custom_target(
 
 # SciPP examples
 
-option(SCIPP_ADD_EXAMPLES "Add target scipp-examples" ON)
+option(SCIPP_BUILD_EXAMPLES "Add target scipp-examples" ON)
 
-if(SCIPP_ADD_EXAMPLES)
+if(SCIPP_BUILD_EXAMPLES)
 
     add_executable(
         scipp-examples

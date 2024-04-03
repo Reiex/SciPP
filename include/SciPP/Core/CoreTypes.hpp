@@ -2,7 +2,7 @@
 //! \file
 //! \author Pélégrin Marius
 //! \copyright The MIT License (MIT)
-//! \date 2019-2023
+//! \date 2019-2024
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -78,10 +78,6 @@ namespace scp
 	template<typename TValue> class Tensor;
 	template<typename TValue> class Matrix;
 	template<typename TValue> class Vector;
-
-	template<typename TValue> class SpTensor;
-	template<typename TValue> class SpMatrix;
-	template<typename TValue> class SpVector;
 
 
 	template <typename TNode, typename TEdge> class Graph;
