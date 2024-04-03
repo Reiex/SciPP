@@ -33,7 +33,6 @@ add_custom_target(
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/misc.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/Quat.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/Rational.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/SpTensor.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/Tensor.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/TensorUtils.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/Vec.hpp
@@ -46,7 +45,6 @@ add_custom_target(
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/misc.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/Quat.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/Rational.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/SpTensor.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/Tensor.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/TensorUtils.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/SciPP/Core/templates/Vector.hpp
