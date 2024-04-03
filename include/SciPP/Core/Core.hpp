@@ -23,6 +23,5 @@
 #include <SciPP/Core/templates/Tensor.hpp>
 #include <SciPP/Core/templates/Matrix.hpp>
 #include <SciPP/Core/templates/Vector.hpp>
-#include <SciPP/Core/templates/SpTensor.hpp>
 
 #include <SciPP/Core/templates/Graph.hpp>
